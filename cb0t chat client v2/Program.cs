@@ -76,7 +76,7 @@ namespace cb0t_chat_client_v2
             catch (Exception e)
             {
                 ShowCrash(e);
-                throw new Exception();
+                throw;
             }
         }
 

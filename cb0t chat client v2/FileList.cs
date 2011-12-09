@@ -23,7 +23,7 @@ namespace cb0t_chat_client_v2
             this.Columns[2].Text = "Media";
             this.Columns[2].Width = 75;
             this.Columns.Add(new ColumnHeader());
-            this.Columns[3].Text = "Catagory";
+            this.Columns[3].Text = "Category";
             this.Columns[3].Width = 75;
             this.Columns.Add(new ColumnHeader());
             this.Columns[4].Text = "Size";
