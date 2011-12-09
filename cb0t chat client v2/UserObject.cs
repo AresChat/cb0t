@@ -100,6 +100,9 @@ namespace cb0t_chat_client_v2
         {
             try
             {
+                if (this.avatar != null)
+                    this.avatar.Dispose();
+
                 using (MemoryStream ms = new MemoryStream(data))
                 {
                     using (Bitmap b = new Bitmap(ms))

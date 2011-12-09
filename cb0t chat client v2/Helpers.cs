@@ -729,6 +729,8 @@ namespace cb0t_chat_client_v2
             if (packet.Remaining() < 10)
                 return null;
 
+            packet.SkipBytes(2);
+
             while (packet.Remaining() > 2) // details
             {
                 byte length = packet.ReadByte();

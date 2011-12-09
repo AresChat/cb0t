@@ -171,49 +171,58 @@ namespace cb0t_chat_client_v2
         public static String GetRTFCustomEmote(CEmoteItem cemote, Graphics richtextbox)
         {
             StringBuilder result = new StringBuilder();
-            result.Append(@"{\pict\wmetafile8\picw");
-            result.Append((int)Math.Round((cemote.Size / richtextbox.DpiX) * 2540));
-            result.Append(@"\pich");
-            result.Append((int)Math.Round((cemote.Size / richtextbox.DpiY) * 2540));
-            result.Append(@"\picwgoal");
-            result.Append((int)Math.Round((cemote.Size / richtextbox.DpiX) * 1440));
-            result.Append(@"\pichgoal");
-            result.Append((int)Math.Round((cemote.Size / richtextbox.DpiY) * 1440));
-            result.Append(" ");
+            bool fail = false;
 
-            using (MemoryStream cm_ms = new MemoryStream(cemote.Image))
+            try
             {
-                using (Bitmap cm_bmp = new Bitmap(cm_ms))
+                result.Append(@"{\pict\wmetafile8\picw");
+                result.Append((int)Math.Round((cemote.Size / richtextbox.DpiX) * 2540));
+                result.Append(@"\pich");
+                result.Append((int)Math.Round((cemote.Size / richtextbox.DpiY) * 2540));
+                result.Append(@"\picwgoal");
+                result.Append((int)Math.Round((cemote.Size / richtextbox.DpiX) * 1440));
+                result.Append(@"\pichgoal");
+                result.Append((int)Math.Round((cemote.Size / richtextbox.DpiY) * 1440));
+                result.Append(" ");
+
+                using (MemoryStream cm_ms = new MemoryStream(cemote.Image))
                 {
-                    using (MemoryStream ms = new MemoryStream())
+                    using (Bitmap cm_bmp = new Bitmap(cm_ms))
                     {
-                        using (Graphics g = Graphics.FromImage(cm_bmp))
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            IntPtr ptr = g.GetHdc();
-
-                            using (Metafile meta = new Metafile(ms, ptr))
+                            using (Graphics g = Graphics.FromImage(cm_bmp))
                             {
-                                g.ReleaseHdc(ptr);
+                                IntPtr ptr = g.GetHdc();
 
-                                using (Graphics gfx = Graphics.FromImage(meta))
-                                    gfx.DrawImage(cm_bmp, new Rectangle(0, 0, cemote.Size, cemote.Size));
+                                using (Metafile meta = new Metafile(ms, ptr))
+                                {
+                                    g.ReleaseHdc(ptr);
 
-                                ptr = meta.GetHenhmetafile();
-                                uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
-                                byte[] buffer = new byte[size];
-                                GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
-                                DeleteEnhMetaFile(ptr);
+                                    using (Graphics gfx = Graphics.FromImage(meta))
+                                        gfx.DrawImage(cm_bmp, new Rectangle(0, 0, cemote.Size, cemote.Size));
 
-                                foreach (byte b in buffer)
-                                    result.Append(String.Format("{0:x2}", b));
+                                    ptr = meta.GetHenhmetafile();
+                                    uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                                    byte[] buffer = new byte[size];
+                                    GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                                    DeleteEnhMetaFile(ptr);
 
-                                result.Append("}");
-                                buffer = null;
+                                    foreach (byte b in buffer)
+                                        result.Append(String.Format("{0:x2}", b));
+
+                                    result.Append("}");
+                                    buffer = null;
+                                }
                             }
                         }
                     }
                 }
             }
+            catch { fail = true; }
+
+            if (fail)
+                return null;
 
             return result.ToString();
         }
