@@ -215,6 +215,7 @@
     <Compile Include="InputTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="iTunes.cs" />
     <Compile Include="ListEx.cs" />
     <Compile Include="MainToolStripAppearance.cs" />
     <Compile Include="MySoundEffects.cs" />

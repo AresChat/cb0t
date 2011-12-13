@@ -1085,7 +1085,7 @@ namespace cb0t_chat_client_v2
         {
             try
             {
-                System.Diagnostics.Process.Start("http://oobe.arca-eclipse.com/");
+                System.Diagnostics.Process.Start("http://sharptricks.wordpress.com/");
             }
             catch { }
         }

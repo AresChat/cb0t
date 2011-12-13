@@ -242,7 +242,7 @@ namespace cb0t_chat_client_v2
 
         private void PrintNP()
         {
-            if (AudioSettings.winamp)
+            if (AudioSettings.choice == AudioPlayerChoice.Winamp)
             {
                 if (!String.IsNullOrEmpty(Winamp.current_song))
                 {
@@ -264,6 +264,36 @@ namespace cb0t_chat_client_v2
                     {
                         str = Helpers.FormatAresColorCodes(str);
                         str = str.Replace("+n", Winamp.current_song);
+
+                        if (AudioSettings.unicode_effect)
+                            str = this.UnicodeText(str);
+
+                        this.OnPacketDispatching(Packets.TextPacket(str));
+                    }
+                }
+            }
+            else if (AudioSettings.choice == AudioPlayerChoice.Itunes)
+            {
+                if (!String.IsNullOrEmpty(iTunes.current_song))
+                {
+                    String str = AudioSettings.np_text;
+
+                    if (str.StartsWith("/me "))
+                    {
+                        str = str.Substring(4);
+                        str = Helpers.FormatAresColorCodes(str);
+                        str = Helpers.StripColors(str);
+                        str = str.Replace("+n", iTunes.current_song);
+
+                        if (AudioSettings.unicode_effect)
+                            str = this.UnicodeText(str);
+
+                        this.OnPacketDispatching(Packets.EmotePacket(str));
+                    }
+                    else
+                    {
+                        str = Helpers.FormatAresColorCodes(str);
+                        str = str.Replace("+n", iTunes.current_song);
 
                         if (AudioSettings.unicode_effect)
                             str = this.UnicodeText(str);
