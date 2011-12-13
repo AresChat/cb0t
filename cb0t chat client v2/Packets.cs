@@ -79,7 +79,7 @@ namespace cb0t_chat_client_v2
             packet.WriteInt16(0);
             packet.WriteInt32(0); // speed no longer needed
             packet.WriteString(Settings.my_username, true);
-            packet.WriteString("cb0t 2.68 client", true);
+            packet.WriteString("cb0t 2.69 client", true);
             packet.WriteIP(Settings.local_ip);
             packet.WriteIP(Settings.external_ip); // external
             packet.WriteByte(7); // browse + zlib

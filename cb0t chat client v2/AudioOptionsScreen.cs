@@ -37,10 +37,13 @@ namespace cb0t_chat_client_v2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AudioSettings.winamp = this.comboBox1.SelectedIndex == 1;
+            if (this.comboBox1.SelectedIndex > -1)
+            {
+                AudioSettings.choice = (AudioPlayerChoice)this.comboBox1.SelectedIndex;
 
-            if (!this.setting_up)
-                AudioSettings.Save();
+                if (!this.setting_up)
+                    AudioSettings.Save();
+            }
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -75,7 +78,7 @@ namespace cb0t_chat_client_v2
             this.checkBox3.Checked = AudioSettings.voice_mute;
             this.checkBox4.Checked = AudioSettings.unicode_effect;
             this.textBox1.Text = AudioSettings.np_text;
-            this.comboBox1.SelectedIndex = AudioSettings.winamp ? 1 : 0;
+            this.comboBox1.SelectedIndex = (int)AudioSettings.choice;
             this.setting_up = false;
         }
 

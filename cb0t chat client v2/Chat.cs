@@ -29,6 +29,7 @@ namespace cb0t_chat_client_v2
 
         private VoicePlayer vplayer = new VoicePlayer();
         private Winamp winamp = new Winamp();
+        private iTunes itunes = new iTunes();
 
         public event EventHandler OnVoiceClipStarted;
         public event EventHandler OnVoiceClipStopped;
@@ -56,12 +57,23 @@ namespace cb0t_chat_client_v2
             this.channelList1.PopulateWithLastKnownList();
             this.LostFocus += new EventHandler(this.OnEnter);
             this.winamp.WinampSongChanged += new EventHandler(this.WinampSongChanged);
+            this.itunes.iTunesSongChanged += new EventHandler(this.iTunesSongChanged);
+        }
+
+        private void iTunesSongChanged(object sender, EventArgs e)
+        {
+            if (AudioSettings.show_in_userlist)
+                if (AudioSettings.choice == AudioPlayerChoice.Itunes)
+                    if (!String.IsNullOrEmpty(iTunes.current_song))
+                        foreach (ChatContainerTabPage _room in this.open_rooms)
+                            if (_room != null)
+                                _room.AddGlobalPacket(Packets.UserlistSongPacket(iTunes.current_song));
         }
 
         private void WinampSongChanged(object sender, EventArgs e)
         {
             if (AudioSettings.show_in_userlist)
-                if (AudioSettings.winamp)
+                if (AudioSettings.choice == AudioPlayerChoice.Winamp)
                     if (!String.IsNullOrEmpty(Winamp.current_song))
                         foreach (ChatContainerTabPage _room in this.open_rooms)
                             if (_room != null)
@@ -71,7 +83,7 @@ namespace cb0t_chat_client_v2
         public void InternalSongChanged()
         {
             if (AudioSettings.show_in_userlist)
-                if (!AudioSettings.winamp)
+                if (AudioSettings.choice == AudioPlayerChoice.Internal)
                     if (!String.IsNullOrEmpty(AudioSettings.current_song))
                         foreach (ChatContainerTabPage _room in this.open_rooms)
                             if (_room != null)
@@ -513,6 +525,7 @@ namespace cb0t_chat_client_v2
                         this.OnTick(null, new EventArgs());
 
                     this.winamp.Tick();
+                    this.itunes.Tick();
                 }
 
                 foreach (ChatContainerTabPage c in this.open_rooms)
