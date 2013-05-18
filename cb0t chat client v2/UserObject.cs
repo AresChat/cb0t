@@ -26,6 +26,7 @@ namespace cb0t_chat_client_v2
         public UserFont font = null;
         public bool can_vc_public = false;
         public bool can_vc_private = false;
+        public bool pm_enc = false;
 
         // custom
 

@@ -10,6 +10,18 @@ namespace cb0t_chat_client_v2
     {
         public delegate void SendPacketDelegate(byte[] packet);
 
+        public static byte[] CustomPM(String target, String text)
+        {
+            AresDataPacket packet = new AresDataPacket();
+            packet.WriteString("cb0t_pm_msg", true);
+            packet.WriteString(target, true);
+            String str = text;
+            str = Helpers.FormatAresColorCodes(str);
+            byte[] msg = Helpers.SoftEncrypt(target, Encoding.UTF8.GetBytes(str));
+            packet.WriteBytes(msg);
+            return packet.ToAresPacket(200);
+        }
+
         public static byte[] DisableCustomNames(bool yes)
         {
             AresDataPacket packet = new AresDataPacket();
@@ -76,10 +88,10 @@ namespace cb0t_chat_client_v2
             packet.WriteByte(0);
             packet.WriteInt16(Settings.dc_port); // dc port
             packet.WriteIP("0.0.0.0");
-            packet.WriteInt16(0);
+            packet.WriteInt16(65535);
             packet.WriteInt32(0); // speed no longer needed
             packet.WriteString(Settings.my_username, true);
-            packet.WriteString("cb0t 2.69 client", true);
+            packet.WriteString("cb0t 2.70 client", true);
             packet.WriteIP(Settings.local_ip);
             packet.WriteIP(Settings.external_ip); // external
             packet.WriteByte(7); // browse + zlib
