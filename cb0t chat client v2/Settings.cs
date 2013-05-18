@@ -136,7 +136,7 @@ namespace cb0t_chat_client_v2
             receive_nudges = true;
             send_to_tray = true;
             dc_auto_accept = false;
-            share_file_msg = "cb0t 2.69 by oobe";
+            share_file_msg = "cb0t 2.70 by oobe";
             share_file_on = true;
             notify_msg = new String[] { };
             pm_notify_msg = new String[] { };
@@ -146,7 +146,7 @@ namespace cb0t_chat_client_v2
             sex = 0;
             country = 0;
             region = String.Empty;
-            personal_message = "cb0t chat client 2.69";
+            personal_message = "cb0t chat client 2.70";
             scribble_enabled = true;
             auto_load = false;
             mp3_repeat = false;

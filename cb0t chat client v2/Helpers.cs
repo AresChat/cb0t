@@ -7,11 +7,77 @@ using System.Diagnostics;
 using System.Threading;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace cb0t_chat_client_v2
 {
     class Helpers
     {
+        public static byte[] SoftEncrypt(String target, byte[] data)
+        {
+            byte[] result;
+
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+            {
+                byte[] key = des.Key;
+
+                using (SHA1 sha = SHA1.Create())
+                {
+                    byte[] sha_iv = sha.ComputeHash(Encoding.UTF8.GetBytes(target));
+                    byte[] iv = new byte[8];
+                    Array.Copy(sha_iv, iv, 8);
+                    des.IV = iv;
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                using (ICryptoTransform enc = des.CreateEncryptor())
+                using (CryptoStream cs = new CryptoStream(ms, enc, CryptoStreamMode.Write))
+                {
+                    cs.Write(data, 0, data.Length);
+                    cs.FlushFinalBlock();
+                    result = ms.ToArray();
+                }
+
+                List<byte> list = new List<byte>();
+                list.AddRange(key);
+                list.AddRange(result);
+                result = list.ToArray();
+            }
+
+            return result;
+        }
+
+        public static byte[] SoftDecrypt(String name, byte[] data)
+        {
+            byte[] result;
+
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+            {
+                byte[] key = new byte[8];
+                Array.Copy(data, key, 8);
+                des.Key = key;
+
+                using (SHA1 sha = SHA1.Create())
+                {
+                    byte[] sha_iv = sha.ComputeHash(Encoding.UTF8.GetBytes(name));
+                    byte[] iv = new byte[8];
+                    Array.Copy(sha_iv, iv, 8);
+                    des.IV = iv;
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                using (ICryptoTransform enc = des.CreateDecryptor())
+                using (CryptoStream cs = new CryptoStream(ms, enc, CryptoStreamMode.Write))
+                {
+                    cs.Write(data, 8, data.Length - 8);
+                    cs.FlushFinalBlock();
+                    result = ms.ToArray();
+                }
+            }
+
+            return result;
+        }
+
         private static Random rnd = new Random();
 
         public static bool IsIP(String str)
