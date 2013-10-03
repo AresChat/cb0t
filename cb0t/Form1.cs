@@ -20,6 +20,8 @@ namespace cb0t
 
         public Form1()
         {
+            Settings.Create();
+
             this.InitializeComponent();
             this.toolStrip1.Items.Add(new SettingsButton());
             this.toolStrip1.Items.Add(new ToolStripSeparator());
@@ -38,7 +40,7 @@ namespace cb0t
             this.audio_content.Dock = DockStyle.Fill;
             this.audio_content.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.clist_content = new ChannelListPanel();
-            this.clist_content.BackColor = Color.White;
+            this.clist_content.BackColor = Color.WhiteSmoke;
             this.clist_content.Dock = DockStyle.Fill;
             this.clist_content.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.SetToList();
