@@ -37,6 +37,16 @@ namespace cb0t
             this.CurrentHoverClear = -1;
         }
 
+        protected override void OnDrawItem(DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        protected override void OnDrawSubItem(DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
         protected override void OnColumnWidthChanging(ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;

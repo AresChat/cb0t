@@ -119,6 +119,10 @@ namespace cb0t
             {
                 this.do_once = true;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
+                Settings.CAN_WRITE_REG = false;
+                this.clist_content.Create();
+                this.clist_content.RefreshList();
+                Settings.CAN_WRITE_REG = true;
             }
         }
 
@@ -130,6 +134,11 @@ namespace cb0t
             {
                 // move left/right
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.clist_content.Terminate = true;
         }
     }
 }

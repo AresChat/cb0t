@@ -22,13 +22,27 @@ namespace cb0t
             this.toolStrip1.Renderer = new ChannelListBar();
         }
 
+        public void Create()
+        {
+            for (int i=0;i<this.toolStripComboBox1.Items.Count;i++)
+                if (this.toolStripComboBox1.Items[i].ToString() == this.lang_pref.ToString())
+                {
+                    this.toolStripComboBox1.SelectedIndex = i;
+                    break;
+                }
+        }
+
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
 
         }
 
         public bool Terminate { get; set; }
+
         private Queue<ChannelListItem> socket_found = new Queue<ChannelListItem>();
+        private List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
+        private List<ChannelListItem> part_channel_list = new List<ChannelListItem>();
+        private RoomLanguage lang_pref = RoomLanguage.Any;
 
         public void RefreshList()
         {
@@ -87,9 +101,9 @@ namespace cb0t
                         {
                             this.toolStrip1.BeginInvoke((Action)(() => this.toolStripButton1.Enabled = true));
                             sock.Close();
-                        //    this.SaveServers();
-                          //  this.searching = false;
+                            this.SaveServers();
                             //this.SearchEnded(this, EventArgs.Empty);
+                            MessageBox.Show(this.socket_found.Count.ToString());
                             return;
                         }
 
@@ -139,6 +153,32 @@ namespace cb0t
             })).Start();
         }
 
+        private void SaveServers()
+        {
+            if (this.full_channel_list.Count > 10)
+            {
+                List<byte> list = new List<byte>();
 
+                foreach (ChannelListItem i in this.full_channel_list)
+                {
+                    list.AddRange(i.IP.GetAddressBytes());
+                    list.AddRange(BitConverter.GetBytes(i.Port));
+                }
+
+                try { File.WriteAllBytes(Settings.DataPath + "servers.dat", list.ToArray()); }
+                catch { }
+
+                list.Clear();
+            }
+            else
+            {
+                try
+                {
+                    if (File.Exists(Settings.DataPath + "servers.dat"))
+                        File.Delete(Settings.DataPath + "servers.dat");
+                }
+                catch { }
+            }
+        }
     }
 }

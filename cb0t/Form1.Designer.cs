@@ -31,9 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.content1 = new cb0t.Content();
             this.moveLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.content1 = new cb0t.Content();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,8 +57,20 @@
             this.moveLeftToolStripMenuItem,
             this.moveRightToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 48);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // moveLeftToolStripMenuItem
+            // 
+            this.moveLeftToolStripMenuItem.Name = "moveLeftToolStripMenuItem";
+            this.moveLeftToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.moveLeftToolStripMenuItem.Text = "move left";
+            // 
+            // moveRightToolStripMenuItem
+            // 
+            this.moveRightToolStripMenuItem.Name = "moveRightToolStripMenuItem";
+            this.moveRightToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.moveRightToolStripMenuItem.Text = "move right";
             // 
             // content1
             // 
@@ -70,18 +82,6 @@
             this.content1.Size = new System.Drawing.Size(586, 361);
             this.content1.TabIndex = 1;
             // 
-            // moveLeftToolStripMenuItem
-            // 
-            this.moveLeftToolStripMenuItem.Name = "moveLeftToolStripMenuItem";
-            this.moveLeftToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.moveLeftToolStripMenuItem.Text = "move left";
-            // 
-            // moveRightToolStripMenuItem
-            // 
-            this.moveRightToolStripMenuItem.Name = "moveRightToolStripMenuItem";
-            this.moveRightToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.moveRightToolStripMenuItem.Text = "move right";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -92,6 +92,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Form1";
             this.Text = "cb0t";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
