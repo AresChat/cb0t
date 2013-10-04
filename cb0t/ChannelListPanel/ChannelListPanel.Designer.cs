@@ -30,15 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChannelListPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.channelListView1 = new cb0t.ChannelListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.channelListView1 = new cb0t.ChannelListView();
             this.channelListView2 = new cb0t.ChannelListView();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,6 +66,20 @@
             this.splitContainer1.SplitterDistance = 222;
             this.splitContainer1.TabIndex = 0;
             // 
+            // channelListView1
+            // 
+            this.channelListView1.BackColor = System.Drawing.Color.White;
+            this.channelListView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.channelListView1.FullRowSelect = true;
+            this.channelListView1.Location = new System.Drawing.Point(0, 25);
+            this.channelListView1.MultiSelect = false;
+            this.channelListView1.Name = "channelListView1";
+            this.channelListView1.OwnerDraw = true;
+            this.channelListView1.Size = new System.Drawing.Size(586, 197);
+            this.channelListView1.TabIndex = 1;
+            this.channelListView1.UseCompatibleStateImageBehavior = false;
+            this.channelListView1.View = System.Windows.Forms.View.Details;
+            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -82,6 +96,17 @@
             this.toolStrip1.Size = new System.Drawing.Size(586, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Enabled = false;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "Refresh";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripSeparator1
             // 
@@ -113,37 +138,33 @@
             // toolStripComboBox1
             // 
             this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "Any",
+            "Arabic",
+            "Chinese",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "Finnish",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Kirghiz",
+            "Polish",
+            "Portuguese",
+            "Russian",
+            "Slovak",
+            "Spanish",
+            "Swedish",
+            "Turkish"});
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
             // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Enabled = false;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "Refresh";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
-            // channelListView1
-            // 
-            this.channelListView1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.channelListView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.channelListView1.FullRowSelect = true;
-            this.channelListView1.Location = new System.Drawing.Point(0, 25);
-            this.channelListView1.MultiSelect = false;
-            this.channelListView1.Name = "channelListView1";
-            this.channelListView1.OwnerDraw = true;
-            this.channelListView1.Size = new System.Drawing.Size(586, 197);
-            this.channelListView1.TabIndex = 1;
-            this.channelListView1.UseCompatibleStateImageBehavior = false;
-            this.channelListView1.View = System.Windows.Forms.View.Details;
-            // 
             // channelListView2
             // 
-            this.channelListView2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.channelListView2.BackColor = System.Drawing.Color.White;
             this.channelListView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.channelListView2.FullRowSelect = true;
             this.channelListView2.Location = new System.Drawing.Point(0, 0);
