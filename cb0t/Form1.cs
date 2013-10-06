@@ -21,6 +21,7 @@ namespace cb0t
         public Form1()
         {
             Settings.Create();
+            Emoticons.Load();
 
             this.InitializeComponent();
             this.toolStrip1.Items.Add(new SettingsButton());
@@ -121,9 +122,23 @@ namespace cb0t
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.Create();
+                this.clist_content.LabelChanged += this.ChannelListLabelChanged;
                 this.clist_content.RefreshList();
                 Settings.CAN_WRITE_REG = true;
             }
+        }
+
+        private void ChannelListLabelChanged(object sender, ChannelListLabelChangedEventArgs e)
+        {
+            this.toolStrip1.BeginInvoke((Action)(() =>
+            {
+                for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                    if (this.toolStrip1.Items[i] is ChannelListButton)
+                    {
+                        this.toolStrip1.Items[i].Text = e.Text;
+                        break;
+                    }
+            }));
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)

@@ -19,6 +19,9 @@ namespace cb0t
         private Color column_bg2 = Color.Silver;
         private Pen column_outline = new Pen(new SolidBrush(Color.FromArgb(109, 115, 123)), 1);
         private SolidBrush column_text_brush = new SolidBrush(Color.Black);
+        private SolidBrush hover_brush = new SolidBrush(Color.LightGray);
+        private SolidBrush clear_brush = new SolidBrush(SystemColors.Window);
+        private SolidBrush selected_brush = new SolidBrush(Color.CornflowerBlue);
 
         public ChannelListView()
         {
@@ -39,12 +42,35 @@ namespace cb0t
 
         protected override void OnDrawItem(DrawListViewItemEventArgs e)
         {
-            e.DrawDefault = true;
+            Point[] points = new Point[]
+            {
+                new Point(e.Bounds.X, e.Bounds.Y),
+                new Point(e.Bounds.X + 8, e.Bounds.Y + 7),
+                new Point(e.Bounds.X, e.Bounds.Y + 14)
+            };
+
+            if (e.Item.Selected)
+            {
+                e.Graphics.FillPolygon(this.selected_brush, points);
+            }
+            else
+            {
+                if (e.Item.Index == this.CurrentHover)
+                    e.Graphics.FillPolygon(this.hover_brush, points);
+                else if (e.Item.Index == this.CurrentHoverClear)
+                {
+                    e.Graphics.FillPolygon(this.clear_brush, points);
+                    this.CurrentHoverClear = -1;
+                }
+            }
         }
 
         protected override void OnDrawSubItem(DrawListViewSubItemEventArgs e)
         {
-            e.DrawDefault = true;
+            if (e.ColumnIndex == 0)
+                e.Graphics.DrawImage(((ChannelListViewItem)e.Item).NameImg, new Point(e.SubItem.Bounds.X + 10, e.SubItem.Bounds.Y));
+            else
+                e.Graphics.DrawImage(((ChannelListViewItem)e.Item).TopicImg, new Point(e.SubItem.Bounds.X, e.SubItem.Bounds.Y));
         }
 
         protected override void OnColumnWidthChanging(ColumnWidthChangingEventArgs e)
