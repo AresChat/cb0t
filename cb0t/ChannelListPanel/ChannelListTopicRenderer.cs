@@ -32,7 +32,7 @@ namespace cb0t
                     switch (letters[i])
                     {
                         case ' ':
-                            x += 2;
+                            x += 3;
                             break;
 
                         default:
@@ -118,7 +118,7 @@ namespace cb0t
                             break;
 
                         case ' ':
-                            x += underline ? 1 : (bold ? 3 : 2);
+                            x += underline ? 2 : (bold ? 4 : 3);
 
                             if (underline)
                                 using (Font font = new Font(this.t_font, this.CreateFont(bold, italic, underline)))

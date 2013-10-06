@@ -58,23 +58,28 @@ namespace cb0t
             {
                 this.channelListView1.BeginInvoke((Action)(() =>
                 {
+                    String text = this.filter_text.ToString().ToUpper();
+
                     for (int i = 0; i < rooms.Length; i++)
                         if (rooms[i].Users > 0)
                         {
+                            this.full_channel_list.Add(rooms[i]);
                             ChannelListViewItem item = new ChannelListViewItem();
                             this.gfx.RenderChannelListItem(item, rooms[i]);
                             this.gfx_items.Add(item);
-                            this.channelListView1.Items.Add(this.gfx_items[this.gfx_items.Count - 1]);
+
+                            if (rooms[i].Name.ToUpper().Contains(text))
+                            {
+                                this.part_channel_list.Add(rooms[i]);
+                                this.channelListView1.Items.Add(this.gfx_items[this.gfx_items.Count - 1]);
+                            }
                         }
+
+                    if (this.full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
+                    else
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
                 }));
-
-                this.full_channel_list.AddRange(rooms.Where(x => x.Users > 0));
-                this.part_channel_list.AddRange(rooms.Where(x => x.Users > 0));
-
-                if (this.full_channel_list.Count == this.part_channel_list.Count)
-                    this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
-                else
-                    this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
             }
             catch { }
         }
@@ -83,6 +88,7 @@ namespace cb0t
         {
             new Thread(new ThreadStart(() =>
             {
+                this.reloading_list = true;
                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
                 byte[] raw = null;
@@ -115,6 +121,7 @@ namespace cb0t
                     EndPoint recv_ep = new IPEndPoint(IPAddress.Any, 0);
                     uint time = Settings.Time;
                     uint last_push = time;
+                    String last_filter = this.filter_text.ToString();
 
                     while (true)
                     {
@@ -122,6 +129,12 @@ namespace cb0t
                             return;
 
                         uint now = Settings.Time;
+
+                        if (last_filter != this.filter_text.ToString())
+                        {
+                            last_filter = this.filter_text.ToString();
+                            this.FilterResults();
+                        }
 
                         if (now > last_push)
                         {
@@ -145,6 +158,7 @@ namespace cb0t
                             }
                             catch { }
 
+                            this.reloading_list = false;
                             this.SaveServers();
 
                             if (this.full_channel_list.Count == this.part_channel_list.Count)
@@ -228,5 +242,58 @@ namespace cb0t
                 catch { }
             }
         }
+
+        private StringBuilder filter_text = new StringBuilder();
+        private bool reloading_list = false;
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (this.filter_text.Length > 0)
+                this.filter_text.Remove(0, this.filter_text.Length);
+
+            this.filter_text.Append(this.toolStripTextBox1.Text);
+
+            if (!this.reloading_list)
+                this.FilterResults();
+        }
+
+        private void FilterResults()
+        {
+            if (this.channelListView1.InvokeRequired)
+                this.channelListView1.BeginInvoke((Action)(() => this.FilterResults()));
+            else
+            {
+                String text = this.filter_text.ToString().ToUpper();
+                this.channelListView1.BeginUpdate();
+                this.channelListView1.Items.Clear();
+                this.part_channel_list.Clear();
+
+                for (int i = 0; i < this.full_channel_list.Count; i++)
+                    if (this.full_channel_list[i].Name.ToUpper().Contains(text))
+                    {
+                        this.part_channel_list.Add(this.full_channel_list[i]);
+                        this.channelListView1.Items.Add(this.gfx_items[i]);
+                    }
+
+                this.channelListView1.EndUpdate();
+
+                if (this.reloading_list)
+                {
+                    if (this.full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
+                    else
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                }
+                else
+                {
+                    if (this.full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.full_channel_list.Count + ")" });
+                    else
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                }
+            }
+        }
+
+
     }
 }
