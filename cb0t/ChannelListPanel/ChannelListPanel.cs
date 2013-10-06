@@ -34,20 +34,56 @@ namespace cb0t
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-
+            this.toolStripButton1.Enabled = false;
+            this.full_channel_list.Clear();
+            this.part_channel_list.Clear();
+            this.channelListView1.Items.Clear();
+            this.gfx_items.ForEach(x => x.Dispose());
+            this.gfx_items.Clear();
+            this.RefreshList();
         }
 
         public bool Terminate { get; set; }
+        public event EventHandler<ChannelListLabelChangedEventArgs> LabelChanged;
 
-        private Queue<ChannelListItem> socket_found = new Queue<ChannelListItem>();
         private List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
         private List<ChannelListItem> part_channel_list = new List<ChannelListItem>();
+        private List<ChannelListViewItem> gfx_items = new List<ChannelListViewItem>();
         private RoomLanguage lang_pref = RoomLanguage.Any;
+        private ChannelListTopicRenderer gfx = new ChannelListTopicRenderer();
+
+        private void CheckNewItems(ChannelListItem[] rooms)
+        {
+            try
+            {
+                this.channelListView1.BeginInvoke((Action)(() =>
+                {
+                    for (int i = 0; i < rooms.Length; i++)
+                        if (rooms[i].Users > 0)
+                        {
+                            ChannelListViewItem item = new ChannelListViewItem();
+                            this.gfx.RenderChannelListItem(item, rooms[i]);
+                            this.gfx_items.Add(item);
+                            this.channelListView1.Items.Add(this.gfx_items[this.gfx_items.Count - 1]);
+                        }
+                }));
+
+                this.full_channel_list.AddRange(rooms.Where(x => x.Users > 0));
+                this.part_channel_list.AddRange(rooms.Where(x => x.Users > 0));
+
+                if (this.full_channel_list.Count == this.part_channel_list.Count)
+                    this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
+                else
+                    this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+            }
+            catch { }
+        }
 
         public void RefreshList()
         {
             new Thread(new ThreadStart(() =>
             {
+                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
                 byte[] raw = null;
 
@@ -91,19 +127,31 @@ namespace cb0t
                         {
                             last_push = now;
 
-                            foreach (ChannelListItem c in recv_items)
-                                this.socket_found.Enqueue(c);
-
-                            recv_items.Clear();
+                            if (recv_items.Count > 0)
+                            {
+                                this.CheckNewItems(recv_items.ToArray());
+                                recv_items.Clear();
+                            }
                         }
 
                         if (now > (time + 15))
                         {
                             this.toolStrip1.BeginInvoke((Action)(() => this.toolStripButton1.Enabled = true));
-                            sock.Close();
+
+                            try
+                            {
+                                sock.Close();
+                                sock = null;
+                            }
+                            catch { }
+
                             this.SaveServers();
-                            //this.SearchEnded(this, EventArgs.Empty);
-                            MessageBox.Show(this.socket_found.Count.ToString());
+
+                            if (this.full_channel_list.Count == this.part_channel_list.Count)
+                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.full_channel_list.Count + ")" });
+                            else
+                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+
                             return;
                         }
 

@@ -43,11 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChannelListPanel\ChannelListLabelChangedEventArgs.cs" />
     <Compile Include="ChannelListPanel\ChannelListItem.cs" />
     <Compile Include="ChannelListPanel\ChannelListBar.cs" />
     <Compile Include="ChannelListPanel\ChannelListView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ChannelListPanel\ChannelListViewItem.cs" />
+    <Compile Include="ChannelListPanel\ChannelListTopicRenderer.cs" />
+    <Compile Include="Emoticons.cs" />
     <Compile Include="Misc\Aero.cs" />
     <Compile Include="AudioPanel\AudioPanel.cs">
       <SubType>UserControl</SubType>
@@ -91,7 +95,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ChannelListPanel\RoomLanguage.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Misc\Settings.cs" />
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,6 +155,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\emotic.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
