@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\UdpChannelListManager\UdpChannelListManager\bin\Debug\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,7 +54,8 @@
     </Compile>
     <Compile Include="ChannelListPanel\ChannelListViewItem.cs" />
     <Compile Include="ChannelListPanel\ChannelListTopicRenderer.cs" />
-    <Compile Include="Emoticons.cs" />
+    <Compile Include="Misc\Hashlink.cs" />
+    <Compile Include="Misc\Emoticons.cs" />
     <Compile Include="Misc\Aero.cs" />
     <Compile Include="AudioPanel\AudioPanel.cs">
       <SubType>UserControl</SubType>
@@ -103,6 +107,8 @@
       <DependentUpon>SettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="ChannelListPanel\UdpPacketReader.cs" />
+    <Compile Include="Misc\Zip.cs" />
+    <Compile Include="Misc\HashlinkReader.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\emotic.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RoomPanel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -10,6 +8,7 @@ using System.Threading;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Diagnostics;
 
 namespace cb0t
 {
@@ -18,18 +17,33 @@ namespace cb0t
         public ChannelListPanel()
         {
             this.InitializeComponent();
+            this.contextMenuStrip2.Items.Insert(4, new ToolStripLabel("Admin password:"));
             this.toolStripButton1.Image = (Bitmap)Properties.Resources.refresh;
             this.toolStrip1.Renderer = new ChannelListBar();
         }
 
+        private bool setting_up = false;
+
         public void Create()
         {
+            this.setting_up = true;
+            this.filter_lang = (RoomLanguage)Enum.Parse(typeof(RoomLanguage), Settings.GetReg<String>("filter_lang", "Any"));
+   
             for (int i=0;i<this.toolStripComboBox1.Items.Count;i++)
-                if (this.toolStripComboBox1.Items[i].ToString() == this.lang_pref.ToString())
+                if (this.toolStripComboBox1.Items[i].ToString() == this.filter_lang.ToString())
                 {
                     this.toolStripComboBox1.SelectedIndex = i;
                     break;
                 }
+
+            int fav_split = Settings.GetReg<int>("clist_pos", -1);
+
+            if (fav_split > 0 && (this.splitContainer1.ClientSize.Height - fav_split) > 0)
+                this.splitContainer1.SplitterDistance = (this.splitContainer1.ClientSize.Height - fav_split);
+
+            this.LoadCache();
+            this.LoadFavourites();
+            this.setting_up = false;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -49,7 +63,6 @@ namespace cb0t
         private List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
         private List<ChannelListItem> part_channel_list = new List<ChannelListItem>();
         private List<ChannelListViewItem> gfx_items = new List<ChannelListViewItem>();
-        private RoomLanguage lang_pref = RoomLanguage.Any;
         private ChannelListTopicRenderer gfx = new ChannelListTopicRenderer();
 
         private void CheckNewItems(ChannelListItem[] rooms)
@@ -69,10 +82,11 @@ namespace cb0t
                             this.gfx_items.Add(item);
 
                             if (rooms[i].Name.ToUpper().Contains(text))
-                            {
-                                this.part_channel_list.Add(rooms[i]);
-                                this.channelListView1.Items.Add(this.gfx_items[this.gfx_items.Count - 1]);
-                            }
+                                if (rooms[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
+                                {
+                                    this.part_channel_list.Add(rooms[i]);
+                                    this.channelListView1.Items.Add(this.gfx_items[this.gfx_items.Count - 1]);
+                                }
                         }
 
                     if (this.full_channel_list.Count == this.part_channel_list.Count)
@@ -122,6 +136,7 @@ namespace cb0t
                     uint time = Settings.Time;
                     uint last_push = time;
                     String last_filter = this.filter_text.ToString();
+                    RoomLanguage last_lang = this.filter_lang;
 
                     while (true)
                     {
@@ -133,6 +148,11 @@ namespace cb0t
                         if (last_filter != this.filter_text.ToString())
                         {
                             last_filter = this.filter_text.ToString();
+                            this.FilterResults();
+                        }
+                        else if (last_lang != this.filter_lang)
+                        {
+                            last_lang = this.filter_lang;
                             this.FilterResults();
                         }
 
@@ -160,6 +180,7 @@ namespace cb0t
 
                             this.reloading_list = false;
                             this.SaveServers();
+                            this.SaveCache();
 
                             if (this.full_channel_list.Count == this.part_channel_list.Count)
                                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.full_channel_list.Count + ")" });
@@ -231,6 +252,7 @@ namespace cb0t
                 catch { }
 
                 list.Clear();
+                list = null;
             }
             else
             {
@@ -244,6 +266,7 @@ namespace cb0t
         }
 
         private StringBuilder filter_text = new StringBuilder();
+        private RoomLanguage filter_lang = RoomLanguage.Any;
         private bool reloading_list = false;
 
         private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
@@ -255,6 +278,18 @@ namespace cb0t
 
             if (!this.reloading_list)
                 this.FilterResults();
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!this.setting_up)
+            {
+                this.filter_lang = (RoomLanguage)Enum.Parse(typeof(RoomLanguage), this.toolStripComboBox1.SelectedItem.ToString());
+                Settings.SetReg("filter_lang", this.filter_lang.ToString());
+
+                if (!this.reloading_list)
+                    this.FilterResults();
+            }
         }
 
         private void FilterResults()
@@ -270,10 +305,11 @@ namespace cb0t
 
                 for (int i = 0; i < this.full_channel_list.Count; i++)
                     if (this.full_channel_list[i].Name.ToUpper().Contains(text))
-                    {
-                        this.part_channel_list.Add(this.full_channel_list[i]);
-                        this.channelListView1.Items.Add(this.gfx_items[i]);
-                    }
+                        if (this.full_channel_list[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
+                        {
+                            this.part_channel_list.Add(this.full_channel_list[i]);
+                            this.channelListView1.Items.Add(this.gfx_items[i]);
+                        }
 
                 this.channelListView1.EndUpdate();
 
@@ -294,6 +330,218 @@ namespace cb0t
             }
         }
 
+        private void SaveCache()
+        {
+            if (this.full_channel_list.Count > 10)
+            {
+                List<byte> list = new List<byte>();
+
+                foreach (ChannelListItem i in this.full_channel_list)
+                {
+                    list.AddRange(i.IP.GetAddressBytes());
+                    list.AddRange(BitConverter.GetBytes(i.Port));
+                    list.Add((byte)i.Lang);
+                    list.AddRange(BitConverter.GetBytes((ushort)Encoding.UTF8.GetByteCount(i.Name)));
+                    list.AddRange(Encoding.UTF8.GetBytes(i.Name));
+                    list.AddRange(BitConverter.GetBytes((ushort)Encoding.UTF8.GetByteCount(i.Topic)));
+                    list.AddRange(Encoding.UTF8.GetBytes(i.Topic));
+                    list.AddRange(BitConverter.GetBytes(i.Users));
+                }
+
+                try { File.WriteAllBytes(Settings.DataPath + "cache.dat", list.ToArray()); }
+                catch { }
+
+                list.Clear();
+                list = null;
+            }
+        }
+
+        private void LoadCache()
+        {
+            List<byte> list = new List<byte>();
+
+            try { list.AddRange(File.ReadAllBytes(Settings.DataPath + "cache.dat")); }
+            catch { }
+
+            if (list.Count > 0)
+            {
+                UdpPacketReader buf = new UdpPacketReader(list.ToArray());
+                list.Clear();
+                list = null;
+
+                while (buf.Remaining() > 0)
+                {
+                    ChannelListItem item = new ChannelListItem();
+                    item.IP = buf.ReadIP();
+                    item.Port = buf.ReadUInt16();
+                    item.Lang = (RoomLanguage)buf.ReadByte();
+                    item.Name = buf.ReadString();
+                    item.Topic = buf.ReadString();
+                    item.Users = buf.ReadUInt16();
+                    this.full_channel_list.Add(item);
+                    ChannelListViewItem vitem = new ChannelListViewItem();
+                    this.gfx.RenderChannelListItem(vitem, item);
+                    this.gfx_items.Add(vitem);
+                }
+
+                buf = null;
+                this.FilterResults();
+            }
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (!this.setting_up)
+            {
+                int fav_split = Settings.GetReg<int>("clist_pos", -1);
+
+                if (this.splitContainer1.Panel2.Height != fav_split)
+                    Settings.SetReg("clist_pos", this.splitContainer1.Panel2.Height + 4);
+            }
+        }
+
+        private List<FavouritesListItem> favs = new List<FavouritesListItem>();
+        private List<ChannelListViewItem> g_favs = new List<ChannelListViewItem>();
+
+        private void LoadFavourites()
+        {
+            List<byte> list = new List<byte>();
+
+            try { list.AddRange(File.ReadAllBytes(Settings.DataPath + "favourites.dat")); }
+            catch { }
+
+            if (list.Count > 0)
+            {
+                UdpPacketReader buf = new UdpPacketReader(list.ToArray());
+                list.Clear();
+                list = null;
+
+                while (buf.Remaining() > 0)
+                {
+                    FavouritesListItem item = new FavouritesListItem();
+                    item.AutoJoin = buf.ReadByte() == 1;
+                    item.IP = buf.ReadIP();
+                    item.Port = buf.ReadUInt16();
+                    item.Name = buf.ReadString();
+                    item.Topic = buf.ReadString();
+                    item.Password = buf.ReadString();
+                    this.favs.Add(item);
+                    ChannelListViewItem vitem = new ChannelListViewItem();
+                    this.gfx.RenderChannelListItem(vitem, item);
+                    this.g_favs.Add(vitem);
+                    this.channelListView2.Items.Add(vitem);
+                }
+
+                buf = null;
+            }
+        }
+
+        private void SaveFavourites()
+        {
+            List<byte> list = new List<byte>();
+
+            foreach (FavouritesListItem i in this.favs)
+            {
+                list.Add((byte)(i.AutoJoin ? 1 : 0));
+                list.AddRange(i.IP.GetAddressBytes());
+                list.AddRange(BitConverter.GetBytes(i.Port));
+                list.AddRange(BitConverter.GetBytes((ushort)Encoding.UTF8.GetByteCount(i.Name)));
+                list.AddRange(Encoding.UTF8.GetBytes(i.Name));
+                list.AddRange(BitConverter.GetBytes((ushort)Encoding.UTF8.GetByteCount(i.Topic)));
+                list.AddRange(Encoding.UTF8.GetBytes(i.Topic));
+                list.AddRange(BitConverter.GetBytes((ushort)Encoding.UTF8.GetByteCount(i.Password)));
+                list.AddRange(Encoding.UTF8.GetBytes(i.Password));
+            }
+
+            try { File.WriteAllBytes(Settings.DataPath + "favourites.dat", list.ToArray()); }
+            catch { }
+
+            list.Clear();
+            list = null;
+        }
+
+        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (this.channelListView1.SelectedItems.Count < 1)
+                e.Cancel = true;
+        }
+
+        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (this.channelListView1.SelectedItems.Count > 0)
+                if (e.ClickedItem.Tag != null)
+                {
+                    String button = e.ClickedItem.Tag.ToString();
+
+                    switch (button)
+                    {
+                        case "1":
+                            this.ExportHashlink(this.part_channel_list[this.channelListView1.SelectedIndices[0]].ToFavouritesItem());
+                            break;
+
+                        case "2":
+                            this.AddToFavourites(this.part_channel_list[this.channelListView1.SelectedIndices[0]]);
+                            break;
+                    }
+                }
+        }
+
+        private void AddToFavourites(ChannelListItem room)
+        {
+            if (this.favs.Find(x => x.IP.Equals(room.IP) && x.Port == room.Port) != null)
+                return;
+
+            FavouritesListItem f = room.ToFavouritesItem();
+            this.favs.Add(f);
+            ChannelListViewItem vitem = new ChannelListViewItem();
+            this.gfx.RenderChannelListItem(vitem, f);
+            this.g_favs.Add(vitem);
+            this.channelListView2.Items.Add(vitem);
+            this.SaveFavourites();
+        }
+
+        private void ExportHashlink(FavouritesListItem room)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(room.Name);
+            sb.Append("arlnk://");
+            sb.AppendLine(Hashlink.EncodeHashlink(room));
+
+            try
+            {
+                File.WriteAllText(Settings.DataPath + "hashlink.txt", sb.ToString());
+                Process.Start("notepad.exe", Settings.DataPath + "hashlink.txt");
+            }
+            catch { }
+        }
+
+        private void contextMenuStrip2_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (this.channelListView2.SelectedItems.Count < 1)
+                e.Cancel = true;
+        }
+
+        private void contextMenuStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (this.channelListView2.SelectedItems.Count > 0)
+                if (e.ClickedItem.Tag != null)
+                {
+                    String button = e.ClickedItem.Tag.ToString();
+
+                    switch (button)
+                    {
+                        case "1":
+                            this.ExportHashlink(this.favs[this.channelListView2.SelectedIndices[0]]);
+                            break;
+
+                        case "2":
+                            break;
+
+                        case "3":
+                            break;
+                    }
+                }
+        }
 
     }
 }
