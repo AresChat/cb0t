@@ -149,14 +149,6 @@ namespace cb0t
             }
             else
             {
-                RoomPool.Rooms.Add(new Room
-                {
-                    Button = new ChannelButton(e.Room),
-                    Credentials = e.Room,
-                    EndPoint = ep,
-                    Panel = new RoomPanel()
-                });
-
                 
             }
         }
