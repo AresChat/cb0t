@@ -101,6 +101,14 @@
     </Compile>
     <Compile Include="ChannelListPanel\RoomLanguage.cs" />
     <Compile Include="Misc\Settings.cs" />
+    <Compile Include="RoomPanel\Room.cs" />
+    <Compile Include="RoomPanel\RoomPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\RoomPanel.Designer.cs">
+      <DependentUpon>RoomPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPanel\RoomPool.cs" />
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +140,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RoomPanel\RoomPanel.resx">
+      <DependentUpon>RoomPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\SettingsPanel.resx">
       <DependentUpon>SettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,9 +177,7 @@
   <ItemGroup>
     <None Include="Resources\emotic.bmp" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RoomPanel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
