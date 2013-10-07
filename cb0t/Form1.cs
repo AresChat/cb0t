@@ -118,6 +118,12 @@ namespace cb0t
         {
             if (!this.do_once)
             {
+                int frm_size_x = Settings.GetReg<int>("form_x", -1);
+                int frm_size_y = Settings.GetReg<int>("form_y", -1);
+
+                if (frm_size_x > 0 && frm_size_y > 0)
+                    this.ClientSize = new Size(frm_size_x, frm_size_y);
+
                 this.do_once = true;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
@@ -134,7 +140,25 @@ namespace cb0t
 
         private void OpenChannel(object sender, OpenChannelEventArgs e)
         {
-            
+            IPEndPoint ep = new IPEndPoint(e.Room.IP, e.Room.Port);
+            int index = RoomPool.Rooms.FindIndex(x => x.EndPoint.Equals(ep));
+
+            if (index > -1)
+            {
+                
+            }
+            else
+            {
+                RoomPool.Rooms.Add(new Room
+                {
+                    Button = new ChannelButton(e.Room),
+                    Credentials = e.Room,
+                    EndPoint = ep,
+                    Panel = new RoomPanel()
+                });
+
+                
+            }
         }
 
         private void ChannelListLabelChanged(object sender, ChannelListLabelChangedEventArgs e)
@@ -164,5 +188,22 @@ namespace cb0t
         {
             this.clist_content.Terminate = true;
         }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            if (this.do_once)
+            {
+                int frm_size_x = Settings.GetReg<int>("form_x", -1);
+                int frm_size_y = Settings.GetReg<int>("form_y", -1);
+
+                if (this.ClientSize.Width != frm_size_x || this.ClientSize.Height != frm_size_y)
+                {
+                    Settings.SetReg("form_x", this.ClientSize.Width);
+                    Settings.SetReg("form_y", this.ClientSize.Height);
+                }
+            }
+        }
+
+
     }
 }
