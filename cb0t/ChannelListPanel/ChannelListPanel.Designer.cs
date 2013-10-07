@@ -195,7 +195,8 @@
             this.toolStripSeparator3,
             this.toolStripTextBox2});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(202, 123);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(202, 101);
+            this.contextMenuStrip2.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.contextMenuStrip2_Closing);
             this.contextMenuStrip2.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip2_Opening);
             this.contextMenuStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip2_ItemClicked);
             // 
@@ -245,6 +246,7 @@
             this.channelListView1.TabIndex = 1;
             this.channelListView1.UseCompatibleStateImageBehavior = false;
             this.channelListView1.View = System.Windows.Forms.View.Details;
+            this.channelListView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView1_MouseDoubleClick);
             // 
             // channelListView2
             // 
@@ -260,6 +262,7 @@
             this.channelListView2.TabIndex = 0;
             this.channelListView2.UseCompatibleStateImageBehavior = false;
             this.channelListView2.View = System.Windows.Forms.View.Details;
+            this.channelListView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView2_MouseDoubleClick);
             // 
             // ChannelListPanel
             // 

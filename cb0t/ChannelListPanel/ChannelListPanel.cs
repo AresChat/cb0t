@@ -59,6 +59,7 @@ namespace cb0t
 
         public bool Terminate { get; set; }
         public event EventHandler<ChannelListLabelChangedEventArgs> LabelChanged;
+        public event EventHandler<OpenChannelEventArgs> OpenChannel;
 
         private List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
         private List<ChannelListItem> part_channel_list = new List<ChannelListItem>();
@@ -519,6 +520,11 @@ namespace cb0t
         {
             if (this.channelListView2.SelectedItems.Count < 1)
                 e.Cancel = true;
+            else
+            {
+                this.autoJoinToolStripMenuItem.Checked = this.favs[this.channelListView2.SelectedIndices[0]].AutoJoin;
+                this.toolStripTextBox2.Text = this.favs[this.channelListView2.SelectedIndices[0]].Password;
+            }
         }
 
         private void contextMenuStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -539,6 +545,7 @@ namespace cb0t
                             break;
 
                         case "3":
+                            this.ChangeAutoJoin(this.channelListView2.SelectedIndices[0]);
                             break;
                     }
                 }
@@ -553,5 +560,44 @@ namespace cb0t
             this.SaveFavourites();
         }
 
+        private void ChangeAutoJoin(int index)
+        {
+            this.favs[index].AutoJoin = !this.favs[index].AutoJoin;
+            this.SaveFavourites();
+        }
+
+        private void contextMenuStrip2_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (this.channelListView2.SelectedIndices.Count > 0)
+            {
+                FavouritesListItem item = this.favs[this.channelListView2.SelectedIndices[0]];
+                String pass = this.toolStripTextBox2.Text;
+
+                if (item.Password != pass)
+                {
+                    item.Password = pass;
+                    this.SaveFavourites();
+                }
+            }
+        }
+
+        private void channelListView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                if (this.channelListView1.SelectedItems.Count > 0)
+                    this.OpenChannel(null, new OpenChannelEventArgs { Room = this.part_channel_list[this.channelListView1.SelectedIndices[0]].ToFavouritesItem() });
+        }
+
+        private void channelListView2_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                if (this.channelListView2.SelectedItems.Count > 0)
+                    this.OpenChannel(null, new OpenChannelEventArgs { Room = this.favs[this.channelListView2.SelectedIndices[0]] });
+        }
+
+        public FavouritesListItem[] GetAutoJoinRooms()
+        {
+            return this.favs.FindAll(x => x.AutoJoin).ToArray();
+        }
     }
 }

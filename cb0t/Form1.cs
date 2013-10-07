@@ -122,9 +122,19 @@ namespace cb0t
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
+                this.clist_content.OpenChannel += this.OpenChannel;
                 this.clist_content.Create();
+
+                foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
+                    this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
+
                 Settings.CAN_WRITE_REG = true;
             }
+        }
+
+        private void OpenChannel(object sender, OpenChannelEventArgs e)
+        {
+            
         }
 
         private void ChannelListLabelChanged(object sender, ChannelListLabelChangedEventArgs e)

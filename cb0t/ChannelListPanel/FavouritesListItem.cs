@@ -6,7 +6,7 @@ using System.Text;
 
 namespace cb0t
 {
-    class FavouritesListItem
+    public class FavouritesListItem
     {
         public String Name { get; set; }
         public String Topic { get; set; }
