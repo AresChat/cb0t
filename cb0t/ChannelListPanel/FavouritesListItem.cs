@@ -18,6 +18,7 @@ namespace cb0t
         public FavouritesListItem()
         {
             this.Password = String.Empty;
+            this.AutoJoin = false;
         }
     }
 }

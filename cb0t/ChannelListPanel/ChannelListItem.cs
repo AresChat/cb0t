@@ -16,6 +16,11 @@ namespace cb0t
         public ushort Users { get; set; }
         public RoomLanguage Lang { get; set; }
 
+        public ChannelListItem()
+        {
+            this.Servers = new IPEndPoint[] { };
+        }
+
         public ChannelListItem(String name, String topic, IPAddress ip, ushort port)
         {
             this.Name = name;

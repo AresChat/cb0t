@@ -121,9 +121,8 @@ namespace cb0t
                 this.do_once = true;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
-                this.clist_content.Create();
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
-                this.clist_content.RefreshList();
+                this.clist_content.Create();
                 Settings.CAN_WRITE_REG = true;
             }
         }
