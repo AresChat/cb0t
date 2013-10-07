@@ -535,12 +535,22 @@ namespace cb0t
                             break;
 
                         case "2":
+                            this.RemoveFromFavourites(this.channelListView2.SelectedIndices[0]);
                             break;
 
                         case "3":
                             break;
                     }
                 }
+        }
+
+        private void RemoveFromFavourites(int index)
+        {
+            this.channelListView2.Items.RemoveAt(index);
+            this.g_favs[index].Dispose();
+            this.g_favs.RemoveAt(index);
+            this.favs.RemoveAt(index);
+            this.SaveFavourites();
         }
 
     }
