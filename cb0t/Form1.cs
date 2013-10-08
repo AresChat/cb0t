@@ -219,7 +219,20 @@ namespace cb0t
                 e.Cancel = true;
             else
             {
-                // move left/right
+                IPEndPoint ep = this.channel_bar.SelectedButton;
+
+                for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                    if (this.toolStrip1.Items[i] is ChannelButton)
+                        if (((ChannelButton)this.toolStrip1.Items[i]).EndPoint.Equals(ep))
+                        {
+                            this.moveLeftToolStripMenuItem.Enabled = i > 5;
+                            this.moveRightToolStripMenuItem.Enabled = i < (this.toolStrip1.Items.Count - 1);
+
+                            if (!this.moveLeftToolStripMenuItem.Enabled && !this.moveRightToolStripMenuItem.Enabled)
+                                e.Cancel = true;
+
+                            break;
+                        }
             }
         }
 
@@ -244,6 +257,34 @@ namespace cb0t
             }
         }
 
+        private void moveLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IPEndPoint ep = this.channel_bar.SelectedButton;
 
+            for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                if (this.toolStrip1.Items[i] is ChannelButton)
+                    if (((ChannelButton)this.toolStrip1.Items[i]).EndPoint.Equals(ep))
+                    {
+                        this.toolStrip1.Items.RemoveAt(i);
+                        this.toolStrip1.Items.Insert((i - 1), RoomPool.Rooms.Find(x => x.EndPoint.Equals(ep)).Button);
+                        this.toolStrip1.Invalidate();
+                        break;
+                    }
+        }
+
+        private void moveRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IPEndPoint ep = this.channel_bar.SelectedButton;
+
+            for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                if (this.toolStrip1.Items[i] is ChannelButton)
+                    if (((ChannelButton)this.toolStrip1.Items[i]).EndPoint.Equals(ep))
+                    {
+                        this.toolStrip1.Items.RemoveAt(i);
+                        this.toolStrip1.Items.Insert((i + 1), RoomPool.Rooms.Find(x => x.EndPoint.Equals(ep)).Button);
+                        this.toolStrip1.Invalidate();
+                        break;
+                    }
+        }
     }
 }
