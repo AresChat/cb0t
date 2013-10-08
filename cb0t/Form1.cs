@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Threading;
 
 namespace cb0t
 {
@@ -17,6 +18,7 @@ namespace cb0t
         private SettingsPanel settings_content { get; set; }
         private AudioPanel audio_content { get; set; }
         private ChannelListPanel clist_content { get; set; }
+        private Thread sock_thread { get; set; }
 
         public Form1()
         {
@@ -105,6 +107,13 @@ namespace cb0t
         {
             while (this.content1.Controls.Count > 0)
                 this.content1.Controls.RemoveAt(0);
+
+            foreach (Room room in RoomPool.Rooms)
+                if (room.EndPoint.Equals(ep))
+                {
+                    this.content1.Controls.Add(room.Panel);
+                    break;
+                }
         }
 
         private void toolStrip1_Resize(object sender, EventArgs e)
@@ -113,11 +122,15 @@ namespace cb0t
         }
 
         private bool do_once = false;
+        private bool terminate = false;
 
         private void Form1_Load(object sender, EventArgs e)
         {
             if (!this.do_once)
             {
+                this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
+                this.sock_thread.Start();
+
                 int frm_size_x = Settings.GetReg<int>("form_x", -1);
                 int frm_size_y = Settings.GetReg<int>("form_y", -1);
 
@@ -138,6 +151,24 @@ namespace cb0t
             }
         }
 
+        private void SocketThread()
+        {
+            while (true)
+            {
+                if (this.terminate)
+                    return;
+
+                Room[] pool = RoomPool.Rooms.ToArray();
+
+                for (int i = 0; i < pool.Length; i++)
+                {
+
+                }
+
+                Thread.Sleep(30);
+            }
+        }
+
         private void OpenChannel(object sender, OpenChannelEventArgs e)
         {
             IPEndPoint ep = new IPEndPoint(e.Room.IP, e.Room.Port);
@@ -145,11 +176,27 @@ namespace cb0t
 
             if (index > -1)
             {
-                
+                this.SetToRoom(RoomPool.Rooms[index].EndPoint);
+                this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
+                this.channel_bar.SelectedButton = RoomPool.Rooms[index].EndPoint;
+                this.toolStrip1.Invalidate();
             }
             else
             {
-                
+                Room room = new Room
+                {
+                    EndPoint = new IPEndPoint(e.Room.IP, e.Room.Port),
+                    Credentials = e.Room
+                };
+
+                room.Button = new ChannelButton(room.Credentials);
+                room.Panel = new RoomPanel();
+                RoomPool.Rooms.Add(room);
+                this.toolStrip1.Items.Add(room.Button);
+                this.SetToRoom(room.EndPoint);
+                this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
+                this.channel_bar.SelectedButton = room.EndPoint;
+                this.toolStrip1.Invalidate();
             }
         }
 
@@ -178,6 +225,7 @@ namespace cb0t
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            this.terminate = true;
             this.clist_content.Terminate = true;
         }
 
