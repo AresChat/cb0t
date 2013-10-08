@@ -66,12 +66,14 @@
             this.moveLeftToolStripMenuItem.Name = "moveLeftToolStripMenuItem";
             this.moveLeftToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.moveLeftToolStripMenuItem.Text = "Move left";
+            this.moveLeftToolStripMenuItem.Click += new System.EventHandler(this.moveLeftToolStripMenuItem_Click);
             // 
             // moveRightToolStripMenuItem
             // 
             this.moveRightToolStripMenuItem.Name = "moveRightToolStripMenuItem";
             this.moveRightToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.moveRightToolStripMenuItem.Text = "Move right";
+            this.moveRightToolStripMenuItem.Click += new System.EventHandler(this.moveRightToolStripMenuItem_Click);
             // 
             // content1
             // 
