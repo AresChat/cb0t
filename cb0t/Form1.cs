@@ -112,6 +112,7 @@ namespace cb0t
                 if (room.EndPoint.Equals(ep))
                 {
                     this.content1.Controls.Add(room.Panel);
+                    room.Button.MakeRead();
                     break;
                 }
         }
@@ -159,11 +160,11 @@ namespace cb0t
                     return;
 
                 Room[] pool = RoomPool.Rooms.ToArray();
+                uint time = Settings.Time;
 
                 for (int i = 0; i < pool.Length; i++)
-                {
-
-                }
+                    if (pool[i] != null)
+                        pool[i].SocketTasks(time);
 
                 Thread.Sleep(30);
             }
@@ -185,18 +186,76 @@ namespace cb0t
             {
                 Room room = new Room
                 {
-                    EndPoint = new IPEndPoint(e.Room.IP, e.Room.Port),
+                    EndPoint = ep,
                     Credentials = e.Room
                 };
 
                 room.Button = new ChannelButton(room.Credentials);
-                room.Panel = new RoomPanel();
+                room.Panel = new RoomPanel(ep);
+                room.Panel.BackColor = Color.White;
+                room.Panel.Dock = DockStyle.Fill;
+                room.Panel.CloseClicked += this.CloseChannel;
+                room.Panel.CheckUnread += this.CheckUnread;
                 RoomPool.Rooms.Add(room);
                 this.toolStrip1.Items.Add(room.Button);
                 this.SetToRoom(room.EndPoint);
                 this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
                 this.channel_bar.SelectedButton = room.EndPoint;
                 this.toolStrip1.Invalidate();
+            }
+        }
+
+        private void CloseChannel(object sender, EventArgs e)
+        {
+            IPEndPoint ep = (IPEndPoint)sender;
+            int index = RoomPool.Rooms.FindIndex(x => x.EndPoint.Equals(ep));
+
+            if (index > -1)
+            {
+                RoomPool.Rooms[index].Panel.CloseClicked -= this.CloseChannel;
+                RoomPool.Rooms[index].Panel.CheckUnread -= this.CheckUnread;
+
+                for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                    if (this.toolStrip1.Items[i] is ChannelButton)
+                        if (((ChannelButton)this.toolStrip1.Items[i]).EndPoint.Equals(ep))
+                        {
+                            this.toolStrip1.Items.RemoveAt(i);
+                            break;
+                        }
+
+                while (this.content1.Controls.Count > 0)
+                    this.content1.Controls.RemoveAt(0);
+
+                RoomPool.Rooms[index].Release();
+                RoomPool.Rooms.RemoveAt(index);
+
+                this.channel_bar.Mode = ChannelBar.ModeOption.ChannelList;
+                this.toolStrip1.Invalidate();
+                this.content1.Controls.Add(this.clist_content);
+            }
+        }
+
+        private void CheckUnread(object sender, EventArgs e)
+        {
+            if (this.toolStrip1.InvokeRequired)
+                this.toolStrip1.BeginInvoke(new EventHandler(this.CheckUnread), sender, e);
+            else
+            {
+                IPEndPoint ep = (IPEndPoint)sender;
+                Room room = RoomPool.Rooms.Find(x => x.EndPoint.Equals(ep));
+
+                if (room != null)
+                {
+                    bool should_update = false;
+
+                    if (this.channel_bar.Mode != ChannelBar.ModeOption.Channel)
+                        should_update = true;
+                    else if (!this.channel_bar.SelectedButton.Equals(ep))
+                        should_update = true;
+
+                    if (should_update)
+                        room.Button.MakeUnread();
+                }
             }
         }
 
