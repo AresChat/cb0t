@@ -12,5 +12,20 @@ namespace cb0t
         public FavouritesListItem Credentials { get; set; }
         public RoomPanel Panel { get; set; }
         public IPEndPoint EndPoint { get; set; }
+
+        public void Release()
+        {
+            this.Button.Free();
+            this.Button.Dispose();
+            this.Button = null;
+            this.Panel.Free();
+            this.Panel.Dispose();
+            this.Panel = null;
+        }
+
+        public void SocketTasks(uint time)
+        {
+
+        }
     }
 }

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoomPanel\ButtonBar.cs" />
     <Compile Include="ChannelListPanel\ChannelListLabelChangedEventArgs.cs" />
     <Compile Include="ChannelListPanel\ChannelListItem.cs" />
     <Compile Include="ChannelListPanel\ChannelListBar.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="ChannelListPanel\UdpPacketReader.cs" />
     <Compile Include="Misc\Zip.cs" />
     <Compile Include="Misc\HashlinkReader.cs" />
+    <Compile Include="RoomPanel\Topic.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -179,7 +181,9 @@
   <ItemGroup>
     <None Include="Resources\emotic.bmp" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
