@@ -51,7 +51,13 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
+            this.tabControl1.Resize += tabControl1_Resize;
             this.tabPage1.ImageIndex = 0;
+        }
+
+        void tabControl1_Resize(object sender, EventArgs e)
+        {
+            
         }
 
         public void Free()

@@ -144,6 +144,28 @@
     <Compile Include="Misc\HashlinkReader.cs" />
     <Compile Include="RoomPanel\Topic.cs" />
     <Compile Include="RoomPanel\User.cs" />
+    <Compile Include="RoomPanel\UserListHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\UserListHeader.Designer.cs">
+      <DependentUpon>UserListHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPanel\UserListBoxSectionType.cs" />
+    <Compile Include="RoomPanel\UserListBoxEmptyItem.cs" />
+    <Compile Include="RoomPanel\UserListBoxItem.cs" />
+    <Compile Include="RoomPanel\UserListBoxSectionItem.cs" />
+    <Compile Include="RoomPanel\UserListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\UserListToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\UserListContainer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\UserListContainer.Designer.cs">
+      <DependentUpon>UserListContainer.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +193,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\SettingsPanel.resx">
       <DependentUpon>SettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\UserListHeader.resx">
+      <DependentUpon>UserListHeader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\UserListContainer.resx">
+      <DependentUpon>UserListContainer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -236,6 +264,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dav.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crypto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\away.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\music.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
