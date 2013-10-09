@@ -192,7 +192,7 @@ namespace cb0t
 
                 room.Button = new ChannelButton(room.Credentials);
                 room.Panel = new RoomPanel(ep);
-                room.Panel.BackColor = Color.White;
+                room.Panel.BackColor = Color.WhiteSmoke;
                 room.Panel.Dock = DockStyle.Fill;
                 room.Panel.CloseClicked += this.CloseChannel;
                 room.Panel.CheckUnread += this.CheckUnread;
@@ -226,8 +226,10 @@ namespace cb0t
                 while (this.content1.Controls.Count > 0)
                     this.content1.Controls.RemoveAt(0);
 
-                RoomPool.Rooms[index].Release();
+                Room room = RoomPool.Rooms[index];
+                room.Release();
                 RoomPool.Rooms.RemoveAt(index);
+                room = null;
 
                 this.channel_bar.Mode = ChannelBar.ModeOption.ChannelList;
                 this.toolStrip1.Invalidate();
