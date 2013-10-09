@@ -26,7 +26,10 @@ namespace cb0t
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            e.Graphics.Clear(Color.WhiteSmoke);
+            Rectangle bounds = new Rectangle(0, 0, e.ToolStrip.Width, e.ToolStrip.Height);
+
+            using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.Gainsboro, Color.WhiteSmoke, LinearGradientMode.Vertical))
+                e.Graphics.FillRectangle(brush, bounds);
 
             // topic
             Rectangle topic_bounds = new Rectangle(4, (e.ToolStrip.Height / 2) - 9, (e.ToolStrip.Width - 60), 20);
@@ -41,10 +44,27 @@ namespace cb0t
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            if (e.Item.Selected || e.Item.Pressed)
+            {
+                using (GraphicsPath path = new Rectangle(1, 1, e.Item.Width - 3, e.Item.Height - 3).Rounded(2))
+                using (Pen pen = new Pen(Color.Silver))
+                    e.Graphics.DrawPath(pen, path);
+            }
+
             if (e.Item.Selected != this.close_hottracking)
             {
                 this.close_hottracking = !this.close_hottracking;
                 e.ToolStrip.Invalidate();
+            }
+        }
+
+        protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (e.Item.Selected || e.Item.Pressed)
+            {
+                using (GraphicsPath path = new Rectangle(1, 1, e.Item.Width - 3, e.Item.Height - 3).Rounded(2))
+                using (Pen pen = new Pen(Color.Silver))
+                    e.Graphics.DrawPath(pen, path);
             }
         }
 
