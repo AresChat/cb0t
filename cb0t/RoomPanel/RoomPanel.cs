@@ -50,6 +50,8 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
+            this.tabControl1.ImageList = this.tab_imgs;
+            this.tabPage1.ImageIndex = 0;
         }
 
         public void Free()
@@ -120,8 +122,10 @@ namespace cb0t
             this.textBox1.Dispose();
             this.textBox1 = null;
 
-
-
+            this.CloseAllTabs(true);
+            this.tabControl1.ImageList = null;
+            this.tabControl1.Dispose();
+            this.tabControl1 = null;
 
             while (this.tab_imgs.Images.Count > 0)
             {
@@ -143,7 +147,28 @@ namespace cb0t
 
         private void CloseAllTabs(bool including_main)
         {
+            if (including_main)
+            {
+                while (this.splitContainer1.Panel1.Controls.Count > 0)
+                    this.splitContainer1.Panel1.Controls.RemoveAt(0);
 
+                while (this.splitContainer1.Panel2.Controls.Count > 0)
+                    this.splitContainer1.Panel2.Controls.RemoveAt(0);
+
+                this.splitContainer1.Dispose();
+                this.splitContainer1 = null;
+
+                while (this.tabPage1.Controls.Count > 0)
+                    this.tabPage1.Controls.RemoveAt(0);
+
+                this.tabPage1.Dispose();
+                this.tabPage1 = null;
+                this.userListContainer1.Free();
+                this.userListContainer1.Dispose();
+                this.userListContainer1 = null;
+            }
+
+            // pm and file tabs
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
