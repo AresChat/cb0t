@@ -54,6 +54,14 @@ namespace cb0t
             this.tabPage1.ImageIndex = 0;
         }
 
+        public void test()
+        {
+            this.userListContainer1.ClearUserList();
+            this.userListContainer1.ResumeUserlist();
+            this.topic.TopicText = "this is a test";
+            this.toolStrip1.Invalidate();
+        }
+
         public void Free()
         {
             while (this.Controls.Count > 0)

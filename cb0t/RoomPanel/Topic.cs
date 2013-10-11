@@ -11,8 +11,10 @@ namespace cb0t
     class Topic : ToolStripRenderer
     {
         private bool close_hottracking = false;
-
+        private Font t_font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
         private SolidBrush close_brush { get; set; }
+
+        public String TopicText = String.Empty;
 
         public Topic()
         {
@@ -22,6 +24,9 @@ namespace cb0t
         public void Free()
         {
             this.close_brush.Dispose();
+            this.close_brush = null;
+            this.t_font.Dispose();
+            this.t_font = null;
         }
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)

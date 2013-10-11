@@ -89,10 +89,17 @@ namespace cb0t
 
         private void UserListHeader_Paint(object sender, PaintEventArgs e)
         {
-            Rectangle r = new Rectangle(0, 0, this.Width, this.Height);
+            e.Graphics.Clear(Color.White);
+
+            Rectangle r = new Rectangle(1, 1, this.Width - 2, this.Height - 2);
 
             using (LinearGradientBrush lb = new LinearGradientBrush(r, this.column_bg1, this.column_bg2, 90f))
                 e.Graphics.FillRectangle(lb, r);
+
+            r = new Rectangle(1, 1, this.Width - 3, this.Height - 3);
+
+            using (Pen column_outline = new Pen(new SolidBrush(Color.FromArgb(109, 115, 123)), 1))
+                e.Graphics.DrawRectangle(column_outline, r);
 
             int icons_drawn = 0;
 
