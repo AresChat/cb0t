@@ -5,7 +5,7 @@ using System.Text;
 
 namespace cb0t
 {
-    class AresFont
+    public class AresFont
     {
         public String NameColor { get; set; }
         public String TextColor { get; set; }
