@@ -199,6 +199,7 @@ namespace cb0t
                 RoomPool.Rooms.Add(room);
                 this.toolStrip1.Items.Add(room.Button);
                 this.SetToRoom(room.EndPoint);
+                room.Panel.test();
                 this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
                 this.channel_bar.SelectedButton = room.EndPoint;
                 this.toolStrip1.Invalidate();
