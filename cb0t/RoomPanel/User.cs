@@ -9,7 +9,7 @@ using System.IO;
 
 namespace cb0t
 {
-    class User
+    public class User
     {
         public String Name { get; set; }
         public IPAddress ExternalIP { get; set; }
