@@ -1,15 +1,139 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace cb0t
 {
     class Emoticons
     {
+        [DllImport("gdiplus.dll")]
+        private static extern uint GdipEmfToWmfBits(IntPtr hEmf, uint uBufferSize, byte[] bBuffer, int iMappingMode, uint flags);
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteEnhMetaFile(IntPtr hemf);
+
         private static List<Emotic> shortcuts { get; set; }
+
+        public static String[] CustomEmoticons { get; set; }
         public static Bitmap[] emotic { get; set; }
+
+        public static String GetRTFExtendedEmoticon(String em_name, Graphics richtextbox)
+        {
+            StringBuilder result = new StringBuilder();
+
+            try
+            {
+                String path = Path.Combine(Settings.AppPath + "emoticons", em_name.ToLower() + ".gif");
+                byte[] file = File.ReadAllBytes(path);
+
+                using (MemoryStream org_ms = new MemoryStream(file))
+                using (Bitmap org_bmp = new Bitmap(org_ms))
+                using (Bitmap bmp = new Bitmap(org_bmp.Width, org_bmp.Height))
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.Clear(Color.White);
+                    g.DrawImage(org_bmp, new Point(0, 0));
+
+                    result.Append(@"{\pict\wmetafile8\picw");
+                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 2540));
+                    result.Append(@"\pich");
+                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 2540));
+                    result.Append(@"\picwgoal");
+                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 1440));
+                    result.Append(@"\pichgoal");
+                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 1440));
+                    result.Append(" ");
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        IntPtr ptr = g.GetHdc();
+
+                        using (Metafile meta = new Metafile(ms, ptr))
+                        {
+                            g.ReleaseHdc(ptr);
+
+                            using (Graphics gfx = Graphics.FromImage(meta))
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
+
+                            ptr = meta.GetHenhmetafile();
+                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                            byte[] buffer = new byte[size];
+                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                            DeleteEnhMetaFile(ptr);
+
+                            foreach (byte b in buffer)
+                                result.Append(String.Format("{0:x2}", b));
+
+                            result.Append("}");
+                            buffer = null;
+                        }
+                    }
+                }
+
+                file = null;
+            }
+            catch
+            {
+                return String.Empty;
+            }
+
+            return result.ToString();
+        }
+
+        public static String GetRTFEmoticon(int image_index, Color back_color, Graphics richtextbox)
+        {
+            StringBuilder result = new StringBuilder();
+
+            using (Bitmap bmp = new Bitmap(16, 16))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.Clear(back_color);
+                    g.DrawImage(emotic[image_index], new Point(0, 0));
+
+                    result.Append(@"{\pict\wmetafile8\picw");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiX) * 2540));
+                    result.Append(@"\pich");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiY) * 2540));
+                    result.Append(@"\picwgoal");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiX) * 1440));
+                    result.Append(@"\pichgoal");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiY) * 1440));
+                    result.Append(" ");
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        IntPtr ptr = g.GetHdc();
+
+                        using (Metafile meta = new Metafile(ms, ptr))
+                        {
+                            g.ReleaseHdc(ptr);
+
+                            using (Graphics gfx = Graphics.FromImage(meta))
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
+
+                            ptr = meta.GetHenhmetafile();
+                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                            byte[] buffer = new byte[size];
+                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                            DeleteEnhMetaFile(ptr);
+
+                            foreach (byte b in buffer)
+                                result.Append(String.Format("{0:x2}", b));
+
+                            result.Append("}");
+                            buffer = null;
+                        }
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
 
         public static Emotic FindEmoticon(String sc)
         {
@@ -22,6 +146,13 @@ namespace cb0t
 
         private static void Load_emotic()
         {
+            DirectoryInfo di = new DirectoryInfo(Settings.AppPath + "emoticons");
+            FileInfo[] files = di.GetFiles();
+            CustomEmoticons = new String[files.Length];
+
+            for (int i = 0; i < files.Length; i++)
+                CustomEmoticons[i] = Path.GetFileNameWithoutExtension(files[i].Name).ToUpper();
+
             emotic = new Bitmap[49];
             int count = 0;
             Rectangle r1 = new Rectangle(0, 0, 16, 16);

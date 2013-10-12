@@ -133,6 +133,9 @@
       <DependentUpon>RoomPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="RoomPanel\RoomPool.cs" />
+    <Compile Include="RtfScreen.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -54,12 +54,18 @@ namespace cb0t
             this.tabPage1.ImageIndex = 0;
         }
 
-        public void test()
+        private bool sdf = false;
+        public void thest()
         {
-            this.userListContainer1.ClearUserList();
-            this.userListContainer1.ResumeUserlist();
-            this.topic.TopicText = "this is a test";
-            this.toolStrip1.Invalidate();
+            if (!sdf)
+            {
+                sdf = true;
+                this.userListContainer1.ClearUserList();
+                this.userListContainer1.ResumeUserlist();
+                this.topic.TopicText = "this is a test";
+                this.toolStrip1.Invalidate();
+                this.rtfScreen1.ShowAnnounceText("test\x000312test(peace)\x0007test:O\x0006test");
+            }
         }
 
         public void Free()
@@ -145,6 +151,15 @@ namespace cb0t
 
             this.tab_imgs.Dispose();
             this.tab_imgs = null;
+
+            while (this.panel2.Controls.Count > 0)
+                this.panel2.Controls.RemoveAt(0);
+
+            this.panel2.Dispose();
+            this.panel2 = null;
+            this.rtfScreen1.Free();
+            this.rtfScreen1.Dispose();
+            this.rtfScreen1 = null;
 
 
 

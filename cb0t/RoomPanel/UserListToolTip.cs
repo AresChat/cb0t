@@ -15,7 +15,7 @@ namespace cb0t
 
         public UserListToolTip()
         {
-            this.Font = new Font("Verdana", 12f, FontStyle.Bold, GraphicsUnit.Pixel, 0);
+            this.Font = new Font("Tahoma", 12f, FontStyle.Bold, GraphicsUnit.Pixel, 0);
             this.OwnerDraw = true;
             this.Popup += this.OnPopup;
             this.Draw += this.OnDraw;

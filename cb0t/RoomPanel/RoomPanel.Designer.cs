@@ -46,14 +46,18 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rtfScreen1 = new cb0t.RtfScreen();
             this.userListContainer1 = new cb0t.UserListContainer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -238,12 +242,40 @@
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.panel2);
+            // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.userListContainer1);
             this.splitContainer1.Size = new System.Drawing.Size(542, 251);
             this.splitContainer1.SplitterDistance = 314;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.rtfScreen1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(314, 251);
+            this.panel2.TabIndex = 0;
+            // 
+            // rtfScreen1
+            // 
+            this.rtfScreen1.BackColor = System.Drawing.Color.White;
+            this.rtfScreen1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtfScreen1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtfScreen1.HideSelection = false;
+            this.rtfScreen1.Location = new System.Drawing.Point(0, 0);
+            this.rtfScreen1.Name = "rtfScreen1";
+            this.rtfScreen1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.rtfScreen1.Size = new System.Drawing.Size(312, 249);
+            this.rtfScreen1.TabIndex = 0;
+            this.rtfScreen1.Text = "";
             // 
             // userListContainer1
             // 
@@ -273,8 +305,10 @@
             this.toolStrip2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -300,5 +334,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private UserListContainer userListContainer1;
+        private System.Windows.Forms.Panel panel2;
+        private RtfScreen rtfScreen1;
     }
 }
