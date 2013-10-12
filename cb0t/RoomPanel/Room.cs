@@ -25,7 +25,7 @@ namespace cb0t
 
         public void SocketTasks(uint time)
         {
-
+            this.Panel.thest();
         }
     }
 }
