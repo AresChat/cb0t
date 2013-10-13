@@ -18,14 +18,18 @@ namespace cb0t
         private Bitmap b3 { get; set; }
         private Bitmap b4 { get; set; }
         private ImageList tab_imgs { get; set; }
+        private FavouritesListItem creds { get; set; }
 
         public IPEndPoint EndPoint { get; set; }
+
         public event EventHandler CloseClicked;
         public event EventHandler CheckUnread;
 
-        public RoomPanel(IPEndPoint ep)
+        public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
+            this.creds = creds;
+            this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
             this.topic = new Topic();
             this.b1 = (Bitmap)Emoticons.emotic[47].Clone();
             this.toolStripButton5.Image = this.b1;
@@ -44,7 +48,6 @@ namespace cb0t
             this.toolStripDropDownButton1.DropDownItems.Add("Auto play voice clips");
             this.toolStripDropDownButton1.DropDownItems.Add("Close sub tabs");
             this.toolStrip2.Renderer = new ButtonBar();
-            this.EndPoint = ep;
             this.tab_imgs = new ImageList();
             this.tab_imgs.ImageSize = new Size(16, 16);
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
@@ -62,10 +65,19 @@ namespace cb0t
                 sdf = true;
                 this.userListContainer1.ClearUserList();
                 this.userListContainer1.ResumeUserlist();
-                this.topic.TopicText = "this is a test";
                 this.toolStrip1.Invalidate();
                 this.rtfScreen1.ShowAnnounceText("test\x000312test(peace)\x0007test:O\x0006test");
+                this.UpdateTopic(this.creds.Topic);
             }
+        }
+
+        public void UpdateTopic(String text)
+        {
+            this.toolStrip1.BeginInvoke((Action)(() =>
+            {
+                this.topic.TopicText = text;
+                this.toolStrip1.Invalidate();
+            }));
         }
 
         public void Free()

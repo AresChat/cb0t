@@ -25,6 +25,7 @@ namespace cb0t
             this.userListHeader1.Free();
             this.userListHeader1.Dispose();
             this.userListHeader1 = null;
+            this.userListBox1.Items.Clear();
             this.userListBox1.Free();
             this.userListBox1.Dispose();
             this.userListBox1 = null;
