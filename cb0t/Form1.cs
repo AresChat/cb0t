@@ -191,7 +191,7 @@ namespace cb0t
                 };
 
                 room.Button = new ChannelButton(room.Credentials);
-                room.Panel = new RoomPanel(ep);
+                room.Panel = new RoomPanel(room.Credentials);
                 room.Panel.BackColor = Color.WhiteSmoke;
                 room.Panel.Dock = DockStyle.Fill;
                 room.Panel.CloseClicked += this.CloseChannel;
