@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AresSocket.cs" />
+    <Compile Include="PacketReceivedEventArgs.cs" />
     <Compile Include="RoomPanel\AresFont.cs" />
     <Compile Include="Misc\Helpers.cs" />
     <Compile Include="RoomPanel\ButtonBar.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="RoomPanel\RtfScreen.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="RoomPanel\SessionState.cs" />
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,6 +172,8 @@
     <Compile Include="RoomPanel\UserListContainer.Designer.cs">
       <DependentUpon>UserListContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="TCPMsg.cs" />
+    <Compile Include="TCPPacketReader.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
