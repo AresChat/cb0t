@@ -184,12 +184,7 @@ namespace cb0t
             }
             else
             {
-                Room room = new Room
-                {
-                    EndPoint = ep,
-                    Credentials = e.Room
-                };
-
+                Room room = new Room(Settings.Time, e.Room);
                 room.Button = new ChannelButton(room.Credentials);
                 room.Panel = new RoomPanel(room.Credentials);
                 room.Panel.BackColor = Color.WhiteSmoke;

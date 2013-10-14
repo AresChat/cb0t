@@ -57,19 +57,8 @@ namespace cb0t
             this.tabPage1.ImageIndex = 0;
         }
 
-        private bool sdf = false;
-        public void thest()
-        {
-            if (!sdf)
-            {
-                sdf = true;
-                this.userListContainer1.ClearUserList();
-                this.userListContainer1.ResumeUserlist();
-                this.toolStrip1.Invalidate();
-                this.rtfScreen1.ShowAnnounceText("test\x000312test(peace)\x0007test:O\x0006test");
-                this.UpdateTopic(this.creds.Topic);
-            }
-        }
+        public void ServerText(String text) { this.rtfScreen1.ShowServerText(text); }
+        public void AnnounceText(String text) { this.rtfScreen1.ShowAnnounceText(text); }
 
         public void UpdateTopic(String text)
         {
@@ -172,10 +161,6 @@ namespace cb0t
             this.rtfScreen1.Free();
             this.rtfScreen1.Dispose();
             this.rtfScreen1 = null;
-
-
-
-
             this.Font.Dispose();
             this.Font = null;
         }
