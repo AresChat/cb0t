@@ -67,8 +67,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AresSocket.cs" />
-    <Compile Include="PacketReceivedEventArgs.cs" />
+    <Compile Include="RoomPanel\CryptoService.cs" />
+    <Compile Include="RoomPanel\AresSocket.cs" />
+    <Compile Include="RoomPanel\PacketReceivedEventArgs.cs" />
     <Compile Include="RoomPanel\AresFont.cs" />
     <Compile Include="Misc\Helpers.cs" />
     <Compile Include="RoomPanel\ButtonBar.cs" />
@@ -172,8 +173,10 @@
     <Compile Include="RoomPanel\UserListContainer.Designer.cs">
       <DependentUpon>UserListContainer.cs</DependentUpon>
     </Compile>
-    <Compile Include="TCPMsg.cs" />
-    <Compile Include="TCPPacketReader.cs" />
+    <Compile Include="RoomPanel\TCPMsg.cs" />
+    <Compile Include="RoomPanel\TCPPacketReader.cs" />
+    <Compile Include="RoomPanel\TCPOutbound.cs" />
+    <Compile Include="RoomPanel\TCPPacketWriter.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>

@@ -93,13 +93,13 @@ namespace cb0t
             return tmp;
         }
 
-        public String ReadString()
+        public String ReadString(CryptoService c)
         {
-          /*  if (Crypto.Mode == CryptoMode.Encrypted)
+            if (c.Mode == CryptoMode.Encrypted)
             {
                 ushort size = this;
                 byte[] data = this.ReadBytes(size);
-                data = Crypto.Decrypt(data);
+                data = c.Decrypt(data);
                 String str = Encoding.UTF8.GetString(data);
 
                 if (this.Position < this.Data.Count)
@@ -109,14 +109,24 @@ namespace cb0t
                 return str;
             }
             else
-            {*/
+            {
                 String str = String.Empty;
                 int split = this.Data.IndexOf(0, this.Position);
                 byte[] tmp = new byte[split > -1 ? (split - this.Position) : (this.Data.Count - this.Position)];
                 Array.Copy(this.Data.ToArray(), this.Position, tmp, 0, tmp.Length);
                 this.Position = split > -1 ? (split + 1) : this.Data.Count;
                 return Encoding.UTF8.GetString(tmp).Replace("\r\n", "\n");
-           // }
+            }
+        }
+
+        public String ReadString()
+        {
+            String str = String.Empty;
+            int split = this.Data.IndexOf(0, this.Position);
+            byte[] tmp = new byte[split > -1 ? (split - this.Position) : (this.Data.Count - this.Position)];
+            Array.Copy(this.Data.ToArray(), this.Position, tmp, 0, tmp.Length);
+            this.Position = split > -1 ? (split + 1) : this.Data.Count;
+            return Encoding.UTF8.GetString(tmp).Replace("\r\n", "\n");
         }
 
         public byte[] ToArray()

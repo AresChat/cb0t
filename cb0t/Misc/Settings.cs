@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 namespace cb0t
@@ -61,6 +63,34 @@ namespace cb0t
             foreach (FileInfo f in files)
                 try { File.Delete(f.FullName); }
                 catch { }
+        }
+
+        public static IPAddress LocalIP
+        {
+            get
+            {
+                foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                        return ip;
+
+                return IPAddress.Loopback;
+            }
+        }
+
+        public static Guid Guid
+        {
+            get
+            {
+                byte[] buf = GetReg<byte[]>("account", null);
+
+                if (buf == null)
+                {
+                    buf = Guid.NewGuid().ToByteArray();
+                    SetReg("account", buf);
+                }
+
+                return new Guid(buf);
+            }
         }
 
         public static uint Time

@@ -17,6 +17,8 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public int MyLevel { get; set; }
+
         public void Free()
         {
             while (this.Controls.Count > 0)

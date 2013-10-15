@@ -198,6 +198,7 @@
             // toolStripButton8
             // 
             this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton8.Enabled = false;
             this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
             this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton8.Name = "toolStripButton8";
@@ -210,8 +211,7 @@
             // 
             this.toolStripLabel1.IsLink = true;
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(26, 22);
-            this.toolStripLabel1.Text = "test";
+            this.toolStripLabel1.Size = new System.Drawing.Size(0, 22);
             // 
             // tabControl1
             // 
