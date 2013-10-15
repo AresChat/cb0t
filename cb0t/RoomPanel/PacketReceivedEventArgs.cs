@@ -9,5 +9,6 @@ namespace cb0t
     {
         public TCPPacketReader Packet { get; set; }
         public TCPMsg Msg { get; set; }
+        public uint Time { get; set; }
     }
 }

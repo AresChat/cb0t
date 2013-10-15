@@ -59,8 +59,31 @@ namespace cb0t
 
         public void ServerText(String text) { this.rtfScreen1.ShowServerText(text); }
         public void AnnounceText(String text) { this.rtfScreen1.ShowAnnounceText(text); }
+        public void PublicText(String name, String text, AresFont font) { this.rtfScreen1.ShowPublicText(name, text, font); }
+        public void EmoteText(String name, String text, AresFont font) { this.rtfScreen1.ShowEmoteText(name, text, font); }
+        public void CheckUnreadStatus() { this.CheckUnread(this.EndPoint, EventArgs.Empty); }
 
-        public void UpdateTopic(String text)
+        public UserListContainer Userlist { get { return this.userListContainer1; } }
+        public TextBox SendBox { get { return this.textBox1; } }
+
+        public void CanVC(bool can)
+        {
+            this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton8.Enabled = can));
+        }
+
+        private String url_tag = String.Empty;
+
+        public void SetURL(String text, String addr)
+        {
+            this.toolStrip2.BeginInvoke((Action)(() =>
+            {
+                this.toolStripLabel1.Text = text;
+                this.toolStripLabel1.ToolTipText = addr;
+                this.url_tag = addr;
+            }));
+        }
+
+        public void SetTopic(String text)
         {
             this.toolStrip1.BeginInvoke((Action)(() =>
             {

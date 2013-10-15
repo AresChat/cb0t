@@ -67,7 +67,12 @@ namespace cb0t
             this.data_out.Add(data);
         }
 
-        public bool Service()
+        public void SendPriority(byte[] data)
+        {
+            this.data_out.Insert(0, data);
+        }
+
+        public bool Service(uint time)
         {
             while (this.data_out.Count > 0)
             {
@@ -113,7 +118,8 @@ namespace cb0t
                     PacketReceivedEventArgs args = new PacketReceivedEventArgs
                     {
                         Msg = (TCPMsg)id,
-                        Packet = new TCPPacketReader(packet)
+                        Packet = new TCPPacketReader(packet),
+                        Time = time
                     };
 
                     this.PacketReceived(null, args);
