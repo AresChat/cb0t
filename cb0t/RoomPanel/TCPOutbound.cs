@@ -14,7 +14,7 @@ namespace cb0t
             packet.WriteGuid(Settings.Guid);
             packet.WriteUInt16(0);
             packet.WriteByte((byte)Settings.GetReg<int>("crypto", 250));
-            packet.WriteUInt16(0);
+            packet.WriteUInt16(220);
             //packet.WriteIP("0.0.0.0");
             packet.WriteBytes(new byte[] { 0x7b, 0xff, 0x7b, 0xff });
             packet.WriteUInt16(65535);
@@ -38,6 +38,27 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_LOGIN);
         }
 
+        public static byte[] Update(CryptoService c)
+        {
+            String str;
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteUInt16(0);
+            packet.WriteByte(7);
+            packet.WriteIP("0.0.0.0");
+            packet.WriteUInt16(65535);
+            packet.WriteIP(Settings.LocalIP);
+            packet.WriteByte((byte)Settings.GetReg<int>("user_age", 0));
+            packet.WriteByte((byte)Settings.GetReg<int>("user_gender", 0));
+            packet.WriteByte((byte)Settings.GetReg<int>("user_country", 0));
+            str = Settings.GetReg<String>("user_region", String.Empty);
+
+            if (str.Length > 30)
+                str = str.Substring(0, 30);
+
+            packet.WriteString(str, c);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_UPDATE_STATUS);
+        }
+
         public static byte[] Public(String text, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();
@@ -57,6 +78,15 @@ namespace cb0t
             TCPPacketWriter packet = new TCPPacketWriter();
             packet.WriteString(Helpers.FormatAresColorCodes(text), c, false);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_COMMAND);
+        }
+
+        public static byte[] Lag(String name, ulong time, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_latency_check", c);
+            packet.WriteString(name, c);
+            packet.WriteUInt64(time);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
         }
 
 

@@ -18,7 +18,6 @@ namespace cb0t
         private Bitmap b3 { get; set; }
         private Bitmap b4 { get; set; }
         private ImageList tab_imgs { get; set; }
-        private FavouritesListItem creds { get; set; }
 
         public IPEndPoint EndPoint { get; set; }
 
@@ -28,7 +27,6 @@ namespace cb0t
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
-            this.creds = creds;
             this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
             this.topic = new Topic();
             this.b1 = (Bitmap)Emoticons.emotic[47].Clone();
@@ -62,6 +60,11 @@ namespace cb0t
         public void PublicText(String name, String text, AresFont font) { this.rtfScreen1.ShowPublicText(name, text, font); }
         public void EmoteText(String name, String text, AresFont font) { this.rtfScreen1.ShowEmoteText(name, text, font); }
         public void CheckUnreadStatus() { this.CheckUnread(this.EndPoint, EventArgs.Empty); }
+
+        public void ScrollDown()
+        {
+            this.rtfScreen1.ScrollDown();
+        }
 
         public UserListContainer Userlist { get { return this.userListContainer1; } }
         public TextBox SendBox { get { return this.textBox1; } }

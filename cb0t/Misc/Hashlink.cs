@@ -74,6 +74,26 @@ namespace cb0t
             return Convert.ToBase64String(buf);
         }
 
+        public static String EncodeHashlink(Redirect room)
+        {
+            List<byte> list = new List<byte>();
+            list.AddRange(new byte[20]);
+            list.AddRange(Encoding.UTF8.GetBytes("CHATCHANNEL"));
+            list.Add(0);
+            list.AddRange(room.IP.GetAddressBytes());
+            list.AddRange(BitConverter.GetBytes(room.Port));
+            list.AddRange(room.IP.GetAddressBytes());
+            list.AddRange(Encoding.UTF8.GetBytes(room.Name));
+            list.Add(0);
+            list.Add(0);
+
+            byte[] buf = list.ToArray();
+            buf = Zip.Compress(buf);
+            buf = e67(buf, 28435);
+
+            return Convert.ToBase64String(buf);
+        }
+
         public static DecryptedHashlink DecodeHashlink(String hashlink)
         {
             DecryptedHashlink room = new DecryptedHashlink();

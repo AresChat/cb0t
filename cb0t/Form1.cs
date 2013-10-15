@@ -113,6 +113,7 @@ namespace cb0t
                 {
                     this.content1.Controls.Add(room.Panel);
                     room.Button.MakeRead();
+                    room.ScrollAndFocus();
                     break;
                 }
         }
