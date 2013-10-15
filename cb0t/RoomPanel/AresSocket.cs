@@ -11,8 +11,9 @@ namespace cb0t
     {
         private Socket sock = null;
         private List<byte> data_in = new List<byte>();
-        private List<byte[]> data_out = new List<byte[]>();
+        private Queue<byte[]> data_out = new Queue<byte[]>();
         private int health = 0;
+        private int avail = 0;
 
         public event EventHandler<PacketReceivedEventArgs> PacketReceived;
 
@@ -70,12 +71,7 @@ namespace cb0t
 
         public void Send(byte[] data)
         {
-            this.data_out.Add(data);
-        }
-
-        public void SendPriority(byte[] data)
-        {
-            this.data_out.Insert(0, data);
+            this.data_out.Enqueue(data);
         }
 
         public bool Service(uint time, out int death_code)
@@ -84,8 +80,8 @@ namespace cb0t
             {
                 try
                 {
-                    this.sock.Send(this.data_out[0]);
-                    this.data_out.RemoveAt(0);
+                    this.sock.Send(this.data_out.Peek());
+                    this.data_out.Dequeue();
                 }
                 catch { break; }
             }
@@ -95,7 +91,15 @@ namespace cb0t
             int size = 0;
             bool success = true;
 
-            try { size = this.sock.Receive(buf, 0, buf.Length, SocketFlags.None, out e); }
+            try
+            {
+                this.avail = this.sock.Available;
+
+                if (this.avail > 8192)
+                    this.avail = 8192;
+
+                size = this.sock.Receive(buf, 0, this.avail, SocketFlags.None, out e);
+            }
             catch { }
 
             death_code = (int)e;
@@ -104,7 +108,7 @@ namespace cb0t
             {
                 if (e == SocketError.WouldBlock)
                     this.health = 0;
-                else if (++this.health > 10)
+                else if (this.health++ > 3)
                     success = false;
             }
             else
