@@ -62,6 +62,8 @@ namespace cb0t
             this.users = null;
         }
 
+        private int death_code = 0;
+
         public void SocketTasks(uint time)
         {
             if (this.state == SessionState.Sleeping)
@@ -90,6 +92,7 @@ namespace cb0t
                     this.state = SessionState.Connected;
                     this.ticks = time;
                     this.Panel.ServerText("Connected, handshaking...");
+                    this.sock.Clear();
                     this.sock.Send(TCPOutbound.Login());
                 }
                 else if (time >= (this.ticks + 10))
@@ -102,7 +105,7 @@ namespace cb0t
                     ScriptEvents.OnDisconnected(this);
                 }
             }
-            else
+            else if (this.sock != null)
             {
                 if (time >= (this.last_lag + 30))
                 {
@@ -118,13 +121,13 @@ namespace cb0t
                     this.sock.SendPriority(TCPOutbound.Update(this.crypto));
                 }
 
-                if (!this.sock.Service(time))
+                if (!this.sock.Service(time, out this.death_code))
                 {
                     this.ticks = time;
                     this.state = SessionState.Sleeping;
                     this.sock.Disconnect();
                     this.reconnect_count++;
-                    this.Panel.AnnounceText("Disconnected (remote connection reset)");
+                    this.Panel.AnnounceText("Disconnected (" + death_code + ")");
                 }
             }
         }
@@ -186,8 +189,11 @@ namespace cb0t
                     break;
 
                 case TCPMsg.MSG_CHAT_SERVER_ERROR:
+                    this.Panel.AnnounceText(e.Packet.ReadString(this.crypto));
+                    break;
+
                 case TCPMsg.MSG_CHAT_SERVER_NOSUCH:
-                    this.Eval_Announce(e.Packet.ReadString(this.crypto));
+                    this.Eval_Announce(e.Packet);
                     break;
 
                 case TCPMsg.MSG_CHAT_SERVER_TOPIC:
@@ -301,6 +307,17 @@ namespace cb0t
             ScriptEvents.OnConnected(this);
         }
 
+        private void Eval_Announce(TCPPacketReader packet)
+        {
+            String text = packet.ReadString(this.crypto);
+
+            if (ScriptEvents.OnAnnounceReceiving(this, text))
+            {
+                this.Panel.AnnounceText(text);
+                ScriptEvents.OnAnnounceReceived(this, text);
+            }
+        }
+
         private void Eval_Redirect(TCPPacketReader packet, uint time)
         {
             Redirect redirect = new Redirect();
@@ -349,7 +366,9 @@ namespace cb0t
         {
             String addr = packet.ReadString(this.crypto);
             String text = packet.ReadString(this.crypto);
-            this.Panel.SetURL(text, addr);
+
+            if (ScriptEvents.OnUrlReceiving(this, text, addr))
+                this.Panel.SetURL(text, addr);
         }
 
         private void Eval_Avatar(TCPPacketReader packet)
@@ -359,6 +378,9 @@ namespace cb0t
 
             if (u != null)
             {
+                if (!ScriptEvents.OnUserAvatarReceiving(this, u))
+                    return;
+
                 this.Panel.Userlist.BeginInvoke((Action)(() =>
                 {
                     byte[] data = packet;
@@ -384,10 +406,11 @@ namespace cb0t
             User u = this.users.Find(x => x.Name == name);
 
             if (u != null)
-            {
-                u.PersonalMessage = text;
-                this.Panel.Userlist.UpdateUserAppearance(u);
-            }
+                if (ScriptEvents.OnUserMessageReceiving(this, u, text))
+                {
+                    u.PersonalMessage = text;
+                    this.Panel.Userlist.UpdateUserAppearance(u);
+                }
         }
 
         private void Eval_Join(TCPPacketReader packet)
@@ -474,17 +497,13 @@ namespace cb0t
             ScriptEvents.OnUserlistReceived(this);
         }
 
-        private void Eval_Announce(String text)
-        {
-            this.Panel.AnnounceText(text);
-        }
-
         private void Eval_Topic(String text, bool updated)
         {
             if (updated)
                 this.Panel.ServerText("Topic update: " + text);
 
-            this.Panel.SetTopic(text);
+            if (ScriptEvents.OnTopicReceiving(this, text))
+                this.Panel.SetTopic(text);
         }
 
         private void Eval_Public(TCPPacketReader packet)
@@ -553,36 +572,37 @@ namespace cb0t
             User u = this.users.Find(x => x.Name == name);
 
             if (u != null)
-            {
-                AresFont f = new AresFont();
-                f.Size = (int)((byte)packet);
-                f.FontName = packet.ReadString(this.crypto);
-                byte oldN = packet;
-                byte oldT = packet;
-
-                if (oldN == 255 || oldT == 255)
+                if (ScriptEvents.OnUserFontChanging(this, u))
                 {
-                    u.Font = null;
-                    return;
+                    AresFont f = new AresFont();
+                    f.Size = (int)((byte)packet);
+                    f.FontName = packet.ReadString(this.crypto);
+                    byte oldN = packet;
+                    byte oldT = packet;
+
+                    if (oldN == 255 || oldT == 255)
+                    {
+                        u.Font = null;
+                        return;
+                    }
+
+                    if (this.new_sbot)
+                    {
+                        if (packet.Remaining > 0)
+                            f.NameColor = packet.ReadString(this.crypto);
+
+                        if (packet.Remaining > 0)
+                            f.TextColor = packet.ReadString(this.crypto);
+                    }
+
+                    if (String.IsNullOrEmpty(f.NameColor))
+                        f.NameColor = Helpers.AresColorToHTMLColor(oldN);
+
+                    if (String.IsNullOrEmpty(f.TextColor))
+                        f.TextColor = Helpers.AresColorToHTMLColor(oldT);
+
+                    u.Font = f;
                 }
-
-                if (this.new_sbot)
-                {
-                    if (packet.Remaining > 0)
-                        f.NameColor = packet.ReadString(this.crypto);
-
-                    if (packet.Remaining > 0)
-                        f.TextColor = packet.ReadString(this.crypto);
-                }
-
-                if (String.IsNullOrEmpty(f.NameColor))
-                    f.NameColor = Helpers.AresColorToHTMLColor(oldN);
-
-                if (String.IsNullOrEmpty(f.TextColor))
-                    f.TextColor = Helpers.AresColorToHTMLColor(oldT);
-
-                u.Font = f;
-            }
         }
 
         private void CustomProtoReceived(TCPPacketReader packet)
