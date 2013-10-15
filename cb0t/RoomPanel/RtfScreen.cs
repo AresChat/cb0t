@@ -31,7 +31,24 @@ namespace cb0t
             this.DetectUrls = true;
         }
 
+        public void ScrollDown()
+        {
+            this.BeginInvoke((Action)(() => SendMessage(this.Handle, 277, 7, IntPtr.Zero)));
+        }
+
         private int cls_count = 0;
+
+        public void ShowPMText(String name, String text, AresFont font)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPMText), name, text, font);
+            else
+            {
+                bool ts = Settings.GetReg<bool>("can_timestamp", false);
+                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, 0, font);
+                this.Render("    " + text, null, true, 0, font);
+            }
+        }
 
         public void ShowAnnounceText(String text)
         {

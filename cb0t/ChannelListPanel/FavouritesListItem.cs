@@ -20,5 +20,17 @@ namespace cb0t
             this.Password = String.Empty;
             this.AutoJoin = false;
         }
+
+        public FavouritesListItem Copy()
+        {
+            FavouritesListItem c = new FavouritesListItem();
+            c.Name = this.Name;
+            c.Topic = this.Topic;
+            c.Port = this.Port;
+            c.IP = this.IP;
+            c.Password = this.Password;
+            c.AutoJoin = this.AutoJoin;
+            return c;
+        }
     }
 }

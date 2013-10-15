@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Redirect.cs" />
     <Compile Include="RoomPanel\CryptoService.cs" />
     <Compile Include="RoomPanel\AresSocket.cs" />
     <Compile Include="RoomPanel\PacketReceivedEventArgs.cs" />
@@ -140,6 +141,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="RoomPanel\SessionState.cs" />
+    <Compile Include="ScriptEvents.cs" />
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -277,15 +279,6 @@
     <None Include="Resources\dav.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\strength1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\strength2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\strength3.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\crypto.png" />
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +289,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\music.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\strength3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

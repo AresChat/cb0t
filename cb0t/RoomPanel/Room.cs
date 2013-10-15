@@ -19,6 +19,7 @@ namespace cb0t
         private int reconnect_count = 0;
         private AresSocket sock = new AresSocket();
         private uint ticks = 0;
+        private uint last_lag = 0;
         private CryptoService crypto = new CryptoService();
         private List<User> users = new List<User>();
         private bool new_sbot = false;
@@ -26,7 +27,7 @@ namespace cb0t
 
         public Room(uint time, FavouritesListItem item)
         {
-            this.Credentials = item;
+            this.Credentials = item.Copy();
             this.EndPoint = new IPEndPoint(item.IP, item.Port);
             this.ticks = (time - 19);
             this.sock.PacketReceived += this.PacketReceived;
@@ -35,6 +36,12 @@ namespace cb0t
         public void ConnectSendBox()
         {
             this.Panel.SendBox.KeyDown += this.SendBoxKeyDown;
+        }
+
+        public void ScrollAndFocus()
+        {
+            this.Panel.SendBox.BeginInvoke((Action)(() => this.Panel.SendBox.Focus()));
+            this.Panel.ScrollDown();
         }
 
         public void Release()
@@ -62,7 +69,7 @@ namespace cb0t
                 if (time >= (this.ticks + 20))
                 {
                     this.state = SessionState.Connecting;
-                    this.sock.Connect(this.EndPoint);                    
+                    this.sock.Connect(new IPEndPoint(this.Credentials.IP, this.Credentials.Port));
                     this.ticks = time;
                     this.crypto.Mode = CryptoMode.Unencrypted;
                     this.Panel.Userlist.SetCrypto(false);
@@ -72,6 +79,8 @@ namespace cb0t
                         this.Panel.ServerText("Connecting to host, please wait... #" + this.reconnect_count);
                     else
                         this.Panel.ServerText("Connecting to host, please wait...");
+
+                    ScriptEvents.OnConnecting(this);
                 }
             }
             else if (this.state == SessionState.Connecting)
@@ -90,15 +99,33 @@ namespace cb0t
                     this.sock.Disconnect();
                     this.reconnect_count++;
                     this.Panel.AnnounceText("Unable to connect");
+                    ScriptEvents.OnDisconnected(this);
                 }
             }
-            else if (!this.sock.Service(time))
+            else
             {
-                this.ticks = time;
-                this.state = SessionState.Sleeping;
-                this.sock.Disconnect();
-                this.reconnect_count++;
-                this.Panel.AnnounceText("Disconnected (remote connection reset)");
+                if (time >= (this.last_lag + 30))
+                {
+                    this.last_lag = time;
+
+                    if (Settings.GetReg<bool>("lag_check", true))
+                        this.sock.SendPriority(TCPOutbound.Lag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                }
+
+                if (time >= (this.ticks + 90))
+                {
+                    this.ticks = time;
+                    this.sock.SendPriority(TCPOutbound.Update(this.crypto));
+                }
+
+                if (!this.sock.Service(time))
+                {
+                    this.ticks = time;
+                    this.state = SessionState.Sleeping;
+                    this.sock.Disconnect();
+                    this.reconnect_count++;
+                    this.Panel.AnnounceText("Disconnected (remote connection reset)");
+                }
             }
         }
 
@@ -203,8 +230,16 @@ namespace cb0t
                     this.Eval_Emote(e.Packet);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_REDIRECT:
+                    this.Eval_Redirect(e.Packet, e.Time);
+                    break;
+
                 case TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL:
                     this.UnofficialProtoReceived(e);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_CUSTOM_DATA:
+                    this.CustomProtoReceived(e.Packet);
                     break;
 
                 default:
@@ -216,6 +251,7 @@ namespace cb0t
         private void Eval_Ack(TCPPacketReader packet, uint time)
         {
             this.ticks = time;
+            this.last_lag = (time - 25);
             this.reconnect_count = 0;
             this.Panel.CheckUnreadStatus();
             this.Panel.Userlist.ClearUserList();
@@ -224,6 +260,10 @@ namespace cb0t
             this.Panel.ServerText("Logged in, retrieving user's list...");
             this.Panel.CanVC(false);
             this.MyName = packet.ReadString(this.crypto);
+
+            if (packet.Remaining > 0)
+                this.Credentials.Name = packet.ReadString(this.crypto);
+
             this.Panel.Userlist.MyLevel = 0;
         }
 
@@ -255,7 +295,31 @@ namespace cb0t
             packet.SkipByte();
             this.Panel.ServerText("Language: " + (RoomLanguage)((byte)packet));
             uint cookie = packet;
-            // send my av+pmsg+font
+            
+            // send my av+pmsg+font+autopassword
+
+            ScriptEvents.OnConnected(this);
+        }
+
+        private void Eval_Redirect(TCPPacketReader packet, uint time)
+        {
+            Redirect redirect = new Redirect();
+            redirect.IP = packet;
+            redirect.Port = packet;
+            packet.SkipBytes(4);
+            redirect.Name = packet.ReadString(this.crypto);
+            redirect.Hashlink = Hashlink.EncodeHashlink(redirect);
+
+            if (ScriptEvents.OnRedirecting(this, redirect))
+            {
+                this.Credentials.IP = redirect.IP;
+                this.Credentials.Port = redirect.Port;
+                this.Credentials.Name = redirect.Name;
+                this.ticks = (time - 19);
+                this.state = SessionState.Sleeping;
+                this.sock.Disconnect();
+                this.Panel.AnnounceText("Redirecting to " + redirect.Name + "...");
+            }
         }
 
         private void Eval_UpdateUserStatus(TCPPacketReader packet)
@@ -273,6 +337,7 @@ namespace cb0t
                     byte before = u.Level;
                     u.Level = level;
                     this.Panel.Userlist.UpdateUserLevel(u, before);
+                    ScriptEvents.OnUserLevelChanged(this, u);
                 }
 
                 if (u.Name == this.MyName)
@@ -347,10 +412,14 @@ namespace cb0t
             u.IsFriend = false;
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
-            this.Panel.AnnounceText("\x000303" + u.Name + " has joined");
+
+            if (ScriptEvents.OnUserJoining(this, u))
+                this.Panel.AnnounceText("\x000303" + u.Name + " has joined");
 
             if (u.Name == this.MyName)
                 this.Panel.Userlist.MyLevel = u.Level;
+
+            ScriptEvents.OnUserJoined(this, u);
         }
 
         private void Eval_Part(TCPPacketReader packet)
@@ -362,7 +431,11 @@ namespace cb0t
             if (u != null)
             {
                 this.Panel.Userlist.RemoveUserItem(u);
-                this.Panel.AnnounceText("\x000307" + u.Name + " has parted");
+
+                if (ScriptEvents.OnUserParting(this, u))
+                    this.Panel.AnnounceText("\x000307" + u.Name + " has parted");
+
+                ScriptEvents.OnUserParted(this, u);
                 u.Dispose();
                 u = null;
             }
@@ -398,6 +471,7 @@ namespace cb0t
         private void Eval_UserlistEnds()
         {
             this.Panel.Userlist.ResumeUserlist();
+            ScriptEvents.OnUserlistReceived(this);
         }
 
         private void Eval_Announce(String text)
@@ -424,8 +498,12 @@ namespace cb0t
                 if (u.Font != null)
                     font = u.Font;
 
-            this.Panel.PublicText(name, text, font);
-            this.Panel.CheckUnreadStatus();
+            if (ScriptEvents.OnTextReceiving(this, name, text))
+            {
+                this.Panel.PublicText(name, text, font);
+                this.Panel.CheckUnreadStatus();
+                ScriptEvents.OnTextReceived(this, name, text);
+            }
         }
 
         private void Eval_Emote(TCPPacketReader packet)
@@ -439,8 +517,12 @@ namespace cb0t
                 if (u.Font != null)
                     font = u.Font;
 
-            this.Panel.EmoteText(name, text, font);
-            this.Panel.CheckUnreadStatus();
+            if (ScriptEvents.OnEmoteReceiving(this, name, text))
+            {
+                this.Panel.EmoteText(name, text, font);
+                this.Panel.CheckUnreadStatus();
+                ScriptEvents.OnEmoteReceived(this, name, text);
+            }
         }
 
         private void UnofficialProtoReceived(PacketReceivedEventArgs e)
@@ -503,6 +585,24 @@ namespace cb0t
             }
         }
 
+        private void CustomProtoReceived(TCPPacketReader packet)
+        {
+            String command = packet.ReadString(this.crypto);
+            String sender = packet.ReadString(this.crypto);
+            User u = this.users.Find(x => x.Name == sender);
+            ulong lag;
 
+            switch (command)
+            {
+                case "cb0t_latency_check":
+                    lag = (Helpers.UnixTimeMS - ((ulong)packet));
+                    this.Panel.Userlist.UpdateLag(lag);
+                    break;
+
+                default:
+                    this.Panel.AnnounceText(command);
+                    break;
+            }
+        }
     }
 }

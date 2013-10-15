@@ -16,6 +16,24 @@ namespace cb0t
             UserIdent = 0;
         }
 
+        public static uint UnixTime
+        {
+            get
+            {
+                TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+                return (uint)ts.TotalSeconds;
+            }
+        }
+
+        public static ulong UnixTimeMS
+        {
+            get
+            {
+                TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+                return (ulong)ts.TotalMilliseconds;
+            }
+        }
+
         public static String AresColorToHTMLColor(byte c)
         {
             switch (c)

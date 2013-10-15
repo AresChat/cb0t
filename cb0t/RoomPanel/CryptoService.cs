@@ -14,6 +14,11 @@ namespace cb0t
         private byte[] Key { get; set; }
         private byte[] IV { get; set; }
 
+        public CryptoService()
+        {
+            this.Mode = CryptoMode.Unencrypted;
+        }
+
         public byte[] Decrypt(byte[] data)
         {
             byte[] result;
