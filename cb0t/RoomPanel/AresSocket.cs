@@ -24,6 +24,12 @@ namespace cb0t
             this.data_out = null;
         }
 
+        public void Clear()
+        {
+            this.data_in.Clear();
+            this.data_out.Clear();
+        }
+
         public void Disconnect()
         {
             if (this.sock != null)
@@ -72,7 +78,7 @@ namespace cb0t
             this.data_out.Insert(0, data);
         }
 
-        public bool Service(uint time)
+        public bool Service(uint time, out int death_code)
         {
             while (this.data_out.Count > 0)
             {
@@ -89,8 +95,10 @@ namespace cb0t
             int size = 0;
             bool success = true;
 
-            try { size = this.sock.Receive(buf, 0, 8192, SocketFlags.None, out e); }
+            try { size = this.sock.Receive(buf, 0, buf.Length, SocketFlags.None, out e); }
             catch { }
+
+            death_code = (int)e;
 
             if (size == 0)
             {
@@ -114,7 +122,7 @@ namespace cb0t
                     byte id = this.data_in[2];
                     byte[] packet = this.data_in.GetRange(3, len).ToArray();
                     this.data_in.RemoveRange(0, (len + 3));
-                    
+
                     PacketReceivedEventArgs args = new PacketReceivedEventArgs
                     {
                         Msg = (TCPMsg)id,
@@ -122,7 +130,15 @@ namespace cb0t
                         Time = time
                     };
 
-                    this.PacketReceived(null, args);
+                    if (args.Msg == TCPMsg.MSG_CHAT_CLIENTCOMPRESSED)
+                    {
+                        packet = Zip.Decompress(packet);
+
+                        if (packet != null)
+                            if (packet.Length > 0)
+                                this.data_in.InsertRange(0, packet);
+                    }
+                    else this.PacketReceived(null, args);
                 }
                 else break;
             }
