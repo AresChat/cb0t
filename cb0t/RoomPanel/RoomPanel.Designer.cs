@@ -42,11 +42,11 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.rtfScreen1 = new cb0t.RtfScreen();
             this.writingPanel1 = new cb0t.WritingPanel();
             this.userListContainer1 = new cb0t.UserListContainer();
@@ -106,6 +106,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(550, 48);
             this.panel1.TabIndex = 2;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // textBox1
             // 
@@ -120,6 +121,7 @@
             // toolStrip2
             // 
             this.toolStrip2.CanOverflow = false;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2,
@@ -132,7 +134,7 @@
             this.toolStripLabel1});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(550, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(164, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
@@ -209,13 +211,6 @@
             this.toolStripButton8.ToolTipText = "To record a Voice Clip, hold down\r\nthis button or press F2.  Release the\r\nbutton " +
     "to send your message.";
             // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.IsLink = true;
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripLabel1.Size = new System.Drawing.Size(0, 22);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -267,6 +262,12 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(314, 251);
             this.panel2.TabIndex = 0;
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.IsLink = true;
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(0, 22);
             // 
             // rtfScreen1
             // 
@@ -345,7 +346,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton6;
         private System.Windows.Forms.ToolStripButton toolStripButton7;
         private System.Windows.Forms.ToolStripButton toolStripButton8;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -353,5 +353,6 @@
         private System.Windows.Forms.Panel panel2;
         private RtfScreen rtfScreen1;
         private WritingPanel writingPanel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }
