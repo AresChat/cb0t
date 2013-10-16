@@ -48,6 +48,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtfScreen1 = new cb0t.RtfScreen();
+            this.writingPanel1 = new cb0t.WritingPanel();
             this.userListContainer1 = new cb0t.UserListContainer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -118,6 +119,7 @@
             // 
             // toolStrip2
             // 
+            this.toolStrip2.CanOverflow = false;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2,
@@ -211,6 +213,7 @@
             // 
             this.toolStripLabel1.IsLink = true;
             this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripLabel1.Size = new System.Drawing.Size(0, 22);
             // 
             // tabControl1
@@ -258,6 +261,7 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.rtfScreen1);
+            this.panel2.Controls.Add(this.writingPanel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
@@ -273,15 +277,27 @@
             this.rtfScreen1.Location = new System.Drawing.Point(0, 0);
             this.rtfScreen1.Name = "rtfScreen1";
             this.rtfScreen1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtfScreen1.Size = new System.Drawing.Size(312, 249);
+            this.rtfScreen1.Size = new System.Drawing.Size(312, 233);
             this.rtfScreen1.TabIndex = 0;
             this.rtfScreen1.Text = "";
+            // 
+            // writingPanel1
+            // 
+            this.writingPanel1.BackColor = System.Drawing.Color.White;
+            this.writingPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.writingPanel1.Location = new System.Drawing.Point(0, 233);
+            this.writingPanel1.Mode = cb0t.WritingPanelMode.Writing;
+            this.writingPanel1.Name = "writingPanel1";
+            this.writingPanel1.RecordingTime = 0;
+            this.writingPanel1.Size = new System.Drawing.Size(312, 16);
+            this.writingPanel1.TabIndex = 1;
             // 
             // userListContainer1
             // 
             this.userListContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.userListContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userListContainer1.Location = new System.Drawing.Point(0, 0);
+            this.userListContainer1.MyLevel = 0;
             this.userListContainer1.Name = "userListContainer1";
             this.userListContainer1.Size = new System.Drawing.Size(224, 251);
             this.userListContainer1.TabIndex = 0;
@@ -336,5 +352,6 @@
         private UserListContainer userListContainer1;
         private System.Windows.Forms.Panel panel2;
         private RtfScreen rtfScreen1;
+        private WritingPanel writingPanel1;
     }
 }

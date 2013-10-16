@@ -14,13 +14,13 @@ namespace cb0t
         public FavouritesListItem Credentials { get; set; }
         public RoomPanel Panel { get; set; }
         public IPEndPoint EndPoint { get; set; }
-
+        
+        private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
         private int reconnect_count = 0;
         private AresSocket sock = new AresSocket();
         private uint ticks = 0;
         private uint last_lag = 0;
-        private CryptoService crypto = new CryptoService();
         private List<User> users = new List<User>();
         private bool new_sbot = false;
         private String MyName = String.Empty;
@@ -36,6 +36,7 @@ namespace cb0t
         public void ConnectSendBox()
         {
             this.Panel.SendBox.KeyDown += this.SendBoxKeyDown;
+            this.Panel.SendBox.KeyUp += this.SendBoxKeyUp;
         }
 
         public void ScrollAndFocus()
@@ -47,6 +48,7 @@ namespace cb0t
         public void Release()
         {
             this.Panel.SendBox.KeyDown -= this.SendBoxKeyDown;
+            this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
             this.sock.Free();
@@ -62,7 +64,15 @@ namespace cb0t
             this.users = null;
         }
 
-        private int death_code = 0;
+        public void SendText(String text)
+        {
+            this.sock.Send(TCPOutbound.Public(text, this.crypto));
+        }
+
+        public void SendEmote(String text)
+        {
+            this.sock.Send(TCPOutbound.Emote(text, this.crypto));
+        }
 
         public void SocketTasks(uint time)
         {
@@ -91,6 +101,7 @@ namespace cb0t
                 {
                     this.state = SessionState.Connected;
                     this.ticks = time;
+                    this.last_lag = (time - 25);
                     this.Panel.ServerText("Connected, handshaking...");
                     this.sock.Clear();
                     this.sock.Send(TCPOutbound.Login());
@@ -112,22 +123,38 @@ namespace cb0t
                     this.last_lag = time;
 
                     if (Settings.GetReg<bool>("lag_check", true))
-                        this.sock.Send(TCPOutbound.Lag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                        this.sock.SendPriority(TCPOutbound.Lag(this.MyName, Helpers.UnixTimeMS, this.crypto));
                 }
 
                 if (time >= (this.ticks + 90))
                 {
                     this.ticks = time;
-                    this.sock.Send(TCPOutbound.Update(this.crypto));
+                    this.sock.SendPriority(TCPOutbound.Update(this.crypto));
                 }
 
-                if (!this.sock.Service(time, out this.death_code))
+                if (this.is_writing)
+                    if (time >= (this.last_key_press + 5))
+                    {
+                        this.is_writing = false;
+
+                        if (Settings.GetReg<bool>("can_write", true))
+                        {
+                            this.Panel.UpdateMyWriting(this.MyName, false);
+                            this.sock.Send(TCPOutbound.Writing(false, this.crypto));
+                        }
+                    }
+
+                if (!this.sock.Service(time))
                 {
                     this.ticks = time;
                     this.state = SessionState.Sleeping;
                     this.sock.Disconnect();
                     this.reconnect_count++;
-                    this.Panel.AnnounceText("Disconnected (" + death_code + ")");
+
+                    if (this.sock.SockCode > 0)
+                        this.Panel.AnnounceText("Disconnected (" + this.sock.SockCode + ")");
+                    else
+                        this.Panel.AnnounceText("Disconnected (remote disconnect)");
                 }
             }
         }
@@ -141,15 +168,77 @@ namespace cb0t
             this.Panel.AnnounceText("Reconnecting...");
         }
 
+        private bool is_writing = false;
+        private uint last_key_press = 0;
+
+        private void SendBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            if (this.state == SessionState.Connected)
+            {
+                if (!this.is_writing)
+                {
+                    if (this.Panel.SendBox.Text.Length > 0)
+                    {
+                        this.is_writing = true;
+
+                        if (Settings.GetReg<bool>("can_write", true))
+                        {
+                            this.Panel.UpdateMyWriting(this.MyName, true);
+                            this.sock.Send(TCPOutbound.Writing(true, this.crypto));
+                        }
+                    }
+                }
+                else if (this.Panel.SendBox.Text.Length == 0)
+                {                    
+                    this.is_writing = false;
+
+                    if (Settings.GetReg<bool>("can_write", true))
+                    {
+                        this.Panel.UpdateMyWriting(this.MyName, false);
+                        this.sock.Send(TCPOutbound.Writing(false, this.crypto));
+                    }
+                }
+                
+                this.last_key_press = Settings.Time;
+            }
+        }
+
         private void SendBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Up)
+            {
+                this.Panel.SendBox.Text = History.GetText();
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                this.Panel.SendBox.Clear();
+                History.Reset();
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Enter)
             {
                 String text = this.Panel.SendBox.Text;
                 this.Panel.SendBox.Clear();
 
                 if (text.Length > 0)
                 {
+                    if (text == "/reconnect")
+                    {
+                        this.Reconnect();
+                        this.Panel.UpdateMyWriting(this.MyName, false);
+                        e.SuppressKeyPress = true;
+                        e.Handled = true;
+                        return;
+                    }
+
+                    if (this.state != SessionState.Connected)
+                        return;
+
+                    History.AddText(text);
+
                     if (text.StartsWith("/me "))
                     {
                         if (text.Length > 4)
@@ -157,7 +246,41 @@ namespace cb0t
                     }
                     else if (text.StartsWith("/"))
                     {
-                        if (text.Length > 1)
+                        if (text == "/time")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
+                        else if (text == "/uptime")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
+                        else if (text == "/gfx")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
+                        else if (text == "/hdd")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
+                        else if (text == "/os")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
+                        else if (text == "/cpu")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
+                        else if (text == "/ram")
+                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
+                        else if (text == "/lag")
+                        {
+
+                        }
+                        else if (text == "/cmds")
+                        {
+
+                        }
+                        else if (text.StartsWith("/all "))
+                        {
+
+                        }
+                        else if (text.StartsWith("/find "))
+                        {
+
+                        }
+                        else if (text.StartsWith("/pretext"))
+                        {
+
+                        }
+                        else if (text.Length > 1)
                             this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
                     }
                     else this.sock.Send(TCPOutbound.Public(text, this.crypto));
@@ -271,6 +394,8 @@ namespace cb0t
                 this.Credentials.Name = packet.ReadString(this.crypto);
 
             this.Panel.Userlist.MyLevel = 0;
+            this.is_writing = false;
+            this.Panel.ClearWriters();
         }
 
         private void Eval_Features(TCPPacketReader packet)
@@ -341,7 +466,7 @@ namespace cb0t
 
         private void Eval_UpdateUserStatus(TCPPacketReader packet)
         {
-            String name = packet.ReadString();
+            String name = packet.ReadString(this.crypto);
             User u = this.users.Find(x => x.Name == name);
 
             if (u != null)
@@ -453,6 +578,12 @@ namespace cb0t
 
             if (u != null)
             {
+                if (u.Writing)
+                {
+                    u.Writing = false;
+                    this.Panel.UpdateWriter(u);
+                }
+
                 this.Panel.Userlist.RemoveUserItem(u);
 
                 if (ScriptEvents.OnUserParting(this, u))
@@ -614,6 +745,12 @@ namespace cb0t
 
             switch (command)
             {
+                case "cb0t_writing":
+                    u.Writing = ((byte)packet) == 2;
+                    this.Panel.UpdateWriter(u);
+                    ScriptEvents.OnUserWritingStatusChanged(this, u);
+                    break;
+
                 case "cb0t_latency_check":
                     lag = (Helpers.UnixTimeMS - ((ulong)packet));
                     this.Panel.Userlist.UpdateLag(lag);

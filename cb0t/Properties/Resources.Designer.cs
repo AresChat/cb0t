@@ -163,6 +163,16 @@ namespace cb0t.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mrec {
+            get {
+                object obj = ResourceManager.GetObject("mrec", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap music {
             get {
                 object obj = ResourceManager.GetObject("music", resourceCulture);
@@ -266,6 +276,16 @@ namespace cb0t.Properties {
         internal static System.Drawing.Bitmap unread {
             get {
                 object obj = ResourceManager.GetObject("unread", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap writingpen {
+            get {
+                object obj = ResourceManager.GetObject("writingpen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

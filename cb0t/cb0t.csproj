@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -67,7 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Redirect.cs" />
+    <Compile Include="RoomPanel\History.cs" />
+    <Compile Include="RoomPanel\InternalCommands.cs" />
+    <Compile Include="RoomPanel\Redirect.cs" />
     <Compile Include="RoomPanel\CryptoService.cs" />
     <Compile Include="RoomPanel\AresSocket.cs" />
     <Compile Include="RoomPanel\PacketReceivedEventArgs.cs" />
@@ -179,6 +182,12 @@
     <Compile Include="RoomPanel\TCPPacketReader.cs" />
     <Compile Include="RoomPanel\TCPOutbound.cs" />
     <Compile Include="RoomPanel\TCPPacketWriter.cs" />
+    <Compile Include="RoomPanel\WritingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\WritingPanel.Designer.cs">
+      <DependentUpon>WritingPanel.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -212,6 +221,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RoomPanel\UserListContainer.resx">
       <DependentUpon>UserListContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\WritingPanel.resx">
+      <DependentUpon>WritingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -300,6 +312,8 @@
     <None Include="Resources\strength3.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\mrec.png" />
+    <None Include="Resources\writingpen.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

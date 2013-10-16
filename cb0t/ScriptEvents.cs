@@ -48,5 +48,9 @@ namespace cb0t
         public static bool OnUrlReceiving(Room room, String text, String address) { return true; }
 
         public static bool OnUserFontChanging(Room room, User user) { return true; }
+
+        public static void OnUserWritingStatusChanged(Room room, User user) { }
+
+
     }
 }
