@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Drawing.Drawing2D;
 
 namespace cb0t
 {
@@ -133,6 +134,7 @@ namespace cb0t
             this.toolStripDropDownButton1.Dispose();
             this.toolStripDropDownButton1 = null;
             this.toolStrip2.ItemClicked -= this.toolStrip2_ItemClicked;
+            this.panel1.Paint -= this.panel1_Paint;
 
             while (this.panel1.Controls.Count > 0)
                 this.panel1.Controls.RemoveAt(0);
@@ -253,6 +255,14 @@ namespace cb0t
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Rectangle bounds = new Rectangle(0, 0, this.panel1.Width, 25);
+
+            using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.WhiteSmoke, Color.Gainsboro, LinearGradientMode.Vertical))
+                e.Graphics.FillRectangle(brush, bounds);
         }
     }
 }
