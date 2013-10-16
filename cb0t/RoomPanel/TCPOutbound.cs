@@ -97,6 +97,15 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
         }
 
+        public static byte[] NudgeReject(String target, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_nudge", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(new byte[] { 78, 65, 61, 61 });
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
 
     }
 }

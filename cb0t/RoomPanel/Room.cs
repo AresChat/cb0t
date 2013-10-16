@@ -14,7 +14,7 @@ namespace cb0t
         public FavouritesListItem Credentials { get; set; }
         public RoomPanel Panel { get; set; }
         public IPEndPoint EndPoint { get; set; }
-        
+
         private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
         private int reconnect_count = 0;
@@ -24,9 +24,11 @@ namespace cb0t
         private List<User> users = new List<User>();
         private bool new_sbot = false;
         private String MyName = String.Empty;
+        private Form1 owner_frm = null;
 
-        public Room(uint time, FavouritesListItem item)
+        public Room(uint time, FavouritesListItem item, Form1 f)
         {
+            this.owner_frm = f;
             this.Credentials = item.Copy();
             this.EndPoint = new IPEndPoint(item.IP, item.Port);
             this.ticks = (time - 19);
@@ -47,6 +49,7 @@ namespace cb0t
 
         public void Release()
         {
+            this.owner_frm = null;
             this.Panel.SendBox.KeyDown -= this.SendBoxKeyDown;
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
             this.sock.Disconnect();
@@ -72,6 +75,16 @@ namespace cb0t
         public void SendEmote(String text)
         {
             this.sock.Send(TCPOutbound.Emote(text, this.crypto));
+        }
+
+        public void SendCommand(String text)
+        {
+            this.sock.Send(TCPOutbound.Command(text, this.crypto));
+        }
+
+        public void ForEachUser(Action<User> u)
+        {
+            this.users.ForEach(u);
         }
 
         public void SocketTasks(uint time)
@@ -189,7 +202,7 @@ namespace cb0t
                     }
                 }
                 else if (this.Panel.SendBox.Text.Length == 0)
-                {                    
+                {
                     this.is_writing = false;
 
                     if (Settings.GetReg<bool>("can_write", true))
@@ -198,7 +211,7 @@ namespace cb0t
                         this.sock.Send(TCPOutbound.Writing(false, this.crypto));
                     }
                 }
-                
+
                 this.last_key_press = Settings.Time;
             }
         }
@@ -414,7 +427,7 @@ namespace cb0t
 
                 this.new_sbot = (vnum >= 514);
             }
-            
+
             byte flag = packet;
             bool has_vc = ((flag & 8) == 8);
             bool has_html = ((flag & 128) == 128);
@@ -426,7 +439,7 @@ namespace cb0t
             packet.SkipByte();
             this.Panel.ServerText("Language: " + (RoomLanguage)((byte)packet));
             uint cookie = packet;
-            
+
             // send my av+pmsg+font+autopassword
 
             ScriptEvents.OnConnected(this);
@@ -742,6 +755,7 @@ namespace cb0t
             String sender = packet.ReadString(this.crypto);
             User u = this.users.Find(x => x.Name == sender);
             ulong lag;
+            bool b;
 
             switch (command)
             {
@@ -756,10 +770,45 @@ namespace cb0t
                     this.Panel.Userlist.UpdateLag(lag);
                     break;
 
+                case "cb0t_online_status":
+                    b = ((byte)packet) != 1;
+
+                    if (u.IsAway != b)
+                    {
+                        u.IsAway = b;
+                        this.Panel.Userlist.UpdateUserAppearance(u);
+                        ScriptEvents.OnUserOnlineStatusChanged(this, u);
+                    }
+
+                    break;
+
+                case "cb0t_nudge":
+                    this.Eval_Nudge(u, ((byte[])packet));
+                    break;
+
                 default:
                     this.Panel.AnnounceText(command);
                     break;
             }
         }
+
+        private void Eval_Nudge(User user, byte[] data)
+        {
+            if (data.Length == 4)
+                if (data.SequenceEqual(new byte[] { 78, 65, 61, 61 }))
+                {
+                    this.Panel.AnnounceText("\x000314--- " + user.Name + " is not receiving nudges");
+                    return;
+                }
+
+            if (Settings.GetReg<bool>("receive_nudge", true))
+            {
+                this.Panel.AnnounceText("\x000314--- " + user.Name + " has nudged you!");
+                this.owner_frm.Nudge();
+            }
+            else this.sock.Send(TCPOutbound.NudgeReject(user.Name, this.crypto));
+        }
+
+
     }
 }
