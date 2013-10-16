@@ -89,6 +89,14 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
         }
 
+        public static byte[] Writing(bool writing, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_writing", c);
+            packet.WriteByte((byte)(writing ? 2 : 1));
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
+
 
     }
 }

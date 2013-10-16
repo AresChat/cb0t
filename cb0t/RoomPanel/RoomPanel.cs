@@ -69,6 +69,21 @@ namespace cb0t
         public UserListContainer Userlist { get { return this.userListContainer1; } }
         public TextBox SendBox { get { return this.textBox1; } }
 
+        public void ClearWriters()
+        {
+            this.writingPanel1.BeginInvoke((Action)(() => this.writingPanel1.ClearWriters()));
+        }
+
+        public void UpdateWriter(User user)
+        {
+            this.writingPanel1.BeginInvoke((Action)(() => this.writingPanel1.RemoteWritingStatusChanged(user.Name, user.Writing)));
+        }
+
+        public void UpdateMyWriting(String name, bool status)
+        {
+            this.writingPanel1.BeginInvoke((Action)(() => this.writingPanel1.MyWritingStatusChanged(name, status)));
+        }
+
         public void CanVC(bool can)
         {
             this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton8.Enabled = can));
@@ -187,6 +202,9 @@ namespace cb0t
             this.rtfScreen1.Free();
             this.rtfScreen1.Dispose();
             this.rtfScreen1 = null;
+            this.writingPanel1.Free();
+            this.writingPanel1.Dispose();
+            this.writingPanel1 = null;
             this.Font.Dispose();
             this.Font = null;
         }

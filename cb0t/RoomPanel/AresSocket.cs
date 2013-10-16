@@ -11,11 +11,13 @@ namespace cb0t
     {
         private Socket sock = null;
         private List<byte> data_in = new List<byte>();
-        private Queue<byte[]> data_out = new Queue<byte[]>();
+        private List<byte[]> data_out = new List<byte[]>();
         private int health = 0;
         private int avail = 0;
 
         public event EventHandler<PacketReceivedEventArgs> PacketReceived;
+
+        public int SockCode { get; set; }
 
         public void Free()
         {
@@ -71,17 +73,22 @@ namespace cb0t
 
         public void Send(byte[] data)
         {
-            this.data_out.Enqueue(data);
+            this.data_out.Add(data);
         }
 
-        public bool Service(uint time, out int death_code)
+        public void SendPriority(byte[] data)
+        {
+            this.data_out.Insert(0, data);
+        }
+
+        public bool Service(uint time)
         {
             while (this.data_out.Count > 0)
             {
                 try
                 {
-                    this.sock.Send(this.data_out.Peek());
-                    this.data_out.Dequeue();
+                    this.sock.Send(this.data_out[0]);
+                    this.data_out.RemoveAt(0);
                 }
                 catch { break; }
             }
@@ -102,14 +109,15 @@ namespace cb0t
             }
             catch { }
 
-            death_code = (int)e;
-
             if (size == 0)
             {
                 if (e == SocketError.WouldBlock)
                     this.health = 0;
                 else if (this.health++ > 3)
+                {
+                    this.SockCode = (int)e;
                     success = false;
+                }
             }
             else
             {
