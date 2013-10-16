@@ -5,5 +5,3 @@ PM
 Browsing
 Voice
 Scribble
-Nudge
-Online Status

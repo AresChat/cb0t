@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace cb0t
 {
@@ -49,6 +50,40 @@ namespace cb0t
             this.SetToList();
 
             Aero.HideIconAndText(this);
+        }
+
+        public void Nudge()
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                InternalSounds.Nudge();
+
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    Random rnd = new Random();
+                    Point start = this.Location;
+                    Point current;
+
+                    while (true)
+                    {
+                        if (sw.ElapsedMilliseconds > 1000)
+                            break;
+
+                        int x = rnd.Next(-3, 3);
+                        int y = rnd.Next(-3, 3);
+                        current = new Point(start.X + x, start.Y + y);
+                        this.Location = current;
+                    }
+
+                    sw.Stop();
+                    sw = null;
+                    rnd = null;
+                }
+
+                // popup
+            }));
         }
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -185,7 +220,7 @@ namespace cb0t
             }
             else
             {
-                Room room = new Room(Settings.Time, e.Room);
+                Room room = new Room(Settings.Time, e.Room, this);
                 room.Button = new ChannelButton(room.Credentials);
                 room.Panel = new RoomPanel(room.Credentials);
                 room.Panel.BackColor = Color.WhiteSmoke;

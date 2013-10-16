@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\InternalSounds.cs" />
     <Compile Include="RoomPanel\History.cs" />
     <Compile Include="RoomPanel\InternalCommands.cs" />
     <Compile Include="RoomPanel\Redirect.cs" />
