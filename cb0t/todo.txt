@@ -4,3 +4,10 @@
 Browsing
 Voice
 Scribble
+
+
+to do
+-----
+
+send av/pmsg/pass on login
+pm auto reply
