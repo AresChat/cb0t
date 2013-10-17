@@ -69,6 +69,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Misc\InternalSounds.cs" />
+    <Compile Include="RoomPanel\PMCrypto.cs" />
+    <Compile Include="RoomPanel\PMRecPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\PMRecPanel.Designer.cs">
+      <DependentUpon>PMRecPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPanel\PMTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\PMTextReceivedType.cs" />
     <Compile Include="RoomPanel\History.cs" />
     <Compile Include="RoomPanel\InternalCommands.cs" />
     <Compile Include="RoomPanel\Redirect.cs" />
@@ -145,7 +156,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="RoomPanel\SessionState.cs" />
-    <Compile Include="ScriptEvents.cs" />
+    <Compile Include="RoomPanel\ScreenMode.cs" />
+    <Compile Include="RoomPanel\ScriptEvents.cs" />
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -200,6 +212,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\PMRecPanel.resx">
+      <DependentUpon>PMRecPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

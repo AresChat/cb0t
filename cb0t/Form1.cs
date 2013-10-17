@@ -227,7 +227,7 @@ namespace cb0t
                 room.Panel.Dock = DockStyle.Fill;
                 room.Panel.CloseClicked += this.CloseChannel;
                 room.Panel.CheckUnread += this.CheckUnread;
-                room.ConnectSendBox();
+                room.ConnectEvents();
                 RoomPool.Rooms.Add(room);
                 this.toolStrip1.Items.Add(room.Button);
                 this.SetToRoom(room.EndPoint);

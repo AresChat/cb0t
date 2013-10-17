@@ -35,10 +35,13 @@ namespace cb0t
             this.sock.PacketReceived += this.PacketReceived;
         }
 
-        public void ConnectSendBox()
+        public void ConnectEvents()
         {
             this.Panel.SendBox.KeyDown += this.SendBoxKeyDown;
+            this.Panel.CancelWriting += this.CancelWriting;
             this.Panel.SendBox.KeyUp += this.SendBoxKeyUp;
+            this.Panel.SendAutoReply += this.SendAutoReply;
+            this.Panel.Userlist.OpenPMRequested += this.OpenPMRequested;
         }
 
         public void ScrollAndFocus()
@@ -51,7 +54,10 @@ namespace cb0t
         {
             this.owner_frm = null;
             this.Panel.SendBox.KeyDown -= this.SendBoxKeyDown;
+            this.Panel.CancelWriting -= this.CancelWriting;
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
+            this.Panel.SendAutoReply -= this.SendAutoReply;
+            this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
             this.sock.Free();
@@ -184,9 +190,24 @@ namespace cb0t
         private bool is_writing = false;
         private uint last_key_press = 0;
 
-        private void SendBoxKeyUp(object sender, KeyEventArgs e)
+        private void CancelWriting(object sender, EventArgs e)
         {
             if (this.state == SessionState.Connected)
+                if (this.is_writing)
+                {
+                    this.is_writing = false;
+
+                    if (Settings.GetReg<bool>("can_write", true))
+                    {
+                        this.Panel.UpdateMyWriting(this.MyName, false);
+                        this.sock.Send(TCPOutbound.Writing(false, this.crypto));
+                    }
+                }
+        }
+
+        private void SendBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            if (this.state == SessionState.Connected && this.Panel.Mode == ScreenMode.Main)
             {
                 if (!this.is_writing)
                 {
@@ -252,56 +273,86 @@ namespace cb0t
 
                     History.AddText(text);
 
-                    if (text.StartsWith("/me "))
+                    if (this.Panel.Mode == ScreenMode.Main)
                     {
-                        if (text.Length > 4)
-                            this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
+                        if (text.StartsWith("/me "))
+                        {
+                            if (text.Length > 4)
+                                this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
+                        }
+                        else if (text.StartsWith("/"))
+                        {
+                            if (text == "/time")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
+                            else if (text == "/uptime")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
+                            else if (text == "/gfx")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
+                            else if (text == "/hdd")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
+                            else if (text == "/os")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
+                            else if (text == "/cpu")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
+                            else if (text == "/ram")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
+                            else if (text == "/lag")
+                            {
+
+                            }
+                            else if (text == "/cmds")
+                            {
+
+                            }
+                            else if (text.StartsWith("/all "))
+                            {
+
+                            }
+                            else if (text.StartsWith("/find "))
+                            {
+
+                            }
+                            else if (text.StartsWith("/pretext"))
+                            {
+
+                            }
+                            else if (text.Length > 1)
+                                this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
+                        }
+                        else this.sock.Send(TCPOutbound.Public(text, this.crypto));
                     }
-                    else if (text.StartsWith("/"))
+                    else if (this.Panel.Mode == ScreenMode.PM)
                     {
-                        if (text == "/time")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
-                        else if (text == "/uptime")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
-                        else if (text == "/gfx")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
-                        else if (text == "/hdd")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
-                        else if (text == "/os")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
-                        else if (text == "/cpu")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
-                        else if (text == "/ram")
-                            this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
-                        else if (text == "/lag")
-                        {
+                        User u = this.users.Find(x => x.Name == this.Panel.PMName);
 
-                        }
-                        else if (text == "/cmds")
+                        if (u != null)
                         {
+                            this.Panel.MyPMText(text, null); // my font
 
+                            if (!u.SupportsPMEnc)
+                                this.sock.Send(TCPOutbound.Private(this.Panel.PMName, text, this.crypto));
+                            else
+                                this.sock.Send(TCPOutbound.CustomPM(this.Panel.PMName, text, this.crypto));
                         }
-                        else if (text.StartsWith("/all "))
-                        {
-
-                        }
-                        else if (text.StartsWith("/find "))
-                        {
-
-                        }
-                        else if (text.StartsWith("/pretext"))
-                        {
-
-                        }
-                        else if (text.Length > 1)
-                            this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
+                        else this.Panel.MyPMAnnounce("User is offline");
                     }
-                    else this.sock.Send(TCPOutbound.Public(text, this.crypto));
                 }
 
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }
+        }
+
+        private void SendAutoReply(object sender, EventArgs e)
+        {
+            String pmname = (String)sender;
+
+        }
+
+        private void OpenPMRequested(object sender, EventArgs e)
+        {
+            String pmname = (String)sender;
+            this.Panel.MyPMCreateOrShowTab(pmname);
         }
 
         private void PacketReceived(object sender, PacketReceivedEventArgs e)
@@ -376,6 +427,18 @@ namespace cb0t
                     this.Eval_Redirect(e.Packet, e.Time);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_PVT:
+                    this.Eval_Private(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_ISIGNORINGYOU:
+                    this.Eval_IsIgnoringYou(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_OFFLINEUSER:
+                    this.Eval_OfflineUser(e.Packet);
+                    break;
+
                 case TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL:
                     this.UnofficialProtoReceived(e);
                     break;
@@ -402,6 +465,7 @@ namespace cb0t
             this.Panel.ServerText("Logged in, retrieving user's list...");
             this.Panel.CanVC(false);
             this.MyName = packet.ReadString(this.crypto);
+            this.Panel.MyName = this.MyName;
 
             if (packet.Remaining > 0)
                 this.Credentials.Name = packet.ReadString(this.crypto);
@@ -650,6 +714,40 @@ namespace cb0t
                 this.Panel.SetTopic(text);
         }
 
+        private void Eval_IsIgnoringYou(TCPPacketReader packet)
+        {
+            String name = packet.ReadString(this.crypto);
+            this.Panel.PMTextReceived(name, "User is ignoring you", null, PMTextReceivedType.Announce);
+        }
+
+        private void Eval_OfflineUser(TCPPacketReader packet)
+        {
+            String name = packet.ReadString(this.crypto);
+            this.Panel.PMTextReceived(name, "User is offline", null, PMTextReceivedType.Announce);
+        }
+
+        private void Eval_Private(TCPPacketReader packet)
+        {
+            String name = packet.ReadString(this.crypto);
+            String text = packet.ReadString(this.crypto);
+            User u = this.users.Find(x => x.Name == name);
+
+            if (u == null)
+                return;
+
+            AresFont font = null;
+
+            if (u.Font != null)
+                font = u.Font;
+
+            if (ScriptEvents.OnPmReceiving(this, u, text))
+            {
+                this.Panel.PMTextReceived(name, text, font, PMTextReceivedType.Text);
+                this.Panel.CheckUnreadStatus();
+                ScriptEvents.OnPmReceived(this, u, text);
+            }
+        }
+
         private void Eval_Public(TCPPacketReader packet)
         {
             String name = packet.ReadString(this.crypto);
@@ -786,9 +884,35 @@ namespace cb0t
                     this.Eval_Nudge(u, ((byte[])packet));
                     break;
 
+                case "cb0t_pm_msg":
+                    this.Eval_cb0t_pm_msg(u, ((byte[])packet));
+                    break;
+
                 default:
                     this.Panel.AnnounceText(command);
                     break;
+            }
+        }
+
+        private void Eval_cb0t_pm_msg(User user, byte[] data)
+        {
+            String name = user.Name;
+            String text = Encoding.UTF8.GetString(PMCrypto.SoftDecrypt(this.MyName, data));
+            User u = this.users.Find(x => x.Name == name);
+
+            if (u == null)
+                return;
+
+            AresFont font = null;
+
+            if (u.Font != null)
+                font = u.Font;
+
+            if (ScriptEvents.OnPmReceiving(this, u, text))
+            {
+                this.Panel.PMTextReceived(name, text, font, PMTextReceivedType.Text);
+                this.Panel.CheckUnreadStatus();
+                ScriptEvents.OnPmReceived(this, u, text);
             }
         }
 

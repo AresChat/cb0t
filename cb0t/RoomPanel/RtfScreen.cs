@@ -45,8 +45,19 @@ namespace cb0t
             else
             {
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, 0, font);
-                this.Render("    " + text, null, true, 0, font);
+                AresFont name_font = null;
+
+                if (font != null)
+                {
+                    name_font = new AresFont();
+                    name_font.FontName = font.FontName;
+                    name_font.NameColor = font.NameColor;
+                    name_font.TextColor = font.NameColor;
+                    name_font.Size = font.Size;
+                }
+
+                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, 1, name_font);
+                this.Render("    " + text, null, true, 1, font);
             }
         }
 

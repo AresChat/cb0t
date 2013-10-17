@@ -12,15 +12,32 @@ namespace cb0t
 {
     public partial class UserListContainer : UserControl
     {
+        public event EventHandler OpenPMRequested;
+
         public UserListContainer()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.userListBox1.MouseDoubleClick += this.ItemMouseDoubleClick;
+        }
+
+        private void ItemMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int i = this.userListBox1.SelectedIndex;
+
+            if (i > -1 && i < this.userListBox1.Items.Count)
+                if (this.userListBox1.Items[i] is UserListBoxItem)
+                {
+                    String name = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.Name;
+                    this.OpenPMRequested(name, EventArgs.Empty);
+                }
         }
 
         public int MyLevel { get; set; }
 
         public void Free()
         {
+            this.userListBox1.MouseDoubleClick -= this.ItemMouseDoubleClick;
+
             while (this.Controls.Count > 0)
                 this.Controls.RemoveAt(0);
 

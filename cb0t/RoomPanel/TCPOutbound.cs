@@ -106,6 +106,23 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
         }
 
+        public static byte[] Private(String name, String text, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString(name, c);
+            packet.WriteString(Helpers.FormatAresColorCodes(text), c, false);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_PVT);
+        }
+
+        public static byte[] CustomPM(String target, String text, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_pm_msg", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(PMCrypto.SoftEncrypt(target, Encoding.UTF8.GetBytes(Helpers.FormatAresColorCodes(text))));
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
 
     }
 }

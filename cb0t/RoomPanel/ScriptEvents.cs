@@ -52,5 +52,9 @@ namespace cb0t
         public static void OnUserWritingStatusChanged(Room room, User user) { }
 
         public static void OnUserOnlineStatusChanged(Room room, User user) { }
+
+        public static bool OnPmReceiving(Room room, User user, String text) { return true; }
+
+        public static void OnPmReceived(Room room, User user, String text) { }
     }
 }

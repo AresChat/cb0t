@@ -21,13 +21,21 @@ namespace cb0t
         private ImageList tab_imgs { get; set; }
 
         public IPEndPoint EndPoint { get; set; }
+        public ScreenMode Mode { get; set; }
+        public String PMName { get; set; }
+        public String MyName { get; set; }
 
         public event EventHandler CloseClicked;
         public event EventHandler CheckUnread;
+        public event EventHandler CancelWriting;
+        public event EventHandler SendAutoReply;
 
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
+            this.Mode = ScreenMode.Main;
+            this.PMName = String.Empty;
+            this.MyName = String.Empty;
             this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
             this.topic = new Topic();
             this.b1 = (Bitmap)Emoticons.emotic[47].Clone();
@@ -50,10 +58,84 @@ namespace cb0t
             this.tab_imgs = new ImageList();
             this.tab_imgs.ImageSize = new Size(16, 16);
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
-            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
-            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
+            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_read.Clone());
+            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_unread.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
+        }
+
+        public void MyPMText(String text, AresFont font)
+        {
+            if (this.tabControl1.SelectedTab != null)
+                if (this.tabControl1.SelectedTab is PMTab)
+                    ((PMTab)this.tabControl1.SelectedTab).PM(this.MyName, text, font);
+        }
+
+        public void MyPMAnnounce(String text)
+        {
+            if (this.tabControl1.SelectedTab != null)
+                if (this.tabControl1.SelectedTab is PMTab)
+                    ((PMTab)this.tabControl1.SelectedTab).Announce(text);
+        }
+
+        public void MyPMCreateOrShowTab(String name)
+        {
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is PMTab)
+                    if (this.tabControl1.TabPages[i].Text == name)
+                    {
+                        this.tabControl1.SelectedIndex = i;
+                        return;
+                    }
+
+            PMTab new_tab = new PMTab(name);
+            new_tab.ImageIndex = 1;
+            this.tabControl1.TabPages.Add(new_tab);
+            this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
+        }
+
+        public void PMTextReceived(String name, String text, AresFont font, PMTextReceivedType type)
+        {
+            this.tabControl1.BeginInvoke((Action)(() =>
+            {
+                for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                    if (this.tabControl1.TabPages[i] is PMTab)
+                        if (this.tabControl1.TabPages[i].Text == name)
+                        {
+                            PMTab tab = (PMTab)this.tabControl1.TabPages[i];
+
+                            if (type == PMTextReceivedType.Announce)
+                                tab.Announce(text);
+                            else
+                            {
+                                tab.PM(name, text, font);
+                                tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == name);
+
+                                if (!tab.AutoReplySent)
+                                {
+                                    this.SendAutoReply(name, EventArgs.Empty);
+                                    //local copy of auto reply
+                                    tab.AutoReplySent = true;
+                                }
+                            }
+
+                            return;
+                        }
+
+                PMTab new_tab = new PMTab(name);
+                new_tab.ImageIndex = 2;
+                this.tabControl1.TabPages.Add(new_tab);
+
+                if (type == PMTextReceivedType.Announce)
+                    new_tab.Announce(text);
+                else
+                {
+                    new_tab.PM(name, text, font);
+                    this.SendAutoReply(name, EventArgs.Empty);
+                    //local copy of auto reply
+                    new_tab.AutoReplySent = true;
+                }
+            }));
         }
 
         public void ServerText(String text) { this.rtfScreen1.ShowServerText(text); }
@@ -113,6 +195,8 @@ namespace cb0t
 
         public void Free()
         {
+            this.tabControl1.SelectedIndexChanged -= this.tabControl1_SelectedIndexChanged;
+
             while (this.Controls.Count > 0)
                 this.Controls.RemoveAt(0);
 
@@ -181,6 +265,7 @@ namespace cb0t
             this.textBox1 = null;
 
             this.CloseAllTabs(true);
+
             this.tabControl1.ImageList = null;
             this.tabControl1.Dispose();
             this.tabControl1 = null;
@@ -215,6 +300,8 @@ namespace cb0t
         {
             if (including_main)
             {
+                this.tabControl1.TabPages.RemoveAt(0);
+
                 while (this.splitContainer1.Panel1.Controls.Count > 0)
                     this.splitContainer1.Panel1.Controls.RemoveAt(0);
 
@@ -235,6 +322,17 @@ namespace cb0t
             }
 
             // pm and file tabs
+            for (int i = (this.tabControl1.TabPages.Count - 1); i > -1; i--)
+            {
+                if (this.tabControl1.TabPages[i] is PMTab)
+                {
+                    PMTab pm = (PMTab)this.tabControl1.TabPages[i];
+                    this.tabControl1.TabPages.RemoveAt(i);
+                    pm.Free();
+                    pm.Dispose();
+                    pm = null;
+                }
+            }
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -263,6 +361,23 @@ namespace cb0t
 
             using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.WhiteSmoke, Color.Gainsboro, LinearGradientMode.Vertical))
                 e.Graphics.FillRectangle(brush, bounds);
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.tabControl1.SelectedIndex > -1)
+            {
+                this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
+
+                if (this.tabControl1.SelectedTab is PMTab)
+                {
+                    ((PMTab)this.tabControl1.SelectedTab).SetRead(true);
+                    this.PMName = this.tabControl1.SelectedTab.Text;
+                    this.Mode = ScreenMode.PM;
+                    this.CancelWriting(null, EventArgs.Empty);
+                }
+                else this.Mode = ScreenMode.Main;
+            }
         }
     }
 }
