@@ -11,10 +11,7 @@ namespace cb0t
 
         public static void OnConnecting(Room room) { }
 
-        public static void OnConnected(Room room)
-        {
-            room.SendCommand("login 246n00bs246");
-        }
+        public static void OnConnected(Room room) { }
 
         public static bool OnRedirecting(Room room, Redirect redirect) { return true; }
 
