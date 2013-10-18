@@ -38,6 +38,33 @@ namespace cb0t
 
         private int cls_count = 0;
 
+        public void Scribble(byte[] data)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<byte[]>(this.Scribble), data);
+            else
+            {
+                StringBuilder rtf = new StringBuilder();
+                rtf.Append("{");
+                rtf.Append("\\rtf");
+                rtf.Append("\\par");
+
+                using (Graphics g = this.CreateGraphics())
+                    rtf.Append(Emoticons.GetRTFScribble(data, g));
+
+                rtf.Append("}");
+
+                this.SelectionLength = 0;
+                this.SelectionStart = this.Text.Length;
+                this.TrimLines();
+                this.SelectedRtf = rtf.ToString();
+                this.SelectionLength = 0;
+                this.SelectionStart = this.Text.Length;
+
+                rtf = null;
+            }
+        }
+
         public void ShowPMText(String name, String text, AresFont font)
         {
             if (this.InvokeRequired)

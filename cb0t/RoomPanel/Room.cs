@@ -5,6 +5,8 @@ using System.Net;
 using System.Text;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using System.IO;
+using System.Drawing;
 
 namespace cb0t
 {
@@ -888,10 +890,45 @@ namespace cb0t
                     this.Eval_cb0t_pm_msg(u, ((byte[])packet));
                     break;
 
+                case "cb0t_scribble_once":
+                    u.ScribbleBuffer.Clear();
+                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    this.Eval_Scribble(u);
+                    break;
+
+                case "cb0t_scribble_first":
+                    u.ScribbleBuffer.Clear();
+                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    break;
+
+                case "cb0t_scribble_chunk":
+                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    break;
+
+                case "cb0t_scribble_last":
+                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    this.Eval_Scribble(u);
+                    break;
+
                 default:
                     this.Panel.AnnounceText(command);
                     break;
             }
+        }
+
+        private void Eval_Scribble(User user)
+        {
+            byte[] data = user.ScribbleBuffer.ToArray();
+            user.ScribbleBuffer.Clear();
+
+            if (Settings.GetReg<bool>("receive_scribbles", true))
+                if (ScriptEvents.OnScribbleReceiving(this, user))
+                {
+                    data = Zip.Decompress(data);
+                    this.Panel.AnnounceText("\x000314--- " + user.Name + ":");
+                    this.Panel.Scribble(data);
+                    ScriptEvents.OnScribbleReceived(this, user);
+                }
         }
 
         private void Eval_cb0t_pm_msg(User user, byte[] data)
@@ -927,8 +964,12 @@ namespace cb0t
 
             if (Settings.GetReg<bool>("receive_nudge", true))
             {
-                this.Panel.AnnounceText("\x000314--- " + user.Name + " has nudged you!");
-                this.owner_frm.Nudge();
+                if (ScriptEvents.OnNudgeReceiving(this, user))
+                {
+                    this.Panel.AnnounceText("\x000314--- " + user.Name + " has nudged you!");
+                    this.owner_frm.Nudge();
+                }
+                else this.sock.Send(TCPOutbound.NudgeReject(user.Name, this.crypto));
             }
             else this.sock.Send(TCPOutbound.NudgeReject(user.Name, this.crypto));
         }

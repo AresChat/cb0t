@@ -57,6 +57,9 @@ namespace cb0t
                 this.dav.Dispose();
                 this.dav = null;
             }
+
+            this.ScribbleBuffer.Clear();
+            this.ScribbleBuffer = null;
         }
 
         public void SetAvatar()

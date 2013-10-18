@@ -143,6 +143,7 @@ namespace cb0t
         public void PublicText(String name, String text, AresFont font) { this.rtfScreen1.ShowPublicText(name, text, font); }
         public void EmoteText(String name, String text, AresFont font) { this.rtfScreen1.ShowEmoteText(name, text, font); }
         public void CheckUnreadStatus() { this.CheckUnread(this.EndPoint, EventArgs.Empty); }
+        public void Scribble(byte[] data) { this.rtfScreen1.Scribble(data); }
 
         public void ScrollDown()
         {

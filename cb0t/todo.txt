@@ -3,7 +3,6 @@
 
 Browsing
 Voice
-Scribble
 
 
 to do
@@ -11,3 +10,9 @@ to do
 
 send av/pmsg/pass on login
 pm auto reply
+emoticon/color dialog
+userlist menu
+room menu
+screen menu
+settings
+audio player
