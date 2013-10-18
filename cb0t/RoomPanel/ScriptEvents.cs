@@ -56,5 +56,11 @@ namespace cb0t
         public static bool OnPmReceiving(Room room, User user, String text) { return true; }
 
         public static void OnPmReceived(Room room, User user, String text) { }
+
+        public static bool OnNudgeReceiving(Room room, User user) { return true; }
+
+        public static bool OnScribbleReceiving(Room room, User user) { return true; }
+
+        public static void OnScribbleReceived(Room room, User user) { }
     }
 }

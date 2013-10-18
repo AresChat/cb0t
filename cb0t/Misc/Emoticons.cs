@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,67 @@ namespace cb0t
 
         public static String[] CustomEmoticons { get; set; }
         public static Bitmap[] emotic { get; set; }
+
+        public static String GetRTFScribble(byte[] data, Graphics richtextbox)
+        {
+            StringBuilder result = new StringBuilder();
+
+            try
+            {
+                using (MemoryStream org_ms = new MemoryStream(data))
+                using (Bitmap org_bmp = new Bitmap(org_ms))
+                using (Bitmap bmp = new Bitmap(org_bmp.Width, org_bmp.Height))
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.CompositingQuality = CompositingQuality.HighQuality;
+                    g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+                    g.Clear(Color.White);
+                    g.DrawImage(org_bmp, new Point(0, 0));
+
+                    result.Append(@"{\pict\wmetafile8\picw");
+                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 2540));
+                    result.Append(@"\pich");
+                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 2540));
+                    result.Append(@"\picwgoal");
+                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 1440));
+                    result.Append(@"\pichgoal");
+                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 1440));
+                    result.Append(" ");
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        IntPtr ptr = g.GetHdc();
+
+                        using (Metafile meta = new Metafile(ms, ptr))
+                        {
+                            g.ReleaseHdc(ptr);
+
+                            using (Graphics gfx = Graphics.FromImage(meta))
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
+
+                            ptr = meta.GetHenhmetafile();
+                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                            byte[] buffer = new byte[size];
+                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                            DeleteEnhMetaFile(ptr);
+
+                            foreach (byte b in buffer)
+                                result.Append(String.Format("{0:x2}", b));
+
+                            result.Append("}");
+                            buffer = null;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return String.Empty;
+            }
+
+            return result.ToString();
+        }
 
         public static String GetRTFExtendedEmoticon(String em_name, Graphics richtextbox)
         {
