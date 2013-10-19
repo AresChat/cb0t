@@ -16,6 +16,7 @@ namespace cb0t
         public FavouritesListItem Credentials { get; set; }
         public RoomPanel Panel { get; set; }
         public IPEndPoint EndPoint { get; set; }
+        public String MyName = String.Empty;
 
         private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
@@ -25,7 +26,6 @@ namespace cb0t
         private uint last_lag = 0;
         private List<User> users = new List<User>();
         private bool new_sbot = false;
-        private String MyName = String.Empty;
         private Form1 owner_frm = null;
 
         public Room(uint time, FavouritesListItem item, Form1 f)
