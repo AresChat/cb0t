@@ -142,8 +142,9 @@ namespace cb0t
                     this.SelectedIndex = -1;
 
             if (e.Button == MouseButtons.Right)
-                if (this.SelectedIndex > -1)
-                    this.SelectedIndex = i;
+                if (i > -1 && i < this.Items.Count)
+                    if (this.Items[i] is UserListBoxItem)
+                        this.SelectedIndex = i;
         }
 
         protected override void Sort()

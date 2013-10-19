@@ -44,6 +44,43 @@ namespace cb0t
             this.Panel.SendBox.KeyUp += this.SendBoxKeyUp;
             this.Panel.SendAutoReply += this.SendAutoReply;
             this.Panel.Userlist.OpenPMRequested += this.OpenPMRequested;
+            this.Panel.Userlist.SendAdminCommand += this.SendAdminCommand;
+            this.Panel.Userlist.MenuTask += this.UserlistMenuTask;
+        }
+
+        private void UserlistMenuTask(object sender, ULCTXTaskEventArgs e)
+        {
+            String name = (String)sender;
+
+            switch (e.Task)
+            {
+                case ULCTXTask.AddRemoveFriend:
+                    break;
+
+                case ULCTXTask.Browse:
+                    break;
+
+                case ULCTXTask.CopyName:
+                    break;
+
+                case ULCTXTask.IgnoreUnignore:
+                    break;
+
+                case ULCTXTask.Nudge:
+                    break;
+
+                case ULCTXTask.Scribble:
+                    break;
+
+                case ULCTXTask.Whois:
+                    break;
+            }
+        }
+
+        private void SendAdminCommand(object sender, EventArgs e)
+        {
+            if (this.state == SessionState.Connected)
+                this.sock.Send(TCPOutbound.Command((String)sender, this.crypto));
         }
 
         public void ScrollAndFocus()
@@ -60,6 +97,8 @@ namespace cb0t
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
             this.Panel.SendAutoReply -= this.SendAutoReply;
             this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
+            this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
+            this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
             this.sock.Free();

@@ -13,11 +13,102 @@ namespace cb0t
     public partial class UserListContainer : UserControl
     {
         public event EventHandler OpenPMRequested;
+        public event EventHandler SendAdminCommand;
+        public event EventHandler<ULCTXTaskEventArgs> MenuTask;
+
+        private ContextMenuStrip ctx_menu { get; set; }
+        private String CTXUserName { get; set; }
 
         public UserListContainer()
         {
             this.InitializeComponent();
             this.userListBox1.MouseDoubleClick += this.ItemMouseDoubleClick;
+            this.ctx_menu = new ContextMenuStrip();
+            this.ctx_menu.Items.Add(new ToolStripLabel());
+            this.ctx_menu.Items[0].Enabled = false;
+            this.ctx_menu.Items.Add(new ToolStripSeparator());//1
+            this.ctx_menu.Items.Add("Nudge");//2
+            this.ctx_menu.Items.Add("Whois");//3
+            this.ctx_menu.Items.Add("Ignore/Unignore");//4
+            this.ctx_menu.Items.Add("Scribble");//5
+            this.ctx_menu.Items.Add("Copy name");//6
+            this.ctx_menu.Items.Add("Add/Remove friend");//7
+            this.ctx_menu.Items.Add("Browse");//8
+            this.ctx_menu.Items.Add(new ToolStripSeparator());//9
+            this.ctx_menu.Items.Add("Kill");//10
+            this.ctx_menu.Items.Add("Ban");//11
+            this.ctx_menu.Items.Add("Muzzle");//12
+            this.ctx_menu.Items.Add("Unmuzzle");//13
+            this.ctx_menu.Items.Add(new ToolStripSeparator());//14
+            this.ctx_menu.Items.Add("Host kill");//15
+            this.ctx_menu.Items.Add("Host ban");//16
+            this.ctx_menu.Items.Add("Host muzzle");//17
+            this.ctx_menu.Items.Add("Host unmuzzle");//18
+            this.ctx_menu.ShowImageMargin = false;
+            this.ctx_menu.Opening += this.CTXMenuOpening;
+            this.ctx_menu.ItemClicked += this.CTXItemClicked;
+            this.userListBox1.ContextMenuStrip = this.ctx_menu;
+        }
+
+        private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(this.CTXUserName))
+                if (e.ClickedItem != null)
+                {
+                    if (e.ClickedItem.Equals(this.ctx_menu.Items[2]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Nudge));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[3]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Whois));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[4]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.IgnoreUnignore));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[5]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Scribble));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[6]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.CopyName));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[7]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.AddRemoveFriend));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[8]))
+                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Browse));
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[10]))
+                        this.SendAdminCommand("kill " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[11]))
+                        this.SendAdminCommand("ban " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[12]))
+                        this.SendAdminCommand("muzzle " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[13]))
+                        this.SendAdminCommand("unmuzzle " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[15]))
+                        this.SendAdminCommand("hostkill " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[16]))
+                        this.SendAdminCommand("hostban " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[17]))
+                        this.SendAdminCommand("hostmuzzle " + this.CTXUserName, EventArgs.Empty);
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[18]))
+                        this.SendAdminCommand("hostunmuzzle " + this.CTXUserName, EventArgs.Empty);
+                }
+        }
+
+        private void CTXMenuOpening(object sender, CancelEventArgs e)
+        {
+            int i = this.userListBox1.SelectedIndex;
+            bool can_show = false;
+
+            if (i > -1 && i < this.userListBox1.Items.Count)
+                if (this.userListBox1.Items[i] is UserListBoxItem)
+                {
+                    can_show = true;
+                    this.CTXUserName = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.Name;
+                    this.ctx_menu.Items[0].Text = "Options for: " + this.CTXUserName;
+
+                    for (int x = 9; x < 14; x++)
+                        this.ctx_menu.Items[x].Visible = this.MyLevel > 0;
+
+                    for (int x = 14; x < 19; x++)
+                        this.ctx_menu.Items[x].Visible = this.MyLevel == 3;
+                }
+
+            if (!can_show)
+                e.Cancel = true;
         }
 
         private void ItemMouseDoubleClick(object sender, MouseEventArgs e)
@@ -36,6 +127,15 @@ namespace cb0t
 
         public void Free()
         {
+            this.userListBox1.ContextMenuStrip = null;
+            this.ctx_menu.Opening -= this.CTXMenuOpening;
+            this.ctx_menu.ItemClicked -= this.CTXItemClicked;
+
+            while (this.ctx_menu.Items.Count > 0)
+                this.ctx_menu.Items[0].Dispose();
+
+            this.ctx_menu.Dispose();
+            this.ctx_menu = null;
             this.userListBox1.MouseDoubleClick -= this.ItemMouseDoubleClick;
 
             while (this.Controls.Count > 0)
