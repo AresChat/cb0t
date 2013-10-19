@@ -201,6 +201,7 @@
     <Compile Include="RoomPanel\WritingPanel.Designer.cs">
       <DependentUpon>WritingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ULCTXTaskEventArgs.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
