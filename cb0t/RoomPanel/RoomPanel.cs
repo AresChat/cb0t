@@ -338,7 +338,26 @@ namespace cb0t
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            this.CloseClicked(this.EndPoint, EventArgs.Empty);
+            if (this.Mode == ScreenMode.Main)
+                this.CloseClicked(this.EndPoint, EventArgs.Empty);
+            else
+            {
+                int index = this.tabControl1.SelectedIndex;
+
+                if (index > 0)
+                {
+                    this.tabControl1.SelectedIndex = 0;
+
+                    if (this.tabControl1.TabPages[index] is PMTab)
+                    {
+                        PMTab pm = (PMTab)this.tabControl1.TabPages[index];
+                        this.tabControl1.TabPages.RemoveAt(index);
+                        pm.Free();
+                        pm.Dispose();
+                        pm = null;
+                    }
+                }
+            }
         }
 
         private void toolStripDropDownButton1_DropDownOpening(object sender, EventArgs e)
