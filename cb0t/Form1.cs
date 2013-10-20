@@ -175,6 +175,8 @@ namespace cb0t
                     this.ClientSize = new Size(frm_size_x, frm_size_y);
 
                 this.do_once = true;
+                Popups.Create();
+                Popups.Available.PopupMouseClicked += this.PopupMouseClicked;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
@@ -186,6 +188,11 @@ namespace cb0t
 
                 Settings.CAN_WRITE_REG = true;
             }
+        }
+
+        private void PopupMouseClicked(object sender, EventArgs e)
+        {
+            
         }
 
         private void SocketThread()
