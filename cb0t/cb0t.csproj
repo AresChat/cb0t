@@ -69,6 +69,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Misc\InternalSounds.cs" />
+    <Compile Include="Misc\PopupDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Misc\PopupDialog.Designer.cs">
+      <DependentUpon>PopupDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\PopupLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Misc\Popups.cs" />
+    <Compile Include="Misc\PopupSound.cs" />
     <Compile Include="RoomPanel\PMCrypto.cs" />
     <Compile Include="RoomPanel\PMRecPanel.cs">
       <SubType>UserControl</SubType>
@@ -201,7 +212,7 @@
     <Compile Include="RoomPanel\WritingPanel.Designer.cs">
       <DependentUpon>WritingPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ULCTXTaskEventArgs.cs" />
+    <Compile Include="RoomPanel\ULCTXTaskEventArgs.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -213,6 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\PopupDialog.resx">
+      <DependentUpon>PopupDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RoomPanel\PMRecPanel.resx">
       <DependentUpon>PMRecPanel.cs</DependentUpon>

@@ -24,6 +24,8 @@ namespace cb0t
         private AresSocket sock = new AresSocket();
         private uint ticks = 0;
         private uint last_lag = 0;
+        private uint last_nudge = 0;
+        private bool can_nudge = true;
         private List<User> users = new List<User>();
         private bool new_sbot = false;
         private Form1 owner_frm = null;
@@ -52,28 +54,33 @@ namespace cb0t
         {
             String name = (String)sender;
 
-            switch (e.Task)
+            if (e.Task == ULCTXTask.AddRemoveFriend)
             {
-                case ULCTXTask.AddRemoveFriend:
-                    break;
 
-                case ULCTXTask.Browse:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.Browse)
+            {
 
-                case ULCTXTask.CopyName:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.CopyName)
+            {
 
-                case ULCTXTask.IgnoreUnignore:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.IgnoreUnignore)
+            {
 
-                case ULCTXTask.Nudge:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.Nudge)
+            {
 
-                case ULCTXTask.Scribble:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.Scribble)
+            {
 
-                case ULCTXTask.Whois:
-                    break;
+            }
+            else if (e.Task == ULCTXTask.Whois)
+            {
+
             }
         }
 
@@ -134,6 +141,11 @@ namespace cb0t
             this.users.ForEach(u);
         }
 
+        public void ShowPopup(String title, String msg, PopupSound sound)
+        {
+            this.owner_frm.BeginInvoke((Action)(() => Popups.Available.ShowPopup(title, msg, this.EndPoint, sound)));
+        }
+
         public void SocketTasks(uint time)
         {
             if (this.state == SessionState.Sleeping)
@@ -178,6 +190,10 @@ namespace cb0t
             }
             else if (this.sock != null)
             {
+                if (!this.can_nudge)
+                    if (time > this.last_nudge)
+                        this.can_nudge = true;
+
                 if (time >= (this.last_lag + 30))
                 {
                     this.last_lag = time;
@@ -1003,10 +1019,15 @@ namespace cb0t
 
             if (Settings.GetReg<bool>("receive_nudge", true))
             {
+                if (this.can_nudge)
+                    this.can_nudge = false;
+                else return;
+
                 if (ScriptEvents.OnNudgeReceiving(this, user))
                 {
                     this.Panel.AnnounceText("\x000314--- " + user.Name + " has nudged you!");
                     this.owner_frm.Nudge();
+                    this.ShowPopup("cb0t :: Nudge", user.Name + " nudged you", PopupSound.None);
                 }
                 else this.sock.Send(TCPOutbound.NudgeReject(user.Name, this.crypto));
             }
