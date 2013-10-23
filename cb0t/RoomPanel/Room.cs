@@ -55,9 +55,7 @@ namespace cb0t
             String name = (String)sender;
 
             if (e.Task == ULCTXTask.AddRemoveFriend)
-            {
-
-            }
+                Friends.FriendStatusChanged(name);
             else if (e.Task == ULCTXTask.Browse)
             {
 
@@ -88,6 +86,20 @@ namespace cb0t
         {
             if (this.state == SessionState.Connected)
                 this.sock.Send(TCPOutbound.Command((String)sender, this.crypto));
+        }
+
+        public void FriendStatusChanged(String name, bool friend)
+        {
+            if (this.users != null)
+            {
+                User u = this.users.Find(x => x.Name == name);
+
+                if (u != null)
+                {
+                    u.IsFriend = friend;
+                    this.Panel.Userlist.UpdateUserFriendship(u);
+                }
+            }
         }
 
         public void ScrollAndFocus()
@@ -143,7 +155,14 @@ namespace cb0t
 
         public void ShowPopup(String title, String msg, PopupSound sound)
         {
-            this.owner_frm.BeginInvoke((Action)(() => Popups.Available.ShowPopup(title, msg, this.EndPoint, sound)));
+            if (Settings.GetReg<bool>("can_popup", true))
+            {
+                this.owner_frm.BeginInvoke((Action)(() =>
+                {
+                    Popups.Available.ShowPopup(title, msg, this.EndPoint, sound);
+                    this.owner_frm.Activate();
+                }));
+            }
         }
 
         public void SocketTasks(uint time)
@@ -691,7 +710,7 @@ namespace cb0t
             byte country = packet;
             u.Country = Helpers.CountryCodeToString(country);
             u.Region = packet.ReadString(this.crypto);
-            u.IsFriend = false;
+            u.IsFriend = Friends.IsFriend(u.Name);
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
 
@@ -702,6 +721,9 @@ namespace cb0t
                 this.Panel.Userlist.MyLevel = u.Level;
 
             ScriptEvents.OnUserJoined(this, u);
+
+            if (u.IsFriend)
+                this.ShowPopup("cb0t :: Friend", u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
         }
 
         private void Eval_Part(TCPPacketReader packet)
@@ -748,7 +770,7 @@ namespace cb0t
             byte country = packet;
             u.Country = Helpers.CountryCodeToString(country);
             u.Region = packet.ReadString(this.crypto);
-            u.IsFriend = false;
+            u.IsFriend = Friends.IsFriend(u.Name);
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
 

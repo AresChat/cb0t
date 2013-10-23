@@ -24,6 +24,7 @@ namespace cb0t
         public Form1()
         {
             Settings.Create();
+            Friends.Load();
             Emoticons.Load();
 
             this.InitializeComponent();
