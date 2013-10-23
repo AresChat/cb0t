@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Friends.cs" />
     <Compile Include="Misc\InternalSounds.cs" />
     <Compile Include="Misc\PopupDialog.cs">
       <SubType>Form</SubType>
