@@ -97,6 +97,18 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
         }
 
+        public static byte[] Nudge(String myName, String target, CryptoService c)
+        {
+            byte[] temp = Encoding.UTF8.GetBytes("0" + myName);
+            temp = Hashlink.e67(temp, 0x5d0);
+            temp = Encoding.Default.GetBytes(Convert.ToBase64String(temp));
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_nudge", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(temp);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
         public static byte[] NudgeReject(String target, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();
@@ -121,6 +133,14 @@ namespace cb0t
             packet.WriteString(target, c);
             packet.WriteBytes(PMCrypto.SoftEncrypt(target, Encoding.UTF8.GetBytes(Helpers.FormatAresColorCodes(text))));
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
+        public static byte[] Ignore(String name, bool ignore, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteByte((byte)(ignore ? 1 : 0));
+            packet.WriteString(name, c);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_IGNORELIST);
         }
 
 

@@ -53,6 +53,45 @@ namespace cb0t
             Aero.HideIconAndText(this);
         }
 
+        private IPEndPoint popup_ep = null;
+
+        public void ShowPopup(String title, String msg, IPEndPoint room, PopupSound sound)
+        {
+            this.popup_ep = room;
+            this.notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            this.notifyIcon1.BalloonTipTitle = title;
+            this.notifyIcon1.BalloonTipText = msg;
+            this.notifyIcon1.ShowBalloonTip(10000);
+
+            if (sound == PopupSound.Notify)
+                InternalSounds.Notify();
+            else if (sound == PopupSound.Friend)
+                InternalSounds.Friend();
+        }
+
+        private void PopupClicked(object sender, EventArgs e)
+        {
+            if (this.popup_ep != null)
+            {
+                this.channel_bar.SelectedButton = this.popup_ep;
+                this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
+                this.toolStrip1.Invalidate();
+                this.SetToRoom(this.popup_ep);
+                this.popup_ep = null;
+
+                this.BeginInvoke((Action)(() =>
+                {
+                    if (!this.Visible)
+                        this.Show();
+
+                    if (this.WindowState == FormWindowState.Minimized)
+                        this.WindowState = FormWindowState.Normal;
+
+                    this.Activate();
+                }));
+            }
+        }
+
         public void Nudge()
         {
             this.BeginInvoke((Action)(() =>
@@ -82,8 +121,6 @@ namespace cb0t
                     sw = null;
                     rnd = null;
                 }
-
-                // popup
             }));
         }
 
@@ -176,13 +213,14 @@ namespace cb0t
                     this.ClientSize = new Size(frm_size_x, frm_size_y);
 
                 this.do_once = true;
-                Popups.Create();
-                Popups.Available.PopupMouseClicked += this.PopupMouseClicked;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
                 this.clist_content.OpenChannel += this.OpenChannel;
                 this.clist_content.Create();
+                this.notifyIcon1.MouseClick += this.SysTrayMouseClicked;
+                this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
+                
 
                 foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
                     this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
@@ -191,9 +229,19 @@ namespace cb0t
             }
         }
 
-        private void PopupMouseClicked(object sender, EventArgs e)
+        private void SysTrayMouseClicked(object sender, MouseEventArgs e)
         {
-            
+            if (e.Button == MouseButtons.Left)
+                this.BeginInvoke((Action)(() =>
+                {
+                    if (!this.Visible)
+                        this.Show();
+
+                    if (this.WindowState == FormWindowState.Minimized)
+                        this.WindowState = FormWindowState.Normal;
+
+                    this.Activate();
+                }));
         }
 
         private void SocketThread()

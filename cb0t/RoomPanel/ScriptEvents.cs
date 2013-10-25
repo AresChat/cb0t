@@ -15,6 +15,8 @@ namespace cb0t
 
         public static bool OnRedirecting(Room room, Redirect redirect) { return true; }
 
+        public static bool OnCommand(Room room, String text) { return true; }
+
         public static bool OnTextReceiving(Room room, String name, String text) { return true; }
 
         public static void OnTextReceived(Room room, String name, String text) { }
