@@ -21,7 +21,7 @@ namespace cb0t
             return buffer;
         }
 
-        private static byte[] e67(byte[] data, int b)
+        public static byte[] e67(byte[] data, int b)
         {
             byte[] buffer = new byte[data.Length];
 

@@ -62,23 +62,35 @@ namespace cb0t
             }
             else if (e.Task == ULCTXTask.CopyName)
             {
-
+                this.Panel.SendBox.AppendText(name);
+                this.Panel.SendBox.SelectionStart = this.Panel.SendBox.Text.Length;
             }
             else if (e.Task == ULCTXTask.IgnoreUnignore)
             {
+                User u = this.users.Find(x => x.Name == name);
 
+                if (u != null)
+                {
+                    u.Ignored = !u.Ignored;
+                    this.sock.Send(TCPOutbound.Ignore(name, u.Ignored, this.crypto));
+                }
             }
             else if (e.Task == ULCTXTask.Nudge)
-            {
-
-            }
+                this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
             else if (e.Task == ULCTXTask.Scribble)
             {
 
             }
             else if (e.Task == ULCTXTask.Whois)
             {
+                User u = this.users.Find(x => x.Name == name);
 
+                if (u != null)
+                {
+                    this.Panel.AnnounceText("\x000314--- Whois: " + u.Name);
+                    this.Panel.AnnounceText("\x000314--- ASL: " + u.ToASLString());
+                    this.Panel.AnnounceText("\x000314--- Personal Message: " + u.PersonalMessage);
+                }
             }
         }
 
@@ -156,13 +168,7 @@ namespace cb0t
         public void ShowPopup(String title, String msg, PopupSound sound)
         {
             if (Settings.GetReg<bool>("can_popup", true))
-            {
-                this.owner_frm.BeginInvoke((Action)(() =>
-                {
-                    Popups.Available.ShowPopup(title, msg, this.EndPoint, sound);
-                    this.owner_frm.Activate();
-                }));
-            }
+                this.owner_frm.BeginInvoke((Action)(() => this.owner_frm.ShowPopup(title, msg, this.EndPoint, sound)));
         }
 
         public void SocketTasks(uint time)
@@ -318,6 +324,7 @@ namespace cb0t
             if (e.KeyCode == Keys.Up)
             {
                 this.Panel.SendBox.Text = History.GetText();
+                this.Panel.SendBox.SelectionStart = this.Panel.SendBox.Text.Length;
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }
@@ -358,42 +365,45 @@ namespace cb0t
                         }
                         else if (text.StartsWith("/"))
                         {
-                            if (text == "/time")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
-                            else if (text == "/uptime")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
-                            else if (text == "/gfx")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
-                            else if (text == "/hdd")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
-                            else if (text == "/os")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
-                            else if (text == "/cpu")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
-                            else if (text == "/ram")
-                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
-                            else if (text == "/lag")
+                            if (ScriptEvents.OnCommand(this, text.Substring(1)))
                             {
+                                if (text == "/time")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
+                                else if (text == "/uptime")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
+                                else if (text == "/gfx")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
+                                else if (text == "/hdd")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
+                                else if (text == "/os")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
+                                else if (text == "/cpu")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
+                                else if (text == "/ram")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
+                                else if (text == "/lag")
+                                {
 
-                            }
-                            else if (text == "/cmds")
-                            {
+                                }
+                                else if (text == "/cmds")
+                                {
 
-                            }
-                            else if (text.StartsWith("/all "))
-                            {
+                                }
+                                else if (text.StartsWith("/all "))
+                                {
 
-                            }
-                            else if (text.StartsWith("/find "))
-                            {
+                                }
+                                else if (text.StartsWith("/find "))
+                                {
 
-                            }
-                            else if (text.StartsWith("/pretext"))
-                            {
+                                }
+                                else if (text.StartsWith("/pretext"))
+                                {
 
+                                }
+                                else if (text.Length > 1)
+                                    this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
                             }
-                            else if (text.Length > 1)
-                                this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
                         }
                         else this.sock.Send(TCPOutbound.Public(text, this.crypto));
                     }
@@ -819,6 +829,9 @@ namespace cb0t
             if (u.Font != null)
                 font = u.Font;
 
+            if (u.Ignored)
+                return;
+
             if (ScriptEvents.OnPmReceiving(this, u, text))
             {
                 this.Panel.PMTextReceived(name, text, font, PMTextReceivedType.Text);
@@ -835,8 +848,13 @@ namespace cb0t
             AresFont font = null;
 
             if (u != null)
+            {
+                if (u.Ignored)
+                    return;
+
                 if (u.Font != null)
                     font = u.Font;
+            }
 
             if (ScriptEvents.OnTextReceiving(this, name, text))
             {
@@ -854,8 +872,13 @@ namespace cb0t
             AresFont font = null;
 
             if (u != null)
+            {
+                if (u.Ignored)
+                    return;
+
                 if (u.Font != null)
                     font = u.Font;
+            }
 
             if (ScriptEvents.OnEmoteReceiving(this, name, text))
             {
