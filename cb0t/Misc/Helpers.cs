@@ -16,6 +16,18 @@ namespace cb0t
             UserIdent = 0;
         }
 
+        private static ushort _bid = 0;
+        public static ushort BrowseIdent
+        {
+            get
+            {
+                if (_bid > 60000)
+                    _bid = 0;
+
+                return _bid++;
+            }
+        }
+
         public static uint UnixTime
         {
             get

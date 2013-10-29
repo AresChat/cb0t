@@ -71,7 +71,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Friends.cs" />
+    <Compile Include="RoomPanel\BrowseItem.cs" />
+    <Compile Include="RoomPanel\BrowseLeftContainer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\BrowseLeftContainer.Designer.cs">
+      <DependentUpon>BrowseLeftContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPanel\BrowseLeftHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\BrowseLeftHeader.Designer.cs">
+      <DependentUpon>BrowseLeftHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPanel\BrowseTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RoomPanel\BrowseView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Misc\Friends.cs" />
     <Compile Include="Misc\InternalSounds.cs" />
     <Compile Include="Misc\PopupSound.cs" />
     <Compile Include="RoomPanel\PMCrypto.cs" />
@@ -209,6 +228,12 @@
     <Compile Include="RoomPanel\ULCTXTaskEventArgs.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\BrowseLeftContainer.resx">
+      <DependentUpon>BrowseLeftContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoomPanel\BrowseLeftHeader.resx">
+      <DependentUpon>BrowseLeftHeader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChannelListPanel\ChannelListPanel.resx">
       <DependentUpon>ChannelListPanel.cs</DependentUpon>

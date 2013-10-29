@@ -58,7 +58,13 @@ namespace cb0t
                 Friends.FriendStatusChanged(name);
             else if (e.Task == ULCTXTask.Browse)
             {
+                if (this.users.Find(x => x.HasFiles && x.Name == name) != null)
+                {
+                    ushort bid = Helpers.BrowseIdent;
 
+                    if (this.Panel.CreateFileBrowseTab(name, bid))
+                        this.sock.Send(TCPOutbound.Browse(name, bid, this.crypto));
+                }
             }
             else if (e.Task == ULCTXTask.CopyName)
             {
@@ -319,6 +325,8 @@ namespace cb0t
             }
         }
 
+        private String[] cmds = new String[] { "/time", "/uptime", "/gfx", "/hdd", "/os", "/cpu", "/ram", "/lag", "/all <text>", "/find <name>", "/pretext", "/pretext <text>" };
+
         private void SendBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
@@ -382,30 +390,48 @@ namespace cb0t
                                 else if (text == "/ram")
                                     this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
                                 else if (text == "/lag")
-                                {
-
-                                }
+                                    this.sock.SendPriority(TCPOutbound.ManualLag(this.MyName, Helpers.UnixTimeMS, this.crypto));
                                 else if (text == "/cmds")
                                 {
-
+                                    foreach (String item in this.cmds)
+                                        this.Panel.AnnounceText(item);
                                 }
                                 else if (text.StartsWith("/all "))
                                 {
-
+                                    if (text.StartsWith("/me ") && text.Length > 4)
+                                        RoomPool.Rooms.ForEach(x => x.SendEmote(text.Substring(4)));
+                                    else if (text.StartsWith("/") && text.Length > 1)
+                                        RoomPool.Rooms.ForEach(x => x.SendCommand(text.Substring(1)));
+                                    else
+                                        RoomPool.Rooms.ForEach(x => x.SendText(text));
                                 }
                                 else if (text.StartsWith("/find "))
                                 {
+                                    String arg = text.Substring(6);
+                                    User u = this.users.Find(x => x.Name == arg);
 
+                                    if (u == null)
+                                        u = this.users.Find(x => x.Name.StartsWith(arg));
+
+                                    if (u != null)
+                                        this.Panel.Userlist.SetToUser(u.Name);
                                 }
-                                else if (text.StartsWith("/pretext"))
+                                else if (text == "/pretext" || text == "/pretext ")
                                 {
-
+                                    Settings.SetReg("pretext", String.Empty);
+                                    this.Panel.AnnounceText("pre text disabled");
+                                }
+                                else if (text.StartsWith("/pretext "))
+                                {
+                                    String arg = text.Substring(9);
+                                    Settings.SetReg("pretext", arg);
+                                    this.Panel.AnnounceText("pre text updated");
                                 }
                                 else if (text.Length > 1)
                                     this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
                             }
                         }
-                        else this.sock.Send(TCPOutbound.Public(text, this.crypto));
+                        else this.sock.Send(TCPOutbound.Public(Settings.GetReg<String>("pretext", String.Empty) + text, this.crypto));
                     }
                     else if (this.Panel.Mode == ScreenMode.PM)
                     {
@@ -533,6 +559,22 @@ namespace cb0t
                     this.CustomProtoReceived(e.Packet);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_STARTOFBROWSE:
+                    this.Eval_StartBrowse(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_BROWSEITEM:
+                    this.Eval_BrowseItem(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_BROWSEERROR:
+                    this.Eval_BrowseError(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_ENDOFBROWSE:
+                    this.Eval_EndBrowse(e.Packet);
+                    break;
+
                 default:
                     this.Panel.AnnounceText(e.Msg.ToString());
                     break;
@@ -593,6 +635,32 @@ namespace cb0t
             // send my av+pmsg+font+autopassword
 
             ScriptEvents.OnConnected(this);
+        }
+
+        private void Eval_StartBrowse(TCPPacketReader packet)
+        {
+            ushort ident = packet;
+            ushort count = packet;
+            this.Panel.StartBrowse(ident, count);
+        }
+
+        private void Eval_BrowseItem(TCPPacketReader packet)
+        {
+            ushort ident = packet;
+            BrowseItem item = new BrowseItem(packet, this.crypto);
+            this.Panel.BrowseItemReceived(ident, item);            
+        }
+
+        private void Eval_BrowseError(TCPPacketReader packet)
+        {
+            ushort ident = packet;
+            this.Panel.BrowseError(ident);
+        }
+
+        private void Eval_EndBrowse(TCPPacketReader packet)
+        {
+            ushort ident = packet;
+            this.Panel.BrowseEnd(ident);
         }
 
         private void Eval_Announce(TCPPacketReader packet)
@@ -968,6 +1036,11 @@ namespace cb0t
                 case "cb0t_latency_check":
                     lag = (Helpers.UnixTimeMS - ((ulong)packet));
                     this.Panel.Userlist.UpdateLag(lag);
+                    break;
+
+                case "cb0t_latency_mcheck":
+                    lag = (Helpers.UnixTimeMS - ((ulong)packet));
+                    this.sock.Send(TCPOutbound.Public("Lag test: " + lag + " milliseconds", this.crypto));
                     break;
 
                 case "cb0t_online_status":

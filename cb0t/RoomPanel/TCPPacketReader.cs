@@ -6,7 +6,7 @@ using System.Text;
 
 namespace cb0t
 {
-    class TCPPacketReader
+    public class TCPPacketReader
     {
         private int Position = 0;
         private List<byte> Data = new List<byte>();

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace cb0t
 {
-    class CryptoService
+    public class CryptoService
     {
         public CryptoMode Mode { get; set; }
 
@@ -84,7 +84,7 @@ namespace cb0t
         }
     }
 
-    enum CryptoMode
+    public enum CryptoMode
     {
         Encrypted,
         Unencrypted
