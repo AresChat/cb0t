@@ -60,6 +60,7 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_read.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_unread.Clone());
+            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.folder.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
         }
@@ -136,6 +137,94 @@ namespace cb0t
                     new_tab.AutoReplySent = true;
                 }
             }));
+        }
+
+        public bool CreateFileBrowseTab(String name, ushort ident)
+        {
+            int index = -1;
+
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is BrowseTab)
+                    if (this.tabControl1.TabPages[i].Text == name)
+                    {
+                        index = i;
+                        break;
+                    }
+
+            if (index > -1)
+            {
+                this.tabControl1.SelectedIndex = index;
+                return false;
+            }
+            else
+            {
+                BrowseTab new_tab = new BrowseTab(name);
+                new_tab.ImageIndex = 3;
+                new_tab.BrowseIdent = ident;
+                this.tabControl1.TabPages.Add(new_tab);
+                this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
+                return true;
+            }
+        }
+
+        public void StartBrowse(ushort ident, ushort count)
+        {
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is BrowseTab)
+                {
+                    BrowseTab tab = (BrowseTab)this.tabControl1.TabPages[i];
+
+                    if (tab.BrowseIdent == ident)
+                    {
+                        tab.StartReceived(count);
+                        break;
+                    }
+                }
+        }
+
+        public void BrowseItemReceived(ushort ident, BrowseItem item)
+        {
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is BrowseTab)
+                {
+                    BrowseTab tab = (BrowseTab)this.tabControl1.TabPages[i];
+
+                    if (tab.BrowseIdent == ident)
+                    {
+                        tab.ItemReceived(item);
+                        break;
+                    }
+                }
+        }
+
+        public void BrowseEnd(ushort ident)
+        {
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is BrowseTab)
+                {
+                    BrowseTab tab = (BrowseTab)this.tabControl1.TabPages[i];
+
+                    if (tab.BrowseIdent == ident)
+                    {
+                        tab.EndReceived();
+                        break;
+                    }
+                }
+        }
+
+        public void BrowseError(ushort ident)
+        {
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is BrowseTab)
+                {
+                    BrowseTab tab = (BrowseTab)this.tabControl1.TabPages[i];
+
+                    if (tab.BrowseIdent == ident)
+                    {
+                        tab.ErrorReceived();
+                        break;
+                    }
+                }
         }
 
         public void ServerText(String text) { this.rtfScreen1.ShowServerText(text); }
@@ -333,6 +422,14 @@ namespace cb0t
                     pm.Dispose();
                     pm = null;
                 }
+                else if (this.tabControl1.TabPages[i] is BrowseTab)
+                {
+                    BrowseTab bt = (BrowseTab)this.tabControl1.TabPages[i];
+                    this.tabControl1.TabPages.RemoveAt(i);
+                    bt.Free();
+                    bt.Dispose();
+                    bt = null;
+                }
             }
         }
 
@@ -355,6 +452,14 @@ namespace cb0t
                         pm.Free();
                         pm.Dispose();
                         pm = null;
+                    }
+                    else if (this.tabControl1.TabPages[index] is BrowseTab)
+                    {
+                        BrowseTab bt = (BrowseTab)this.tabControl1.TabPages[index];
+                        this.tabControl1.TabPages.RemoveAt(index);
+                        bt.Free();
+                        bt.Dispose();
+                        bt = null;
                     }
                 }
             }
@@ -387,16 +492,29 @@ namespace cb0t
         {
             if (this.tabControl1.SelectedIndex > -1)
             {
-                this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
-
-                if (this.tabControl1.SelectedTab is PMTab)
+                if (this.tabControl1.SelectedTab is BrowseTab)
                 {
-                    ((PMTab)this.tabControl1.SelectedTab).SetRead(true);
-                    this.PMName = this.tabControl1.SelectedTab.Text;
-                    this.Mode = ScreenMode.PM;
-                    this.CancelWriting(null, EventArgs.Empty);
+                    this.Mode = ScreenMode.Browse;
+
+                    if (this.panel1.Visible)
+                        this.panel1.Visible = false;
                 }
-                else this.Mode = ScreenMode.Main;
+                else
+                {
+                    if (!this.panel1.Visible)
+                        this.panel1.Visible = true;
+
+                    this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
+
+                    if (this.tabControl1.SelectedTab is PMTab)
+                    {
+                        ((PMTab)this.tabControl1.SelectedTab).SetRead(true);
+                        this.PMName = this.tabControl1.SelectedTab.Text;
+                        this.Mode = ScreenMode.PM;
+                        this.CancelWriting(null, EventArgs.Empty);
+                    }
+                    else this.Mode = ScreenMode.Main;
+                }
             }
         }
     }

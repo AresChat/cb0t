@@ -19,7 +19,7 @@ namespace cb0t
             packet.WriteBytes(new byte[] { 0x7b, 0xff, 0x7b, 0xff });
             packet.WriteUInt16(65535);
             packet.WriteUInt32(0);
-            packet.WriteString("placebo", true);
+            packet.WriteString("n-oobe", true);
             packet.WriteString("cb0t 3.00a", true);
             packet.WriteIP(Settings.LocalIP);
             packet.WriteIP(Settings.LocalIP);
@@ -89,6 +89,15 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
         }
 
+        public static byte[] ManualLag(String name, ulong time, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_latency_mcheck", c);
+            packet.WriteString(name, c);
+            packet.WriteUInt64(time);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
         public static byte[] Writing(bool writing, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();
@@ -141,6 +150,15 @@ namespace cb0t
             packet.WriteByte((byte)(ignore ? 1 : 0));
             packet.WriteString(name, c);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_IGNORELIST);
+        }
+
+        public static byte[] Browse(String target, ushort ident, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteUInt16(ident);
+            packet.WriteByte(0);
+            packet.WriteString(target, c);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_BROWSE);
         }
 
 
