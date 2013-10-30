@@ -71,6 +71,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\CustomColorPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Misc\CustomColorPicker.Designer.cs">
+      <DependentUpon>CustomColorPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\DoubleBufferedComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RoomPanel\BrowseItem.cs" />
     <Compile Include="RoomPanel\BrowseLeftContainer.cs">
       <SubType>UserControl</SubType>
@@ -182,6 +191,19 @@
     <Compile Include="RoomPanel\SessionState.cs" />
     <Compile Include="RoomPanel\ScreenMode.cs" />
     <Compile Include="RoomPanel\ScriptEvents.cs" />
+    <Compile Include="Misc\ScribbleCanvas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Misc\ScribbleCanvas.Designer.cs">
+      <DependentUpon>ScribbleCanvas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\ScribbleBar.cs" />
+    <Compile Include="Misc\ScribbleEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Misc\ScribbleEditor.Designer.cs">
+      <DependentUpon>ScribbleEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPanel\SettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -226,8 +248,12 @@
       <DependentUpon>WritingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="RoomPanel\ULCTXTaskEventArgs.cs" />
+    <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\CustomColorPicker.resx">
+      <DependentUpon>CustomColorPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RoomPanel\BrowseLeftContainer.resx">
       <DependentUpon>BrowseLeftContainer.cs</DependentUpon>
@@ -259,6 +285,12 @@
     </Compile>
     <EmbeddedResource Include="RoomPanel\RoomPanel.resx">
       <DependentUpon>RoomPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\ScribbleCanvas.resx">
+      <DependentUpon>ScribbleCanvas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\ScribbleEditor.resx">
+      <DependentUpon>ScribbleEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\SettingsPanel.resx">
       <DependentUpon>SettingsPanel.cs</DependentUpon>
@@ -362,6 +394,8 @@
     <None Include="Resources\mrec.png" />
     <None Include="Resources\writingpen.png" />
     <Content Include="ni.ico" />
+    <None Include="Resources\scribble.png" />
+    <None Include="Resources\folder2.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

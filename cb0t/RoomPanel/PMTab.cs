@@ -67,6 +67,11 @@ namespace cb0t
             this.rtf.ShowAnnounceText(text);
         }
 
+        public void Scribble(byte[] data)
+        {
+            this.rtf.Scribble(data);
+        }
+
         public void Free()
         {
             while (this.Controls.Count > 0)

@@ -18,6 +18,7 @@ namespace cb0t
         private Bitmap b2 { get; set; }
         private Bitmap b3 { get; set; }
         private Bitmap b4 { get; set; }
+        private Bitmap b5 { get; set; }
         private ImageList tab_imgs { get; set; }
 
         public IPEndPoint EndPoint { get; set; }
@@ -29,6 +30,7 @@ namespace cb0t
         public event EventHandler CheckUnread;
         public event EventHandler CancelWriting;
         public event EventHandler SendAutoReply;
+        public event EventHandler WantScribble;
 
         public RoomPanel(FavouritesListItem creds)
         {
@@ -46,6 +48,8 @@ namespace cb0t
             this.toolStripButton7.Image = this.b3;
             this.b4 = (Bitmap)Properties.Resources.button4.Clone();
             this.toolStripButton8.Image = this.b4;
+            this.b5 = (Bitmap)Properties.Resources.scribble.Clone();
+            this.toolStripButton9.Image = this.b5;
             this.toolStrip1.Renderer = this.topic;
             this.toolStripButton1.Image = (Bitmap)Properties.Resources.close.Clone();
             this.toolStripDropDownButton1.Image = (Bitmap)Properties.Resources.settings.Clone();
@@ -60,7 +64,7 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab1.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_read.Clone());
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.tab_unread.Clone());
-            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.folder.Clone());
+            this.tab_imgs.Images.Add((Bitmap)Properties.Resources.folder2.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
         }
@@ -93,6 +97,38 @@ namespace cb0t
             new_tab.ImageIndex = 1;
             this.tabControl1.TabPages.Add(new_tab);
             this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
+        }
+
+        public void PMScribbleReceived(String name, byte[] data)
+        {
+            this.tabControl1.BeginInvoke((Action)(() =>
+            {
+                for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                    if (this.tabControl1.TabPages[i] is PMTab)
+                        if (this.tabControl1.TabPages[i].Text == name)
+                        {
+                            PMTab tab = (PMTab)this.tabControl1.TabPages[i];
+                            tab.Scribble(data);
+                            tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == name);
+
+                            if (!tab.AutoReplySent)
+                            {
+                                this.SendAutoReply(name, EventArgs.Empty);
+                                //local copy of auto reply
+                                tab.AutoReplySent = true;
+                            }
+
+                            return;
+                        }
+
+                PMTab new_tab = new PMTab(name);
+                new_tab.ImageIndex = 2;
+                this.tabControl1.TabPages.Add(new_tab);
+                new_tab.Scribble(data);
+                this.SendAutoReply(name, EventArgs.Empty);
+                //local copy of auto reply
+                new_tab.AutoReplySent = true;
+            }));
         }
 
         public void PMTextReceived(String name, String text, AresFont font, PMTextReceivedType type)
@@ -262,6 +298,14 @@ namespace cb0t
             this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton8.Enabled = can));
         }
 
+        private bool ScribbleAllAvailable { get; set; }
+
+        public void CanScribbleAll(bool can)
+        {
+            this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton9.Enabled = can));
+            this.ScribbleAllAvailable = can;
+        }
+
         private String url_tag = String.Empty;
 
         public void SetURL(String text, String addr)
@@ -348,6 +392,11 @@ namespace cb0t
             this.toolStripButton8 = null;
             this.b4.Dispose();
             this.b4 = null;
+            this.toolStripButton9.Image = null;
+            this.toolStripButton9.Dispose();
+            this.toolStripButton9 = null;
+            this.b5.Dispose();
+            this.b5 = null;
             this.toolStripLabel1.Dispose();
             this.toolStripLabel1 = null;
             this.textBox1.Font.Dispose();
@@ -512,10 +561,20 @@ namespace cb0t
                         this.PMName = this.tabControl1.SelectedTab.Text;
                         this.Mode = ScreenMode.PM;
                         this.CancelWriting(null, EventArgs.Empty);
+                        this.toolStripButton9.Enabled = true;
                     }
-                    else this.Mode = ScreenMode.Main;
+                    else
+                    {
+                        this.Mode = ScreenMode.Main;
+                        this.toolStripButton9.Enabled = this.ScribbleAllAvailable;
+                    }
                 }
             }
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            this.WantScribble(null, EventArgs.Empty);
         }
     }
 }

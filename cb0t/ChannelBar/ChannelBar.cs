@@ -26,12 +26,19 @@ namespace cb0t
         {
             this.Mode = ModeOption.ChannelList;
             this.SelectedButton = null;
+            this.IsFocused = true;
         }
 
         private SolidBrush text_brush = new SolidBrush(Color.Black);
         private Pen border_pen = new Pen(Color.FromArgb(109, 115, 123), 1);
+
         private Color regular_col1 = Color.FromArgb(233, 239, 247);
         private Color regular_col2 = Color.FromArgb(152, 161, 175);
+        private Color regular_col1_nf = Color.WhiteSmoke;
+        private Color regular_col2_nf = Color.Gainsboro;
+
+        public bool IsFocused { get; set; }
+
         private Color selected_col1 = Color.FromArgb(255, 255, 255);
         private Color selected_col2 = Color.FromArgb(241, 249, 255);
         private Color hover_col1 = Color.FromArgb(234, 240, 247);
@@ -53,7 +60,7 @@ namespace cb0t
             {
                 Rectangle bounds = new Rectangle(0, 0, e.Item.Bounds.Width - 1, e.Item.Bounds.Height - 1);
 
-                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                 using (GraphicsPath path = bounds.Rounded(3))
                     e.Graphics.FillPath(brush, path);
 
@@ -77,7 +84,7 @@ namespace cb0t
             {
                 Rectangle bounds = new Rectangle(0, 0, e.Item.Bounds.Width - 1, e.Item.Bounds.Height - 1);
 
-                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                 using (GraphicsPath path = bounds.Rounded(3))
                     e.Graphics.FillPath(brush, path);
 
@@ -102,7 +109,7 @@ namespace cb0t
                 bool text_drawn = false;
                 Rectangle bounds = new Rectangle(0, 0, e.Item.Bounds.Width - 4, e.Item.Bounds.Height - 1);
 
-                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                 using (GraphicsPath path = bounds.Rounded(3))
                     e.Graphics.FillPath(brush, path);
 
@@ -147,7 +154,7 @@ namespace cb0t
 
                 if (!text_drawn)
                 {
-                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                     using (Bitmap text_bmp = new Bitmap(bounds.Width - 28, bounds.Height))
                     using (Graphics g = Graphics.FromImage(text_bmp))
                     {
@@ -167,7 +174,7 @@ namespace cb0t
                 Rectangle bounds = new Rectangle(0, 0, e.Item.Bounds.Width - 4, e.Item.Bounds.Height - 1);
                 ChannelButton button = (ChannelButton)e.Item;
 
-                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                 using (GraphicsPath path = bounds.Rounded(3))
                     e.Graphics.FillPath(brush, path);
 
@@ -234,7 +241,7 @@ namespace cb0t
 
                 if (!text_drawn)
                 {
-                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.regular_col1, this.regular_col2, LinearGradientMode.Vertical))
+                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, this.IsFocused ? this.regular_col1 : this.regular_col1_nf, this.IsFocused ? this.regular_col2 : this.regular_col2_nf, LinearGradientMode.Vertical))
                     using (Bitmap text_bmp = new Bitmap(bounds.Width - 28, bounds.Height))
                     using (Graphics g = Graphics.FromImage(text_bmp))
                     {
