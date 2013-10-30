@@ -8,6 +8,7 @@ namespace cb0t
     public enum PMTextReceivedType
     {
         Text,
-        Announce
+        Announce,
+        Scribble
     }
 }

@@ -48,6 +48,84 @@ namespace cb0t
             this.Panel.Userlist.OpenPMRequested += this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand += this.SendAdminCommand;
             this.Panel.Userlist.MenuTask += this.UserlistMenuTask;
+            this.Panel.WantScribble += this.WantScribble;
+        }
+
+        private void WantScribble(object sender, EventArgs e)
+        {
+            SharedUI.ScribbleEditor.StartPosition = FormStartPosition.CenterParent;
+            byte[] data = SharedUI.ScribbleEditor.GetScribble();
+
+            if (data == null)
+                return;
+
+            if (this.Panel.Mode == ScreenMode.Main)
+            {
+                this.Panel.AnnounceText("\x000314--- Sending...");
+                this.Panel.Scribble(data);
+            }
+            else if (this.Panel.Mode == ScreenMode.PM)
+            {
+                this.Panel.PMTextReceived(this.Panel.PMName, "\x000314--- Sending...", null, PMTextReceivedType.Announce);
+                this.Panel.PMScribbleReceived(this.Panel.PMName, data);
+            }
+
+            data = Zip.Compress(data);
+
+            List<byte> full = new List<byte>(data);
+            data = null;
+
+            if (full.Count <= 4000)
+            {
+                if (this.Panel.Mode == ScreenMode.Main)
+                    this.sock.Send(TCPOutbound.AllScribbleOnce(full.ToArray(), this.crypto));
+                else
+                    this.sock.Send(TCPOutbound.PMScribbleOnce(this.Panel.PMName, full.ToArray(), this.crypto));
+            }
+            else
+            {
+                List<byte[]> p = new List<byte[]>();
+
+                while (full.Count > 4000)
+                {
+                    p.Add(full.GetRange(0, 4000).ToArray());
+                    full.RemoveRange(0, 4000);
+                }
+
+                if (full.Count > 0)
+                    p.Add(full.ToArray());
+
+                for (int i = 0; i < p.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (this.Panel.Mode == ScreenMode.Main)
+                            this.sock.Send(TCPOutbound.AllScribbleFirst(p[i], this.crypto));
+                        else
+                            this.sock.Send(TCPOutbound.PMScribbleFirst(this.Panel.PMName, p[i], this.crypto));
+                    }
+                    else if (i == (p.Count - 1))
+                    {
+                        if (this.Panel.Mode == ScreenMode.Main)
+                            this.sock.Send(TCPOutbound.AllScribbleLast(p[i], this.crypto));
+                        else
+                            this.sock.Send(TCPOutbound.PMScribbleLast(this.Panel.PMName, p[i], this.crypto));
+                    }
+                    else
+                    {
+                        if (this.Panel.Mode == ScreenMode.Main)
+                            this.sock.Send(TCPOutbound.AllScribbleChunk(p[i], this.crypto));
+                        else
+                            this.sock.Send(TCPOutbound.PMScribbleChunk(this.Panel.PMName, p[i], this.crypto));
+                    }
+                }
+
+                p.Clear();
+                p = null;
+            }
+
+            full.Clear();
+            full = null;
         }
 
         private void UserlistMenuTask(object sender, ULCTXTaskEventArgs e)
@@ -83,10 +161,6 @@ namespace cb0t
             }
             else if (e.Task == ULCTXTask.Nudge)
                 this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
-            else if (e.Task == ULCTXTask.Scribble)
-            {
-
-            }
             else if (e.Task == ULCTXTask.Whois)
             {
                 User u = this.users.Find(x => x.Name == name);
@@ -136,6 +210,7 @@ namespace cb0t
             this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
             this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
+            this.Panel.WantScribble -= this.WantScribble;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
             this.sock.Free();
@@ -188,6 +263,7 @@ namespace cb0t
                     this.ticks = time;
                     this.crypto.Mode = CryptoMode.Unencrypted;
                     this.Panel.Userlist.SetCrypto(false);
+                    this.Panel.CanScribbleAll(false);
                     this.new_sbot = false;
 
                     if (this.reconnect_count > 0)
@@ -972,6 +1048,10 @@ namespace cb0t
                     this.Eval_Font(e.Packet);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_ROOM_SCRIBBLE:
+                    this.Panel.CanScribbleAll(true);
+                    break;
+
                 default:
                     this.Panel.AnnounceText(msg.ToString());
                     break;
@@ -1022,6 +1102,10 @@ namespace cb0t
             String command = packet.ReadString(this.crypto);
             String sender = packet.ReadString(this.crypto);
             User u = this.users.Find(x => x.Name == sender);
+
+            if (u == null)
+                return;
+
             ulong lag;
             bool b;
 
@@ -1098,8 +1182,13 @@ namespace cb0t
                 if (ScriptEvents.OnScribbleReceiving(this, user))
                 {
                     data = Zip.Decompress(data);
-                    this.Panel.AnnounceText("\x000314--- " + user.Name + ":");
-                    this.Panel.Scribble(data);
+
+                    if (user.Name == this.users[0].Name)
+                        this.Panel.Scribble(data);
+                    else
+                        this.Panel.PMScribbleReceived(user.Name, data);
+
+                    this.Panel.CheckUnreadStatus();
                     ScriptEvents.OnScribbleReceived(this, user);
                 }
         }

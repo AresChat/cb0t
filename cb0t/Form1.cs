@@ -69,6 +69,25 @@ namespace cb0t
                 InternalSounds.Friend();
         }
 
+        public byte[] GetScribble()
+        {
+            int pos_x = this.Location.X + (this.Width / 2) - (SharedUI.ScribbleEditor.Width / 2);
+            int pos_y = this.Location.Y + (this.Height / 2) - (SharedUI.ScribbleEditor.Height / 2);
+
+            if (pos_x < 0)
+                pos_x = 0;
+
+            if (pos_y < 0)
+                pos_y = 0;
+
+            SharedUI.ScribbleEditor.StartPosition = FormStartPosition.Manual;
+            SharedUI.ScribbleEditor.Location = new Point(pos_x, pos_y);
+            SharedUI.ScribbleEditor.ResetCanvas();
+            byte[] scr = SharedUI.ScribbleEditor.GetScribble();
+            SharedUI.ScribbleEditor.ResetCanvas();
+            return scr;
+        }
+
         private void PopupClicked(object sender, EventArgs e)
         {
             if (this.popup_ep != null)
@@ -214,6 +233,7 @@ namespace cb0t
 
                 this.do_once = true;
                 Aero.ExtendTop(this, this.toolStrip1.Height);
+                SharedUI.Init();
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
                 this.clist_content.OpenChannel += this.OpenChannel;
@@ -434,6 +454,18 @@ namespace cb0t
                         this.toolStrip1.Invalidate();
                         break;
                     }
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            this.channel_bar.IsFocused = true;
+            this.toolStrip1.Refresh();
+        }
+
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            this.channel_bar.IsFocused = false;
+            this.toolStrip1.Refresh();
         }
     }
 }

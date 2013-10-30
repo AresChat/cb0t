@@ -161,6 +161,72 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_BROWSE);
         }
 
+        public static byte[] AllScribbleOnce(byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_once", c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
 
+        public static byte[] AllScribbleFirst(byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_first", c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
+
+        public static byte[] AllScribbleChunk(byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_chunk", c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
+
+        public static byte[] AllScribbleLast(byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_last", c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
+
+        public static byte[] PMScribbleOnce(String target, byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_once", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
+        public static byte[] PMScribbleFirst(String target, byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_first", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
+        public static byte[] PMScribbleChunk(String target, byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_chunk", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
+        public static byte[] PMScribbleLast(String target, byte[] data, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_scribble_last", c);
+            packet.WriteString(target, c);
+            packet.WriteBytes(data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
     }
 }

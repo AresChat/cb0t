@@ -30,20 +30,19 @@ namespace cb0t
             this.ctx_menu.Items.Add("Nudge");//2
             this.ctx_menu.Items.Add("Whois");//3
             this.ctx_menu.Items.Add("Ignore/Unignore");//4
-            this.ctx_menu.Items.Add("Scribble");//5
-            this.ctx_menu.Items.Add("Copy name");//6
-            this.ctx_menu.Items.Add("Add/Remove friend");//7
-            this.ctx_menu.Items.Add("Browse");//8
-            this.ctx_menu.Items.Add(new ToolStripSeparator());//9
-            this.ctx_menu.Items.Add("Kill");//10
-            this.ctx_menu.Items.Add("Ban");//11
-            this.ctx_menu.Items.Add("Muzzle");//12
-            this.ctx_menu.Items.Add("Unmuzzle");//13
-            this.ctx_menu.Items.Add(new ToolStripSeparator());//14
-            this.ctx_menu.Items.Add("Host kill");//15
-            this.ctx_menu.Items.Add("Host ban");//16
-            this.ctx_menu.Items.Add("Host muzzle");//17
-            this.ctx_menu.Items.Add("Host unmuzzle");//18
+            this.ctx_menu.Items.Add("Copy name");//5
+            this.ctx_menu.Items.Add("Add/Remove friend");//6
+            this.ctx_menu.Items.Add("Browse");//7
+            this.ctx_menu.Items.Add(new ToolStripSeparator());//8
+            this.ctx_menu.Items.Add("Kill");//9
+            this.ctx_menu.Items.Add("Ban");//10
+            this.ctx_menu.Items.Add("Muzzle");//11
+            this.ctx_menu.Items.Add("Unmuzzle");//12
+            this.ctx_menu.Items.Add(new ToolStripSeparator());//13
+            this.ctx_menu.Items.Add("Host kill");//14
+            this.ctx_menu.Items.Add("Host ban");//15
+            this.ctx_menu.Items.Add("Host muzzle");//16
+            this.ctx_menu.Items.Add("Host unmuzzle");//17
             this.ctx_menu.ShowImageMargin = false;
             this.ctx_menu.Opening += this.CTXMenuOpening;
             this.ctx_menu.ItemClicked += this.CTXItemClicked;
@@ -62,28 +61,26 @@ namespace cb0t
                     else if (e.ClickedItem.Equals(this.ctx_menu.Items[4]))
                         this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.IgnoreUnignore));
                     else if (e.ClickedItem.Equals(this.ctx_menu.Items[5]))
-                        this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Scribble));
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[6]))
                         this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.CopyName));
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[7]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[6]))
                         this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.AddRemoveFriend));
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[8]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[7]))
                         this.MenuTask(this.CTXUserName, new ULCTXTaskEventArgs(ULCTXTask.Browse));
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[10]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[9]))
                         this.SendAdminCommand("kill " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[11]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[10]))
                         this.SendAdminCommand("ban " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[12]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[11]))
                         this.SendAdminCommand("muzzle " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[13]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[12]))
                         this.SendAdminCommand("unmuzzle " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[15]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[14]))
                         this.SendAdminCommand("hostkill " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[16]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[15]))
                         this.SendAdminCommand("hostban " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[17]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[16]))
                         this.SendAdminCommand("hostmuzzle " + this.CTXUserName, EventArgs.Empty);
-                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[18]))
+                    else if (e.ClickedItem.Equals(this.ctx_menu.Items[17]))
                         this.SendAdminCommand("hostunmuzzle " + this.CTXUserName, EventArgs.Empty);
                 }
         }
@@ -100,10 +97,10 @@ namespace cb0t
                     this.CTXUserName = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.Name;
                     this.ctx_menu.Items[0].Text = "Options for: " + this.CTXUserName;
 
-                    for (int x = 9; x < 14; x++)
+                    for (int x = 8; x < 13; x++)
                         this.ctx_menu.Items[x].Visible = this.MyLevel > 0;
 
-                    for (int x = 14; x < 19; x++)
+                    for (int x = 13; x < 18; x++)
                         this.ctx_menu.Items[x].Visible = this.MyLevel == 3;
                 }
 

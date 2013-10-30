@@ -20,7 +20,6 @@ namespace cb0t
         Nudge,
         Whois,
         IgnoreUnignore,
-        Scribble,
         CopyName,
         AddRemoveFriend,
         Browse
