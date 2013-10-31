@@ -57,6 +57,9 @@ namespace cb0t
 
         public void ShowPopup(String title, String msg, IPEndPoint room, PopupSound sound)
         {
+            if (Settings.GetReg<bool>("block_popups", false))
+                return;
+
             this.popup_ep = room;
             this.notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
             this.notifyIcon1.BalloonTipTitle = title;
@@ -240,7 +243,7 @@ namespace cb0t
                 this.clist_content.Create();
                 this.notifyIcon1.MouseClick += this.SysTrayMouseClicked;
                 this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
-                
+                this.settings_content.CreateSettings();
 
                 foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
                     this.OpenChannel(null, new OpenChannelEventArgs { Room = f });

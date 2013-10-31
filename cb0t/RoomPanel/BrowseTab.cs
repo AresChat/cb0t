@@ -86,6 +86,7 @@ namespace cb0t
             this.Panels = new SplitContainer();
             this.Panels.Dock = DockStyle.Fill;
             this.Panels.FixedPanel = FixedPanel.Panel1;
+            this.Panels.IsSplitterFixed = true;
             this.Panels.Location = new Point(3, 3);
             this.Panels.Panel1.Controls.Add(this.LeftContainer);
             this.Panels.Panel2.Controls.Add(this.Viewer);
