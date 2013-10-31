@@ -96,6 +96,7 @@ namespace cb0t
                     can_show = true;
                     this.CTXUserName = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.Name;
                     this.ctx_menu.Items[0].Text = "Options for: " + this.CTXUserName;
+                    this.ctx_menu.Items[7].Visible = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.HasFiles;
 
                     for (int x = 8; x < 13; x++)
                         this.ctx_menu.Items[x].Visible = this.MyLevel > 0;

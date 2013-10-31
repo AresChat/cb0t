@@ -51,6 +51,14 @@ namespace cb0t
             this.Panel.WantScribble += this.WantScribble;
         }
 
+        public void CancelWritingStatus()
+        {
+            this.Panel.UpdateMyWriting(this.MyName, false);
+
+            if (this.state == SessionState.Connected)
+                this.sock.Send(TCPOutbound.Writing(false, this.crypto));
+        }
+
         private void WantScribble(object sender, EventArgs e)
         {
             SharedUI.ScribbleEditor.StartPosition = FormStartPosition.CenterParent;
@@ -752,6 +760,9 @@ namespace cb0t
 
         private void Eval_Redirect(TCPPacketReader packet, uint time)
         {
+            if (Settings.GetReg<bool>("block_redirect", false))
+                return;
+
             Redirect redirect = new Redirect();
             redirect.IP = packet;
             redirect.Port = packet;
@@ -961,6 +972,9 @@ namespace cb0t
 
         private void Eval_Private(TCPPacketReader packet)
         {
+            if (!Settings.GetReg<bool>("can_receive_pms", true))
+                return;
+
             String name = packet.ReadString(this.crypto);
             String text = packet.ReadString(this.crypto);
             User u = this.users.Find(x => x.Name == name);
@@ -1195,6 +1209,9 @@ namespace cb0t
 
         private void Eval_cb0t_pm_msg(User user, byte[] data)
         {
+            if (!Settings.GetReg<bool>("can_receive_pms", true))
+                return;
+
             String name = user.Name;
             String text = Encoding.UTF8.GetString(PMCrypto.SoftDecrypt(this.MyName, data));
             User u = this.users.Find(x => x.Name == name);

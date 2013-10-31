@@ -71,6 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SettingsPanel\GlobalSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\GlobalSettings.Designer.cs">
+      <DependentUpon>GlobalSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Misc\CustomColorPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -251,6 +257,9 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\GlobalSettings.resx">
+      <DependentUpon>GlobalSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Misc\CustomColorPicker.resx">
       <DependentUpon>CustomColorPicker.cs</DependentUpon>
