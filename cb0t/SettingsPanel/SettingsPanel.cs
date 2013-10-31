@@ -12,6 +12,9 @@ namespace cb0t
     public partial class SettingsPanel : UserControl
     {
         private GlobalSettings global_settings { get; set; }
+        private HashlinkSettings hashlink_settings { get; set; }
+
+        public event EventHandler JoinFromHashlinkClicked;
 
         public SettingsPanel()
         {
@@ -24,8 +27,18 @@ namespace cb0t
             this.global_settings.Dock = DockStyle.Fill;
             this.global_settings.AutoScroll = true;
             this.global_settings.Populate();
+            this.hashlink_settings = new HashlinkSettings();
+            this.hashlink_settings.Dock = DockStyle.Fill;
+            this.hashlink_settings.AutoScroll = true;
+            this.hashlink_settings.Populate();
+            this.hashlink_settings.JoinFromHashlink += this.JoinFromHashlink;
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
+        }
+
+        private void JoinFromHashlink(object sender, EventArgs e)
+        {
+            this.JoinFromHashlinkClicked(sender, e);
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -38,10 +51,8 @@ namespace cb0t
 
             if (e.Node.Equals(this.treeView1.Nodes[0]))
                 this.panel1.Controls.Add(this.global_settings);
-
-            this.treeView1.SelectedNode = null;
+            else if (e.Node.Equals(this.treeView1.Nodes[1]))
+                this.panel1.Controls.Add(this.hashlink_settings);
         }
-
-
     }
 }

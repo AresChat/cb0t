@@ -40,6 +40,7 @@ namespace cb0t
             this.settings_content.BackColor = Color.White;
             this.settings_content.Dock = DockStyle.Fill;
             this.settings_content.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.settings_content.JoinFromHashlinkClicked += this.JoinFromHashlinkClicked;
             this.audio_content = new AudioPanel();
             this.audio_content.BackColor = Color.White;
             this.audio_content.Dock = DockStyle.Fill;
@@ -51,6 +52,21 @@ namespace cb0t
             this.SetToList();
 
             Aero.HideIconAndText(this);
+        }
+
+        private void JoinFromHashlinkClicked(object sender, EventArgs e)
+        {
+            DecryptedHashlink hashlink = (DecryptedHashlink)sender;
+            OpenChannelEventArgs args = new OpenChannelEventArgs();
+            FavouritesListItem item = new FavouritesListItem();
+            item.IP = hashlink.IP;
+            item.Name = hashlink.Name;
+            item.Port = hashlink.Port;
+            item.Topic = hashlink.Name;
+            item.Password = String.Empty;
+            item.AutoJoin = false;
+            args.Room = item;
+            this.OpenChannel(null, args);
         }
 
         private IPEndPoint popup_ep = null;
