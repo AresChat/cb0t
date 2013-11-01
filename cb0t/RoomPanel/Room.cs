@@ -234,6 +234,24 @@ namespace cb0t
             this.users = null;
         }
 
+        public void UpdatePersonalMessage()
+        {
+            this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
+        }
+
+        public void UpdateAvatar()
+        {
+            if (Avatar.Data == null)
+                this.sock.Send(TCPOutbound.ClearAvatar());
+            else
+                this.sock.Send(TCPOutbound.Avatar());
+        }
+
+        public void UpdateFont()
+        {
+            this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
+        }
+
         public void SendText(String text)
         {
             this.sock.Send(TCPOutbound.Public(text, this.crypto));
@@ -523,7 +541,12 @@ namespace cb0t
 
                         if (u != null)
                         {
-                            this.Panel.MyPMText(text, null); // my font
+                            AresFont f = null;
+
+                            if (Settings.MyFont != null)
+                                f = Settings.MyFont.Copy();
+
+                            this.Panel.MyPMText(text, f); // my font
 
                             if (!u.SupportsPMEnc)
                                 this.sock.Send(TCPOutbound.Private(this.Panel.PMName, text, this.crypto));
@@ -543,6 +566,23 @@ namespace cb0t
         {
             String pmname = (String)sender;
 
+            if (this.state == SessionState.Connected)
+            {
+                String[] lines = Settings.GetReg<String>("pm_reply", "Hello +n, please leave a message.").Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (String str in lines)
+                {
+                    String text = str.Replace("+n", pmname);
+
+                    if (!String.IsNullOrEmpty(text))
+                    {
+                        while (Encoding.UTF8.GetByteCount(text) > 200)
+                            text = text.Substring(0, text.Length - 1);
+
+                        this.sock.Send(TCPOutbound.Private(pmname, text, this.crypto));
+                    }
+                }
+            }
         }
 
         private void OpenPMRequested(object sender, EventArgs e)
@@ -716,7 +756,14 @@ namespace cb0t
             this.Panel.ServerText("Language: " + (RoomLanguage)((byte)packet));
             uint cookie = packet;
 
-            // send my av+pmsg+font+autopassword
+            // send my autopassword
+            this.UpdatePersonalMessage();
+
+            if (Avatar.Data != null)
+                this.sock.Send(TCPOutbound.Avatar());
+
+            if (Settings.GetReg<bool>("user_font_enabled", false))
+                this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
 
             ScriptEvents.OnConnected(this);
         }

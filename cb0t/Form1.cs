@@ -26,6 +26,7 @@ namespace cb0t
             Settings.Create();
             Friends.Load();
             Emoticons.Load();
+            Avatar.Load();
 
             this.InitializeComponent();
             this.toolStrip1.Items.Add(new SettingsButton());

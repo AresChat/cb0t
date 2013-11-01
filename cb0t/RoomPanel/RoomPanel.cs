@@ -110,14 +110,6 @@ namespace cb0t
                             PMTab tab = (PMTab)this.tabControl1.TabPages[i];
                             tab.Scribble(data);
                             tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == name);
-
-                            if (!tab.AutoReplySent)
-                            {
-                                this.SendAutoReply(name, EventArgs.Empty);
-                                //local copy of auto reply
-                                tab.AutoReplySent = true;
-                            }
-
                             return;
                         }
 
@@ -125,9 +117,6 @@ namespace cb0t
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
                 new_tab.Scribble(data);
-                this.SendAutoReply(name, EventArgs.Empty);
-                //local copy of auto reply
-                new_tab.AutoReplySent = true;
             }));
         }
 
@@ -150,8 +139,29 @@ namespace cb0t
 
                                 if (!tab.AutoReplySent)
                                 {
-                                    this.SendAutoReply(name, EventArgs.Empty);
-                                    //local copy of auto reply
+                                    if (Settings.GetReg<bool>("can_pm_reply", true))
+                                    {
+                                        this.SendAutoReply(name, EventArgs.Empty);
+                                        String[] lines = Settings.GetReg<String>("pm_reply", "Hello +n, please leave a message.").Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                                        AresFont f = null;
+
+                                        if (Settings.MyFont != null)
+                                            f = Settings.MyFont.Copy();
+
+                                        foreach (String str in lines)
+                                        {
+                                            String rtext = str.Replace("+n", name);
+
+                                            if (!String.IsNullOrEmpty(rtext))
+                                            {
+                                                while (Encoding.UTF8.GetByteCount(rtext) > 200)
+                                                    rtext = rtext.Substring(0, rtext.Length - 1);
+
+                                                tab.PM(this.MyName, rtext, f);
+                                            }
+                                        }
+                                    }
+
                                     tab.AutoReplySent = true;
                                 }
                             }
@@ -168,8 +178,30 @@ namespace cb0t
                 else
                 {
                     new_tab.PM(name, text, font);
-                    this.SendAutoReply(name, EventArgs.Empty);
-                    //local copy of auto reply
+
+                    if (Settings.GetReg<bool>("can_pm_reply", true))
+                    {
+                        this.SendAutoReply(name, EventArgs.Empty);
+                        String[] lines = Settings.GetReg<String>("pm_reply", "Hello +n, please leave a message.").Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        AresFont f = null;
+
+                        if (Settings.MyFont != null)
+                            f = Settings.MyFont.Copy();
+
+                        foreach (String str in lines)
+                        {
+                            String rtext = str.Replace("+n", name);
+
+                            if (!String.IsNullOrEmpty(text))
+                            {
+                                while (Encoding.UTF8.GetByteCount(rtext) > 200)
+                                    rtext = rtext.Substring(0, rtext.Length - 1);
+
+                                new_tab.PM(this.MyName, rtext, f);
+                            }
+                        }
+                    }
+
                     new_tab.AutoReplySent = true;
                 }
             }));

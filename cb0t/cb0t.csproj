@@ -71,6 +71,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\Avatar.cs" />
+    <Compile Include="SettingsPanel\PersonalSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\PersonalSettings.Designer.cs">
+      <DependentUpon>PersonalSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPanel\HashlinkSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -263,6 +270,9 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\PersonalSettings.resx">
+      <DependentUpon>PersonalSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\HashlinkSettings.resx">
       <DependentUpon>HashlinkSettings.cs</DependentUpon>
