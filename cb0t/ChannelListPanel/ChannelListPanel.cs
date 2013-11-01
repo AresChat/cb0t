@@ -501,6 +501,19 @@ namespace cb0t
             this.SaveFavourites();
         }
 
+        public void AddToFavourites(FavouritesListItem room)
+        {
+            if (this.favs.Find(x => x.IP.Equals(room.IP) && x.Port == room.Port) != null)
+                return;
+
+            this.favs.Add(room);
+            ChannelListViewItem vitem = new ChannelListViewItem();
+            this.gfx.RenderChannelListItem(vitem, room);
+            this.g_favs.Add(vitem);
+            this.channelListView2.Items.Add(vitem);
+            this.SaveFavourites();
+        }
+
         private void ExportHashlink(FavouritesListItem room)
         {
             StringBuilder sb = new StringBuilder();

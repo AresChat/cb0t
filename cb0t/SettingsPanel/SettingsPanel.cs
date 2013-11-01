@@ -14,6 +14,7 @@ namespace cb0t
         private GlobalSettings global_settings { get; set; }
         private HashlinkSettings hashlink_settings { get; set; }
         private PersonalSettings personal_settings { get; set; }
+        private FilterSettings filter_settings { get; set; }
 
         public event EventHandler JoinFromHashlinkClicked;
 
@@ -37,6 +38,10 @@ namespace cb0t
             this.personal_settings.Dock = DockStyle.Fill;
             this.personal_settings.AutoScroll = true;
             this.personal_settings.Populate();
+            this.filter_settings = new FilterSettings();
+            this.filter_settings.Dock = DockStyle.Fill;
+            this.filter_settings.AutoScroll = true;
+            this.filter_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
         }
@@ -60,6 +65,8 @@ namespace cb0t
                 this.panel1.Controls.Add(this.hashlink_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[2]))
                 this.panel1.Controls.Add(this.personal_settings);
+            else if (e.Node.Equals(this.treeView1.Nodes[3]))
+                this.panel1.Controls.Add(this.filter_settings);
         }
     }
 }

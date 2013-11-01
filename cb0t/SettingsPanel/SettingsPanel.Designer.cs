@@ -32,6 +32,7 @@
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Global");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Hashlink");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Personal");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Filter");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -76,10 +77,13 @@
             treeNode2.Text = "Hashlink";
             treeNode3.Name = "Node2";
             treeNode3.Text = "Personal";
+            treeNode4.Name = "Node0";
+            treeNode4.Text = "Filter";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
-            treeNode3});
+            treeNode3,
+            treeNode4});
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.ShowPlusMinus = false;
             this.treeView1.ShowRootLines = false;

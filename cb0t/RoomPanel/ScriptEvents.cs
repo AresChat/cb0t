@@ -17,13 +17,87 @@ namespace cb0t
 
         public static bool OnCommand(Room room, String text) { return true; }
 
-        public static bool OnTextReceiving(Room room, String name, String text) { return true; }
+        public static bool OnTextReceiving(Room room, String name, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Text, name, text);
 
-        public static void OnTextReceived(Room room, String name, String text) { }
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Block)
+                            return false;
+                    }
+                }
 
-        public static bool OnEmoteReceiving(Room room, String name, String text) { return true; }
+            return true;
+        }
 
-        public static void OnEmoteReceived(Room room, String name, String text) { }
+        public static void OnTextReceived(Room room, String name, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Text, name, text);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", name).Replace("+t", text));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", name).Replace("+t", text));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", name).Replace("+t", text));
+                        }
+                    }
+                }
+        }
+
+        public static bool OnEmoteReceiving(Room room, String name, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Emote, name, text);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Block)
+                            return false;
+                    }
+                }
+
+            return true;
+        }
+
+        public static void OnEmoteReceived(Room room, String name, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Emote, name, text);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", name).Replace("+t", text));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", name).Replace("+t", text));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", name).Replace("+t", text));
+                        }
+                    }
+                }
+        }
 
         public static bool OnAnnounceReceiving(Room room, String text) { return true; }
 
@@ -33,11 +107,55 @@ namespace cb0t
 
         public static bool OnUserJoining(Room room, User user) { return true; }
 
-        public static void OnUserJoined(Room room, User user) { }
+        public static void OnUserJoined(Room room, User user)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (user.Name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Join, user.Name, null);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", user.Name));
+                        }
+                    }
+                }
+        }
 
         public static bool OnUserParting(Room room, User user) { return true; }
 
-        public static void OnUserParted(Room room, User user) { }
+        public static void OnUserParted(Room room, User user)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (user.Name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.Part, user.Name, null);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", user.Name));
+                        }
+                    }
+                }
+        }
 
         public static void OnUserLevelChanged(Room room, User user) { }
 
@@ -55,9 +173,46 @@ namespace cb0t
 
         public static void OnUserOnlineStatusChanged(Room room, User user) { }
 
-        public static bool OnPmReceiving(Room room, User user, String text) { return true; }
+        public static bool OnPmReceiving(Room room, User user, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (user.Name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.PM, user.Name, text);
 
-        public static void OnPmReceived(Room room, User user, String text) { }
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Block)
+                            return false;
+                    }
+                }
+
+            return true;
+        }
+
+        public static void OnPmReceived(Room room, User user, String text)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (user.Name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.PM, user.Name, text);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name).Replace("+t", text), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name).Replace("+t", text));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name).Replace("+t", text));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", user.Name).Replace("+t", text));
+                        }
+                    }
+                }
+        }
 
         public static bool OnNudgeReceiving(Room room, User user) { return true; }
 
