@@ -257,8 +257,8 @@ namespace cb0t
         public static byte[] Font(bool new_sbot, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();
-            packet.WriteByte((byte)Settings.GetReg<int>("global_font_size", 10));
-            packet.WriteString(Settings.GetReg<String>("global_font", "Verdana"), c);
+            packet.WriteByte((byte)Settings.GetReg<int>("user_font_size", 10));
+            packet.WriteString(Settings.GetReg<String>("user_font", "Tahoma"), c);
             packet.WriteByte(Helpers.HTMLColorToAresColor("#" + Settings.GetReg<String>("name_color", "000000")));
             packet.WriteByte(Helpers.HTMLColorToAresColor("#" + Settings.GetReg<String>("text_color", "0000FF")));
 
