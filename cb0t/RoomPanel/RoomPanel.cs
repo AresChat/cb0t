@@ -31,6 +31,7 @@ namespace cb0t
         public event EventHandler CancelWriting;
         public event EventHandler SendAutoReply;
         public event EventHandler WantScribble;
+        public event EventHandler<RoomMenuItemClickedEventArgs> RoomMenuItemClicked;
 
         public RoomPanel(FavouritesListItem creds)
         {
@@ -58,6 +59,8 @@ namespace cb0t
             this.toolStripDropDownButton1.DropDownItems.Add("Copy room name");
             this.toolStripDropDownButton1.DropDownItems.Add("Auto play voice clips");
             this.toolStripDropDownButton1.DropDownItems.Add("Close sub tabs");
+            this.toolStripDropDownButton1.DropDownItems.Add(new ToolStripSeparator());
+            this.toolStripDropDownButton1.DropDownItems[5].Visible = false;
             this.toolStrip2.Renderer = new ButtonBar();
             this.tab_imgs = new ImageList();
             this.tab_imgs.ImageSize = new Size(16, 16);
@@ -467,7 +470,7 @@ namespace cb0t
             this.Font = null;
         }
 
-        private void CloseAllTabs(bool including_main)
+        public void CloseAllTabs(bool including_main)
         {
             if (including_main)
             {
@@ -553,7 +556,20 @@ namespace cb0t
 
         private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-
+            if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[0]))
+                this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.ExportHashlink });
+            else if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[1]))
+                this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.AddToFavourites });
+            else if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[2]))
+                this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.CopyRoomName });
+            else if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[3]))
+            {
+                ToolStripMenuItem item = (ToolStripMenuItem)e.ClickedItem;
+                item.Checked = !item.Checked;
+                this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.AutoPlayVoiceClips, Arg = item.Checked });
+            }
+            else if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[4]))
+                this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.CloseSubTabs });
         }
 
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

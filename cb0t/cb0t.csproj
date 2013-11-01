@@ -71,7 +71,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filter.cs" />
+    <Compile Include="FilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterDialog.Designer.cs">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FilterItem.cs" />
+    <Compile Include="FilterSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FilterSettings.Designer.cs">
+      <DependentUpon>FilterSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Misc\Avatar.cs" />
+    <Compile Include="RoomPanel\RoomMenuItem.cs" />
     <Compile Include="SettingsPanel\PersonalSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -270,6 +285,12 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterDialog.resx">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterSettings.resx">
+      <DependentUpon>FilterSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\PersonalSettings.resx">
       <DependentUpon>PersonalSettings.cs</DependentUpon>

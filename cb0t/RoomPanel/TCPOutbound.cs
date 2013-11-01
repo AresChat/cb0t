@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace cb0t
@@ -272,6 +274,24 @@ namespace cb0t
             packet = new TCPPacketWriter();
             packet.WriteBytes(buf);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL);
+        }
+
+        public static byte[] SecureAdminLogin(String password, uint cookie, IPAddress ip)
+        {
+            byte[] result;
+
+            using (SHA1 sha1 = SHA1.Create())
+            {
+                List<byte> list = new List<byte>();
+                list.AddRange(BitConverter.GetBytes(cookie));
+                list.AddRange(ip.GetAddressBytes());
+                list.AddRange(sha1.ComputeHash(Encoding.UTF8.GetBytes(password)));
+                TCPPacketWriter packet = new TCPPacketWriter();
+                packet.WriteBytes(sha1.ComputeHash(list.ToArray()));
+                result = packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_AUTOLOGIN);
+            }
+
+            return result;
         }
     }
 }

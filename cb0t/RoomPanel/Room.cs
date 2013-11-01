@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace cb0t
 {
@@ -29,6 +30,7 @@ namespace cb0t
         private List<User> users = new List<User>();
         private bool new_sbot = false;
         private Form1 owner_frm = null;
+        private bool CanAutoPlayVC { get; set; }
 
         public Room(uint time, FavouritesListItem item, Form1 f)
         {
@@ -49,6 +51,40 @@ namespace cb0t
             this.Panel.Userlist.SendAdminCommand += this.SendAdminCommand;
             this.Panel.Userlist.MenuTask += this.UserlistMenuTask;
             this.Panel.WantScribble += this.WantScribble;
+            this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
+        }
+
+        private void RoomMenuItemClicked(object sender, RoomMenuItemClickedEventArgs e)
+        {
+            if (e.Item == RoomMenuItem.ExportHashlink)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(this.Credentials.Name);
+                sb.Append("arlnk://");
+                sb.AppendLine(Hashlink.EncodeHashlink(this.Credentials));
+
+                try
+                {
+                    File.WriteAllText(Settings.DataPath + "hashlink.txt", sb.ToString());
+                    Process.Start("notepad.exe", Settings.DataPath + "hashlink.txt");
+                }
+                catch { }
+            }
+            else if (e.Item == RoomMenuItem.AddToFavourites)
+                this.owner_frm.AddToFavourite(this.Credentials);
+            else if (e.Item == RoomMenuItem.CopyRoomName)
+            {
+                try { Clipboard.SetText(this.Credentials.Name); }
+                catch { }
+            }
+            else if (e.Item == RoomMenuItem.AutoPlayVoiceClips)
+                this.CanAutoPlayVC = (bool)e.Arg;
+            else if (e.Item == RoomMenuItem.CloseSubTabs)
+                this.Panel.CloseAllTabs(false);
+            else if (e.Item == RoomMenuItem.Custom)
+            {
+                // custom item
+            }
         }
 
         public void CancelWritingStatus()
@@ -215,6 +251,7 @@ namespace cb0t
             this.Panel.CancelWriting -= this.CancelWriting;
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
             this.Panel.SendAutoReply -= this.SendAutoReply;
+            this.Panel.RoomMenuItemClicked -= this.RoomMenuItemClicked;
             this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
             this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
@@ -756,7 +793,9 @@ namespace cb0t
             this.Panel.ServerText("Language: " + (RoomLanguage)((byte)packet));
             uint cookie = packet;
 
-            // send my autopassword
+            if (!String.IsNullOrEmpty(this.Credentials.Password))
+                this.sock.Send(TCPOutbound.SecureAdminLogin(this.Credentials.Password, cookie, this.Credentials.IP));
+
             this.UpdatePersonalMessage();
 
             if (Avatar.Data != null)

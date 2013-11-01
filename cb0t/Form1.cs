@@ -27,6 +27,7 @@ namespace cb0t
             Friends.Load();
             Emoticons.Load();
             Avatar.Load();
+            Filter.Load();
 
             this.InitializeComponent();
             this.toolStrip1.Items.Add(new SettingsButton());
@@ -53,6 +54,11 @@ namespace cb0t
             this.SetToList();
 
             Aero.HideIconAndText(this);
+        }
+
+        public void AddToFavourite(FavouritesListItem f)
+        {
+            this.clist_content.AddToFavourites(f);
         }
 
         private void JoinFromHashlinkClicked(object sender, EventArgs e)
