@@ -71,18 +71,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Filter.cs" />
-    <Compile Include="FilterDialog.cs">
+    <Compile Include="Misc\Filter.cs" />
+    <Compile Include="SettingsPanel\FilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FilterDialog.Designer.cs">
+    <Compile Include="SettingsPanel\FilterDialog.Designer.cs">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="FilterItem.cs" />
-    <Compile Include="FilterSettings.cs">
+    <Compile Include="Misc\FilterItem.cs" />
+    <Compile Include="SettingsPanel\FilterSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FilterSettings.Designer.cs">
+    <Compile Include="SettingsPanel\FilterSettings.Designer.cs">
       <DependentUpon>FilterSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Misc\Avatar.cs" />
@@ -286,10 +286,10 @@
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FilterDialog.resx">
+    <EmbeddedResource Include="SettingsPanel\FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FilterSettings.resx">
+    <EmbeddedResource Include="SettingsPanel\FilterSettings.resx">
       <DependentUpon>FilterSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\PersonalSettings.resx">
