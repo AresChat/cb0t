@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,37 @@ namespace cb0t
         static Helpers()
         {
             UserIdent = 0;
+        }
+
+        private static Color[] acols = new Color[]
+        {
+            Color.White, Color.Black, Color.Navy, Color.Green, Color.Red, Color.Maroon, Color.Purple, Color.Orange,
+            Color.Yellow, Color.Lime, Color.Teal, Color.Aqua, Color.Blue, Color.Fuchsia, Color.Gray, Color.Silver
+        };
+
+        public static byte HTMLColorToAresColor(String h)
+        {
+            byte r = byte.Parse(h.Substring(1, 2), NumberStyles.HexNumber);
+            byte g = byte.Parse(h.Substring(3, 2), NumberStyles.HexNumber);
+            byte b = byte.Parse(h.Substring(5, 2), NumberStyles.HexNumber);
+
+            double closest = double.MaxValue;
+            int result = 0;
+
+            for (int i = 0; i < acols.Length; i++)
+            {
+                double d = Math.Sqrt(Math.Pow((r - acols[i].R), 2) +
+                                     Math.Pow((g - acols[i].G), 2) +
+                                     Math.Pow((b - acols[i].B), 2));
+
+                if (d < closest)
+                {
+                    closest = d;
+                    result = i;
+                }
+            }
+
+            return (byte)result;
         }
 
         private static ushort _bid = 0;

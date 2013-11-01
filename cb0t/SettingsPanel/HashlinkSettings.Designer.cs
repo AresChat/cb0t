@@ -40,9 +40,9 @@
             this.label1.ForeColor = System.Drawing.Color.DimGray;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 23);
+            this.label1.Size = new System.Drawing.Size(153, 23);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Hashlinks";
+            this.label1.Text = "Hashlink Settings";
             // 
             // textBox1
             // 

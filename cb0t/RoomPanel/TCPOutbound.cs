@@ -19,7 +19,7 @@ namespace cb0t
             packet.WriteBytes(new byte[] { 0x7b, 0xff, 0x7b, 0xff });
             packet.WriteUInt16(65535);
             packet.WriteUInt32(0);
-            packet.WriteString("n-oobe", true);
+            packet.WriteString(Settings.GetReg<String>("username", String.Empty), true);
             packet.WriteString("cb0t 3.00a", true);
             packet.WriteIP(Settings.LocalIP);
             packet.WriteIP(Settings.LocalIP);
@@ -227,6 +227,51 @@ namespace cb0t
             packet.WriteString(target, c);
             packet.WriteBytes(data);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA);
+        }
+
+        public static byte[] PersonalMessage(CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            String str = Settings.GetReg<String>("personal_message", String.Empty);
+
+            if (str.Length > 100)
+                str = str.Substring(0, 100);
+
+            packet.WriteString(Helpers.FormatAresColorCodes(str), c, false);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_PERSONAL_MESSAGE);
+        }
+
+        public static byte[] ClearAvatar()
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_AVATAR);
+        }
+
+        public static byte[] Avatar()
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteBytes(cb0t.Avatar.Data);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_AVATAR);
+        }
+
+        public static byte[] Font(bool new_sbot, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteByte((byte)Settings.GetReg<int>("global_font_size", 10));
+            packet.WriteString(Settings.GetReg<String>("global_font", "Verdana"), c);
+            packet.WriteByte(Helpers.HTMLColorToAresColor("#" + Settings.GetReg<String>("name_color", "000000")));
+            packet.WriteByte(Helpers.HTMLColorToAresColor("#" + Settings.GetReg<String>("text_color", "0000FF")));
+
+            if (new_sbot)
+            {
+                packet.WriteString("#" + Settings.GetReg<String>("name_color", "000000"), c);
+                packet.WriteString("#" + Settings.GetReg<String>("text_color", "0000FF"), c);
+            }
+
+            byte[] buf = packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_FONT);
+            packet = new TCPPacketWriter();
+            packet.WriteBytes(buf);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL);
         }
     }
 }
