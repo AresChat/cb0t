@@ -29,6 +29,7 @@ namespace cb0t
             Avatar.Load();
             Filter.Load();
             Menus.Load();
+            AutoIgnores.Load();
 
             this.InitializeComponent();
             this.toolStrip1.Items.Add(new SettingsButton());
