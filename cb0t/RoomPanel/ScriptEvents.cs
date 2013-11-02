@@ -19,6 +19,11 @@ namespace cb0t
 
         public static bool OnTextReceiving(Room room, String name, String text)
         {
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(name);
+
+            if (ai == AutoIgnoreType.All || ai == AutoIgnoreType.Text)
+                return false;
+
             if (Settings.GetReg<bool>("filter_on", false))
                 if (name != room.MyName)
                 {
@@ -60,6 +65,11 @@ namespace cb0t
 
         public static bool OnEmoteReceiving(Room room, String name, String text)
         {
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(name);
+
+            if (ai == AutoIgnoreType.All || ai == AutoIgnoreType.Text)
+                return false;
+
             if (Settings.GetReg<bool>("filter_on", false))
                 if (name != room.MyName)
                 {
@@ -175,6 +185,11 @@ namespace cb0t
 
         public static bool OnPmReceiving(Room room, User user, String text)
         {
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(user.Name);
+
+            if (ai == AutoIgnoreType.All || ai == AutoIgnoreType.PM)
+                return false;
+
             if (Settings.GetReg<bool>("filter_on", false))
                 if (user.Name != room.MyName)
                 {
@@ -214,9 +229,25 @@ namespace cb0t
                 }
         }
 
-        public static bool OnNudgeReceiving(Room room, User user) { return true; }
+        public static bool OnNudgeReceiving(Room room, User user)
+        {
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(user.Name);
 
-        public static bool OnScribbleReceiving(Room room, User user) { return true; }
+            if (ai == AutoIgnoreType.All)
+                return false;
+
+            return true;
+        }
+
+        public static bool OnScribbleReceiving(Room room, User user)
+        {
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(user.Name);
+
+            if (ai == AutoIgnoreType.All)
+                return false;
+
+            return true;
+        }
 
         public static void OnScribbleReceived(Room room, User user) { }
     }

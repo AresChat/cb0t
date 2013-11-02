@@ -71,6 +71,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\AutoIgnores.cs" />
+    <Compile Include="SettingsPanel\PrivacySettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\PrivacySettings.Designer.cs">
+      <DependentUpon>PrivacySettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPanel\AudioSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -298,6 +305,9 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\PrivacySettings.resx">
+      <DependentUpon>PrivacySettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\AudioSettings.resx">
       <DependentUpon>AudioSettings.cs</DependentUpon>

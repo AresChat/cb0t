@@ -17,6 +17,7 @@ namespace cb0t
         private AudioSettings audio_settings { get; set; }
         private FilterSettings filter_settings { get; set; }
         private MenuSettings menu_settings { get; set; }
+        private PrivacySettings privacy_settings { get; set; }
 
         public event EventHandler JoinFromHashlinkClicked;
 
@@ -53,6 +54,10 @@ namespace cb0t
             this.menu_settings.Dock = DockStyle.Fill;
             this.menu_settings.AutoScroll = true;
             this.menu_settings.Populate();
+            this.privacy_settings = new PrivacySettings();
+            this.privacy_settings.Dock = DockStyle.Fill;
+            this.privacy_settings.AutoScroll = true;
+            this.privacy_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
         }
@@ -82,6 +87,8 @@ namespace cb0t
                 this.panel1.Controls.Add(this.filter_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[5]))
                 this.panel1.Controls.Add(this.menu_settings);
+            else if (e.Node.Equals(this.treeView1.Nodes[6]))
+                this.panel1.Controls.Add(this.privacy_settings);
         }
 
         private void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
