@@ -71,6 +71,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SettingsPanel\AudioSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\AudioSettings.Designer.cs">
+      <DependentUpon>AudioSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\Menus.cs" />
+    <Compile Include="SettingsPanel\MenuSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\MenuSettings.Designer.cs">
+      <DependentUpon>MenuSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Misc\Filter.cs" />
     <Compile Include="SettingsPanel\FilterDialog.cs">
       <SubType>Form</SubType>
@@ -285,6 +298,12 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\AudioSettings.resx">
+      <DependentUpon>AudioSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\MenuSettings.resx">
+      <DependentUpon>MenuSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>

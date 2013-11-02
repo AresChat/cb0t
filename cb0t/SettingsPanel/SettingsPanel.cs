@@ -14,13 +14,16 @@ namespace cb0t
         private GlobalSettings global_settings { get; set; }
         private HashlinkSettings hashlink_settings { get; set; }
         private PersonalSettings personal_settings { get; set; }
+        private AudioSettings audio_settings { get; set; }
         private FilterSettings filter_settings { get; set; }
+        private MenuSettings menu_settings { get; set; }
 
         public event EventHandler JoinFromHashlinkClicked;
 
         public SettingsPanel()
         {
             this.InitializeComponent();
+            this.treeView1.ExpandAll();
         }
 
         public void CreateSettings()
@@ -38,10 +41,18 @@ namespace cb0t
             this.personal_settings.Dock = DockStyle.Fill;
             this.personal_settings.AutoScroll = true;
             this.personal_settings.Populate();
+            this.audio_settings = new AudioSettings();
+            this.audio_settings.Dock = DockStyle.Fill;
+            this.audio_settings.AutoScroll = true;
+            this.audio_settings.Populate();
             this.filter_settings = new FilterSettings();
             this.filter_settings.Dock = DockStyle.Fill;
             this.filter_settings.AutoScroll = true;
             this.filter_settings.Populate();
+            this.menu_settings = new MenuSettings();
+            this.menu_settings.Dock = DockStyle.Fill;
+            this.menu_settings.AutoScroll = true;
+            this.menu_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
         }
@@ -66,7 +77,16 @@ namespace cb0t
             else if (e.Node.Equals(this.treeView1.Nodes[2]))
                 this.panel1.Controls.Add(this.personal_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[3]))
+                this.panel1.Controls.Add(this.audio_settings);
+            else if (e.Node.Equals(this.treeView1.Nodes[4]))
                 this.panel1.Controls.Add(this.filter_settings);
+            else if (e.Node.Equals(this.treeView1.Nodes[5]))
+                this.panel1.Controls.Add(this.menu_settings);
+        }
+
+        private void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }

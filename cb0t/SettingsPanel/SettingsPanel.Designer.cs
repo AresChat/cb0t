@@ -32,7 +32,11 @@
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Global");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Hashlink");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Personal");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Filter");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Audio");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Filter");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Menus");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Privacy");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Scripting");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -78,17 +82,30 @@
             treeNode3.Name = "Node2";
             treeNode3.Text = "Personal";
             treeNode4.Name = "Node0";
-            treeNode4.Text = "Filter";
+            treeNode4.Text = "Audio";
+            treeNode5.Name = "Node0";
+            treeNode5.Text = "Filter";
+            treeNode6.Name = "Node1";
+            treeNode6.Text = "Menus";
+            treeNode7.Name = "Node2";
+            treeNode7.Text = "Privacy";
+            treeNode8.Name = "Node3";
+            treeNode8.Text = "Scripting";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
             treeNode3,
-            treeNode4});
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8});
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.ShowPlusMinus = false;
             this.treeView1.ShowRootLines = false;
             this.treeView1.Size = new System.Drawing.Size(212, 306);
             this.treeView1.TabIndex = 0;
+            this.treeView1.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCollapse);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // imageList1
@@ -96,6 +113,7 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "settings.png");
+            this.imageList1.Images.SetKeyName(1, "script.png");
             // 
             // panel1
             // 

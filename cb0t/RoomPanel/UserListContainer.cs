@@ -14,6 +14,7 @@ namespace cb0t
     {
         public event EventHandler OpenPMRequested;
         public event EventHandler SendAdminCommand;
+        public event EventHandler CustomOptionClicked;
         public event EventHandler<ULCTXTaskEventArgs> MenuTask;
 
         private ContextMenuStrip ctx_menu { get; set; }
@@ -43,6 +44,8 @@ namespace cb0t
             this.ctx_menu.Items.Add("Host ban");//15
             this.ctx_menu.Items.Add("Host muzzle");//16
             this.ctx_menu.Items.Add("Host unmuzzle");//17
+            this.ctx_menu.Items.Add(new ToolStripSeparator()); // 18
+            this.ctx_menu.Items[18].Visible = false;
             this.ctx_menu.ShowImageMargin = false;
             this.ctx_menu.Opening += this.CTXMenuOpening;
             this.ctx_menu.ItemClicked += this.CTXItemClicked;
@@ -82,6 +85,22 @@ namespace cb0t
                         this.SendAdminCommand("hostmuzzle " + this.CTXUserName, EventArgs.Empty);
                     else if (e.ClickedItem.Equals(this.ctx_menu.Items[17]))
                         this.SendAdminCommand("hostunmuzzle " + this.CTXUserName, EventArgs.Empty);
+                    else
+                    {
+                        for (int i = 19; i < this.ctx_menu.Items.Count; i++)
+                            if (e.ClickedItem.Equals(this.ctx_menu.Items[i]))
+                            {
+                                int index = (i - 19);
+
+                                if (index >= 0 && index < Menus.UserList.Count)
+                                {
+                                    String ctext = Menus.UserList[index].Text.Replace("+n", this.CTXUserName);
+                                    this.CustomOptionClicked(ctext, EventArgs.Empty);
+                                }
+
+                                break;
+                            }
+                    }
                 }
         }
 
@@ -104,6 +123,16 @@ namespace cb0t
                     for (int x = 13; x < 18; x++)
                         this.ctx_menu.Items[x].Visible = this.MyLevel == 3;
                 }
+
+            while (this.ctx_menu.Items.Count > 19)
+                this.ctx_menu.Items[19].Dispose();
+
+            if (Menus.UserList.Count > 0)
+            {
+                this.ctx_menu.Items[18].Visible = true;
+                Menus.UserList.ForEach(x => this.ctx_menu.Items.Add(x.Name));
+            }
+            else this.ctx_menu.Items[18].Visible = false;
 
             if (!can_show)
                 e.Cancel = true;

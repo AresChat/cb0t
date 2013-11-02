@@ -551,7 +551,15 @@ namespace cb0t
 
         private void toolStripDropDownButton1_DropDownOpening(object sender, EventArgs e)
         {
+            while (this.toolStripDropDownButton1.DropDownItems.Count > 6)
+                this.toolStripDropDownButton1.DropDownItems.RemoveAt(6);
 
+            if (Menus.Room.Count > 0)
+            {
+                this.toolStripDropDownButton1.DropDownItems[5].Visible = true;
+                Menus.Room.ForEach(x => this.toolStripDropDownButton1.DropDownItems.Add(x.Name));
+            }
+            else this.toolStripDropDownButton1.DropDownItems[5].Visible = false;
         }
 
         private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -570,6 +578,22 @@ namespace cb0t
             }
             else if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[4]))
                 this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.CloseSubTabs });
+            else
+            {
+                for (int i=6;i<this.toolStripDropDownButton1.DropDownItems.Count;i++)
+                    if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[i]))
+                    {
+                        int index = (i - 6);
+
+                        if (index >= 0 && index < Menus.Room.Count)
+                        {
+                            String ctext = Menus.Room[index].Text;
+                            this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.Custom, Arg = ctext });
+                        }
+
+                        break;
+                    }
+            }
         }
 
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
