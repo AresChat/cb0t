@@ -7,11 +7,7 @@ Voice
 to do
 -----
 
-send av/pmsg/pass on login
-pm auto reply
-scribble/emoticon/color dialog
-userlist menu
-room menu
+emoticon/color dialog
 screen menu
 settings
 audio player

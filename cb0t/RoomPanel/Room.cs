@@ -50,8 +50,21 @@ namespace cb0t
             this.Panel.Userlist.OpenPMRequested += this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand += this.SendAdminCommand;
             this.Panel.Userlist.MenuTask += this.UserlistMenuTask;
+            this.Panel.Userlist.CustomOptionClicked += this.UserlistCustomOptionClicked;
             this.Panel.WantScribble += this.WantScribble;
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
+        }
+
+        private void UserlistCustomOptionClicked(object sender, EventArgs e)
+        {
+            String text = (String)sender;
+
+            if (text.StartsWith("/me ") && text.Length > 4)
+                this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
+            else if (text.StartsWith("/") && text.Length > 1)
+                this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
+            else if (text.Length > 0)
+                this.sock.Send(TCPOutbound.Public(text, this.crypto));
         }
 
         private void RoomMenuItemClicked(object sender, RoomMenuItemClickedEventArgs e)
@@ -83,7 +96,14 @@ namespace cb0t
                 this.Panel.CloseAllTabs(false);
             else if (e.Item == RoomMenuItem.Custom)
             {
-                // custom item
+                String text = e.Arg.ToString();
+
+                if (text.StartsWith("/me ") && text.Length > 4)
+                    this.sock.Send(TCPOutbound.Emote(text.Substring(4).Replace("+n", this.Credentials.Name), this.crypto));
+                else if (text.StartsWith("/") && text.Length > 1)
+                    this.sock.Send(TCPOutbound.Command(text.Substring(1).Replace("+n", this.Credentials.Name), this.crypto));
+                else if (text.Length > 0)
+                    this.sock.Send(TCPOutbound.Public(text.Replace("+n", this.Credentials.Name), this.crypto));
             }
         }
 
@@ -255,6 +275,7 @@ namespace cb0t
             this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
             this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
+            this.Panel.Userlist.CustomOptionClicked -= this.UserlistCustomOptionClicked;
             this.Panel.WantScribble -= this.WantScribble;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
