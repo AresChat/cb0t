@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -11,13 +14,77 @@ namespace cb0t
 {
     class RtfScreen : RichTextBox
     {
+        private byte[] img_data { get; set; }
+        private ContextMenuStrip ctx { get; set; }
+        private List<PausedItem> paused_items = new List<PausedItem>();
+        private bool IsPaused { get; set; }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             e.SuppressKeyPress = e.KeyData != (Keys.Control | Keys.C);
         }
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int char_index = this.GetCharIndexFromPosition(e.Location);
+                int line = this.GetLineFromCharIndex(char_index);
+                int old_ss = this.SelectionStart;
+                int old_sl = this.SelectionLength;
+                this.SelectionStart = this.GetFirstCharIndexFromLine(line);
+                this.SelectionLength = this.Lines[line].Length;
+                String rtf = this.SelectedRtf;
+
+                if (!rtf.Contains("colortbl"))
+                    if (rtf.Contains("{\\pict") && rtf.Contains("\\picw") && rtf.Contains("\\pich"))
+                    {
+                        float dx = -1, dy = -1;
+
+                        using (Graphics g = this.CreateGraphics())
+                        {
+                            dx = g.DpiX;
+                            dy = g.DpiY;
+                        }
+
+                        Size size = Helpers.GetScribbleSize(rtf, dx, dy);
+
+                        if (!size.IsEmpty)
+                        {
+                            byte[] data = Helpers.GetScribbleBytesFromRTF(rtf);
+
+                            if (data != null)
+                                this.img_data = Helpers.GetPngBytesFromScribbleBytes(data, size);
+                        }
+                    }
+
+                this.SelectionStart = old_ss;
+                this.SelectionLength = old_sl;
+
+                if (old_sl == 0)
+                {
+                    this.SelectionLength = 0;
+                    this.SelectionStart = this.Text.Length;
+                }
+            }
+
+            base.OnMouseDown(e);
+        }
+
         public void Free()
         {
+            this.paused_items.Clear();
+            this.paused_items = null;
+            this.ContextMenuStrip = null;
+            this.ctx.Opening -= this.CTXOpening;
+            this.ctx.Closed -= this.CTXClosed;
+            this.ctx.ItemClicked -= this.CTXItemClicked;
+
+            while (this.ctx.Items.Count > 0)
+                this.ctx.Items[0].Dispose();
+
+            this.ctx.Dispose();
+            this.ctx = null;
             this.Clear();
 
             while (this.CanUndo)
@@ -29,7 +96,119 @@ namespace cb0t
             this.BackColor = Color.White;
             this.HideSelection = false;
             this.DetectUrls = true;
+            this.ctx = new ContextMenuStrip();
+            this.ctx.ShowImageMargin = false;
+            this.ctx.ShowCheckMargin = false;
+            this.ctx.Items.Add("Save image...");
+            this.ctx.Items[0].Visible = false;
+            this.ctx.Items.Add("Clear screen");
+            this.ctx.Items.Add("Export text");
+            this.ctx.Items.Add("Copy to clipboard");
+            this.ctx.Items.Add("Pause/Unpause screen");
+            this.ctx.Opening += this.CTXOpening;
+            this.ctx.Closed += this.CTXClosed;
+            this.ctx.ItemClicked += this.CTXItemClicked;
+            this.ContextMenuStrip = this.ctx;
         }
+
+        private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Equals(this.ctx.Items[0]))
+            {
+                SharedUI.SaveFile.Filter = "Image|*.png";
+                SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                SharedUI.SaveFile.FileName = String.Empty;
+
+                if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        File.WriteAllBytes(SharedUI.SaveFile.FileName, this.img_data);
+                    }
+                    catch { }
+                }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[1]))
+            {
+                this.Clear();
+
+                while (this.CanUndo)
+                    this.ClearUndo();
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[2]))
+            {
+                try
+                {
+                    File.WriteAllLines(Settings.DataPath + "export.txt", this.Lines);
+                    Process.Start("notepad.exe", Settings.DataPath + "export.txt");
+                }
+                catch { }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[3]))
+            {
+                try
+                {
+                    if (this.SelectionLength == 0)
+                        Clipboard.SetText(this.Text);
+                    else
+                        Clipboard.SetText(this.Text.Substring(this.SelectionStart, this.SelectionLength));
+                }
+                catch { }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[4]))
+            {
+                if (this.IsPaused)
+                {
+                    this.IsPaused = false;
+
+                    while (this.paused_items.Count > 0)
+                    {
+                        PausedItem item = this.paused_items[0];
+                        this.paused_items.RemoveAt(0);
+
+                        switch (item.Type)
+                        {
+                            case PausedItemType.Announce:
+                                this.ShowAnnounceText(item.Text);
+                                break;
+
+                            case PausedItemType.Emote:
+                                this.ShowEmoteText(item.Name, item.Text, null);
+                                break;
+
+                            case PausedItemType.PM:
+                                this.ShowPMText(item.Name, item.Text, null);
+                                break;
+
+                            case PausedItemType.Public:
+                                this.ShowPublicText(item.Name, item.Text, null);
+                                break;
+
+                            case PausedItemType.Server:
+                                this.ShowServerText(item.Text);
+                                break;
+                        }
+                    }
+
+                    this.ShowAnnounceText("\x000314--- Screen unpaused");
+                }
+                else
+                {
+                    this.ShowAnnounceText("\x000314--- Screen paused");
+                    this.IsPaused = true;
+                }
+            }
+        }
+
+        private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            this.img_data = null;
+        }
+
+        private void CTXOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.ctx.Items[0].Visible = this.img_data != null;
+        }        
 
         public void ScrollDown()
         {
@@ -44,6 +223,9 @@ namespace cb0t
                 this.BeginInvoke(new Action<byte[]>(this.Scribble), data);
             else
             {
+                if (this.IsPaused)
+                    return;
+
                 StringBuilder rtf = new StringBuilder();
                 rtf.Append("{");
                 rtf.Append("\\rtf");
@@ -71,6 +253,12 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPMText), name, text, font);
             else
             {
+                if (this.IsPaused)
+                {
+                    this.paused_items.Add(new PausedItem { Type = PausedItemType.PM, Name = name, Text = text });
+                    return;
+                }
+
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 AresFont name_font = null;
 
@@ -94,6 +282,12 @@ namespace cb0t
                 this.BeginInvoke(new Action<String>(this.ShowAnnounceText), text);
             else
             {
+                if (this.IsPaused)
+                {
+                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Announce, Text = text });
+                    return;
+                }
+
                 if (text.Replace("\n", "").Replace("\r", "").Length == 0)
                 {
                     if (this.cls_count++ > 6)
@@ -129,6 +323,12 @@ namespace cb0t
                 this.BeginInvoke(new Action<String>(this.ShowServerText), text);
             else
             {
+                if (this.IsPaused)
+                {
+                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Server, Text = text });
+                    return;
+                }
+
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, 2, null);
@@ -141,6 +341,12 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPublicText), name, text, font);
             else
             {
+                if (this.IsPaused)
+                {
+                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Public, Name = name, Text = text });
+                    return;
+                }
+
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, 12, font);
@@ -153,6 +359,12 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowEmoteText), name, text, font);
             else
             {
+                if (this.IsPaused)
+                {
+                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Emote, Name = name, Text = text });
+                    return;
+                }
+
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, 6, font);
@@ -549,5 +761,21 @@ namespace cb0t
                 this.SelectionStart = this.Text.Length;
             }
         }
+    }
+
+    public enum PausedItemType
+    {
+        Public,
+        Emote,
+        PM,
+        Announce,
+        Server
+    }
+
+    public class PausedItem
+    {
+        public PausedItemType Type { get; set; }
+        public String Name { get; set; }
+        public String Text { get; set; }
     }
 }
