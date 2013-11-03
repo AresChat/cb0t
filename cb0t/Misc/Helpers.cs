@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,6 +17,91 @@ namespace cb0t
         static Helpers()
         {
             UserIdent = 0;
+        }
+
+        public static byte[] GetPngBytesFromScribbleBytes(byte[] data, Size size)
+        {
+            byte[] result = null;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(data))
+                {
+                    using (Image img = Image.FromStream(ms))
+                    using (Bitmap bmp = new Bitmap(size.Width, size.Height))
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.DrawImage(img, new Rectangle(0, 0, size.Width, size.Height), new Rectangle(0, 0, img.Width, img.Height), GraphicsUnit.Pixel);
+
+                        using (MemoryStream writer = new MemoryStream())
+                        {
+                            bmp.Save(writer, ImageFormat.Png);
+                            result = writer.ToArray();
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            return result;
+        }
+
+        public static Size GetScribbleSize(String rtf, float dx, float dy)
+        {
+            Size size = Size.Empty;
+
+            try
+            {
+                int size_start = rtf.IndexOf("\\picw");
+                int size_end = rtf.IndexOf("\\", size_start + 1);
+                int width = (int)Math.Round((double.Parse(rtf.Substring(size_start + 5, (size_end - size_start - 5))) / 2540) * dx);
+                size_start = rtf.IndexOf("\\pich");
+                size_end = rtf.IndexOf("\\", size_start + 1);
+                int height = (int)Math.Round((double.Parse(rtf.Substring(size_start + 5, (size_end - size_start - 5))) / 2540) * dy);
+                size = new Size(width, height);
+            }
+            catch { }
+
+            return size;
+        }
+
+        public static byte[] GetScribbleBytesFromRTF(String rtf)
+        {
+            int index = rtf.IndexOf("{\\pict");
+
+            if (index > -1)
+            {
+                rtf = rtf.Substring(index);
+                index = rtf.LastIndexOf(" ");
+
+                if (index > -1)
+                {
+                    rtf = rtf.Substring(index);
+                    index = rtf.IndexOf("}");
+
+                    if (index > -1)
+                    {
+                        rtf = rtf.Substring(0, index);
+                        rtf = new String(rtf.Where(x => char.IsLetter(x) || char.IsNumber(x)).ToArray());
+
+                        if ((rtf.Length % 2) == 0)
+                        {
+                            try
+                            {
+                                byte[] result = new byte[rtf.Length / 2];
+
+                                for (int i = 0; i < result.Length; i++)
+                                    result[i] = byte.Parse(rtf.Substring((i * 2), 2), NumberStyles.HexNumber);
+
+                                return result;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         private static Color[] acols = new Color[]
