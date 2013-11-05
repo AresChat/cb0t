@@ -7,7 +7,6 @@ Voice
 to do
 -----
 
-emoticon/color dialog
 settings
 audio player
 screen hot links

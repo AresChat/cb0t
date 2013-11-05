@@ -71,6 +71,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\ColorMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Misc\ColorMenu.Designer.cs">
+      <DependentUpon>ColorMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\ColorMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Misc\EmExtMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -327,6 +336,9 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\ColorMenu.resx">
+      <DependentUpon>ColorMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Misc\EmoticonMenu.resx">
       <DependentUpon>EmoticonMenu.cs</DependentUpon>
