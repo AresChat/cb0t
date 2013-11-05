@@ -34,9 +34,15 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.moveLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.content1 = new cb0t.Content();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showAsOnlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAsAwayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.content1 = new cb0t.Content();
             this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -77,6 +83,51 @@
             this.moveRightToolStripMenuItem.Text = "Move right";
             this.moveRightToolStripMenuItem.Click += new System.EventHandler(this.moveRightToolStripMenuItem_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip2;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "cb0t";
+            this.notifyIcon1.Visible = true;
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAsOnlineToolStripMenuItem,
+            this.showAsAwayToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(156, 98);
+            // 
+            // showAsOnlineToolStripMenuItem
+            // 
+            this.showAsOnlineToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsOnlineToolStripMenuItem.Image")));
+            this.showAsOnlineToolStripMenuItem.Name = "showAsOnlineToolStripMenuItem";
+            this.showAsOnlineToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.showAsOnlineToolStripMenuItem.Text = "Show as Online";
+            this.showAsOnlineToolStripMenuItem.Click += new System.EventHandler(this.showAsOnlineToolStripMenuItem_Click);
+            // 
+            // showAsAwayToolStripMenuItem
+            // 
+            this.showAsAwayToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsAwayToolStripMenuItem.Image")));
+            this.showAsAwayToolStripMenuItem.Name = "showAsAwayToolStripMenuItem";
+            this.showAsAwayToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.showAsAwayToolStripMenuItem.Text = "Show as Away";
+            this.showAsAwayToolStripMenuItem.Click += new System.EventHandler(this.showAsAwayToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // content1
             // 
             this.content1.BackColor = System.Drawing.Color.White;
@@ -86,12 +137,6 @@
             this.content1.Name = "content1";
             this.content1.Size = new System.Drawing.Size(586, 361);
             this.content1.TabIndex = 1;
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "cb0t";
-            this.notifyIcon1.Visible = true;
             // 
             // Form1
             // 
@@ -110,6 +155,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,6 +169,11 @@
         private System.Windows.Forms.ToolStripMenuItem moveLeftToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveRightToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem showAsOnlineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAsAwayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

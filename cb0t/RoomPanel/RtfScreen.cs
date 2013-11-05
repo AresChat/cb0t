@@ -19,6 +19,26 @@ namespace cb0t
         private List<PausedItem> paused_items = new List<PausedItem>();
         private bool IsPaused { get; set; }
 
+        public event EventHandler HashlinkClicked;
+
+        protected override void OnLinkClicked(LinkClickedEventArgs e)
+        {
+            base.OnLinkClicked(e);
+
+            if (e.LinkText.StartsWith("\\\\arlnk://"))
+            {
+                DecryptedHashlink hashlink = Hashlink.DecodeHashlink(e.LinkText.Substring(10));
+
+                if (hashlink != null)
+                    this.HashlinkClicked(hashlink, EventArgs.Empty);
+            }
+            else
+            {
+                try { Process.Start(e.LinkText); }
+                catch { }
+            }
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             e.SuppressKeyPress = e.KeyData != (Keys.Control | Keys.C);

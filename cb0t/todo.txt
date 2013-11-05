@@ -9,6 +9,3 @@ to do
 
 settings
 audio player
-screen hot links
-online status
-close to tray
