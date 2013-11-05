@@ -71,6 +71,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmExtMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EmExtMenu.Designer.cs">
+      <DependentUpon>EmExtMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmoticonMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmoticonMenu.Designer.cs">
+      <DependentUpon>EmoticonMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmRegMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EmRegMenu.Designer.cs">
+      <DependentUpon>EmRegMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExtEm.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Misc\ExtendedEmoticon.cs" />
     <Compile Include="Misc\AutoIgnores.cs" />
     <Compile Include="SettingsPanel\PrivacySettings.cs">
       <SubType>UserControl</SubType>
@@ -305,6 +327,9 @@
     <Compile Include="Misc\SharedUI.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmoticonMenu.resx">
+      <DependentUpon>EmoticonMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\PrivacySettings.resx">
       <DependentUpon>PrivacySettings.cs</DependentUpon>

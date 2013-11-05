@@ -19,8 +19,8 @@ namespace cb0t
 
         private static List<Emotic> shortcuts { get; set; }
 
-        public static String[] CustomEmoticons { get; set; }
         public static Bitmap[] emotic { get; set; }
+        public static ExtendedEmoticon[] ex_emotic { get; set; }
 
         public static String GetRTFScribble(byte[] data, Graphics richtextbox)
         {
@@ -83,69 +83,6 @@ namespace cb0t
             return result.ToString();
         }
 
-        public static String GetRTFExtendedEmoticon(String em_name, Graphics richtextbox)
-        {
-            StringBuilder result = new StringBuilder();
-
-            try
-            {
-                String path = Path.Combine(Settings.AppPath + "emoticons", em_name.ToLower() + ".gif");
-                byte[] file = File.ReadAllBytes(path);
-
-                using (MemoryStream org_ms = new MemoryStream(file))
-                using (Bitmap org_bmp = new Bitmap(org_ms))
-                using (Bitmap bmp = new Bitmap(org_bmp.Width, org_bmp.Height))
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.Clear(Color.White);
-                    g.DrawImage(org_bmp, new Point(0, 0));
-
-                    result.Append(@"{\pict\wmetafile8\picw");
-                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 2540));
-                    result.Append(@"\pich");
-                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 2540));
-                    result.Append(@"\picwgoal");
-                    result.Append((int)Math.Round((bmp.Width / richtextbox.DpiX) * 1440));
-                    result.Append(@"\pichgoal");
-                    result.Append((int)Math.Round((bmp.Height / richtextbox.DpiY) * 1440));
-                    result.Append(" ");
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        IntPtr ptr = g.GetHdc();
-
-                        using (Metafile meta = new Metafile(ms, ptr))
-                        {
-                            g.ReleaseHdc(ptr);
-
-                            using (Graphics gfx = Graphics.FromImage(meta))
-                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
-
-                            ptr = meta.GetHenhmetafile();
-                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
-                            byte[] buffer = new byte[size];
-                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
-                            DeleteEnhMetaFile(ptr);
-
-                            foreach (byte b in buffer)
-                                result.Append(String.Format("{0:x2}", b));
-
-                            result.Append("}");
-                            buffer = null;
-                        }
-                    }
-                }
-
-                file = null;
-            }
-            catch
-            {
-                return String.Empty;
-            }
-
-            return result.ToString();
-        }
-
         public static String GetRTFEmoticon(int image_index, Color back_color, Graphics richtextbox)
         {
             StringBuilder result = new StringBuilder();
@@ -197,6 +134,59 @@ namespace cb0t
             return result.ToString();
         }
 
+        public static String GetRTFExEmoticon(int image_index, Color back_color, Graphics richtextbox)
+        {
+            StringBuilder result = new StringBuilder();
+            int width = ex_emotic[image_index].Img.Width;
+            int height = ex_emotic[image_index].Img.Height;
+
+            using (Bitmap bmp = new Bitmap(width, height))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.Clear(back_color);
+                    g.DrawImage(ex_emotic[image_index].Img, new Point(0, 0));
+
+                    result.Append(@"{\pict\wmetafile8\picw");
+                    result.Append((int)Math.Round((width / richtextbox.DpiX) * 2540));
+                    result.Append(@"\pich");
+                    result.Append((int)Math.Round((height / richtextbox.DpiY) * 2540));
+                    result.Append(@"\picwgoal");
+                    result.Append((int)Math.Round((width / richtextbox.DpiX) * 1440));
+                    result.Append(@"\pichgoal");
+                    result.Append((int)Math.Round((height / richtextbox.DpiY) * 1440));
+                    result.Append(" ");
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        IntPtr ptr = g.GetHdc();
+
+                        using (Metafile meta = new Metafile(ms, ptr))
+                        {
+                            g.ReleaseHdc(ptr);
+
+                            using (Graphics gfx = Graphics.FromImage(meta))
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, width, height));
+
+                            ptr = meta.GetHenhmetafile();
+                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                            byte[] buffer = new byte[size];
+                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                            DeleteEnhMetaFile(ptr);
+
+                            foreach (byte b in buffer)
+                                result.Append(String.Format("{0:x2}", b));
+
+                            result.Append("}");
+                            buffer = null;
+                        }
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
+
         public static Emotic FindEmoticon(String sc)
         {
             foreach (Emotic e in shortcuts)
@@ -210,10 +200,23 @@ namespace cb0t
         {
             DirectoryInfo di = new DirectoryInfo(Settings.AppPath + "emoticons");
             FileInfo[] files = di.GetFiles();
-            CustomEmoticons = new String[files.Length];
+            ex_emotic = new ExtendedEmoticon[files.Length];
 
             for (int i = 0; i < files.Length; i++)
-                CustomEmoticons[i] = Path.GetFileNameWithoutExtension(files[i].Name).ToUpper();
+            {
+                using (MemoryStream ms = new MemoryStream(File.ReadAllBytes(files[i].FullName)))
+                using (Bitmap raw = new Bitmap(ms))
+                {
+                    ExtendedEmoticon ex = new ExtendedEmoticon();
+                    ex.Img = new Bitmap(raw.Width, raw.Height);
+
+                    using (Graphics g = Graphics.FromImage(ex.Img))
+                        g.DrawImage(raw, new Point(0, 0));
+
+                    ex.ShortcutText = Path.GetFileNameWithoutExtension(files[i].Name).ToUpper();
+                    ex_emotic[i] = ex;
+                }
+            }
 
             emotic = new Bitmap[49];
             int count = 0;

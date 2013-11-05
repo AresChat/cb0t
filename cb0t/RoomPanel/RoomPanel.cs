@@ -598,7 +598,21 @@ namespace cb0t
 
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            if (e.ClickedItem.Equals(this.toolStripButton7))
+            {
+                SharedUI.EMenu.StartPosition = FormStartPosition.Manual;
+                SharedUI.EMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 276);
+                SharedUI.EMenu.SetCallback(this);
+                SharedUI.EMenu.Show();
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton9))
+                this.WantScribble(null, EventArgs.Empty);
+        }
 
+        public void EmoticonCallback(String sc)
+        {
+            this.textBox1.AppendText(sc);
+            this.textBox1.SelectionStart = this.textBox1.Text.Length;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -642,11 +656,6 @@ namespace cb0t
                     }
                 }
             }
-        }
-
-        private void toolStripButton9_Click(object sender, EventArgs e)
-        {
-            this.WantScribble(null, EventArgs.Empty);
         }
     }
 }
