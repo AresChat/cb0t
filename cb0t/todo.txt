@@ -8,6 +8,8 @@ to do
 -----
 
 emoticon/color dialog
-screen menu
 settings
 audio player
+screen hot links
+online status
+close to tray

@@ -11,12 +11,14 @@ namespace cb0t
         public static CustomColorPicker ColorPicker { get; set; }
         public static ScribbleEditor ScribbleEditor { get; set; }
         public static SaveFileDialog SaveFile { get; set; }
+        public static EmoticonMenu EMenu { get; set; }
 
         public static void Init()
         {
             ColorPicker = new CustomColorPicker();
             ScribbleEditor = new ScribbleEditor();
             SaveFile = new SaveFileDialog();
+            EMenu = new EmoticonMenu();
         }
     }
 }

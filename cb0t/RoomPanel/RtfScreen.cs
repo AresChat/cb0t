@@ -429,15 +429,11 @@ namespace cb0t
             return Color.FromArgb(r, g, b);
         }
 
-        private String FindNewEmoticon(String str)
+        private Emotic FindNewEmoticon(String str)
         {
-            foreach (String s in Emoticons.CustomEmoticons)
-            {
-                String ce = "(" + s + ")";
-
-                if (str.StartsWith(ce))
-                    return s;
-            }
+            for (int i = 0; i < Emoticons.ex_emotic.Length; i++)
+                if (str.StartsWith("(" + Emoticons.ex_emotic[i].ShortcutText + ")"))
+                    return new Emotic { Index = i, Shortcut = "(" + Emoticons.ex_emotic[i].ShortcutText + ")" };
 
             return null;
         }
@@ -451,7 +447,6 @@ namespace cb0t
 
             List<Color> cols = new List<Color>();
             StringBuilder rtf = new StringBuilder();
-            List<EmItem> emitems = new List<EmItem>();
             int col_index;
 
             if (ff == null)
@@ -606,24 +601,14 @@ namespace cb0t
                                     else goto default;
                                 }
 
-                                String t_em = this.FindNewEmoticon(text.ToString().Substring(i).ToUpper());
+                                em = this.FindNewEmoticon(text.ToString().Substring(i).ToUpper());
 
-                                if (!String.IsNullOrEmpty(t_em))
+                                if (em != null)
                                 {
                                     if (emote_count++ < 8)
                                     {
-                                        EmItem temitem = emitems.Find(x => x.Name == t_em);
-
-                                        if (temitem == null)
-                                        {
-                                            String emrtf = Emoticons.GetRTFExtendedEmoticon(t_em, richtextbox);
-                                            emitems.Add(new EmItem { Name = t_em, RTF = emrtf });
-                                            rtf.Append(emrtf);
-                                            emrtf = null;
-                                        }
-                                        else rtf.Append(temitem.RTF);
-
-                                        i += (t_em.Length + 1);
+                                        rtf.Append(Emoticons.GetRTFExEmoticon(em.Index, back_color, richtextbox));
+                                        i += (em.Shortcut.Length - 1);
                                         break;
                                     }
                                     else goto default;
@@ -637,9 +622,6 @@ namespace cb0t
                     }
                 }
             }
-
-            emitems.Clear();
-            emitems = null;
 
             if (underline) rtf.Append("\\ul0");
             if (italic) rtf.Append("\\i0");
@@ -702,7 +684,12 @@ namespace cb0t
             if (ff == null)
                 rtf.Insert(0, "\\fs" + (Settings.GetReg<int>("global_font_size", 10) * 2));
             else
-                rtf.Insert(0, "\\fs" + (ff.Size * 2));
+            {
+                int org_size = Settings.GetReg<int>("global_font_size", 10);
+                int difference = (org_size - 10);
+                int user_size = ff.Size + difference;
+                rtf.Insert(0, "\\fs" + (user_size * 2));
+            }
 
             StringBuilder header = new StringBuilder();
             header.Append("\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1040{\\fonttbl{\\f0\\fswiss\\fprq2\\fcharset0");
