@@ -32,6 +32,7 @@ namespace cb0t
         public event EventHandler SendAutoReply;
         public event EventHandler WantScribble;
         public event EventHandler<RoomMenuItemClickedEventArgs> RoomMenuItemClicked;
+        public event EventHandler HashlinkClicked;
 
         public RoomPanel(FavouritesListItem creds)
         {
@@ -70,6 +71,12 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.folder2.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
+            this.rtfScreen1.HashlinkClicked += this.LinkHashlinkClicked;
+        }
+
+        private void LinkHashlinkClicked(object sender, EventArgs e)
+        {
+            this.HashlinkClicked(sender, e);
         }
 
         public void MyPMText(String text, AresFont font)
@@ -97,6 +104,7 @@ namespace cb0t
                     }
 
             PMTab new_tab = new PMTab(name);
+            new_tab.HashlinkClicked += this.LinkHashlinkClicked;
             new_tab.ImageIndex = 1;
             this.tabControl1.TabPages.Add(new_tab);
             this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
@@ -117,6 +125,7 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
+                new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
                 new_tab.Scribble(data);
@@ -173,6 +182,7 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
+                new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
 
@@ -460,6 +470,7 @@ namespace cb0t
 
             this.panel2.Dispose();
             this.panel2 = null;
+            this.rtfScreen1.HashlinkClicked -= this.LinkHashlinkClicked;
             this.rtfScreen1.Free();
             this.rtfScreen1.Dispose();
             this.rtfScreen1 = null;
@@ -502,6 +513,7 @@ namespace cb0t
                 {
                     PMTab pm = (PMTab)this.tabControl1.TabPages[i];
                     this.tabControl1.TabPages.RemoveAt(i);
+                    pm.HashlinkClicked -= this.LinkHashlinkClicked;
                     pm.Free();
                     pm.Dispose();
                     pm = null;
@@ -533,6 +545,7 @@ namespace cb0t
                     {
                         PMTab pm = (PMTab)this.tabControl1.TabPages[index];
                         this.tabControl1.TabPages.RemoveAt(index);
+                        pm.HashlinkClicked -= this.LinkHashlinkClicked;
                         pm.Free();
                         pm.Dispose();
                         pm = null;

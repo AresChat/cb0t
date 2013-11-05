@@ -60,6 +60,14 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_UPDATE_STATUS);
         }
 
+        public static byte[] OnlineStatus(bool away, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString("cb0t_online_status", c);
+            packet.WriteByte((byte)(away ? 3 : 1));
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_CUSTOM_DATA_ALL);
+        }
+
         public static byte[] Public(String text, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();

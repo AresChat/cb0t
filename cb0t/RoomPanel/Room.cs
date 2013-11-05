@@ -53,6 +53,12 @@ namespace cb0t
             this.Panel.Userlist.CustomOptionClicked += this.UserlistCustomOptionClicked;
             this.Panel.WantScribble += this.WantScribble;
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
+            this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
+        }
+
+        private void PanelHashlinkClicked(object sender, EventArgs e)
+        {
+            this.owner_frm.JoinFromHashlinkClicked(sender, e);
         }
 
         private void UserlistCustomOptionClicked(object sender, EventArgs e)
@@ -104,6 +110,21 @@ namespace cb0t
                     this.sock.Send(TCPOutbound.Command(text.Substring(1).Replace("+n", this.Credentials.Name), this.crypto));
                 else if (text.Length > 0)
                     this.sock.Send(TCPOutbound.Public(text.Replace("+n", this.Credentials.Name), this.crypto));
+            }
+        }
+
+        public void UpdateAwayStatus(bool away)
+        {
+            if (this.state == SessionState.Connected)
+            {
+                this.sock.Send(TCPOutbound.OnlineStatus(away, this.crypto));
+                User u = this.users.Find(x => x.Name == this.MyName);
+
+                if (u != null)
+                {
+                    u.IsAway = away;
+                    this.Panel.Userlist.UpdateUserAppearance(u);
+                }
             }
         }
 
@@ -276,6 +297,7 @@ namespace cb0t
             this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
             this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
             this.Panel.Userlist.CustomOptionClicked -= this.UserlistCustomOptionClicked;
+            this.Panel.HashlinkClicked -= this.PanelHashlinkClicked;
             this.Panel.WantScribble -= this.WantScribble;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
@@ -338,6 +360,9 @@ namespace cb0t
 
         public void SocketTasks(uint time)
         {
+            if (this.sock == null)
+                return;
+
             if (this.state == SessionState.Sleeping)
             {
                 if (time >= (this.ticks + 20))
@@ -397,6 +422,9 @@ namespace cb0t
                 {
                     this.ticks = time;
                     this.sock.SendPriority(TCPOutbound.Update(this.crypto));
+
+                    if (Settings.IsAway)
+                        this.sock.Send(TCPOutbound.OnlineStatus(true, this.crypto));
                 }
 
                 if (this.is_writing)
@@ -990,7 +1018,10 @@ namespace cb0t
                 this.Panel.AnnounceText("\x000303" + u.Name + " has joined");
 
             if (u.Name == this.MyName)
+            {
+                u.IsAway = Settings.IsAway;
                 this.Panel.Userlist.MyLevel = u.Level;
+            }
 
             ScriptEvents.OnUserJoined(this, u);
 
@@ -1047,7 +1078,10 @@ namespace cb0t
             this.Panel.Userlist.AddUserItem(u);
 
             if (u.Name == this.MyName)
+            {
+                u.IsAway = Settings.IsAway;
                 this.Panel.Userlist.MyLevel = u.Level;
+            }
         }
 
         private void Eval_UserlistEnds()

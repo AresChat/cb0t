@@ -156,7 +156,11 @@ namespace cb0t
                 }
                 catch { }
 
-                this.BeginInvoke((Action)(() => this.Refresh()));
+                try
+                {
+                    this.BeginInvoke((Action)(() => this.Refresh()));
+                }
+                catch { }
             }));
 
             thread.Start();

@@ -12,7 +12,9 @@ namespace cb0t
         private Panel container { get; set; }
         private PMRecPanel rec { get; set; }
         private RtfScreen rtf { get; set; }
-        
+
+        public event EventHandler HashlinkClicked;
+
         public bool AutoReplySent { get; set; }
 
         public PMTab(String name)
@@ -34,6 +36,7 @@ namespace cb0t
             this.rtf.Location = new Point(0, 0);
             this.rtf.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             this.rtf.Size = new Size(540, 233);
+            this.rtf.HashlinkClicked += this.LinkHashlinkClicked;
 
             this.container = new Panel();
             this.container.BackColor = Color.White;
@@ -50,6 +53,11 @@ namespace cb0t
             this.ImageIndex = 2;
             this.UseVisualStyleBackColor = true;
             this.Controls.Add(this.container);
+        }
+
+        private void LinkHashlinkClicked(object sender, EventArgs e)
+        {
+            this.HashlinkClicked(sender, e);
         }
 
         public void SetRead(bool read)
@@ -85,6 +93,7 @@ namespace cb0t
             this.rec.Destroy();
             this.rec.Dispose();
             this.rec = null;
+            this.rtf.HashlinkClicked -= this.LinkHashlinkClicked;
             this.rtf.Free();
             this.rtf.Dispose();
             this.rtf = null;

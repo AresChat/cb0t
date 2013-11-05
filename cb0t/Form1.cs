@@ -63,7 +63,7 @@ namespace cb0t
             this.clist_content.AddToFavourites(f);
         }
 
-        private void JoinFromHashlinkClicked(object sender, EventArgs e)
+        public void JoinFromHashlinkClicked(object sender, EventArgs e)
         {
             DecryptedHashlink hashlink = (DecryptedHashlink)sender;
             OpenChannelEventArgs args = new OpenChannelEventArgs();
@@ -274,6 +274,17 @@ namespace cb0t
                     this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
 
                 Settings.CAN_WRITE_REG = true;
+
+                if (Settings.IsAway)
+                {
+                    this.showAsAwayToolStripMenuItem.Enabled = false;
+                    this.showAsOnlineToolStripMenuItem.Enabled = true;
+                }
+                else
+                {
+                    this.showAsAwayToolStripMenuItem.Enabled = true;
+                    this.showAsOnlineToolStripMenuItem.Enabled = false;
+                }
             }
         }
 
@@ -370,6 +381,7 @@ namespace cb0t
                 this.channel_bar.Mode = ChannelBar.ModeOption.ChannelList;
                 this.toolStrip1.Invalidate();
                 this.content1.Controls.Add(this.clist_content);
+                this.BeginInvoke((Action)(() => this.Activate()));
             }
         }
 
@@ -433,10 +445,20 @@ namespace cb0t
             }
         }
 
+        private bool can_close = false;
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.terminate = true;
-            this.clist_content.Terminate = true;
+            if (this.can_close)
+            {
+                this.terminate = true;
+                this.clist_content.Terminate = true;
+            }
+            else
+            {
+                e.Cancel = true;
+                this.Hide();
+            }
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -494,6 +516,28 @@ namespace cb0t
         {
             this.channel_bar.IsFocused = false;
             this.toolStrip1.Refresh();
+        }
+
+        private void showAsOnlineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.showAsAwayToolStripMenuItem.Enabled = true;
+            this.showAsOnlineToolStripMenuItem.Enabled = false;
+            Settings.IsAway = false;
+            RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(false));
+        }
+
+        private void showAsAwayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.showAsAwayToolStripMenuItem.Enabled = false;
+            this.showAsOnlineToolStripMenuItem.Enabled = true;
+            Settings.IsAway = true;
+            RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(true));
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.can_close = true;
+            this.Close();
         }
     }
 }
