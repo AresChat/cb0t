@@ -598,7 +598,36 @@ namespace cb0t
 
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Equals(this.toolStripButton7))
+            if (e.ClickedItem.Equals(this.toolStripButton2))
+            {
+                this.textBox1.AppendText("\x00026");
+                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton3))
+            {
+                this.textBox1.AppendText("\x00029");
+                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton4))
+            {
+                this.textBox1.AppendText("\x00027");
+                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton5))
+            {
+                SharedUI.CMenu.StartPosition = FormStartPosition.Manual;
+                SharedUI.CMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 164);
+                SharedUI.CMenu.SetCallback(this, false);
+                SharedUI.CMenu.Show();
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton6))
+            {
+                SharedUI.CMenu.StartPosition = FormStartPosition.Manual;
+                SharedUI.CMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 164);
+                SharedUI.CMenu.SetCallback(this, true);
+                SharedUI.CMenu.Show();
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton7))
             {
                 SharedUI.EMenu.StartPosition = FormStartPosition.Manual;
                 SharedUI.EMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 276);
@@ -607,6 +636,12 @@ namespace cb0t
             }
             else if (e.ClickedItem.Equals(this.toolStripButton9))
                 this.WantScribble(null, EventArgs.Empty);
+        }
+
+        public void ColorCallback(String sc)
+        {
+            this.textBox1.AppendText(sc);
+            this.textBox1.SelectionStart = this.textBox1.Text.Length;
         }
 
         public void EmoticonCallback(String sc)

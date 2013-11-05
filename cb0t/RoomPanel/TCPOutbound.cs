@@ -17,8 +17,7 @@ namespace cb0t
             packet.WriteUInt16(0);
             packet.WriteByte((byte)Settings.GetReg<int>("crypto", 250));
             packet.WriteUInt16(220);
-            //packet.WriteIP("0.0.0.0");
-            packet.WriteBytes(new byte[] { 0x7b, 0xff, 0x7b, 0xff });
+            packet.WriteIP("0.0.0.0");
             packet.WriteUInt16(65535);
             packet.WriteUInt32(0);
             packet.WriteString(Settings.GetReg<String>("username", String.Empty), true);

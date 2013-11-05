@@ -12,6 +12,7 @@ namespace cb0t
         public static ScribbleEditor ScribbleEditor { get; set; }
         public static SaveFileDialog SaveFile { get; set; }
         public static EmoticonMenu EMenu { get; set; }
+        public static ColorMenu CMenu { get; set; }
 
         public static void Init()
         {
@@ -19,6 +20,7 @@ namespace cb0t
             ScribbleEditor = new ScribbleEditor();
             SaveFile = new SaveFileDialog();
             EMenu = new EmoticonMenu();
+            CMenu = new ColorMenu();
         }
     }
 }
