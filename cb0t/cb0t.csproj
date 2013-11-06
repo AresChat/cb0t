@@ -56,8 +56,17 @@
     <ApplicationIcon>ni.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\UdpChannelListManager\UdpChannelListManager\bin\Debug\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>bin\Debug\Interop.WMPLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +80,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioPanel\AlbumArtBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AudioPanel\AudioHelpers.cs" />
+    <Compile Include="AudioPanel\AudioList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AudioPanel\AudioControlBar.cs" />
+    <Compile Include="AudioPanel\AudioPlayerItem.cs" />
     <Compile Include="Misc\ColorMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -511,6 +529,9 @@
     <Content Include="ni.ico" />
     <None Include="Resources\scribble.png" />
     <None Include="Resources\folder2.png" />
+    <None Include="Resources\audio_pause.png" />
+    <None Include="Resources\audio_play.png" />
+    <None Include="Resources\note.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
