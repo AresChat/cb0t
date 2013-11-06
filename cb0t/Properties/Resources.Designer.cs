@@ -73,6 +73,26 @@ namespace cb0t.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap audio_pause {
+            get {
+                object obj = ResourceManager.GetObject("audio_pause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap audio_play {
+            get {
+                object obj = ResourceManager.GetObject("audio_play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap away {
             get {
                 object obj = ResourceManager.GetObject("away", resourceCulture);
@@ -186,6 +206,16 @@ namespace cb0t.Properties {
         internal static System.Drawing.Bitmap music {
             get {
                 object obj = ResourceManager.GetObject("music", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap note {
+            get {
+                object obj = ResourceManager.GetObject("note", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

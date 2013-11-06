@@ -15,11 +15,14 @@ namespace cb0t
     public partial class Form1 : Form
     {
         private ChannelBar channel_bar { get; set; }
+        private AudioControlBar audio_bar { get; set; }
         
         private SettingsPanel settings_content { get; set; }
         private AudioPanel audio_content { get; set; }
         private ChannelListPanel clist_content { get; set; }
         private Thread sock_thread { get; set; }
+        private Bitmap img_play { get; set; }
+        private Bitmap img_pause { get; set; }
 
         public Form1()
         {
@@ -32,6 +35,8 @@ namespace cb0t
             AutoIgnores.Load();
 
             this.InitializeComponent();
+            this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
+            this.img_pause = (Bitmap)Properties.Resources.audio_pause.Clone();
             this.toolStrip1.Items.Add(new SettingsButton());
             this.toolStrip1.Items.Add(new ToolStripSeparator());
             this.toolStrip1.Items.Add(new AudioButton());
@@ -39,6 +44,8 @@ namespace cb0t
             this.toolStrip1.Items.Add(new ChannelListButton());
             this.channel_bar = new ChannelBar();
             this.toolStrip1.Renderer = this.channel_bar;
+            this.audio_bar = new AudioControlBar();
+            this.toolStrip2.Renderer = this.audio_bar;
 
             this.settings_content = new SettingsPanel();
             this.settings_content.BackColor = Color.White;
@@ -273,6 +280,8 @@ namespace cb0t
                 foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
                     this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
 
+                this.audio_content.LoadPlaylist();
+
                 Settings.CAN_WRITE_REG = true;
 
                 if (Settings.IsAway)
@@ -285,7 +294,22 @@ namespace cb0t
                     this.showAsAwayToolStripMenuItem.Enabled = true;
                     this.showAsOnlineToolStripMenuItem.Enabled = false;
                 }
+
+                this.audio_content.PlayPauseIconChanged += this.PlayPauseIconChanged;
+                this.audio_content.ShowAudioText += this.ShowAudioText;
+                this.toolStripButton5.Image = this.img_play;
             }
+        }
+
+        private void ShowAudioText(object sender, EventArgs e)
+        {
+            this.audio_bar.DisplayText = (String)sender;
+            this.toolStrip2.Invalidate();
+        }
+
+        private void PlayPauseIconChanged(object sender, EventArgs e)
+        {
+            this.toolStripButton5.Image = ((bool)sender) ? this.img_play : this.img_pause;
         }
 
         private void SysTrayMouseClicked(object sender, MouseEventArgs e)
@@ -538,6 +562,12 @@ namespace cb0t
         {
             this.can_close = true;
             this.Close();
+        }
+
+        private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Equals(this.toolStripButton5))
+                this.audio_content.PlayPauseClicked();
         }
     }
 }
