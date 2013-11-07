@@ -19,6 +19,7 @@ namespace cb0t
         public static String DataPath { get; set; }
         public static String AppPath { get; set; }
         public static String VoicePath { get; set; }
+        public static String ArtPath { get; set; }
 
         private static Stopwatch sw { get; set; }
 
@@ -26,6 +27,7 @@ namespace cb0t
         {
             DataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\";
             VoicePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\voice\\";
+            ArtPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\art\\";
             AppPath = AppDomain.CurrentDomain.BaseDirectory;
 
             sw = new Stopwatch();
@@ -55,16 +57,10 @@ namespace cb0t
                 try { File.Delete(f.FullName); }
                 catch { }
 
-            path = Path.Combine(DataPath, "temp\\scribble");
+            path = Path.Combine(DataPath, "temp\\art");
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-
-            files = new DirectoryInfo(path).GetFiles();
-
-            foreach (FileInfo f in files)
-                try { File.Delete(f.FullName); }
-                catch { }
         }
 
         public static IPAddress LocalIP

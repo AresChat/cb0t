@@ -72,6 +72,16 @@ namespace cb0t
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
             this.rtfScreen1.HashlinkClicked += this.LinkHashlinkClicked;
+            this.rtfScreen1.NameClicked += this.ScreenNameClicked;
+            this.rtfScreen1.IsMainScreen = true;
+        }
+
+        private void ScreenNameClicked(object sender, EventArgs e)
+        {
+            String name = (String)sender;
+            this.textBox1.AppendText(name);
+            this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
         }
 
         private void LinkHashlinkClicked(object sender, EventArgs e)

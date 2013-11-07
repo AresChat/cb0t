@@ -479,12 +479,6 @@
     <None Include="Resources\button4.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tab_read.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tab_unread.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\tab1.png" />
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +526,8 @@
     <None Include="Resources\audio_pause.png" />
     <None Include="Resources\audio_play.png" />
     <None Include="Resources\note.png" />
+    <None Include="Resources\tab_read.png" />
+    <None Include="Resources\tab_unread.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

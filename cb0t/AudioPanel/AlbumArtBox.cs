@@ -49,10 +49,35 @@ namespace cb0t
             }
         }
 
+        private String GetFilename(String text)
+        {
+            byte[] buf = Encoding.UTF8.GetBytes(text);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte b in buf)
+                sb.AppendFormat("{0:X2}", b);
+
+            return sb.ToString();
+        }
+
         private void Worker(object args)
         {
             byte[] raw_bytes = null;
             String[] arr = (String[])args;
+
+            if (this.LocalArt(arr))
+            {
+                if (this.pending)
+                {
+                    this.pending = false;
+                    arr = new String[] { this.artist, this.album, this.song };
+                    this.Worker(arr);
+                }
+
+                return;
+            }
+
+            String saver = null;
             this.busy = true;
 
             String url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=4f17ae42e38a39194a0c6c2f82f8d16a&artist=" +
@@ -75,6 +100,7 @@ namespace cb0t
                         if (n.Attributes["size"].Value.ToUpper() == "LARGE")
                         {
                             url = n.InnerText;
+                            saver = arr[0] + arr[1];
                             break;
                         }
                     }
@@ -108,6 +134,7 @@ namespace cb0t
                             if (n.Attributes["size"].Value.ToUpper() == "LARGE")
                             {
                                 url = n.InnerText;
+                                saver = arr[0] + arr[2];
                                 break;
                             }
                         }
@@ -174,7 +201,43 @@ namespace cb0t
                 this.Worker(arr);
             }
             else if (raw_bytes != null)
+            {
                 this.SetArt(raw_bytes);
+
+                try
+                {
+                    if (!String.IsNullOrEmpty(saver))
+                        File.WriteAllBytes(Path.Combine(Settings.ArtPath, this.GetFilename(saver)), raw_bytes);
+                }
+                catch { }
+            }
+        }
+
+        private bool LocalArt(String[] arr)
+        {
+            String path = Path.Combine(Settings.ArtPath, this.GetFilename(arr[0] + arr[1]));
+            byte[] raw_bytes = null;
+
+            if (File.Exists(path))
+                try { raw_bytes = File.ReadAllBytes(path); }
+                catch { }
+
+            if (raw_bytes == null)
+            {
+                path = Path.Combine(Settings.ArtPath, this.GetFilename(arr[0] + arr[2]));
+
+                if (File.Exists(path))
+                    try { raw_bytes = File.ReadAllBytes(path); }
+                    catch { }
+            }
+
+            if (raw_bytes != null)
+            {
+                this.SetArt(raw_bytes);
+                return true;
+            }
+
+            return false;
         }
 
         private void SetArt(object data)

@@ -185,7 +185,7 @@ namespace cb0t
                 this.channel_bar.Mode = ChannelBar.ModeOption.Settings;
                 this.SetToSettings();
             }
-            else if (e.ClickedItem is AudioButton)
+            else if (e.ClickedItem is AudioButton && AudioPanel.Available)
             {
                 this.channel_bar.Mode = ChannelBar.ModeOption.Audio;
                 this.SetToAudio();
@@ -298,6 +298,8 @@ namespace cb0t
                 this.audio_content.PlayPauseIconChanged += this.PlayPauseIconChanged;
                 this.audio_content.ShowAudioText += this.ShowAudioText;
                 this.toolStripButton5.Image = this.img_play;
+                this.toolStrip1.Items[2].Enabled = AudioPanel.Available;
+                this.toolStrip2.Enabled = AudioPanel.Available;
             }
         }
 
@@ -566,8 +568,41 @@ namespace cb0t
 
         private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Equals(this.toolStripButton5))
+            if (!AudioPanel.Available)
+                return;
+
+            if (e.ClickedItem.Equals(this.toolStripButton3))
+                this.audio_content.StopClicked();
+            else if (e.ClickedItem.Equals(this.toolStripButton4))
+                this.audio_content.PreviousClicked();
+            else if (e.ClickedItem.Equals(this.toolStripButton5))
                 this.audio_content.PlayPauseClicked();
+            else if (e.ClickedItem.Equals(this.toolStripButton6))
+                this.audio_content.NextClicked();
+        }
+
+        private void toolStripDropDownButton1_DropDownOpening(object sender, EventArgs e)
+        {
+            this.randomToolStripMenuItem.Checked = AudioPanel.DoRandom;
+            this.repeatToolStripMenuItem.Checked = AudioPanel.DoRepeat;
+        }
+
+        private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Equals(this.randomToolStripMenuItem))
+                AudioPanel.DoRandom = !AudioPanel.DoRandom;
+            else if (e.ClickedItem.Equals(this.repeatToolStripMenuItem))
+                AudioPanel.DoRepeat = !AudioPanel.DoRepeat;
+            else if (e.ClickedItem.Equals(this.clearListToolStripMenuItem))
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to clear your play list?",
+                                                  "cb0t",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+
+                if (dr == DialogResult.Yes)
+                    this.audio_content.ClearPlaylist();
+            }
         }
     }
 }
