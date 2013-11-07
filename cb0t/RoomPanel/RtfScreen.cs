@@ -20,6 +20,9 @@ namespace cb0t
         private bool IsPaused { get; set; }
 
         public event EventHandler HashlinkClicked;
+        public event EventHandler NameClicked;
+
+        public bool IsMainScreen { get; set; }
 
         protected override void OnLinkClicked(LinkClickedEventArgs e)
         {
@@ -85,6 +88,55 @@ namespace cb0t
                 {
                     this.SelectionLength = 0;
                     this.SelectionStart = this.Text.Length;
+                }
+            }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                int char_index = this.GetCharIndexFromPosition(e.Location);
+                int line_index = this.GetLineFromCharIndex(char_index);
+                int first_char_index = this.GetFirstCharIndexFromLine(line_index);
+                String line_text = this.Lines[line_index];
+                int space = line_text.IndexOf(" ");
+                bool ts = Settings.GetReg<bool>("can_timestamp", false);
+
+                if (space > -1)
+                {
+                    String name = null;
+
+                    if (ts)
+                        space = line_text.IndexOf(" ", space + 1);
+
+                    if (space > -1)
+                        name = line_text.Substring(0, space);
+
+                    if (!String.IsNullOrEmpty(name))
+                        if (name.EndsWith("*"))
+                        {
+                            space = line_text.IndexOf(" ", space + 1);
+
+                            if (space > -1)
+                                name = line_text.Substring(0, space);
+                            else
+                                name = null;
+                        }
+
+                    if (!String.IsNullOrEmpty(name))
+                        if (char_index <= (first_char_index + name.Length))
+                        {
+                            if (ts)
+                                name = name.Substring(name.IndexOf(" ") + 1);
+
+                            if (name.StartsWith("* "))
+                                name = name.Substring(2);
+                            else if (name.EndsWith(">"))
+                                name = name.Substring(0, name.Length - 1);
+
+                            if (this.IsMainScreen)
+                            {
+                                this.NameClicked(name, EventArgs.Empty);
+                                return;
+                            }
+                        }
                 }
             }
 

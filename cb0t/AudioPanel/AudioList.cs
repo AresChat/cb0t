@@ -49,6 +49,9 @@ namespace cb0t
         {
             Rectangle r = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height - 2);
 
+            if (r.Width <= 0 || r.Height <= 0)
+                return;
+
             using (LinearGradientBrush lb = new LinearGradientBrush(r, this.column_bg1, this.column_bg2, 90f))
                 e.Graphics.FillRectangle(lb, r);
 
