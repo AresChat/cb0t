@@ -109,7 +109,7 @@ namespace cb0t
                             break;
 
                         case ' ':
-                            x += underline ? 1 : (bold ? 4 : 3);
+                            x += underline ? 2 : (bold ? 4 : 3);
                             break;
 
                         case '(':

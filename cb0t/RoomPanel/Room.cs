@@ -262,7 +262,8 @@ namespace cb0t
         private void SendAdminCommand(object sender, EventArgs e)
         {
             if (this.state == SessionState.Connected)
-                this.sock.Send(TCPOutbound.Command((String)sender, this.crypto));
+                if (this.sock != null)
+                    this.sock.Send(TCPOutbound.Command((String)sender, this.crypto));
         }
 
         public void FriendStatusChanged(String name, bool friend)
@@ -316,40 +317,61 @@ namespace cb0t
 
         public void UpdatePersonalMessage()
         {
-            this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void UpdateAvatar()
         {
-            if (Avatar.Data == null)
-                this.sock.Send(TCPOutbound.ClearAvatar());
-            else
-                this.sock.Send(TCPOutbound.Avatar());
+            if (this.sock != null)
+            {
+                if (Avatar.Data == null)
+                    this.sock.Send(TCPOutbound.ClearAvatar());
+                else
+                    this.sock.Send(TCPOutbound.Avatar());
+            }
         }
 
         public void UpdateFont()
         {
-            this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
         }
 
         public void SendText(String text)
         {
-            this.sock.Send(TCPOutbound.Public(text, this.crypto));
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.Public(text, this.crypto));
         }
 
         public void SendEmote(String text)
         {
-            this.sock.Send(TCPOutbound.Emote(text, this.crypto));
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.Emote(text, this.crypto));
         }
 
         public void SendCommand(String text)
         {
-            this.sock.Send(TCPOutbound.Command(text, this.crypto));
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.Command(text, this.crypto));
+        }
+
+        public void SendPersonalMessage(String text)
+        {
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.PersonalMessage(text, this.crypto));
+        }
+
+        public void SendPersonalMessage()
+        {
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void ForEachUser(Action<User> u)
         {
-            this.users.ForEach(u);
+            if (this.users != null)
+                this.users.ForEach(u);
         }
 
         public void ShowPopup(String title, String msg, PopupSound sound)
@@ -586,6 +608,8 @@ namespace cb0t
                                 }
                                 else if (text.StartsWith("/all "))
                                 {
+                                    text = text.Substring(5);
+
                                     if (text.StartsWith("/me ") && text.Length > 4)
                                         RoomPool.Rooms.ForEach(x => x.SendEmote(text.Substring(4)));
                                     else if (text.StartsWith("/") && text.Length > 1)

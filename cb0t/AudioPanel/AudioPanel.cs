@@ -34,6 +34,7 @@ namespace cb0t
         public static bool Available { get; set; }
         public static bool DoRepeat { get; set; }
         public static bool DoRandom { get; set; }
+        public static String Song = String.Empty;
 
         public AudioPanel()
         {
@@ -87,6 +88,7 @@ namespace cb0t
 
                     if (pos > -1)
                     {
+                        Song = this.play_list[pos].ToAudioTextString();
                         this.PlayPauseIconChanged(false, EventArgs.Empty);
                         this.ShowAudioText("♫ 0:00 " + this.play_list[pos].ToAudioTextString() + " ♫", EventArgs.Empty);
                         this.albumArtBox1.UpdateArt(this.play_list[pos]);
@@ -106,6 +108,7 @@ namespace cb0t
 
                         if (pos > -1)
                         {
+                            Song = String.Empty;
                             this.play_list.ForEach(x => x.Playing = false);
                             this.PlayPauseIconChanged(true, EventArgs.Empty);
                             this.ShowAudioText(String.Empty, EventArgs.Empty);
@@ -164,6 +167,7 @@ namespace cb0t
                 this.albumArtBox1.ClearArt();
                 this.label1.Text = String.Empty;
                 this.Player.controls.stop();
+                Song = String.Empty;
             }
         }
 

@@ -250,5 +250,15 @@ namespace cb0t
         }
 
         public static void OnScribbleReceived(Room room, User user) { }
+
+        public static void OnSongChanged(Room room, String song)
+        {
+            if (!String.IsNullOrEmpty(song))
+                room.SendPersonalMessage("\x0007" + song);
+            else
+                room.SendPersonalMessage();
+        }
+
+        public static void OnTimer(Room room) { }
     }
 }
