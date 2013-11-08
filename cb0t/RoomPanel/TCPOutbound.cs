@@ -250,6 +250,18 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_PERSONAL_MESSAGE);
         }
 
+        public static byte[] PersonalMessage(String text, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            String str = text;
+
+            if (str.Length > 100)
+                str = str.Substring(0, 100);
+
+            packet.WriteString(Helpers.FormatAresColorCodes(str), c, false);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_PERSONAL_MESSAGE);
+        }
+
         public static byte[] ClearAvatar()
         {
             TCPPacketWriter packet = new TCPPacketWriter();

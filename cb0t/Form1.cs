@@ -329,8 +329,14 @@ namespace cb0t
                 }));
         }
 
+        private String last_song = String.Empty;
+        private uint last_song_check = 0;
+
         private void SocketThread()
         {
+            this.last_song = String.Empty;
+            this.last_song_check = Settings.Time;
+
             while (true)
             {
                 if (this.terminate)
@@ -338,10 +344,30 @@ namespace cb0t
 
                 Room[] pool = RoomPool.Rooms.ToArray();
                 uint time = Settings.Time;
+                bool check_song = time > this.last_song_check;
+                bool do_timer = time > this.last_song_check;
+
+                if (check_song)
+                {
+                    this.last_song_check = time;
+
+                    if (AudioPanel.Song != this.last_song)
+                        this.last_song = AudioPanel.Song;
+                    else
+                        check_song = false;
+                }
 
                 for (int i = 0; i < pool.Length; i++)
                     if (pool[i] != null)
+                    {
                         pool[i].SocketTasks(time);
+
+                        if (check_song)
+                            ScriptEvents.OnSongChanged(pool[i], this.last_song);
+
+                        if (do_timer)
+                            ScriptEvents.OnTimer(pool[i]);
+                    }
 
                 Thread.Sleep(30);
             }
