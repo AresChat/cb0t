@@ -34,7 +34,6 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -49,9 +48,11 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.rtfScreen1 = new cb0t.RtfScreen();
             this.writingPanel1 = new cb0t.WritingPanel();
             this.userListContainer1 = new cb0t.UserListContainer();
+            this.accuTextBox1 = new cb0t.AccuTextBox();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -61,6 +62,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -101,7 +103,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.toolStrip2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 302);
@@ -109,16 +111,6 @@
             this.panel1.Size = new System.Drawing.Size(550, 48);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(0, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(550, 23);
-            this.textBox1.TabIndex = 1;
             // 
             // toolStrip2
             // 
@@ -137,7 +129,7 @@
             this.toolStripLabel1});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(218, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(187, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
@@ -283,12 +275,25 @@
             this.panel2.Size = new System.Drawing.Size(314, 251);
             this.panel2.TabIndex = 0;
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.accuTextBox1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 25);
+            this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.panel3.Size = new System.Drawing.Size(550, 23);
+            this.panel3.TabIndex = 1;
+            // 
             // rtfScreen1
             // 
             this.rtfScreen1.BackColor = System.Drawing.Color.White;
             this.rtfScreen1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtfScreen1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtfScreen1.HideSelection = false;
+            this.rtfScreen1.IsMainScreen = false;
             this.rtfScreen1.Location = new System.Drawing.Point(0, 0);
             this.rtfScreen1.Name = "rtfScreen1";
             this.rtfScreen1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -317,6 +322,23 @@
             this.userListContainer1.Size = new System.Drawing.Size(224, 251);
             this.userListContainer1.TabIndex = 0;
             // 
+            // accuTextBox1
+            // 
+            this.accuTextBox1.BackColor = System.Drawing.Color.White;
+            this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.accuTextBox1.DetectUrls = false;
+            this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.accuTextBox1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accuTextBox1.HideSelection = false;
+            this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
+            this.accuTextBox1.Multiline = false;
+            this.accuTextBox1.Name = "accuTextBox1";
+            this.accuTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.accuTextBox1.Size = new System.Drawing.Size(546, 21);
+            this.accuTextBox1.TabIndex = 0;
+            this.accuTextBox1.Text = "";
+            this.accuTextBox1.WordWrap = false;
+            // 
             // RoomPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,6 +362,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,7 +374,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
@@ -369,5 +391,7 @@
         private WritingPanel writingPanel1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripButton toolStripButton9;
+        private System.Windows.Forms.Panel panel3;
+        private AccuTextBox accuTextBox1;
     }
 }

@@ -76,12 +76,17 @@ namespace cb0t
             this.rtfScreen1.IsMainScreen = true;
         }
 
+        public void SpellCheck()
+        {
+            this.accuTextBox1.SpellCheck();
+        }
+
         private void ScreenNameClicked(object sender, EventArgs e)
         {
             String name = (String)sender;
-            this.textBox1.AppendText(name);
-            this.textBox1.SelectionStart = this.textBox1.Text.Length;
-            this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
+            this.accuTextBox1.AppendText(name);
+            this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
+            this.accuTextBox1.BeginInvoke((Action)(() => this.accuTextBox1.Focus()));
         }
 
         private void LinkHashlinkClicked(object sender, EventArgs e)
@@ -331,7 +336,7 @@ namespace cb0t
         }
 
         public UserListContainer Userlist { get { return this.userListContainer1; } }
-        public TextBox SendBox { get { return this.textBox1; } }
+        internal AccuTextBox SendBox { get { return this.accuTextBox1; } }
 
         public void ClearWriters()
         {
@@ -414,6 +419,12 @@ namespace cb0t
 
             this.panel1.Dispose();
             this.panel1 = null;
+
+            while (this.panel3.Controls.Count > 0)
+                this.panel3.Controls.RemoveAt(0);
+
+            this.panel3.Dispose();
+            this.panel3 = null;
             this.toolStrip2.Items.Clear();
             this.toolStrip2.Renderer = null;
             this.toolStrip2.Dispose();
@@ -454,9 +465,10 @@ namespace cb0t
             this.b5 = null;
             this.toolStripLabel1.Dispose();
             this.toolStripLabel1 = null;
-            this.textBox1.Font.Dispose();
-            this.textBox1.Dispose();
-            this.textBox1 = null;
+            this.accuTextBox1.Free();
+            this.accuTextBox1.Font.Dispose();
+            this.accuTextBox1.Dispose();
+            this.accuTextBox1 = null;
 
             this.CloseAllTabs(true);
 
@@ -623,18 +635,18 @@ namespace cb0t
         {
             if (e.ClickedItem.Equals(this.toolStripButton2))
             {
-                this.textBox1.AppendText("\x00026");
-                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+                this.accuTextBox1.AppendText("\x00026");
+                this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
             }
             else if (e.ClickedItem.Equals(this.toolStripButton3))
             {
-                this.textBox1.AppendText("\x00029");
-                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+                this.accuTextBox1.AppendText("\x00029");
+                this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
             }
             else if (e.ClickedItem.Equals(this.toolStripButton4))
             {
-                this.textBox1.AppendText("\x00027");
-                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+                this.accuTextBox1.AppendText("\x00027");
+                this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
             }
             else if (e.ClickedItem.Equals(this.toolStripButton5))
             {
@@ -663,14 +675,14 @@ namespace cb0t
 
         public void ColorCallback(String sc)
         {
-            this.textBox1.AppendText(sc);
-            this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            this.accuTextBox1.AppendText(sc);
+            this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
         }
 
         public void EmoticonCallback(String sc)
         {
-            this.textBox1.AppendText(sc);
-            this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            this.accuTextBox1.AppendText(sc);
+            this.accuTextBox1.SelectionStart = this.accuTextBox1.Text.Length;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -697,7 +709,7 @@ namespace cb0t
                     if (!this.panel1.Visible)
                         this.panel1.Visible = true;
 
-                    this.textBox1.BeginInvoke((Action)(() => this.textBox1.Focus()));
+                    this.accuTextBox1.BeginInvoke((Action)(() => this.accuTextBox1.Focus()));
 
                     if (this.tabControl1.SelectedTab is PMTab)
                     {
