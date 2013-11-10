@@ -17,8 +17,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public event EventHandler SpellCheckUpdate;
+
         public void Populate()
         {
+            this.comboBox2.SelectedIndex = Settings.GetReg<int>("spell_checker", 0);
             this.checkBox1.Checked = Settings.GetReg<bool>("can_timestamp", false);
             this.checkBox2.Checked = Settings.GetReg<bool>("can_emoticon", true);
             this.checkBox3.Checked = Settings.GetReg<int>("crypto", 250) == 250;
@@ -115,6 +118,17 @@ namespace cb0t
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             Settings.SetReg("global_font_size", (int)this.numericUpDown1.Value);
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.comboBox2.SelectedIndex > -1)
+            {
+                Settings.SetReg("spell_checker", this.comboBox2.SelectedIndex);
+
+                SpellChecker.Load();
+                this.SpellCheckUpdate(this.comboBox2.SelectedIndex > 0, null);
+            }
         }
     }
 }

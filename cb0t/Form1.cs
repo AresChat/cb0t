@@ -208,6 +208,8 @@ namespace cb0t
 
         private void SetToList()
         {
+            RoomPool.Rooms.ForEach(x => x.RoomIsVisible = false);
+
             while (this.content1.Controls.Count > 0)
                 this.content1.Controls.RemoveAt(0);
 
@@ -216,6 +218,8 @@ namespace cb0t
 
         private void SetToSettings()
         {
+            RoomPool.Rooms.ForEach(x => x.RoomIsVisible = false);
+
             while (this.content1.Controls.Count > 0)
                 this.content1.Controls.RemoveAt(0);
 
@@ -224,6 +228,8 @@ namespace cb0t
 
         private void SetToAudio()
         {
+            RoomPool.Rooms.ForEach(x => x.RoomIsVisible = false);
+
             while (this.content1.Controls.Count > 0)
                 this.content1.Controls.RemoveAt(0);
 
@@ -241,8 +247,9 @@ namespace cb0t
                     this.content1.Controls.Add(room.Panel);
                     room.Button.MakeRead();
                     room.ScrollAndFocus();
-                    break;
+                    room.RoomIsVisible = true;
                 }
+                else room.RoomIsVisible = false;
         }
 
         private void toolStrip1_Resize(object sender, EventArgs e)
@@ -275,6 +282,7 @@ namespace cb0t
                 this.clist_content.Create();
                 this.notifyIcon1.MouseClick += this.SysTrayMouseClicked;
                 this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
+                this.settings_content.SpellCheckUpdate2 += this.SpellCheckUpdate2;
                 this.settings_content.CreateSettings();
 
                 foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
@@ -301,6 +309,12 @@ namespace cb0t
                 this.toolStrip1.Items[2].Enabled = AudioPanel.Available;
                 this.toolStrip2.Enabled = AudioPanel.Available;
             }
+        }
+
+        private void SpellCheckUpdate2(object sender, EventArgs e)
+        {
+            bool enable = (bool)sender;
+            this.timer1.Enabled = enable;
         }
 
         private void ShowAudioText(object sender, EventArgs e)
@@ -629,6 +643,14 @@ namespace cb0t
                 if (dr == DialogResult.Yes)
                     this.audio_content.ClearPlaylist();
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Room room = RoomPool.Rooms.Find(x => x.RoomIsVisible);
+
+            if (room != null)
+                room.SpellCheck();
         }
     }
 }

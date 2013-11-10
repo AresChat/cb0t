@@ -20,6 +20,7 @@ namespace cb0t
         private PrivacySettings privacy_settings { get; set; }
 
         public event EventHandler JoinFromHashlinkClicked;
+        public event EventHandler SpellCheckUpdate2;
 
         public SettingsPanel()
         {
@@ -32,6 +33,7 @@ namespace cb0t
             this.global_settings = new GlobalSettings();
             this.global_settings.Dock = DockStyle.Fill;
             this.global_settings.AutoScroll = true;
+            this.global_settings.SpellCheckUpdate += this.SpellCheckUpdate;
             this.global_settings.Populate();
             this.hashlink_settings = new HashlinkSettings();
             this.hashlink_settings.Dock = DockStyle.Fill;
@@ -60,6 +62,11 @@ namespace cb0t
             this.privacy_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
+        }
+
+        private void SpellCheckUpdate(object sender, EventArgs e)
+        {
+            this.SpellCheckUpdate2(sender, e);
         }
 
         private void JoinFromHashlink(object sender, EventArgs e)

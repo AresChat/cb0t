@@ -18,6 +18,7 @@ namespace cb0t
         public RoomPanel Panel { get; set; }
         public IPEndPoint EndPoint { get; set; }
         public String MyName = String.Empty;
+        public bool RoomIsVisible { get; set; }
 
         private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
@@ -54,6 +55,11 @@ namespace cb0t
             this.Panel.WantScribble += this.WantScribble;
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
             this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
+        }
+
+        public void SpellCheck()
+        {
+            this.Panel.SpellCheck();
         }
 
         private void PanelHashlinkClicked(object sender, EventArgs e)

@@ -36,22 +36,23 @@
             this.moveRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showAsOnlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAsAwayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.clearListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repeatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.showAsOnlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAsAwayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.content1 = new cb0t.Content();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -112,6 +113,22 @@
             this.contextMenuStrip2.Name = "contextMenuStrip2";
             this.contextMenuStrip2.Size = new System.Drawing.Size(156, 76);
             // 
+            // showAsOnlineToolStripMenuItem
+            // 
+            this.showAsOnlineToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsOnlineToolStripMenuItem.Image")));
+            this.showAsOnlineToolStripMenuItem.Name = "showAsOnlineToolStripMenuItem";
+            this.showAsOnlineToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.showAsOnlineToolStripMenuItem.Text = "Show as Online";
+            this.showAsOnlineToolStripMenuItem.Click += new System.EventHandler(this.showAsOnlineToolStripMenuItem_Click);
+            // 
+            // showAsAwayToolStripMenuItem
+            // 
+            this.showAsAwayToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsAwayToolStripMenuItem.Image")));
+            this.showAsAwayToolStripMenuItem.Name = "showAsAwayToolStripMenuItem";
+            this.showAsAwayToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.showAsAwayToolStripMenuItem.Text = "Show as Away";
+            this.showAsAwayToolStripMenuItem.Click += new System.EventHandler(this.showAsAwayToolStripMenuItem_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -141,11 +158,6 @@
             this.toolStrip2.TabIndex = 2;
             this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
             // toolStripDropDownButton1
             // 
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -165,25 +177,30 @@
             // clearListToolStripMenuItem
             // 
             this.clearListToolStripMenuItem.Name = "clearListToolStripMenuItem";
-            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.clearListToolStripMenuItem.Text = "Clear list";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(116, 6);
             // 
             // randomToolStripMenuItem
             // 
             this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
-            this.randomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.randomToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.randomToolStripMenuItem.Text = "Random";
             // 
             // repeatToolStripMenuItem
             // 
             this.repeatToolStripMenuItem.Name = "repeatToolStripMenuItem";
-            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.repeatToolStripMenuItem.Text = "Repeat";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButton3
             // 
@@ -221,22 +238,6 @@
             this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton6.Text = "next";
             // 
-            // showAsOnlineToolStripMenuItem
-            // 
-            this.showAsOnlineToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsOnlineToolStripMenuItem.Image")));
-            this.showAsOnlineToolStripMenuItem.Name = "showAsOnlineToolStripMenuItem";
-            this.showAsOnlineToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.showAsOnlineToolStripMenuItem.Text = "Show as Online";
-            this.showAsOnlineToolStripMenuItem.Click += new System.EventHandler(this.showAsOnlineToolStripMenuItem_Click);
-            // 
-            // showAsAwayToolStripMenuItem
-            // 
-            this.showAsAwayToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAsAwayToolStripMenuItem.Image")));
-            this.showAsAwayToolStripMenuItem.Name = "showAsAwayToolStripMenuItem";
-            this.showAsAwayToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.showAsAwayToolStripMenuItem.Text = "Show as Away";
-            this.showAsAwayToolStripMenuItem.Click += new System.EventHandler(this.showAsAwayToolStripMenuItem_Click);
-            // 
             // content1
             // 
             this.content1.BackColor = System.Drawing.Color.White;
@@ -246,6 +247,11 @@
             this.content1.Name = "content1";
             this.content1.Size = new System.Drawing.Size(884, 536);
             this.content1.TabIndex = 1;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -297,6 +303,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem repeatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem randomToolStripMenuItem;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
