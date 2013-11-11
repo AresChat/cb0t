@@ -61,6 +61,10 @@ namespace cb0t
                         }
                     }
                 }
+
+            if (room.RoomIsVisible)
+                if (Settings.GetReg<bool>("can_narrate", false))
+                    Narrator.Say(text);                    
         }
 
         public static bool OnEmoteReceiving(Room room, String name, String text)
@@ -107,6 +111,10 @@ namespace cb0t
                         }
                     }
                 }
+
+            if (room.RoomIsVisible)
+                if (Settings.GetReg<bool>("can_narrate", false))
+                    Narrator.Say(text);
         }
 
         public static bool OnAnnounceReceiving(Room room, String text) { return true; }

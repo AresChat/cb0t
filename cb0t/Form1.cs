@@ -33,6 +33,7 @@ namespace cb0t
             Filter.Load();
             Menus.Load();
             AutoIgnores.Load();
+            Narrator.Init();
 
             this.InitializeComponent();
             this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
@@ -214,6 +215,7 @@ namespace cb0t
                 this.content1.Controls.RemoveAt(0);
 
             this.content1.Controls.Add(this.clist_content);
+            Narrator.ClearList();
         }
 
         private void SetToSettings()
@@ -224,6 +226,7 @@ namespace cb0t
                 this.content1.Controls.RemoveAt(0);
 
             this.content1.Controls.Add(this.settings_content);
+            Narrator.ClearList();
         }
 
         private void SetToAudio()
@@ -234,6 +237,7 @@ namespace cb0t
                 this.content1.Controls.RemoveAt(0);
 
             this.content1.Controls.Add(this.audio_content);
+            Narrator.ClearList();
         }
 
         private void SetToRoom(IPEndPoint ep)
@@ -250,6 +254,8 @@ namespace cb0t
                     room.RoomIsVisible = true;
                 }
                 else room.RoomIsVisible = false;
+
+            Narrator.ClearList();
         }
 
         private void toolStrip1_Resize(object sender, EventArgs e)
