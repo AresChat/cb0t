@@ -7,6 +7,5 @@ Voice
 to do
 -----
 
-settings
 /np command
-
+prevent packets when not connected

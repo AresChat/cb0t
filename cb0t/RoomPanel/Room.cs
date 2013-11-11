@@ -27,7 +27,6 @@ namespace cb0t
         private uint ticks = 0;
         private uint last_lag = 0;
         private uint last_nudge = 0;
-        private bool can_nudge = true;
         private List<User> users = new List<User>();
         private bool new_sbot = false;
         private Form1 owner_frm = null;
@@ -434,10 +433,6 @@ namespace cb0t
             }
             else if (this.sock != null)
             {
-                if (!this.can_nudge)
-                    if (time > this.last_nudge)
-                        this.can_nudge = true;
-
                 if (time >= (this.last_lag + 30))
                 {
                     this.last_lag = time;
@@ -796,7 +791,7 @@ namespace cb0t
                     break;
 
                 case TCPMsg.MSG_CHAT_SERVER_CUSTOM_DATA:
-                    this.CustomProtoReceived(e.Packet);
+                    this.CustomProtoReceived(e.Packet, e.Time);
                     break;
 
                 case TCPMsg.MSG_CHAT_SERVER_STARTOFBROWSE:
@@ -1282,7 +1277,7 @@ namespace cb0t
                 }
         }
 
-        private void CustomProtoReceived(TCPPacketReader packet)
+        private void CustomProtoReceived(TCPPacketReader packet, uint time)
         {
             String command = packet.ReadString(this.crypto);
             String sender = packet.ReadString(this.crypto);
@@ -1325,7 +1320,7 @@ namespace cb0t
                     break;
 
                 case "cb0t_nudge":
-                    this.Eval_Nudge(u, ((byte[])packet));
+                    this.Eval_Nudge(u, ((byte[])packet), time);
                     break;
 
                 case "cb0t_pm_msg":
@@ -1403,7 +1398,7 @@ namespace cb0t
             }
         }
 
-        private void Eval_Nudge(User user, byte[] data)
+        private void Eval_Nudge(User user, byte[] data, uint time)
         {
             if (data.Length == 4)
                 if (data.SequenceEqual(new byte[] { 78, 65, 61, 61 }))
@@ -1414,8 +1409,8 @@ namespace cb0t
 
             if (Settings.GetReg<bool>("receive_nudge", true))
             {
-                if (this.can_nudge)
-                    this.can_nudge = false;
+                if (time > this.last_nudge)
+                    this.last_nudge = time;
                 else return;
 
                 if (ScriptEvents.OnNudgeReceiving(this, user))
