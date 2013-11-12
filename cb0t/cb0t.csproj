@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoomPanel\ClientFeatures.cs" />
     <Compile Include="MediaIPC\Foobar2000\FoobarListener.cs" />
     <Compile Include="MediaIPC\VLC\VLCListener.cs" />
     <Compile Include="MediaIPC\Winamp\WinampListener.cs" />
@@ -146,6 +147,7 @@
     </Compile>
     <Compile Include="Misc\ExtendedEmoticon.cs" />
     <Compile Include="Misc\AutoIgnores.cs" />
+    <Compile Include="RoomPanel\ServerFeatures.cs" />
     <Compile Include="SettingsPanel\PrivacySettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
