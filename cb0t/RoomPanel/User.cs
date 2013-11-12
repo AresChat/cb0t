@@ -31,6 +31,8 @@ namespace cb0t
         public List<byte> ScribbleBuffer { get; set; }
         public AresFont Font { get; set; }
         public bool SupportsPMEnc { get; set; }
+        public bool SupportsVC { get; set; }
+        public bool SupportsOpusVC { get; set; }
 
         private Bitmap dav { get; set; }
 

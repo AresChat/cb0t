@@ -31,6 +31,8 @@ namespace cb0t
         private bool new_sbot = false;
         private Form1 owner_frm = null;
         private bool CanAutoPlayVC { get; set; }
+        private bool CanVC { get; set; }
+        private bool CanOpusVC { get; set; }
 
         public Room(uint time, FavouritesListItem item, Form1 f)
         {
@@ -877,6 +879,8 @@ namespace cb0t
             this.users.Clear();
             this.Panel.ServerText("Logged in, retrieving user's list...");
             this.Panel.CanVC(false);
+            this.CanVC = false;
+            this.CanOpusVC = false;
             this.MyName = packet.ReadString(this.crypto);
             this.Panel.MyName = this.MyName;
 
@@ -905,10 +909,13 @@ namespace cb0t
                 this.new_sbot = (vnum >= 514);
             }
 
-            byte flag = packet;
-            bool has_vc = ((flag & 8) == 8);
-            bool has_html = ((flag & 128) == 128);
-            this.Panel.CanVC(has_vc);
+            ServerFeatures flag = (ServerFeatures)((byte)packet);
+            this.CanVC = ((flag & ServerFeatures.SERVER_SUPPORTS_VC) == ServerFeatures.SERVER_SUPPORTS_VC);
+            bool has_html = ((flag & ServerFeatures.SERVER_SUPPORTS_HTML) == ServerFeatures.SERVER_SUPPORTS_HTML);
+            bool has_scribble = ((flag & ServerFeatures.SERVER_SUPPORTS_ROOM_SCRIBBLES) == ServerFeatures.SERVER_SUPPORTS_ROOM_SCRIBBLES);
+            this.CanOpusVC = ((flag & ServerFeatures.SERVER_SUPPORTS_OPUS_VC) == ServerFeatures.SERVER_SUPPORTS_OPUS_VC);
+            this.Panel.CanVC(this.CanVC);
+            this.Panel.CanScribbleAll(has_scribble);
 
             if (has_html)
                 this.Panel.Userlist.AcquireServerIcon(this.EndPoint);
@@ -1086,6 +1093,17 @@ namespace cb0t
             u.Country = Helpers.CountryCodeToString(country);
             u.Region = packet.ReadString(this.crypto);
             u.IsFriend = Friends.IsFriend(u.Name);
+
+            if (packet.Remaining > 0)
+            {
+                ClientFeatures features = (ClientFeatures)((byte)packet);
+                u.SupportsVC = ((features & ClientFeatures.CLIENT_SUPPORTS_VC) == ClientFeatures.CLIENT_SUPPORTS_VC);
+                u.SupportsOpusVC = ((features & ClientFeatures.CLIENT_SUPPORTS_OPUS_VC) == ClientFeatures.CLIENT_SUPPORTS_OPUS_VC);
+
+                if (u.SupportsOpusVC)
+                    u.SupportsVC = true;
+            }
+
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
 
@@ -1148,6 +1166,17 @@ namespace cb0t
             byte country = packet;
             u.Country = Helpers.CountryCodeToString(country);
             u.Region = packet.ReadString(this.crypto);
+
+            if (packet.Remaining > 0)
+            {
+                ClientFeatures features = (ClientFeatures)((byte)packet);
+                u.SupportsVC = ((features & ClientFeatures.CLIENT_SUPPORTS_VC) == ClientFeatures.CLIENT_SUPPORTS_VC);
+                u.SupportsOpusVC = ((features & ClientFeatures.CLIENT_SUPPORTS_OPUS_VC) == ClientFeatures.CLIENT_SUPPORTS_OPUS_VC);
+
+                if (u.SupportsOpusVC)
+                    u.SupportsVC = true;
+            }
+
             u.IsFriend = Friends.IsFriend(u.Name);
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
@@ -1278,13 +1307,63 @@ namespace cb0t
                     this.Eval_Font(e.Packet);
                     break;
 
-                case TCPMsg.MSG_CHAT_SERVER_ROOM_SCRIBBLE:
-                    this.Panel.CanScribbleAll(true);
+                case TCPMsg.MSG_CHAT_SERVER_VC_SUPPORTED:
+                    this.Eval_VC_Supported(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_VC_USER_SUPPORTED:
+                    this.Eval_VC_UserSupported(e.Packet);
                     break;
 
                 default:
                     this.Panel.AnnounceText(msg.ToString());
                     break;
+            }
+        }
+
+        private void Eval_VC_UserSupported(TCPPacketReader packet)
+        {
+            String name = packet.ReadString(this.crypto);
+
+            if (packet.Remaining < 2)
+                return;
+
+            User user = this.users.Find(x => x.Name == name);
+
+            if (user != null)
+            {
+                bool can_public = ((byte)packet) == 1;
+
+                if (!can_public)
+                {
+                    user.SupportsVC = false;
+                    user.SupportsOpusVC = false;
+                    this.Panel.Userlist.UpdateUserAppearance(user);
+                }
+                else if (!user.SupportsVC)
+                {
+                    user.SupportsVC = true;
+                    user.SupportsOpusVC = false;
+                    this.Panel.Userlist.UpdateUserAppearance(user);
+                }
+            }
+        }
+
+        private void Eval_VC_Supported(TCPPacketReader packet)
+        {
+            bool supported = ((byte)packet) == 1;
+
+            if (!supported)
+            {
+                this.CanVC = false;
+                this.CanOpusVC = false;
+                this.Panel.CanVC(false);
+            }
+            else if (!this.CanVC)
+            {
+                this.CanVC = true;
+                this.CanOpusVC = false;
+                this.Panel.CanVC(true);
             }
         }
 
