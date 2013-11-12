@@ -261,10 +261,13 @@ namespace cb0t
 
         public static void OnSongChanged(Room room, String song)
         {
-            if (!String.IsNullOrEmpty(song))
-                room.SendPersonalMessage("\x0007" + song);
-            else
-                room.SendPersonalMessage();
+            if (Settings.GetReg<bool>("show_song", true))
+            {
+                if (!String.IsNullOrEmpty(song))
+                    room.SendPersonalMessage("\x0007" + song);
+                else
+                    room.SendPersonalMessage();
+            }
         }
 
         public static void OnTimer(Room room) { }

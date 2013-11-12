@@ -68,6 +68,9 @@ namespace cb0t
 
         private void UserlistCustomOptionClicked(object sender, EventArgs e)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             String text = (String)sender;
 
             if (text.StartsWith("/me ") && text.Length > 4)
@@ -107,6 +110,9 @@ namespace cb0t
                 this.Panel.CloseAllTabs(false);
             else if (e.Item == RoomMenuItem.Custom)
             {
+                if (this.state != SessionState.Connected)
+                    return;
+
                 String text = e.Arg.ToString();
 
                 if (text.StartsWith("/me ") && text.Length > 4)
@@ -143,6 +149,9 @@ namespace cb0t
 
         private void WantScribble(object sender, EventArgs e)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             SharedUI.ScribbleEditor.StartPosition = FormStartPosition.CenterParent;
             byte[] data = SharedUI.ScribbleEditor.GetScribble();
 
@@ -226,6 +235,9 @@ namespace cb0t
                 Friends.FriendStatusChanged(name);
             else if (e.Task == ULCTXTask.Browse)
             {
+                if (this.state != SessionState.Connected)
+                    return;
+
                 if (this.users.Find(x => x.HasFiles && x.Name == name) != null)
                 {
                     ushort bid = Helpers.BrowseIdent;
@@ -241,6 +253,9 @@ namespace cb0t
             }
             else if (e.Task == ULCTXTask.IgnoreUnignore)
             {
+                if (this.state != SessionState.Connected)
+                    return;
+
                 User u = this.users.Find(x => x.Name == name);
 
                 if (u != null)
@@ -250,7 +265,12 @@ namespace cb0t
                 }
             }
             else if (e.Task == ULCTXTask.Nudge)
+            {
+                if (this.state != SessionState.Connected)
+                    return;
+
                 this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
+            }
             else if (e.Task == ULCTXTask.Whois)
             {
                 User u = this.users.Find(x => x.Name == name);
@@ -322,12 +342,18 @@ namespace cb0t
 
         public void UpdatePersonalMessage()
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void UpdateAvatar()
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
             {
                 if (Avatar.Data == null)
@@ -339,42 +365,63 @@ namespace cb0t
 
         public void UpdateFont()
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
         }
 
         public void SendText(String text)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.Public(text, this.crypto));
         }
 
         public void SendEmote(String text)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.Emote(text, this.crypto));
         }
 
         public void SendCommand(String text)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.Command(text, this.crypto));
         }
 
         public void SendPersonalMessage(String text)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.PersonalMessage(text, this.crypto));
         }
 
         public void SendPersonalMessage()
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.sock != null)
                 this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void ForEachUser(Action<User> u)
         {
+            if (this.state != SessionState.Connected)
+                return;
+
             if (this.users != null)
                 this.users.ForEach(u);
         }
@@ -536,8 +583,6 @@ namespace cb0t
             }
         }
 
-        private String[] cmds = new String[] { "/time", "/uptime", "/gfx", "/hdd", "/os", "/cpu", "/ram", "/lag", "/all <text>", "/find <name>", "/pretext", "/pretext <text>" };
-
         private void SendBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
@@ -602,9 +647,14 @@ namespace cb0t
                                     this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
                                 else if (text == "/lag")
                                     this.sock.SendPriority(TCPOutbound.ManualLag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                                else if (text == "/np")
+                                {
+                                    if (!String.IsNullOrEmpty(Helpers.NP))
+                                        this.sock.Send(TCPOutbound.Emote("np: " + Helpers.NP, this.crypto));
+                                }
                                 else if (text == "/cmds")
                                 {
-                                    foreach (String item in this.cmds)
+                                    foreach (String item in Helpers.cmds)
                                         this.Panel.AnnounceText(item);
                                 }
                                 else if (text.StartsWith("/all "))
