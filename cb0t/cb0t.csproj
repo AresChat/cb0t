@@ -86,7 +86,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Narrator.cs" />
+    <Compile Include="MediaIPC\Foobar2000\FoobarListener.cs" />
+    <Compile Include="MediaIPC\VLC\VLCListener.cs" />
+    <Compile Include="MediaIPC\Winamp\WinampListener.cs" />
+    <Compile Include="MediaIPC\WMP\DVASPECT.cs" />
+    <Compile Include="MediaIPC\WMP\HResults.cs" />
+    <Compile Include="MediaIPC\WMP\IOleClientSite.cs" />
+    <Compile Include="MediaIPC\WMP\IOleObject.cs" />
+    <Compile Include="MediaIPC\WMP\IOleServiceProvider.cs" />
+    <Compile Include="MediaIPC\WMP\IWMPRemoteMediaServices.cs" />
+    <Compile Include="MediaIPC\WMP\RemoteHostInfo.cs" />
+    <Compile Include="MediaIPC\WMP\TAGOLECLOSE.cs" />
+    <Compile Include="MediaIPC\WMP\WMPInterOp.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MediaIPC\WMP\WMPListener.cs" />
+    <Compile Include="Misc\Narrator.cs" />
     <Compile Include="RoomPanel\AccuTextBox.cs">
       <SubType>Component</SubType>
     </Compile>

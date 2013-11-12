@@ -14,6 +14,9 @@ namespace cb0t
     {
         public static uint UserIdent { get; set; }
 
+        public static String[] cmds = new String[] { "/np", "/time", "/uptime", "/gfx", "/hdd", "/os", "/cpu", "/ram", "/lag", "/all <text>", "/find <name>", "/pretext", "/pretext <text>" };
+        public static String NP = String.Empty;
+
         static Helpers()
         {
             UserIdent = 0;

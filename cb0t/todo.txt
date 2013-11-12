@@ -2,10 +2,3 @@
 -----
 
 Voice
-
-
-to do
------
-
-/np command
-prevent packets when not connected

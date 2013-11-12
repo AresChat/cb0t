@@ -24,6 +24,11 @@ namespace cb0t
         private Bitmap img_play { get; set; }
         private Bitmap img_pause { get; set; }
 
+        private MediaIPC.WMP.WMPListener wmp { get; set; }
+        private MediaIPC.Winamp.WinampListener winamp { get; set; }
+        private MediaIPC.VLC.VLCListener vlc { get; set; }
+        private MediaIPC.Foobar2000.FoobarListener foobar { get; set; }
+
         public Form1()
         {
             Settings.Create();
@@ -270,9 +275,6 @@ namespace cb0t
         {
             if (!this.do_once)
             {
-                this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
-                this.sock_thread.Start();
-
                 int frm_size_x = Settings.GetReg<int>("form_x", -1);
                 int frm_size_y = Settings.GetReg<int>("form_y", -1);
 
@@ -314,6 +316,13 @@ namespace cb0t
                 this.toolStripButton5.Image = this.img_play;
                 this.toolStrip1.Items[2].Enabled = AudioPanel.Available;
                 this.toolStrip2.Enabled = AudioPanel.Available;
+                this.wmp = new MediaIPC.WMP.WMPListener(this, AudioPanel.Available);
+                this.winamp = new MediaIPC.Winamp.WinampListener();
+                this.vlc = new MediaIPC.VLC.VLCListener();
+                this.foobar = new MediaIPC.Foobar2000.FoobarListener();
+
+                this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
+                this.sock_thread.Start();
             }
         }
 
@@ -370,11 +379,38 @@ namespace cb0t
                 if (check_song)
                 {
                     this.last_song_check = time;
+                    int src = Settings.GetReg<int>("m_listener_index", 0);
+                    String c_song = String.Empty;
 
-                    if (AudioPanel.Song != this.last_song)
-                        this.last_song = AudioPanel.Song;
-                    else
-                        check_song = false;
+                    switch (src)
+                    {
+                        case 1:
+                            c_song = AudioPanel.Song;
+                            break;
+
+                        case 2:
+                            c_song = this.wmp.Song;
+                            break;
+
+                        case 3:
+                            c_song = this.vlc.Song;
+                            break;
+
+                        case 4:
+                            c_song = this.winamp.Song;
+                            break;
+
+                        case 5:
+                            c_song = this.foobar.Song;
+                            break;
+                    }
+
+                    if (c_song != this.last_song)
+                    {
+                        this.last_song = c_song;
+                        Helpers.NP = c_song;
+                    }
+                    else check_song = false;
                 }
 
                 for (int i = 0; i < pool.Length; i++)
