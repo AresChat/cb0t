@@ -861,10 +861,6 @@ namespace cb0t
                 case TCPMsg.MSG_CHAT_SERVER_ENDOFBROWSE:
                     this.Eval_EndBrowse(e.Packet);
                     break;
-
-                default:
-                    this.Panel.AnnounceText(e.Msg.ToString());
-                    break;
             }
         }
 
@@ -1364,6 +1360,7 @@ namespace cb0t
                 this.CanVC = true;
                 this.CanOpusVC = false;
                 this.Panel.CanVC(true);
+                this.sock.Send(TCPOutbound.EnableClips());
             }
         }
 
@@ -1475,10 +1472,6 @@ namespace cb0t
                     u.ScribbleBuffer.AddRange((byte[])packet);
                     this.Eval_Scribble(u);
                     break;
-
-                default:
-                    this.Panel.AnnounceText(command);
-                    break;
             }
         }
 
@@ -1487,7 +1480,7 @@ namespace cb0t
             byte[] data = user.ScribbleBuffer.ToArray();
             user.ScribbleBuffer.Clear();
 
-            if (Settings.GetReg<bool>("receive_scribbles", true))
+            if (Settings.GetReg<bool>("receive_scribbles", true) && !user.Ignored)
                 if (ScriptEvents.OnScribbleReceiving(this, user))
                 {
                     data = Zip.Decompress(data);
@@ -1514,6 +1507,9 @@ namespace cb0t
             if (u == null)
                 return;
 
+            if (u.Ignored)
+                return;
+
             AresFont font = null;
 
             if (u.Font != null)
@@ -1536,7 +1532,7 @@ namespace cb0t
                     return;
                 }
 
-            if (Settings.GetReg<bool>("receive_nudge", true))
+            if (Settings.GetReg<bool>("receive_nudge", true) && !user.Ignored)
             {
                 if (time > this.last_nudge)
                     this.last_nudge = time;

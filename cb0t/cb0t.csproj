@@ -531,12 +531,6 @@
     <None Include="Resources\away.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\folder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\music.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\strength1.png" />
   </ItemGroup>
   <ItemGroup>
@@ -556,6 +550,8 @@
     <None Include="Resources\note.png" />
     <None Include="Resources\tab_read.png" />
     <None Include="Resources\tab_unread.png" />
+    <None Include="Resources\music.png" />
+    <None Include="Resources\folder.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -36,7 +36,6 @@
             System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Filter");
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Menus");
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Privacy");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Scripting");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -89,8 +88,6 @@
             treeNode6.Text = "Menus";
             treeNode7.Name = "Node2";
             treeNode7.Text = "Privacy";
-            treeNode8.Name = "Node3";
-            treeNode8.Text = "Scripting";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
@@ -98,8 +95,7 @@
             treeNode4,
             treeNode5,
             treeNode6,
-            treeNode7,
-            treeNode8});
+            treeNode7});
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.ShowPlusMinus = false;
             this.treeView1.ShowRootLines = false;

@@ -16,7 +16,7 @@ namespace cb0t
             this.Owner = owner;
         }
 
-        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw)
+        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc)
         {
             if (this.Owner.Avatar == null)
                 this.Owner.SetAvatar();
@@ -33,17 +33,31 @@ namespace cb0t
 
             e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
 
-            if (this.Owner.HasFiles)
-                e.Graphics.DrawImage(bi, new Point(e.Bounds.X + 40, e.Bounds.Y + 42));
+            int img_x = 58;
 
             Color name_color = this.Owner.Level == 3 ? Color.Red : this.Owner.Level == 2 ? Color.Green : this.Owner.Level == 1 ? Color.Blue : Color.Black;
 
+            if (this.Owner.HasFiles)
+            {
+                e.Graphics.DrawImage(bi, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                img_x += 15;
+            }
+
             if (this.Owner.IsAway)
-                e.Graphics.DrawImage(aw, new Rectangle(e.Bounds.X + 58, e.Bounds.Y + 7, 14, 14));
+            {
+                e.Graphics.DrawImage(aw, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                img_x += 15;
+            }
+
+            if (this.Owner.SupportsVC)
+            {
+                e.Graphics.DrawImage(vc, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                img_x += 15;
+            }
 
             using (Font name_font = new Font(e.Font, FontStyle.Bold))
             using (SolidBrush brush = new SolidBrush(name_color))
-                e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + (this.Owner.IsAway ? 74 : 58), e.Bounds.Y + 7));
+                e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + img_x, e.Bounds.Y + 7));
 
             using (SolidBrush brush = new SolidBrush(Color.Gray))
                 e.Graphics.DrawString(this.Owner.ToASLString(), e.Font, brush, new PointF(e.Bounds.X + 58, e.Bounds.Y + 24));
