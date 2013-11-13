@@ -320,7 +320,7 @@
     </Compile>
     <Compile Include="RoomPanel\SessionState.cs" />
     <Compile Include="RoomPanel\ScreenMode.cs" />
-    <Compile Include="RoomPanel\ScriptEvents.cs" />
+    <Compile Include="Scripting\ScriptEvents.cs" />
     <Compile Include="Misc\ScribbleCanvas.cs">
       <SubType>UserControl</SubType>
     </Compile>
