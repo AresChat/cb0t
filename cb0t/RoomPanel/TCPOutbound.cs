@@ -35,7 +35,21 @@ namespace cb0t
                 str = str.Substring(0, 30);
 
             packet.WriteString(str);
-            packet.WriteByte((byte)(1 | 2 | 4 | 8));
+            ClientFeatures features = (ClientFeatures)0;
+
+            if (Settings.GetReg<bool>("vc_public", true))
+            {
+                features |= ClientFeatures.CLIENT_SUPPORTS_OPUS_VC;
+                features |= ClientFeatures.CLIENT_SUPPORTS_VC;
+            }
+
+            if (Settings.GetReg<bool>("vc_private", true))
+            {
+                features |= ClientFeatures.CLIENT_SUPPORTS_OPUS_PM_VC;
+                features |= ClientFeatures.CLIENT_SUPPORTS_PM_VC;
+            }
+
+            packet.WriteByte((byte)features);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_LOGIN);
         }
 
@@ -58,6 +72,17 @@ namespace cb0t
 
             packet.WriteString(str, c);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_UPDATE_STATUS);
+        }
+
+        public static byte[] EnableClips()
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteByte((byte)(Settings.GetReg<bool>("vc_public", true) ? 1 : 0));
+            packet.WriteByte((byte)(Settings.GetReg<bool>("vc_private", true) ? 1 : 0));
+            byte[] buf = packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_VC_SUPPORTED);
+            packet = new TCPPacketWriter();
+            packet.WriteBytes(buf);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL);
         }
 
         public static byte[] OnlineStatus(bool away, CryptoService c)

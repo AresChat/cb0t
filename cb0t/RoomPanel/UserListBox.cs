@@ -12,6 +12,7 @@ namespace cb0t
         private Bitmap browse_icon = null;
         private Bitmap music_icon = null;
         private Bitmap away_icon = null;
+        private Bitmap voice_icon = null;
         private int hover_item = -1;
         private bool updating = false;
         private UserListToolTip popup;
@@ -24,9 +25,10 @@ namespace cb0t
             this.ScrollAlwaysVisible = true;
             this.BackColor = Color.White;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
-            this.browse_icon = (Bitmap)Properties.Resources.folder;
-            this.music_icon = (Bitmap)Properties.Resources.music;
-            this.away_icon = (Bitmap)Properties.Resources.away;
+            this.browse_icon = (Bitmap)Properties.Resources.folder.Clone();
+            this.music_icon = (Bitmap)Properties.Resources.music.Clone();
+            this.away_icon = (Bitmap)Properties.Resources.away.Clone();
+            this.voice_icon = (Bitmap)Properties.Resources.button4.Clone();
             this.popup = new UserListToolTip();
         }
 
@@ -223,7 +225,7 @@ namespace cb0t
             if (e.Index > -1)
             {
                 if (this.Items[e.Index] is UserListBoxItem)
-                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon);
+                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon);
                 else if (this.Items[e.Index] is UserListBoxSectionItem)
                     ((UserListBoxSectionItem)this.Items[e.Index]).Draw(e);
                 else if (this.Items[e.Index] is UserListBoxEmptyItem)

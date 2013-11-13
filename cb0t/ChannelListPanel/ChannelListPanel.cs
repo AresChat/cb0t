@@ -18,7 +18,7 @@ namespace cb0t
         {
             this.InitializeComponent();
             this.contextMenuStrip2.Items.Insert(4, new ToolStripLabel("Admin password:"));
-            this.toolStripButton1.Image = (Bitmap)Properties.Resources.refresh;
+            this.toolStripButton1.Image = (Bitmap)Properties.Resources.refresh.Clone();
             this.toolStrip1.Renderer = new ChannelListBar();
         }
 
