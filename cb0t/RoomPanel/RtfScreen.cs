@@ -27,7 +27,7 @@ namespace cb0t
         protected override void OnLinkClicked(LinkClickedEventArgs e)
         {
             base.OnLinkClicked(e);
-
+            
             if (e.LinkText.StartsWith("\\\\arlnk://"))
             {
                 DecryptedHashlink hashlink = Hashlink.DecodeHashlink(e.LinkText.Substring(10));
@@ -138,6 +138,10 @@ namespace cb0t
                             }
                         }
                 }
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                
             }
 
             base.OnMouseDown(e);

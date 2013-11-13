@@ -320,7 +320,7 @@ namespace cb0t
             {
                 this.needs_checking = false;
                 StringBuilder rtf = new StringBuilder();
-                rtf.Append("{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1040{\\fonttbl{\\f0\\fswiss\\fprq2\\fcharset0Verdana;}}");
+                rtf.Append("{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1040{\\fonttbl{\\f0\\fswiss\\fprq2\\fcharset0Tahoma;}}");
                 rtf.Append("{\\colortbl ;\\red0\\green0\\blue0; \\red255\\green0\\blue0; }");
                 rtf.Append("\\fs20");
 
