@@ -246,6 +246,7 @@ namespace cb0t
                     this.albumArtBox1.ClearArt();
                     this.label1.Text = String.Empty;
                     this.Player.controls.stop();
+                    Song = String.Empty;
 
                     if (DoRandom)
                     {
