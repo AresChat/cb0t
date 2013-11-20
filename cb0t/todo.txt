@@ -2,5 +2,4 @@
 -----
 
 Voice
-
-todo: disable VC button if pm user doesn't support it
+scribble!!

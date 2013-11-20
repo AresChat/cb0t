@@ -29,6 +29,8 @@ namespace cb0t
         private MediaIPC.VLC.VLCListener vlc { get; set; }
         private MediaIPC.Foobar2000.FoobarListener foobar { get; set; }
 
+        private ulong last_trickle = 0;
+
         public Form1()
         {
             Settings.Create();
@@ -39,6 +41,7 @@ namespace cb0t
             Menus.Load();
             AutoIgnores.Load();
             Narrator.Init();
+            VoicePlayer.Init();
 
             this.InitializeComponent();
             this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
@@ -373,8 +376,13 @@ namespace cb0t
 
                 Room[] pool = RoomPool.Rooms.ToArray();
                 uint time = Settings.Time;
+                ulong time_long = Settings.TimeLong;
                 bool check_song = time > this.last_song_check;
                 bool do_timer = time > this.last_song_check;
+                bool do_trickle = time_long >= (this.last_trickle + 500);
+
+                if (do_trickle)
+                    this.last_trickle = time_long;
 
                 if (check_song)
                 {
@@ -417,6 +425,9 @@ namespace cb0t
                     if (pool[i] != null)
                     {
                         pool[i].SocketTasks(time);
+
+                        if (do_trickle)
+                            pool[i].TrickleTasks();
 
                         if (check_song)
                             ScriptEvents.OnSongChanged(pool[i], this.last_song);

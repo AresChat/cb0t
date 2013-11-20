@@ -24,6 +24,7 @@ namespace cb0t
         private SessionState state = SessionState.Sleeping;
         private int reconnect_count = 0;
         private AresSocket sock = new AresSocket();
+        private List<byte> unknown_scribble_buffer = new List<byte>();
         private uint ticks = 0;
         private uint last_lag = 0;
         private uint last_nudge = 0;
@@ -56,6 +57,15 @@ namespace cb0t
             this.Panel.WantScribble += this.WantScribble;
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
             this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
+            this.Panel.GetUserByName += this.PanelGetUserByName;
+        }
+
+        private User PanelGetUserByName(String name)
+        {
+            if (this.users == null)
+                return null;
+
+            return this.users.Find(x => x.Name == name);
         }
 
         public void SpellCheck()
@@ -179,13 +189,14 @@ namespace cb0t
             if (full.Count <= 4000)
             {
                 if (this.Panel.Mode == ScreenMode.Main)
-                    this.sock.Send(TCPOutbound.AllScribbleOnce(full.ToArray(), this.crypto));
-                else
-                    this.sock.Send(TCPOutbound.PMScribbleOnce(this.Panel.PMName, full.ToArray(), this.crypto));
+                    this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst((uint)full.Count, 0, full.ToArray()));
+                else if (this.Panel.Mode == ScreenMode.PM)
+                    this.sock.SendTrickle(TCPOutbound.PMScribbleOnce(this.Panel.PMName, full.ToArray(), this.crypto));
             }
             else
             {
                 List<byte[]> p = new List<byte[]>();
+                uint s_size = (uint)full.Count;
 
                 while (full.Count > 4000)
                 {
@@ -196,29 +207,23 @@ namespace cb0t
                 if (full.Count > 0)
                     p.Add(full.ToArray());
 
-                for (int i = 0; i < p.Count; i++)
+                if (this.Panel.Mode == ScreenMode.Main)
                 {
-                    if (i == 0)
-                    {
-                        if (this.Panel.Mode == ScreenMode.Main)
-                            this.sock.Send(TCPOutbound.AllScribbleFirst(p[i], this.crypto));
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst(s_size, (ushort)(p.Count - 1), p[i]));
                         else
-                            this.sock.Send(TCPOutbound.PMScribbleFirst(this.Panel.PMName, p[i], this.crypto));
-                    }
-                    else if (i == (p.Count - 1))
-                    {
-                        if (this.Panel.Mode == ScreenMode.Main)
-                            this.sock.Send(TCPOutbound.AllScribbleLast(p[i], this.crypto));
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomChunk(p[i]));
+                }
+                else if (this.Panel.Mode == ScreenMode.PM)
+                {
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleFirst(this.Panel.PMName, p[i], this.crypto));
+                        else if (i == (p.Count - 1))
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleLast(this.Panel.PMName, p[i], this.crypto));
                         else
-                            this.sock.Send(TCPOutbound.PMScribbleLast(this.Panel.PMName, p[i], this.crypto));
-                    }
-                    else
-                    {
-                        if (this.Panel.Mode == ScreenMode.Main)
-                            this.sock.Send(TCPOutbound.AllScribbleChunk(p[i], this.crypto));
-                        else
-                            this.sock.Send(TCPOutbound.PMScribbleChunk(this.Panel.PMName, p[i], this.crypto));
-                    }
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleChunk(this.Panel.PMName, p[i], this.crypto));
                 }
 
                 p.Clear();
@@ -316,6 +321,7 @@ namespace cb0t
         public void Release()
         {
             this.owner_frm = null;
+            this.Panel.GetUserByName -= this.PanelGetUserByName;
             this.Panel.SendBox.KeyDown -= this.SendBoxKeyDown;
             this.Panel.CancelWriting -= this.CancelWriting;
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
@@ -340,6 +346,8 @@ namespace cb0t
             this.users.ForEach(x => x.Dispose());
             this.users.Clear();
             this.users = null;
+            this.unknown_scribble_buffer.Clear();
+            this.unknown_scribble_buffer = null;
         }
 
         public void UpdatePersonalMessage()
@@ -434,6 +442,15 @@ namespace cb0t
                 this.owner_frm.BeginInvoke((Action)(() => this.owner_frm.ShowPopup(title, msg, this.EndPoint, sound)));
         }
 
+        public void TrickleTasks()
+        {
+            if (this.sock == null)
+                return;
+
+            if (this.state == SessionState.Connected)
+                this.sock.DequeueTrickle();
+        }
+
         public void SocketTasks(uint time)
         {
             if (this.sock == null)
@@ -449,6 +466,8 @@ namespace cb0t
                     this.crypto.Mode = CryptoMode.Unencrypted;
                     this.Panel.Userlist.SetCrypto(false);
                     this.Panel.CanScribbleAll(false);
+                    this.Panel.CanScribblePM(false);
+                    this.Panel.InitScribbleButton();
                     this.new_sbot = false;
 
                     if (this.reconnect_count > 0)
@@ -909,9 +928,13 @@ namespace cb0t
             this.CanVC = ((flag & ServerFeatures.SERVER_SUPPORTS_VC) == ServerFeatures.SERVER_SUPPORTS_VC);
             bool has_html = ((flag & ServerFeatures.SERVER_SUPPORTS_HTML) == ServerFeatures.SERVER_SUPPORTS_HTML);
             bool has_scribble = ((flag & ServerFeatures.SERVER_SUPPORTS_ROOM_SCRIBBLES) == ServerFeatures.SERVER_SUPPORTS_ROOM_SCRIBBLES);
+            bool has_pm_scribble = ((flag & ServerFeatures.SERVER_SUPPORTS_PM_SCRIBBLES) == ServerFeatures.SERVER_SUPPORTS_PM_SCRIBBLES);
+            
             this.CanOpusVC = ((flag & ServerFeatures.SERVER_SUPPORTS_OPUS_VC) == ServerFeatures.SERVER_SUPPORTS_OPUS_VC);
             this.Panel.CanVC(this.CanVC);
             this.Panel.CanScribbleAll(has_scribble);
+            this.Panel.CanScribblePM(has_pm_scribble);
+            this.Panel.InitScribbleButton();
 
             if (has_html)
                 this.Panel.Userlist.AcquireServerIcon(this.EndPoint);
@@ -1311,9 +1334,63 @@ namespace cb0t
                     this.Eval_VC_UserSupported(e.Packet);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_VC_FIRST:
+                    this.Eval_VC_First(e.Packet);
+                    break;
+
+                case TCPMsg.MSG_CHAT_SERVER_VC_CHUNK:
+                    this.Eval_VC_Chunk(e.Packet);
+                    break;
+
                 default:
                     this.Panel.AnnounceText(msg.ToString());
                     break;
+            }
+        }
+
+        private void Eval_VC_First(TCPPacketReader packet)
+        {
+            VoicePlayerInboundItem item = new VoicePlayerInboundItem(packet,
+                                                       VoicePlayerItemType.Public,
+                                                       this.crypto,
+                                                       this.EndPoint);
+
+            VoicePlayer.Inbound.RemoveAll(x => x.Ident == item.Ident && x.EndPoint.Equals(this.EndPoint));
+
+            if (item.Received)
+            {
+                item.Save();
+
+                if (!String.IsNullOrEmpty(item.FileName))
+                {
+                    // play it
+                }
+            }
+            else VoicePlayer.Inbound.Add(item);
+        }
+
+        private void Eval_VC_Chunk(TCPPacketReader packet)
+        {
+            String sender = packet.ReadString(this.crypto);
+            uint ident = packet;
+            int index = VoicePlayer.Inbound.FindIndex(x => x.EndPoint.Equals(this.EndPoint) && x.Ident == ident);
+            byte[] chunk = packet;
+
+            if (index > -1)
+            {
+                VoicePlayerInboundItem item = VoicePlayer.Inbound[index];
+                item.AddChunk(chunk);
+
+                if (item.Received)
+                {
+                    VoicePlayer.Inbound.RemoveAt(index);
+                    item.Save();
+
+                    if (!String.IsNullOrEmpty(item.FileName))
+                    {
+                        // play it
+                    }
+                }
             }
         }
 
@@ -1409,15 +1486,13 @@ namespace cb0t
             String sender = packet.ReadString(this.crypto);
             User u = this.users.Find(x => x.Name == sender);
 
-            if (u == null)
-                return;
-
             ulong lag;
             bool b;
 
             switch (command)
             {
                 case "cb0t_writing":
+                    if (u == null) return;
                     u.Writing = ((byte)packet) == 2;
                     this.Panel.UpdateWriter(u);
                     ScriptEvents.OnUserWritingStatusChanged(this, u);
@@ -1434,6 +1509,7 @@ namespace cb0t
                     break;
 
                 case "cb0t_online_status":
+                    if (u == null) return;
                     b = ((byte)packet) != 1;
 
                     if (u.IsAway != b)
@@ -1446,31 +1522,61 @@ namespace cb0t
                     break;
 
                 case "cb0t_nudge":
+                    if (u == null) return;
                     this.Eval_Nudge(u, ((byte[])packet), time);
                     break;
 
                 case "cb0t_pm_msg":
+                    if (u == null) return;
                     this.Eval_cb0t_pm_msg(u, ((byte[])packet));
                     break;
 
                 case "cb0t_scribble_once":
-                    u.ScribbleBuffer.Clear();
-                    u.ScribbleBuffer.AddRange((byte[])packet);
-                    this.Eval_Scribble(u);
+                    if (u != null)
+                    {
+                        u.ScribbleBuffer.Clear();
+                        u.ScribbleBuffer.AddRange((byte[])packet);
+                        this.Eval_Scribble(u);
+                    }
+                    else if (String.IsNullOrEmpty(sender))
+                    {
+                        this.unknown_scribble_buffer.Clear();
+                        this.unknown_scribble_buffer.AddRange((byte[])packet);
+                        this.Eval_Scribble_Unknown();
+                    }
                     break;
 
                 case "cb0t_scribble_first":
-                    u.ScribbleBuffer.Clear();
-                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    if (u != null)
+                    {
+                        u.ScribbleBuffer.Clear();
+                        u.ScribbleBuffer.AddRange((byte[])packet);
+                    }
+                    else if (String.IsNullOrEmpty(sender))
+                    {
+                        this.unknown_scribble_buffer.Clear();
+                        this.unknown_scribble_buffer.AddRange((byte[])packet);
+                    }
                     break;
 
                 case "cb0t_scribble_chunk":
-                    u.ScribbleBuffer.AddRange((byte[])packet);
+                    if (u != null)
+                        u.ScribbleBuffer.AddRange((byte[])packet);
+                    else if (String.IsNullOrEmpty(sender))
+                        this.unknown_scribble_buffer.AddRange((byte[])packet);
                     break;
 
                 case "cb0t_scribble_last":
-                    u.ScribbleBuffer.AddRange((byte[])packet);
-                    this.Eval_Scribble(u);
+                    if (u != null)
+                    {
+                        u.ScribbleBuffer.AddRange((byte[])packet);
+                        this.Eval_Scribble(u);
+                    }
+                    else if (String.IsNullOrEmpty(sender))
+                    {
+                        this.unknown_scribble_buffer.AddRange((byte[])packet);
+                        this.Eval_Scribble_Unknown();
+                    }
                     break;
             }
         }
@@ -1493,6 +1599,18 @@ namespace cb0t
                     this.Panel.CheckUnreadStatus();
                     ScriptEvents.OnScribbleReceived(this, user);
                 }
+        }
+
+        private void Eval_Scribble_Unknown()
+        {
+            byte[] data = this.unknown_scribble_buffer.ToArray();
+            this.unknown_scribble_buffer.Clear();
+
+            if (Settings.GetReg<bool>("receive_scribbles", true))
+            {
+                data = Zip.Decompress(data);
+                this.Panel.Scribble(data);
+            }
         }
 
         private void Eval_cb0t_pm_msg(User user, byte[] data)

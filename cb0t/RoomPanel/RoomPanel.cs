@@ -353,17 +353,37 @@ namespace cb0t
             this.writingPanel1.BeginInvoke((Action)(() => this.writingPanel1.MyWritingStatusChanged(name, status)));
         }
 
+        private bool VCAll { get; set; }
+
         public void CanVC(bool can)
         {
             this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton8.Enabled = can));
+            this.VCAll = can;
         }
 
         private bool ScribbleAllAvailable { get; set; }
+        private bool ScribblePMAvailable { get; set; }
 
         public void CanScribbleAll(bool can)
         {
-            this.toolStrip2.BeginInvoke((Action)(() => this.toolStripButton9.Enabled = can));
             this.ScribbleAllAvailable = can;
+        }
+
+        public void CanScribblePM(bool can)
+        {
+            this.ScribblePMAvailable = can;
+        }
+
+        public void InitScribbleButton()
+        {
+            this.toolStrip2.BeginInvoke((Action)(() =>
+            {
+                if (this.tabControl1.SelectedIndex == 0)
+                    this.toolStripButton9.Enabled = this.ScribbleAllAvailable;
+                else if (this.tabControl1.SelectedTab != null)
+                    if (this.tabControl1.SelectedTab is PMTab)
+                        this.toolStripButton9.Enabled = this.ScribblePMAvailable;
+            }));
         }
 
         private String url_tag = String.Empty;
@@ -693,6 +713,9 @@ namespace cb0t
                 e.Graphics.FillRectangle(brush, bounds);
         }
 
+        public delegate User GetUserEventHandler(String name);
+        public event GetUserEventHandler GetUserByName;
+
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.tabControl1.SelectedIndex > -1)
@@ -717,11 +740,19 @@ namespace cb0t
                         this.PMName = this.tabControl1.SelectedTab.Text;
                         this.Mode = ScreenMode.PM;
                         this.CancelWriting(null, EventArgs.Empty);
+                        User user = this.GetUserByName(this.PMName);
+
+                        if (user == null)
+                            this.toolStripButton8.Enabled = false;
+                        else
+                            this.toolStripButton8.Enabled = user.SupportsVC;
+
                         this.toolStripButton9.Enabled = true;
                     }
                     else
                     {
                         this.Mode = ScreenMode.Main;
+                        this.toolStripButton8.Enabled = this.VCAll;
                         this.toolStripButton9.Enabled = this.ScribbleAllAvailable;
                     }
                 }

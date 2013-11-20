@@ -12,6 +12,9 @@ namespace cb0t
 {
     class Settings
     {
+        public const String APP_NAME = "cb0t";
+        public const String APP_VERSION = "3.01";
+
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }
 
@@ -96,6 +99,14 @@ namespace cb0t
             get
             {
                 return (uint)Math.Floor((double)sw.ElapsedMilliseconds / 1000);
+            }
+        }
+
+        public static ulong TimeLong
+        {
+            get
+            {
+                return (ulong)sw.ElapsedMilliseconds;
             }
         }
 
