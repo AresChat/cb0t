@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -20,6 +21,19 @@ namespace cb0t
         static Helpers()
         {
             UserIdent = 0;
+        }
+
+        public static String EndPointToHexString(IPEndPoint ep)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte b in ep.Address.GetAddressBytes())
+                sb.AppendFormat("{0:X2}", b);
+
+            foreach (byte b in BitConverter.GetBytes((ushort)ep.Port))
+                sb.AppendFormat("{0:X2}", b);
+
+            return sb.ToString();
         }
 
         public static byte[] GetPngBytesFromScribbleBytes(byte[] data, Size size)

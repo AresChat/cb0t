@@ -12,6 +12,7 @@ namespace cb0t
         private Socket sock = null;
         private List<byte> data_in = new List<byte>();
         private List<byte[]> data_out = new List<byte[]>();
+        private List<byte[]> trickle_out = new List<byte[]>();
         private int health = 0;
         private int avail = 0;
 
@@ -25,12 +26,29 @@ namespace cb0t
             this.data_in = null;
             this.data_out.Clear();
             this.data_out = null;
+            this.trickle_out.Clear();
+            this.trickle_out = null;
+        }
+
+        public void DequeueTrickle()
+        {
+            if (this.trickle_out.Count > 0)
+            {
+                this.Send(this.trickle_out[0]);
+                this.trickle_out.RemoveAt(0);
+            }
+        }
+
+        public void SendTrickle(byte[] data)
+        {
+            this.trickle_out.Add(data);
         }
 
         public void Clear()
         {
             this.data_in.Clear();
             this.data_out.Clear();
+            this.trickle_out.Clear();
         }
 
         public void Disconnect()
@@ -53,6 +71,7 @@ namespace cb0t
             this.health = 0;
             this.data_in.Clear();
             this.data_out.Clear();
+            this.trickle_out.Clear();
             this.sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.sock.Blocking = false;
 
