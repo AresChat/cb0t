@@ -158,7 +158,12 @@ namespace cb0t
                             PMTab tab = (PMTab)this.tabControl1.TabPages[i];
 
                             if (type == PMTextReceivedType.Announce)
+                            {
                                 tab.Announce(text);
+
+                                if (text.Contains("voice_clip"))
+                                    tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == name);
+                            }
                             else
                             {
                                 tab.PM(name, text, font);

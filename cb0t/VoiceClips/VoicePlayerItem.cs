@@ -8,11 +8,16 @@ namespace cb0t
 {
     class VoicePlayerItem
     {
-        public VoicePlayerItemType Type { get; set; }
         public IPEndPoint EndPoint { get; set; }
         public String Sender { get; set; }
         public uint Ident { get; set; }
         public String FileName { get; set; }
         public bool Auto { get; set; }
+        public uint ShortCut { get; private set; }
+
+        public VoicePlayerItem(uint sc)
+        {
+            this.ShortCut = sc;
+        }
     }
 }

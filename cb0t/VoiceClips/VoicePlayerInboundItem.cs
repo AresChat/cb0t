@@ -9,7 +9,6 @@ namespace cb0t
 {
     class VoicePlayerInboundItem
     {
-        public VoicePlayerItemType Type { get; private set; }
         public IPEndPoint EndPoint { get; private set; }
         public String Sender { get; private set; }
         public uint Ident { get; private set; }
@@ -21,9 +20,8 @@ namespace cb0t
         private bool is_opus = false;
         private List<byte> data_in = new List<byte>();
 
-        public VoicePlayerInboundItem(TCPPacketReader packet, VoicePlayerItemType type, CryptoService c, IPEndPoint ep)
+        public VoicePlayerInboundItem(TCPPacketReader packet, CryptoService c, IPEndPoint ep)
         {
-            this.Type = type;
             this.EndPoint = ep;
             this.Sender = packet.ReadString(c);
             this.Ident = packet;
@@ -87,14 +85,13 @@ namespace cb0t
             buf = null;
         }
 
-        public VoicePlayerItem ToVoicePlayerItem()
+        public VoicePlayerItem ToVoicePlayerItem(uint sc)
         {
-            VoicePlayerItem item = new VoicePlayerItem();
+            VoicePlayerItem item = new VoicePlayerItem(sc);
             item.EndPoint = this.EndPoint;
             item.FileName = this.FileName;
             item.Ident = this.Ident;
             item.Sender = this.Sender;
-            item.Type = this.Type;
             return item;
         }
     }
