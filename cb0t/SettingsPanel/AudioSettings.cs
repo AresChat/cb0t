@@ -58,6 +58,7 @@ namespace cb0t
             this.checkBox3.Checked = Settings.GetReg<bool>("show_song", true);
             this.checkBox4.Checked = Settings.GetReg<bool>("can_popup_sound", true);
             this.checkBox5.Checked = Settings.GetReg<bool>("can_narrate", false);
+            this.checkBox6.Checked = Settings.GetReg<bool>("can_opus", true);
         }
 
         private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
@@ -99,6 +100,11 @@ namespace cb0t
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SetReg("can_narrate", this.checkBox5.Checked);
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SetReg("can_opus", this.checkBox6.Checked);
         }
     }
 }

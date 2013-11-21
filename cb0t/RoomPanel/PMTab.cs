@@ -55,6 +55,22 @@ namespace cb0t
             this.Controls.Add(this.container);
         }
 
+        public void UpdateVoiceTime(int seconds)
+        {
+            if (seconds == -1)
+            {
+                this.rec.Recording = false;
+                this.rec.RecordingTime = 0;
+            }
+            else
+            {
+                this.rec.Recording = true;
+                this.rec.RecordingTime = seconds;
+            }
+
+            this.rec.Invalidate();
+        }
+
         private void LinkHashlinkClicked(object sender, EventArgs e)
         {
             this.HashlinkClicked(sender, e);

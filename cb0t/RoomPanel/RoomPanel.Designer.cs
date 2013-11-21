@@ -158,7 +158,7 @@
             this.toolStripLabel1});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(187, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(218, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
@@ -234,6 +234,9 @@
             this.toolStripButton8.Text = "voice clip";
             this.toolStripButton8.ToolTipText = "To record a Voice Clip, hold down\r\nthis button or press F2.  Release the\r\nbutton " +
     "to send your message.";
+            this.toolStripButton8.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolStripButton8_MouseDown);
+            this.toolStripButton8.MouseLeave += new System.EventHandler(this.toolStripButton8_MouseLeave);
+            this.toolStripButton8.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripButton8_MouseUp);
             // 
             // toolStripButton9
             // 

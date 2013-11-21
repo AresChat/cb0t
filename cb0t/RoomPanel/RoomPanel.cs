@@ -76,6 +76,30 @@ namespace cb0t
             this.rtfScreen1.IsMainScreen = true;
         }
 
+        public void UpdateVoiceTime(int seconds)
+        {
+            if (this.tabControl1.SelectedTab is PMTab)
+            {
+                PMTab tab = (PMTab)this.tabControl1.SelectedTab;
+                tab.UpdateVoiceTime(seconds);
+            }
+            else if (!(this.tabControl1.SelectedTab is BrowseTab))
+            {
+                if (seconds == -1)
+                {
+                    this.writingPanel1.Mode = WritingPanelMode.Writing;
+                    this.writingPanel1.RecordingTime = 0;
+                }
+                else
+                {
+                    this.writingPanel1.Mode = WritingPanelMode.Recording;
+                    this.writingPanel1.RecordingTime = seconds;
+                }
+
+                this.writingPanel1.Invalidate();
+            }            
+        }
+
         public void SpellCheck()
         {
             this.accuTextBox1.SpellCheck();
@@ -436,6 +460,9 @@ namespace cb0t
 
             this.toolStripDropDownButton1.Dispose();
             this.toolStripDropDownButton1 = null;
+            this.toolStripButton8.MouseDown -= this.toolStripButton8_MouseDown;
+            this.toolStripButton8.MouseUp -= this.toolStripButton8_MouseUp;
+            this.toolStripButton8.MouseLeave -= this.toolStripButton8_MouseLeave;
             this.toolStrip2.ItemClicked -= this.toolStrip2_ItemClicked;
             this.panel1.Paint -= this.panel1_Paint;
 
@@ -762,6 +789,23 @@ namespace cb0t
                     }
                 }
             }
+        }
+
+        public event EventHandler VoiceRecordingButtonClicked;
+
+        private void toolStripButton8_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.VoiceRecordingButtonClicked(true, EventArgs.Empty);
+        }
+
+        private void toolStripButton8_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.VoiceRecordingButtonClicked(false, EventArgs.Empty);
+        }
+
+        private void toolStripButton8_MouseLeave(object sender, EventArgs e)
+        {
+            this.VoiceRecordingButtonClicked(false, EventArgs.Empty);
         }
     }
 }
