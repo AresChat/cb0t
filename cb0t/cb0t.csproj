@@ -386,6 +386,7 @@
     <Compile Include="VoiceClips\VoicePlayerItem.cs" />
     <Compile Include="VoiceClips\VoicePlayer.cs" />
     <Compile Include="VoiceClips\VoicePlayerState.cs" />
+    <Compile Include="VoiceClips\VoiceRecorder.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>

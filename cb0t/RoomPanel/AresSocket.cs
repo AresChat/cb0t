@@ -169,7 +169,11 @@ namespace cb0t
                             if (packet.Length > 0)
                                 this.data_in.InsertRange(0, packet);
                     }
-                    else this.PacketReceived(null, args);
+                    else
+                    {
+                        try { this.PacketReceived(null, args); }
+                        catch { }
+                    }
                 }
                 else break;
             }

@@ -28,13 +28,29 @@ namespace cb0t
         protected override void OnLinkClicked(LinkClickedEventArgs e)
         {
             base.OnLinkClicked(e);
-            
+
             if (e.LinkText.StartsWith("\\\\arlnk://"))
             {
                 DecryptedHashlink hashlink = Hashlink.DecodeHashlink(e.LinkText.Substring(10));
 
                 if (hashlink != null)
                     this.HashlinkClicked(hashlink, EventArgs.Empty);
+            }
+            else if (e.LinkText.StartsWith("\\\\voice_clip_#"))
+            {
+                String vc_check = e.LinkText.Substring(14);
+                uint vc_finder = 0;
+
+                if (uint.TryParse(vc_check, out vc_finder))
+                {
+                    VoicePlayerItem vc = VoicePlayer.Records.Find(x => x.ShortCut == vc_finder);
+
+                    if (vc != null)
+                    {
+                        vc.Auto = false;
+                        VoicePlayer.QueueItem(vc);
+                    }
+                }
             }
             else
             {

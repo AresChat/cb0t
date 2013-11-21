@@ -710,6 +710,14 @@ namespace cb0t
         private void timer2_Tick(object sender, EventArgs e)
         {
             VoicePlayer.Tick(this);
+
+            if (VoiceRecorder.Recording)
+            {
+                Room room = RoomPool.Rooms.Find(x => x.RoomIsVisible);
+
+                if (room != null)
+                    room.VCTick();
+            }
         }
 
         protected override void WndProc(ref Message m)
@@ -720,6 +728,33 @@ namespace cb0t
                     VoicePlayer.PlaybackCompleted();
             }
             else base.WndProc(ref m);
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            Room room = RoomPool.Rooms.Find(x => x.RoomIsVisible);
+
+            if (e.KeyCode == Keys.F2)
+            {
+                if (room != null)
+                    room.StartRecording();
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                if (!VoiceRecorder.Recording)
+                    VoicePlayer.PlaybackCompleted();
+                else if (room != null)
+                    room.CancelRecording();
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            Room room = RoomPool.Rooms.Find(x => x.RoomIsVisible);
+
+            if (room != null)
+                if (e.KeyCode == Keys.F2)
+                    room.StopRecording();
         }
     }
 }

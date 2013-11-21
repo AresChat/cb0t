@@ -58,6 +58,37 @@ namespace cb0t
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
             this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
             this.Panel.GetUserByName += this.PanelGetUserByName;
+            this.Panel.VoiceRecordingButtonClicked += this.VoiceRecordingButtonClicked;
+        }
+
+        private void VoiceRecordingButtonClicked(object sender, EventArgs e)
+        {
+            if ((bool)sender)
+                this.StartRecording();
+            else
+                this.StopRecording();
+        }
+
+
+
+        public void StartRecording()
+        {
+            
+        }
+
+        public void StopRecording()
+        {
+
+        }
+
+        public void CancelRecording()
+        {
+
+        }
+
+        public void VCTick()
+        {
+
         }
 
         private User PanelGetUserByName(String name)
@@ -321,6 +352,7 @@ namespace cb0t
         public void Release()
         {
             this.owner_frm = null;
+            this.Panel.VoiceRecordingButtonClicked -= this.VoiceRecordingButtonClicked;
             this.Panel.GetUserByName -= this.PanelGetUserByName;
             this.Panel.SendBox.KeyDown -= this.SendBoxKeyDown;
             this.Panel.CancelWriting -= this.CancelWriting;
