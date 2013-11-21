@@ -326,6 +326,7 @@ namespace cb0t
 
                 this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
                 this.sock_thread.Start();
+                this.timer2.Enabled = true;
             }
         }
 
@@ -704,6 +705,21 @@ namespace cb0t
 
             if (room != null)
                 room.SpellCheck();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            VoicePlayer.Tick(this);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 953)
+            {
+                if (m.WParam != (IntPtr)4)
+                    VoicePlayer.PlaybackCompleted();
+            }
+            else base.WndProc(ref m);
         }
     }
 }

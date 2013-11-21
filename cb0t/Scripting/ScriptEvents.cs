@@ -271,5 +271,9 @@ namespace cb0t
         }
 
         public static void OnTimer(Room room) { }
+
+        public static bool OnVoiceClipReceiving(Room room, User user) { return true; }
+
+        public static void OnVoiceClipReceived(Room room, User user) { }
     }
 }

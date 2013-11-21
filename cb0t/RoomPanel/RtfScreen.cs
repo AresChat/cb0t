@@ -15,6 +15,7 @@ namespace cb0t
     class RtfScreen : RichTextBox
     {
         private byte[] img_data { get; set; }
+        private uint vc_sc { get; set; }
         private ContextMenuStrip ctx { get; set; }
         private List<PausedItem> paused_items = new List<PausedItem>();
         private bool IsPaused { get; set; }
@@ -89,6 +90,24 @@ namespace cb0t
                     this.SelectionLength = 0;
                     this.SelectionStart = this.Text.Length;
                 }
+                if (line > -1 && line < this.Lines.Length)
+                {
+                    String vc_check = this.Lines[line];
+
+                    if (vc_check.Contains("\\\\voice_clip_#"))
+                    {
+                        vc_check = vc_check.Substring(vc_check.IndexOf("\\\\voice_clip_#") + 14);
+
+                        if (vc_check.Contains(" "))
+                        {
+                            vc_check = vc_check.Substring(0, vc_check.IndexOf(" "));
+                            uint vc_finder = 0;
+
+                            if (uint.TryParse(vc_check, out vc_finder))
+                                this.vc_sc = vc_finder;
+                        }
+                    }
+                }
             }
             else if (e.Button == MouseButtons.Middle)
             {
@@ -139,10 +158,6 @@ namespace cb0t
                         }
                 }
             }
-            else if (e.Button == MouseButtons.Left)
-            {
-                
-            }
 
             base.OnMouseDown(e);
         }
@@ -177,6 +192,8 @@ namespace cb0t
             this.ctx.ShowCheckMargin = false;
             this.ctx.Items.Add("Save image...");
             this.ctx.Items[0].Visible = false;
+            this.ctx.Items.Add("Save voice clip...");
+            this.ctx.Items[1].Visible = false;
             this.ctx.Items.Add("Clear screen");
             this.ctx.Items.Add("Export text");
             this.ctx.Items.Add("Copy to clipboard");
@@ -191,27 +208,53 @@ namespace cb0t
         {
             if (e.ClickedItem.Equals(this.ctx.Items[0]))
             {
-                SharedUI.SaveFile.Filter = "Image|*.png";
-                SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                if (this.img_data != null)
+                {
+                    byte[] tmp = this.img_data;
+                    this.ctx.Hide();
+                    SharedUI.SaveFile.Filter = "Image|*.png";
+                    SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    SharedUI.SaveFile.FileName = String.Empty;
+
+                    if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            File.WriteAllBytes(SharedUI.SaveFile.FileName, tmp);
+                        }
+                        catch { }
+                    }
+                }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[1]))
+            {
+                VoicePlayerItem item = VoicePlayer.Records.Find(x => x.ShortCut == this.vc_sc);
+                this.ctx.Hide();
+                SharedUI.SaveFile.Filter = "Wav|*.wav";
+                SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
                 SharedUI.SaveFile.FileName = String.Empty;
 
                 if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        File.WriteAllBytes(SharedUI.SaveFile.FileName, this.img_data);
+                        if (item != null)
+                        {
+                            String org_path = Path.Combine(Settings.VoicePath, item.FileName + ".wav");
+                            File.Copy(org_path, SharedUI.SaveFile.FileName);
+                        }
                     }
                     catch { }
                 }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[1]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[2]))
             {
                 this.Clear();
 
                 while (this.CanUndo)
                     this.ClearUndo();
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[2]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[3]))
             {
                 try
                 {
@@ -220,7 +263,7 @@ namespace cb0t
                 }
                 catch { }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[3]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[4]))
             {
                 try
                 {
@@ -231,7 +274,7 @@ namespace cb0t
                 }
                 catch { }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[4]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[5]))
             {
                 if (this.IsPaused)
                 {
@@ -279,11 +322,13 @@ namespace cb0t
         private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             this.img_data = null;
+            this.vc_sc = 0;
         }
 
         private void CTXOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.ctx.Items[0].Visible = this.img_data != null;
+            this.ctx.Items[1].Visible = this.vc_sc > 0;
         }        
 
         public void ScrollDown()

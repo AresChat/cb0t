@@ -5,9 +5,9 @@ using System.Text;
 
 namespace cb0t
 {
-    public enum VoicePlayerItemType
+    public enum VoicePlayerState
     {
-        Public,
-        Private
+        Available,
+        Busy
     }
 }

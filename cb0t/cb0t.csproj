@@ -86,7 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Opus.cs" />
+    <Compile Include="RoomPanel\Room.Handler.cs" />
+    <Compile Include="VoiceClips\Opus.cs" />
     <Compile Include="RoomPanel\ClientFeatures.cs" />
     <Compile Include="MediaIPC\Foobar2000\FoobarListener.cs" />
     <Compile Include="MediaIPC\VLC\VLCListener.cs" />
@@ -381,10 +382,10 @@
     <Compile Include="RoomPanel\ULCTXTaskEventArgs.cs" />
     <Compile Include="Misc\SharedUI.cs" />
     <Compile Include="Misc\SpellChecker.cs" />
-    <Compile Include="VoicePlayerInboundItem.cs" />
-    <Compile Include="VoicePlayerItem.cs" />
-    <Compile Include="VoicePlayerItemType.cs" />
-    <Compile Include="VoicePlayer.cs" />
+    <Compile Include="VoiceClips\VoicePlayerInboundItem.cs" />
+    <Compile Include="VoiceClips\VoicePlayerItem.cs" />
+    <Compile Include="VoiceClips\VoicePlayer.cs" />
+    <Compile Include="VoiceClips\VoicePlayerState.cs" />
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
