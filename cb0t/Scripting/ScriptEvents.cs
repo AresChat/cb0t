@@ -275,5 +275,7 @@ namespace cb0t
         public static bool OnVoiceClipReceiving(Room room, User user) { return true; }
 
         public static void OnVoiceClipReceived(Room room, User user) { }
+
+        public static void OnCustomDataReceived(Room room, User user, String ident, String data) { }
     }
 }
