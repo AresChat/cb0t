@@ -35,7 +35,6 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.accuTextBox1 = new cb0t.AccuTextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -53,6 +52,7 @@
             this.rtfScreen1 = new cb0t.RtfScreen();
             this.writingPanel1 = new cb0t.WritingPanel();
             this.userListContainer1 = new cb0t.UserListContainer();
+            this.accuTextBox1 = new cb0t.AccuTextBox();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -124,23 +124,6 @@
             this.panel3.Size = new System.Drawing.Size(550, 23);
             this.panel3.TabIndex = 1;
             // 
-            // accuTextBox1
-            // 
-            this.accuTextBox1.BackColor = System.Drawing.Color.White;
-            this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.accuTextBox1.DetectUrls = false;
-            this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.accuTextBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accuTextBox1.HideSelection = false;
-            this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
-            this.accuTextBox1.Multiline = false;
-            this.accuTextBox1.Name = "accuTextBox1";
-            this.accuTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.accuTextBox1.Size = new System.Drawing.Size(546, 21);
-            this.accuTextBox1.TabIndex = 0;
-            this.accuTextBox1.Text = "";
-            this.accuTextBox1.WordWrap = false;
-            // 
             // toolStrip2
             // 
             this.toolStrip2.CanOverflow = false;
@@ -158,7 +141,7 @@
             this.toolStripLabel1});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(218, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(187, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
@@ -341,6 +324,23 @@
             this.userListContainer1.Name = "userListContainer1";
             this.userListContainer1.Size = new System.Drawing.Size(224, 251);
             this.userListContainer1.TabIndex = 0;
+            // 
+            // accuTextBox1
+            // 
+            this.accuTextBox1.BackColor = System.Drawing.Color.White;
+            this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.accuTextBox1.DetectUrls = false;
+            this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.accuTextBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accuTextBox1.HideSelection = false;
+            this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
+            this.accuTextBox1.Multiline = false;
+            this.accuTextBox1.Name = "accuTextBox1";
+            this.accuTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.accuTextBox1.Size = new System.Drawing.Size(546, 21);
+            this.accuTextBox1.TabIndex = 0;
+            this.accuTextBox1.Text = "";
+            this.accuTextBox1.WordWrap = false;
             // 
             // RoomPanel
             // 

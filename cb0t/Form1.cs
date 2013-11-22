@@ -327,6 +327,8 @@ namespace cb0t
                 this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
                 this.sock_thread.Start();
                 this.timer2.Enabled = true;
+
+                this.clist_content.RefreshIfEmpty();
             }
         }
 

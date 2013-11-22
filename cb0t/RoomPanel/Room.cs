@@ -591,7 +591,7 @@ namespace cb0t
                 {
                     this.state = SessionState.Connected;
                     this.ticks = time;
-                    this.last_lag = (time - 25);
+                    this.last_lag = time;
                     this.Panel.ServerText("Connected, handshaking...");
                     this.sock.Clear();
                     this.sock.Send(TCPOutbound.Login());

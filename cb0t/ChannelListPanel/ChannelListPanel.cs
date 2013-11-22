@@ -57,6 +57,20 @@ namespace cb0t
             this.RefreshList();
         }
 
+        public void RefreshIfEmpty()
+        {
+            if (this.full_channel_list.Count == 0)
+            {
+                this.toolStripButton1.Enabled = false;
+                this.full_channel_list.Clear();
+                this.part_channel_list.Clear();
+                this.channelListView1.Items.Clear();
+                this.gfx_items.ForEach(x => x.Dispose());
+                this.gfx_items.Clear();
+                this.RefreshList();
+            }
+        }
+
         public bool Terminate { get; set; }
         public event EventHandler<ChannelListLabelChangedEventArgs> LabelChanged;
         public event EventHandler<OpenChannelEventArgs> OpenChannel;
@@ -99,7 +113,7 @@ namespace cb0t
             catch { }
         }
 
-        public void RefreshList()
+        private void RefreshList()
         {
             new Thread(new ThreadStart(() =>
             {

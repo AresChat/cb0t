@@ -70,44 +70,47 @@ namespace cb0t
             {
                 int char_index = this.GetCharIndexFromPosition(e.Location);
                 int line = this.GetLineFromCharIndex(char_index);
-                int old_ss = this.SelectionStart;
-                int old_sl = this.SelectionLength;
-                this.SelectionStart = this.GetFirstCharIndexFromLine(line);
-                this.SelectionLength = this.Lines[line].Length;
-                String rtf = this.SelectedRtf;
 
-                if (!rtf.Contains("colortbl"))
-                    if (rtf.Contains("{\\pict") && rtf.Contains("\\picw") && rtf.Contains("\\pich"))
-                    {
-                        float dx = -1, dy = -1;
-
-                        using (Graphics g = this.CreateGraphics())
-                        {
-                            dx = g.DpiX;
-                            dy = g.DpiY;
-                        }
-
-                        Size size = Helpers.GetScribbleSize(rtf, dx, dy);
-
-                        if (!size.IsEmpty)
-                        {
-                            byte[] data = Helpers.GetScribbleBytesFromRTF(rtf);
-
-                            if (data != null)
-                                this.img_data = Helpers.GetPngBytesFromScribbleBytes(data, size);
-                        }
-                    }
-
-                this.SelectionStart = old_ss;
-                this.SelectionLength = old_sl;
-
-                if (old_sl == 0)
-                {
-                    this.SelectionLength = 0;
-                    this.SelectionStart = this.Text.Length;
-                }
                 if (line > -1 && line < this.Lines.Length)
                 {
+                    String[] rtf_lines = this.Rtf.Split(new String[] { "\\par" }, StringSplitOptions.None);
+                    int img_line = line;
+
+                    if (img_line == (this.Lines.Length - 1))
+                        img_line++;
+
+                    if ((img_line + 1) < rtf_lines.Length)
+                    {
+                        String rtf = rtf_lines[img_line + 1];
+                        int first_cf = rtf.IndexOf("\\cf");
+                        int is_img = -1;
+
+                        if ((first_cf + 4) < rtf.Length)
+                            int.TryParse(rtf.Substring(first_cf + 3, 1), out is_img);
+
+                        if (is_img == 0)
+                            if (rtf.Contains("{\\pict") && rtf.Contains("\\picw") && rtf.Contains("\\pich"))
+                            {
+                                float dx = -1, dy = -1;
+
+                                using (Graphics g = this.CreateGraphics())
+                                {
+                                    dx = g.DpiX;
+                                    dy = g.DpiY;
+                                }
+
+                                Size size = Helpers.GetScribbleSize(rtf, dx, dy);
+
+                                if (!size.IsEmpty)
+                                {
+                                    byte[] data = Helpers.GetScribbleBytesFromRTF(rtf);
+
+                                    if (data != null)
+                                        this.img_data = Helpers.GetPngBytesFromScribbleBytes(data, size);
+                                }
+                            }
+                    }
+
                     String vc_check = this.Lines[line];
 
                     if (vc_check.Contains("\\\\voice_clip_#"))

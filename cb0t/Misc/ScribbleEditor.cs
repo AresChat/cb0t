@@ -358,6 +358,7 @@ namespace cb0t
             {
                 using (Graphics g = Graphics.FromImage(avatar_sized))
                 {
+                    g.Clear(Color.White);
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     g.DrawImage(avatar_raw, new RectangleF(0, 0, img_x, img_y));
                     this.SetUndo(Point.Empty);
@@ -375,8 +376,10 @@ namespace cb0t
             try
             {
                 if (Clipboard.ContainsImage())
+                {
                     using (Bitmap bmp = (Bitmap)Clipboard.GetImage())
                         this.ImportExternalImage(bmp);
+                }
             }
             catch { }
         }
