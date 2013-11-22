@@ -910,6 +910,19 @@ namespace cb0t
                         this.Eval_Scribble_Unknown();
                     }
                     break;
+
+                default:
+                    if (command.StartsWith("cb3_custom_"))
+                    {
+                        command = command.Substring(11);
+
+                        if (u != null)
+                        {
+                            String c_text = Encoding.UTF8.GetString((byte[])packet);
+                            ScriptEvents.OnCustomDataReceived(this, u, command, c_text);
+                        }
+                    }
+                    break;
             }
         }
 
