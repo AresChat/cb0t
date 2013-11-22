@@ -77,13 +77,19 @@ namespace cb0t
                 long available = 0;
                 long total = 0;
 
-
+                
                 foreach (DriveInfo disk in DriveInfo.GetDrives())
-                    if (disk.DriveType == DriveType.Fixed)
+                {
+                    try
                     {
-                        available += disk.AvailableFreeSpace;
-                        total += disk.TotalSize;
+                        if (disk.DriveType == DriveType.Fixed)
+                        {
+                            available += disk.AvailableFreeSpace;
+                            total += disk.TotalSize;
+                        }
                     }
+                    catch { }
+                }
 
                 double d_av = available;
                 d_av = Math.Round((double)(available / 1024 / 1024 / 1024), 2);
