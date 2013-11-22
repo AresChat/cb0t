@@ -613,7 +613,8 @@ namespace cb0t
                     this.last_lag = time;
 
                     if (Settings.GetReg<bool>("lag_check", true))
-                        this.sock.SendPriority(TCPOutbound.Lag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                        if (!String.IsNullOrEmpty(this.MyName))
+                            this.sock.SendPriority(TCPOutbound.Lag(this.MyName, Helpers.UnixTimeMS, this.crypto));
                 }
 
                 if (time >= (this.ticks + 90))
