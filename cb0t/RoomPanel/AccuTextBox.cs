@@ -365,6 +365,10 @@ namespace cb0t
         protected override void OnTextChanged(EventArgs e)
         {
             this.needs_checking = true;
+
+            if (String.IsNullOrEmpty(this.Text))
+                this.needs_checking = false;
+
             base.OnTextChanged(e);
         }
     }

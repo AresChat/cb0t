@@ -240,7 +240,7 @@ namespace cb0t
         {
             if (this.state == SessionState.Connected)
             {
-                this.sock.Send(TCPOutbound.OnlineStatus(away, this.crypto));
+                this.sock.SendTrickle(TCPOutbound.OnlineStatus(away, this.crypto));
                 User u = this.users.Find(x => x.Name == this.MyName);
 
                 if (u != null)
@@ -457,7 +457,7 @@ namespace cb0t
                 return;
 
             if (this.sock != null)
-                this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
+                this.sock.SendTrickle(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void UpdateAvatar()
@@ -468,9 +468,9 @@ namespace cb0t
             if (this.sock != null)
             {
                 if (Avatar.Data == null)
-                    this.sock.Send(TCPOutbound.ClearAvatar());
+                    this.sock.SendTrickle(TCPOutbound.ClearAvatar());
                 else
-                    this.sock.Send(TCPOutbound.Avatar());
+                    this.sock.SendTrickle(TCPOutbound.Avatar());
             }
         }
 
@@ -480,7 +480,7 @@ namespace cb0t
                 return;
 
             if (this.sock != null)
-                this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
+                this.sock.SendTrickle(TCPOutbound.Font(this.new_sbot, this.crypto));
         }
 
         public void ShowAnnounceText(String text)
@@ -522,7 +522,7 @@ namespace cb0t
                 return;
 
             if (this.sock != null)
-                this.sock.Send(TCPOutbound.PersonalMessage(text, this.crypto));
+                this.sock.SendTrickle(TCPOutbound.PersonalMessage(text, this.crypto));
         }
 
         public void SendPersonalMessage()
@@ -531,7 +531,7 @@ namespace cb0t
                 return;
 
             if (this.sock != null)
-                this.sock.Send(TCPOutbound.PersonalMessage(this.crypto));
+                this.sock.SendTrickle(TCPOutbound.PersonalMessage(this.crypto));
         }
 
         public void ForEachUser(Action<User> u)
@@ -622,7 +622,7 @@ namespace cb0t
                     this.sock.SendPriority(TCPOutbound.Update(this.crypto));
 
                     if (Settings.IsAway)
-                        this.sock.Send(TCPOutbound.OnlineStatus(true, this.crypto));
+                        this.sock.SendTrickle(TCPOutbound.OnlineStatus(true, this.crypto));
                 }
 
                 if (this.is_writing)
