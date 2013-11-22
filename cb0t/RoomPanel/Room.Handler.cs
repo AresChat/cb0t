@@ -183,10 +183,10 @@ namespace cb0t
             this.UpdatePersonalMessage();
 
             if (Avatar.Data != null)
-                this.sock.Send(TCPOutbound.Avatar());
+                this.sock.SendTrickle(TCPOutbound.Avatar());
 
             if (Settings.GetReg<bool>("user_font_enabled", false))
-                this.sock.Send(TCPOutbound.Font(this.new_sbot, this.crypto));
+                this.sock.SendTrickle(TCPOutbound.Font(this.new_sbot, this.crypto));
 
             ScriptEvents.OnConnected(this);
         }
