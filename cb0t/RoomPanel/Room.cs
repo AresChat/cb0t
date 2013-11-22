@@ -69,26 +69,95 @@ namespace cb0t
                 this.StopRecording();
         }
 
-
+        private bool is_recording = false;
+        private int recording_time = -1;
 
         public void StartRecording()
         {
-            
+            if (!VoiceRecorder.Recording)
+            {
+                VoiceRecorder.RecordStart();
+                this.is_recording = true;
+                this.recording_time = 0;
+                this.Panel.UpdateVoiceTime(this.recording_time);
+            }
         }
 
         public void StopRecording()
         {
+            if (VoiceRecorder.Recording)
+            {
+                VoiceRecorder.RecordStop();
+                this.is_recording = false;
+                byte rec_len = (byte)this.recording_time;
+                this.recording_time = 0;
+                this.Panel.UpdateVoiceTime(-1);
+                bool should_opus = this.CanOpusVC;
 
+                if (should_opus)
+                    should_opus = Settings.GetReg<bool>("can_opus", true);
+
+                if (should_opus)
+                    if (this.Panel.Mode == ScreenMode.PM)
+                    {
+                        should_opus = false;
+                        User user = this.users.Find(x => x.Name == this.Panel.PMName);
+
+                        if (user != null)
+                            should_opus = user.SupportsOpusVC;
+                    }
+
+                if (this.sock != null)
+                    if (this.state == SessionState.Connected)
+                    {
+                        if (this.Panel.Mode == ScreenMode.PM)
+                        {
+                            byte[][] packets = VoiceRecorder.GetPackets(this.Panel.PMName, should_opus ? VoiceRecorderSendMethod.Opus : VoiceRecorderSendMethod.Zip, rec_len, this.crypto);
+
+                            foreach (byte[] p in packets)
+                                this.sock.SendTrickle(p);
+
+                            this.Panel.MyPMAnnounce("\x000314--- your voice clip has recorded and is now being sent...");
+                        }
+                        else
+                        {
+                            byte[][] packets = VoiceRecorder.GetPackets(should_opus ? VoiceRecorderSendMethod.Opus : VoiceRecorderSendMethod.Zip, rec_len);
+
+                            foreach (byte[] p in packets)
+                                this.sock.SendTrickle(p);
+
+                            this.Panel.AnnounceText("\x000314--- your voice clip has recorded and is now being sent...");
+                        }
+                    }
+            }
         }
 
         public void CancelRecording()
         {
+            if (VoiceRecorder.Recording)
+            {
+                VoiceRecorder.RecordCancel();
+                this.is_recording = false;
+                this.recording_time = 0;
+                this.Panel.UpdateVoiceTime(-1);
 
+                if (this.Panel.Mode == ScreenMode.PM)
+                    this.Panel.MyPMAnnounce("\x000314--- your voice clip was cancelled");
+                else
+                    this.Panel.AnnounceText("\x000314--- your voice clip was cancelled");
+            }
         }
 
         public void VCTick()
         {
+            if (this.is_recording)
+            {
+                this.recording_time++;
+                this.Panel.UpdateVoiceTime(this.recording_time);
 
+                if (this.recording_time == 15)
+                    this.StopRecording();
+            }
         }
 
         private User PanelGetUserByName(String name)
