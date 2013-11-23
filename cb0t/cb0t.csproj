@@ -559,6 +559,8 @@
     <None Include="Resources\tab_unread.png" />
     <None Include="Resources\music.png" />
     <None Include="Resources\folder.png" />
+    <None Include="Resources\button4bg.png" />
+    <None Include="Resources\musicbg.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

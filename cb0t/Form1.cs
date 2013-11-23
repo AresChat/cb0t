@@ -457,7 +457,7 @@ namespace cb0t
             }
             else
             {
-                Room room = new Room(Settings.Time, e.Room, this);
+                Room room = new Room(Settings.Time, e.Room, this, Settings.GetReg<bool>("back_bg", false));
                 room.Button = new ChannelButton(room.Credentials);
                 room.Panel = new RoomPanel(room.Credentials);
                 room.Panel.BackColor = Color.WhiteSmoke;

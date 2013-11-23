@@ -14,10 +14,12 @@ namespace cb0t
         public String FileName { get; set; }
         public bool Auto { get; set; }
         public uint ShortCut { get; private set; }
+        public bool IsBlack { get; private set; }
 
-        public VoicePlayerItem(uint sc)
+        public VoicePlayerItem(uint sc, bool b)
         {
             this.ShortCut = sc;
+            this.IsBlack = b;
         }
     }
 }

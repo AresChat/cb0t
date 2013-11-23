@@ -123,6 +123,16 @@ namespace cb0t.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap button4bg {
+            get {
+                object obj = ResourceManager.GetObject("button4bg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clist {
             get {
                 object obj = ResourceManager.GetObject("clist", resourceCulture);
@@ -206,6 +216,16 @@ namespace cb0t.Properties {
         internal static System.Drawing.Bitmap music {
             get {
                 object obj = ResourceManager.GetObject("music", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap musicbg {
+            get {
+                object obj = ResourceManager.GetObject("musicbg", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

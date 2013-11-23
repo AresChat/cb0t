@@ -17,6 +17,8 @@ namespace cb0t
         private bool updating = false;
         private UserListToolTip popup;
 
+        public bool IsBlack { get; set; }
+
         public UserListBox()
         {
             this.DoubleBuffered = true;
@@ -32,6 +34,14 @@ namespace cb0t
             this.popup = new UserListToolTip();
         }
 
+        public void UpdateBlackImgs()
+        {
+            this.music_icon.Dispose();
+            this.voice_icon.Dispose();
+            this.music_icon = (Bitmap)Properties.Resources.musicbg.Clone();
+            this.voice_icon = (Bitmap)Properties.Resources.button4bg.Clone();
+        }
+
         public void Free()
         {
             this.popup.Free();
@@ -43,6 +53,8 @@ namespace cb0t
             this.music_icon = null;
             this.away_icon.Dispose();
             this.away_icon = null;
+            this.voice_icon.Dispose();
+            this.voice_icon = null;
         }
 
         public new void BeginUpdate()
@@ -225,7 +237,7 @@ namespace cb0t
             if (e.Index > -1)
             {
                 if (this.Items[e.Index] is UserListBoxItem)
-                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon);
+                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon, this.IsBlack);
                 else if (this.Items[e.Index] is UserListBoxSectionItem)
                     ((UserListBoxSectionItem)this.Items[e.Index]).Draw(e);
                 else if (this.Items[e.Index] is UserListBoxEmptyItem)

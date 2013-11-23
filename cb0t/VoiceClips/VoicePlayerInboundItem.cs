@@ -85,9 +85,9 @@ namespace cb0t
             buf = null;
         }
 
-        public VoicePlayerItem ToVoicePlayerItem(uint sc)
+        public VoicePlayerItem ToVoicePlayerItem(uint sc, bool b)
         {
-            VoicePlayerItem item = new VoicePlayerItem(sc);
+            VoicePlayerItem item = new VoicePlayerItem(sc, b);
             item.EndPoint = this.EndPoint;
             item.FileName = this.FileName;
             item.Ident = this.Ident;

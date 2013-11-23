@@ -55,6 +55,14 @@ namespace cb0t
             this.Controls.Add(this.container);
         }
 
+        public void SetToBlack()
+        {
+            this.rec.IsBlack = true;
+            this.rec.Invalidate();
+            this.rtf.IsBlack = true;
+            this.rtf.BackColor = Color.Black;
+        }
+
         public void UpdateVoiceTime(int seconds)
         {
             if (seconds == -1)

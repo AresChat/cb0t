@@ -361,7 +361,7 @@ namespace cb0t
             this.Panel.Userlist.AddUserItem(u);
 
             if (ScriptEvents.OnUserJoining(this, u))
-                this.Panel.AnnounceText("\x000303" + u.Name + " has joined");
+                this.Panel.AnnounceText((this.BlackBG ? "\x000309" : "\x000303") + u.Name + " has joined");
 
             if (u.Name == this.MyName)
             {
@@ -601,7 +601,7 @@ namespace cb0t
 
                 if (!String.IsNullOrEmpty(item.FileName))
                 {
-                    VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT);
+                    VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT, this.BlackBG);
                     VoicePlayer.Records.Add(vc);
                     User u = this.users.Find(x => x.Name == vc.Sender);
 
@@ -609,7 +609,7 @@ namespace cb0t
                         if (!u.Ignored)
                             if (ScriptEvents.OnVoiceClipReceiving(this, u))
                             {
-                                this.Panel.PMTextReceived(vc.Sender, "\x000314--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                this.Panel.PMTextReceived(vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
                 }
@@ -636,7 +636,7 @@ namespace cb0t
 
                     if (!String.IsNullOrEmpty(item.FileName))
                     {
-                        VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT);
+                        VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT, this.BlackBG);
                         VoicePlayer.Records.Add(vc);
                         User u = this.users.Find(x => x.Name == vc.Sender);
 
@@ -644,7 +644,7 @@ namespace cb0t
                             if (!u.Ignored)
                                 if (ScriptEvents.OnVoiceClipReceiving(this, u))
                                 {
-                                    this.Panel.PMTextReceived(vc.Sender, "\x000314--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                    this.Panel.PMTextReceived(vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }
                     }
@@ -663,7 +663,7 @@ namespace cb0t
 
                 if (!String.IsNullOrEmpty(item.FileName))
                 {
-                    VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT);
+                    VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT, this.BlackBG);
                     VoicePlayer.Records.Add(vc);
                     User u = this.users.Find(x => x.Name == vc.Sender);
 
@@ -676,7 +676,7 @@ namespace cb0t
                                     vc.Auto = true;
                                     VoicePlayer.QueueItem(vc);
                                 }
-                                else this.Panel.AnnounceText("\x000314--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
+                                else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
 
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
@@ -704,7 +704,7 @@ namespace cb0t
 
                     if (!String.IsNullOrEmpty(item.FileName))
                     {
-                        VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT);
+                        VoicePlayerItem vc = item.ToVoicePlayerItem(++VoicePlayer.NEXT_SHORTCUT, this.BlackBG);
                         VoicePlayer.Records.Add(vc);
                         User u = this.users.Find(x => x.Name == vc.Sender);
 
@@ -717,7 +717,7 @@ namespace cb0t
                                         vc.Auto = true;
                                         VoicePlayer.QueueItem(vc);
                                     }
-                                    else this.Panel.AnnounceText("\x000314--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
+                                    else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
 
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }
@@ -991,7 +991,7 @@ namespace cb0t
             if (data.Length == 4)
                 if (data.SequenceEqual(new byte[] { 78, 65, 61, 61 }))
                 {
-                    this.Panel.AnnounceText("\x000314--- " + user.Name + " is not receiving nudges");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + user.Name + " is not receiving nudges");
                     return;
                 }
 
@@ -1003,7 +1003,7 @@ namespace cb0t
 
                 if (ScriptEvents.OnNudgeReceiving(this, user))
                 {
-                    this.Panel.AnnounceText("\x000314--- " + user.Name + " has nudged you!");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + user.Name + " has nudged you!");
                     this.owner_frm.Nudge();
                     this.ShowPopup("cb0t :: Nudge", user.Name + " nudged you", PopupSound.None);
                 }

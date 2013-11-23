@@ -16,17 +16,17 @@ namespace cb0t
             this.Owner = owner;
         }
 
-        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc)
+        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc, bool is_black)
         {
             if (this.Owner.Avatar == null)
                 this.Owner.SetAvatar();
 
-            Color item_bg = Color.White;
+            Color item_bg = is_black ? Color.Black : Color.White;
 
             if (tracked)
-                item_bg = Color.Gainsboro;
+                item_bg = is_black ? Color.DimGray : Color.Gainsboro;
             if (selected)
-                item_bg = Color.LightSteelBlue;
+                item_bg = is_black ? Color.DarkBlue : Color.LightSteelBlue;
 
             using (SolidBrush brush = new SolidBrush(item_bg))
                 e.Graphics.FillRectangle(brush, e.Bounds);
@@ -35,7 +35,14 @@ namespace cb0t
 
             int img_x = 58;
 
-            Color name_color = this.Owner.Level == 3 ? Color.Red : this.Owner.Level == 2 ? Color.Green : this.Owner.Level == 1 ? Color.Blue : Color.Black;
+            Color name_color = is_black ? Color.White : Color.Black;
+
+            if (this.Owner.Level == 3)
+                name_color = Color.Red;
+            else if (this.Owner.Level == 2)
+                name_color = is_black ? Color.Lime : Color.Green;
+            else if (this.Owner.Level == 1)
+                name_color = is_black ? Color.Aqua : Color.Black;
 
             if (this.Owner.HasFiles)
             {
@@ -59,7 +66,7 @@ namespace cb0t
             using (SolidBrush brush = new SolidBrush(name_color))
                 e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + img_x, e.Bounds.Y + 7));
 
-            using (SolidBrush brush = new SolidBrush(Color.Gray))
+            using (SolidBrush brush = new SolidBrush(is_black ? Color.WhiteSmoke : Color.Gray))
                 e.Graphics.DrawString(this.Owner.ToASLString(), e.Font, brush, new PointF(e.Bounds.X + 58, e.Bounds.Y + 24));
 
             String text = this.Owner.PersonalMessage;
@@ -68,7 +75,12 @@ namespace cb0t
             if (text.StartsWith("\x0007"))
             {
                 text = Helpers.StripColors(text);
-                text = "\x0007\x000312" + text;
+
+                if (is_black)
+                    text = "\x0007\x000311" + text;
+                else
+                    text = "\x0007\x000312" + text;
+
                 is_song = true;
             }
 
@@ -78,7 +90,7 @@ namespace cb0t
                 bool bold = false, italic = false, underline = false;
                 int x = e.Bounds.X + 58, y = e.Bounds.Y + 38;
                 int max_width = (e.Bounds.X + e.Bounds.Width);
-                Color fore_color = Color.Gray;
+                Color fore_color = is_black ? Color.WhiteSmoke : Color.Gray;
                 int color_finder;
 
                 if (is_song)

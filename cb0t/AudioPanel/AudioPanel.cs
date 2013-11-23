@@ -342,11 +342,12 @@ namespace cb0t
                 {
                     AudioPlayerItem item = AudioHelpers.CreateAudioPlayerItem(this.Player, f);
 
-                    if (item.Duration > 0)
-                    {
-                        this.play_list.Add(item);
-                        this.AddPlaylistItem(item);
-                    }
+                    if (item != null)
+                        if (item.Duration > 0)
+                        {
+                            this.play_list.Add(item);
+                            this.AddPlaylistItem(item);
+                        }
                 }
 
             this.SavePlaylist();
