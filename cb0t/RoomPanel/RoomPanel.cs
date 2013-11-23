@@ -57,7 +57,7 @@ namespace cb0t
             this.toolStripDropDownButton1.Image = (Bitmap)Properties.Resources.settings.Clone();
             this.toolStripDropDownButton1.DropDownItems.Add("Export hashlink");
             this.toolStripDropDownButton1.DropDownItems.Add("Add to favourites");
-            this.toolStripDropDownButton1.DropDownItems.Add("Copy room name");
+            this.toolStripDropDownButton1.DropDownItems.Add("Copy room name to clipboard");
             this.toolStripDropDownButton1.DropDownItems.Add("Auto play voice clips");
             this.toolStripDropDownButton1.DropDownItems.Add("Close sub tabs");
             this.toolStripDropDownButton1.DropDownItems.Add(new ToolStripSeparator());

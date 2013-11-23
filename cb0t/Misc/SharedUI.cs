@@ -13,6 +13,8 @@ namespace cb0t
         public static SaveFileDialog SaveFile { get; set; }
         public static EmoticonMenu EMenu { get; set; }
         public static ColorMenu CMenu { get; set; }
+        public static OpenFileDialog OpenFile { get; set; }
+        public static FolderBrowserDialog OpenFolder { get; set; }
 
         public static void Init()
         {
@@ -21,6 +23,8 @@ namespace cb0t
             SaveFile = new SaveFileDialog();
             EMenu = new EmoticonMenu();
             CMenu = new ColorMenu();
+            OpenFile = new OpenFileDialog();
+            OpenFolder = new FolderBrowserDialog();
         }
     }
 }

@@ -1,5 +1,2 @@
 ﻿cb0t://
 single instance
-black b/g on scribbles
-add folder/file import options for audio player
-prevent voice clip send flooding

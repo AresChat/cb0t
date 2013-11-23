@@ -699,6 +699,36 @@ namespace cb0t
                 if (dr == DialogResult.Yes)
                     this.audio_content.ClearPlaylist();
             }
+            else if (e.ClickedItem.Equals(this.importFilesToolStripMenuItem))
+            {
+                this.toolStripDropDownButton1.HideDropDown();
+                SharedUI.OpenFile.Multiselect = true;
+                SharedUI.OpenFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+                SharedUI.OpenFile.FileName = String.Empty;
+
+                if (SharedUI.OpenFile.ShowDialog() == DialogResult.OK)
+                {
+                    String[] files = SharedUI.OpenFile.FileNames;
+
+                    if (files != null)
+                        if (files.Length > 0)
+                            this.audio_content.ImportFilesFromDialog(files);
+                }
+            }
+            else if (e.ClickedItem.Equals(this.importFolderToolStripMenuItem))
+            {
+                this.toolStripDropDownButton1.HideDropDown();
+                SharedUI.OpenFolder.ShowNewFolderButton = false;
+                SharedUI.OpenFolder.RootFolder = Environment.SpecialFolder.MyMusic;
+
+                if (SharedUI.OpenFolder.ShowDialog() == DialogResult.OK)
+                {
+                    String folder = SharedUI.OpenFolder.SelectedPath;
+
+                    if (!String.IsNullOrEmpty(folder))
+                        this.audio_content.ImportFolderFromDialog(folder);
+                }
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)

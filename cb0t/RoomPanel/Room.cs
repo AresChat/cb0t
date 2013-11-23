@@ -71,11 +71,16 @@ namespace cb0t
 
         private bool is_recording = false;
         private int recording_time = -1;
+        private uint last_recording_start_time = 0;
 
         public void StartRecording()
         {
             if (!VoiceRecorder.Recording)
             {
+                if (Helpers.UnixTime >= (this.last_recording_start_time + 5))
+                    this.last_recording_start_time = Helpers.UnixTime;
+                else return;
+
                 VoiceRecorder.RecordStart();
                 this.is_recording = true;
                 this.recording_time = 0;
@@ -355,8 +360,11 @@ namespace cb0t
             }
             else if (e.Task == ULCTXTask.CopyName)
             {
-                this.Panel.SendBox.AppendText(name);
-                this.Panel.SendBox.SelectionStart = this.Panel.SendBox.Text.Length;
+                try
+                {
+                    Clipboard.SetText(name);
+                }
+                catch { }
             }
             else if (e.Task == ULCTXTask.IgnoreUnignore)
             {

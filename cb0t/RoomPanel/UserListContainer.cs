@@ -31,7 +31,7 @@ namespace cb0t
             this.ctx_menu.Items.Add("Nudge");//2
             this.ctx_menu.Items.Add("Whois");//3
             this.ctx_menu.Items.Add("Ignore/Unignore");//4
-            this.ctx_menu.Items.Add("Copy name");//5
+            this.ctx_menu.Items.Add("Copy name to clipboard");//5
             this.ctx_menu.Items.Add("Add/Remove friend");//6
             this.ctx_menu.Items.Add("Browse");//7
             this.ctx_menu.Items.Add(new ToolStripSeparator());//8

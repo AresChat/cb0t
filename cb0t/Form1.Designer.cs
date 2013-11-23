@@ -54,6 +54,9 @@
             this.content1 = new cb0t.Content();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.importFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -166,7 +169,10 @@
             this.clearListToolStripMenuItem,
             this.toolStripSeparator3,
             this.randomToolStripMenuItem,
-            this.repeatToolStripMenuItem});
+            this.repeatToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.importFilesToolStripMenuItem,
+            this.importFolderToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -178,24 +184,24 @@
             // clearListToolStripMenuItem
             // 
             this.clearListToolStripMenuItem.Name = "clearListToolStripMenuItem";
-            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clearListToolStripMenuItem.Text = "Clear list";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(116, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // randomToolStripMenuItem
             // 
             this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
-            this.randomToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.randomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.randomToolStripMenuItem.Text = "Random";
             // 
             // repeatToolStripMenuItem
             // 
             this.repeatToolStripMenuItem.Name = "repeatToolStripMenuItem";
-            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.repeatToolStripMenuItem.Text = "Repeat";
             // 
             // toolStripSeparator2
@@ -259,6 +265,23 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            // 
+            // importFilesToolStripMenuItem
+            // 
+            this.importFilesToolStripMenuItem.Name = "importFilesToolStripMenuItem";
+            this.importFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importFilesToolStripMenuItem.Text = "Import files";
+            // 
+            // importFolderToolStripMenuItem
+            // 
+            this.importFolderToolStripMenuItem.Name = "importFolderToolStripMenuItem";
+            this.importFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importFolderToolStripMenuItem.Text = "Import folder";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,6 +337,9 @@
         private System.Windows.Forms.ToolStripMenuItem randomToolStripMenuItem;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem importFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importFolderToolStripMenuItem;
     }
 }
 
