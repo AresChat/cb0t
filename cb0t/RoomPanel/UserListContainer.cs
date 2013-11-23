@@ -52,6 +52,13 @@ namespace cb0t
             this.userListBox1.ContextMenuStrip = this.ctx_menu;
         }
 
+        public void SetBlack()
+        {
+            this.userListBox1.BackColor = Color.Black;
+            this.userListBox1.IsBlack = true;
+            this.userListBox1.UpdateBlackImgs();
+        }
+
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (!String.IsNullOrEmpty(this.CTXUserName))

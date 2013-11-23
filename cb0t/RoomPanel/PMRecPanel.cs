@@ -15,6 +15,7 @@ namespace cb0t
 
         public int RecordingTime { get; set; }
         public bool Recording { get; set; }
+        public bool IsBlack { get; set; }
 
         public void Destroy()
         {
@@ -34,14 +35,14 @@ namespace cb0t
 
         private void PaintRec(object sender, PaintEventArgs e)
         {
-            using (SolidBrush brush = new SolidBrush(Color.White))
+            using (SolidBrush brush = new SolidBrush(this.IsBlack ? Color.Black : Color.White))
                 e.Graphics.FillRectangle(brush, new Rectangle(0, 0, this.Width, this.Height));
 
             if (this.Recording)
             {
                 e.Graphics.DrawImage(this.rec, new Point(1, 0));
 
-                using (SolidBrush brush = new SolidBrush(Color.Black))
+                using (SolidBrush brush = new SolidBrush(this.IsBlack ? Color.White : Color.Black))
                     e.Graphics.DrawString("RECORDING [" + (15 - this.RecordingTime) + " seconds remaining]", this.Font, brush, new PointF(16, 1));
             }
         }

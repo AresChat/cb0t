@@ -34,14 +34,16 @@ namespace cb0t
         private bool CanAutoPlayVC { get; set; }
         private bool CanVC { get; set; }
         private bool CanOpusVC { get; set; }
+        private bool BlackBG { get; set; }
 
-        public Room(uint time, FavouritesListItem item, Form1 f)
+        public Room(uint time, FavouritesListItem item, Form1 f, bool black_bg)
         {
             this.owner_frm = f;
             this.Credentials = item.Copy();
             this.EndPoint = new IPEndPoint(item.IP, item.Port);
             this.ticks = (time - 19);
             this.sock.PacketReceived += this.PacketReceived;
+            this.BlackBG = black_bg;
         }
 
         public void ConnectEvents()
@@ -59,6 +61,12 @@ namespace cb0t
             this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
             this.Panel.GetUserByName += this.PanelGetUserByName;
             this.Panel.VoiceRecordingButtonClicked += this.VoiceRecordingButtonClicked;
+
+            if (this.BlackBG)
+            {
+                this.Panel.Userlist.SetBlack();
+                this.Panel.SetToBlack();
+            }
         }
 
         private void VoiceRecordingButtonClicked(object sender, EventArgs e)
@@ -122,7 +130,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.MyPMAnnounce("\x000314--- your voice clip has recorded and is now being sent...");
+                            this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip has recorded and is now being sent...");
                         }
                         else
                         {
@@ -131,7 +139,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.AnnounceText("\x000314--- your voice clip has recorded and is now being sent...");
+                            this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip has recorded and is now being sent...");
                         }
                     }
             }
@@ -147,9 +155,9 @@ namespace cb0t
                 this.Panel.UpdateVoiceTime(-1);
 
                 if (this.Panel.Mode == ScreenMode.PM)
-                    this.Panel.MyPMAnnounce("\x000314--- your voice clip was cancelled");
+                    this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip was cancelled");
                 else
-                    this.Panel.AnnounceText("\x000314--- your voice clip was cancelled");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip was cancelled");
             }
         }
 
@@ -277,12 +285,12 @@ namespace cb0t
 
             if (this.Panel.Mode == ScreenMode.Main)
             {
-                this.Panel.AnnounceText("\x000314--- Sending...");
+                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...");
                 this.Panel.Scribble(data);
             }
             else if (this.Panel.Mode == ScreenMode.PM)
             {
-                this.Panel.PMTextReceived(this.Panel.PMName, "\x000314--- Sending...", null, PMTextReceivedType.Announce);
+                this.Panel.PMTextReceived(this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...", null, PMTextReceivedType.Announce);
                 this.Panel.PMScribbleReceived(this.Panel.PMName, data);
             }
 
@@ -392,9 +400,9 @@ namespace cb0t
 
                 if (u != null)
                 {
-                    this.Panel.AnnounceText("\x000314--- Whois: " + u.Name);
-                    this.Panel.AnnounceText("\x000314--- ASL: " + u.ToASLString());
-                    this.Panel.AnnounceText("\x000314--- Personal Message: " + u.PersonalMessage);
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Whois: " + u.Name);
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- ASL: " + u.ToASLString());
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Personal Message: " + u.PersonalMessage);
                 }
             }
         }

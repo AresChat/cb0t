@@ -76,6 +76,16 @@ namespace cb0t
             this.rtfScreen1.IsMainScreen = true;
         }
 
+        private bool IsBlack { get; set; }
+
+        public void SetToBlack()
+        {
+            this.writingPanel1.IsBlack = true;
+            this.writingPanel1.Invalidate();
+            this.rtfScreen1.IsBlack = true;
+            this.rtfScreen1.BackColor = Color.Black;
+        }
+
         public void UpdateVoiceTime(int seconds)
         {
             if (this.tabControl1.SelectedTab is PMTab)
@@ -143,6 +153,7 @@ namespace cb0t
                     }
 
             PMTab new_tab = new PMTab(name);
+            new_tab.SetToBlack();
             new_tab.HashlinkClicked += this.LinkHashlinkClicked;
             new_tab.ImageIndex = 1;
             this.tabControl1.TabPages.Add(new_tab);
@@ -164,6 +175,7 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
+                new_tab.SetToBlack();
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
@@ -226,6 +238,7 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
+                new_tab.SetToBlack();
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
@@ -723,6 +736,31 @@ namespace cb0t
             }
             else if (e.ClickedItem.Equals(this.toolStripButton9))
                 this.WantScribble(null, EventArgs.Empty);
+            else if (e.ClickedItem.Equals(this.toolStripLabel1))
+            {
+                if (this.url_tag.StartsWith("\\\\arlnk://"))
+                {
+                    DecryptedHashlink hashlink = Hashlink.DecodeHashlink(this.url_tag.Substring(10));
+
+                    if (hashlink != null)
+                        this.HashlinkClicked(hashlink, EventArgs.Empty);
+                }
+                else if (this.url_tag.StartsWith("arlnk://"))
+                {
+                    DecryptedHashlink hashlink = Hashlink.DecodeHashlink(this.url_tag.Substring(8));
+
+                    if (hashlink != null)
+                        this.HashlinkClicked(hashlink, EventArgs.Empty);
+                }
+                else
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(this.url_tag);
+                    }
+                    catch { }
+                }
+            }
         }
 
         public void ColorCallback(String sc)

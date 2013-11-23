@@ -33,6 +33,7 @@ namespace cb0t
             this.checkBox9.Checked = Settings.GetReg<bool>("block_redirect", false);
             this.checkBox10.Checked = Settings.GetReg<bool>("block_cls", false);
             this.checkBox11.Checked = Settings.GetReg<bool>("block_popups", false);
+            this.checkBox12.Checked = Settings.GetReg<bool>("back_bg", false);
 
             InstalledFontCollection fonts = new InstalledFontCollection();
 
@@ -129,6 +130,11 @@ namespace cb0t
                 SpellChecker.Load();
                 this.SpellCheckUpdate(this.comboBox2.SelectedIndex > 0, null);
             }
+        }
+
+        private void checkBox12_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SetReg("back_bg", this.checkBox12.Checked);
         }
     }
 }

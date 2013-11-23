@@ -24,6 +24,7 @@ namespace cb0t
         public event EventHandler NameClicked;
 
         public bool IsMainScreen { get; set; }
+        public bool IsBlack { get; set; }
 
         protected override void OnLinkClicked(LinkClickedEventArgs e)
         {
@@ -336,11 +337,11 @@ namespace cb0t
                         }
                     }
 
-                    this.ShowAnnounceText("\x000314--- Screen unpaused");
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- Screen unpaused");
                 }
                 else
                 {
-                    this.ShowAnnounceText("\x000314--- Screen paused");
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- Screen paused");
                     this.IsPaused = true;
                 }
             }
@@ -419,8 +420,8 @@ namespace cb0t
                     name_font.Size = font.Size;
                 }
 
-                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, 1, name_font);
-                this.Render("    " + text, null, true, 1, font);
+                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, this.IsBlack ? 0 : 1, name_font);
+                this.Render("    " + text, null, true, this.IsBlack ? 0 : 1, font);
             }
         }
 
@@ -479,7 +480,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, 2, null);
+                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, this.IsBlack ? 15 : 2, null);
             }
         }
 
@@ -497,7 +498,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, 12, font);
+                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, this.IsBlack ? 0 : 12, font);
             }
         }
 
@@ -515,7 +516,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, 6, font);
+                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, this.IsBlack ? 13 : 6, font);
             }
         }
 
@@ -596,17 +597,29 @@ namespace cb0t
             List<Color> cols = new List<Color>();
             StringBuilder rtf = new StringBuilder();
             int col_index;
+            String bg_test;
 
             if (ff == null)
                 cols.Add(this.GetColorFromCode(first_col));
             else
-                cols.Add(this.HTMLColorToColor(ff.TextColor));
+            {
+                bg_test = ff.TextColor.ToUpper().Replace("#", String.Empty);
+
+                if (bg_test == "000000" && this.IsBlack)
+                    bg_test = "#FFFFFF";
+                else if (bg_test == "FFFFFF" && !this.IsBlack)
+                    bg_test = "#000000";
+                else
+                    bg_test = ff.TextColor;
+
+                cols.Add(this.HTMLColorToColor(bg_test));
+            }
 
             rtf.Append("\\cf1 ");
 
-            if (this.GetColorIndex(ref cols, Color.White) == -1)
+            if (this.GetColorIndex(ref cols, this.IsBlack ? Color.Black : Color.White) == -1)
             {
-                cols.Add(Color.White);
+                cols.Add(this.IsBlack ? Color.Black : Color.White);
                 rtf.Append("\\highlight2 ");
             }
             else rtf.Append("\\highlight1 ");
@@ -615,7 +628,7 @@ namespace cb0t
             bool bold = false, italic = false, underline = false;
             bool can_emoticon = Settings.GetReg<bool>("can_emoticon", true);
             int emote_count = 0;
-            Color back_color = Color.White;
+            Color back_color = this.IsBlack ? Color.Black : Color.White;
 
             String tmp;
             int itmp;
@@ -783,36 +796,45 @@ namespace cb0t
 
                 if (ff == null)
                 {
-                    col_index = this.GetColorIndex(ref cols, Color.Black);
+                    col_index = this.GetColorIndex(ref cols, this.IsBlack ? Color.Yellow : Color.Black);
 
                     if (col_index > -1)
                         name_builder.Append("\\cf" + (col_index + 1) + " ");
                     else
                     {
-                        cols.Add(Color.Black);
+                        cols.Add(this.IsBlack ? Color.Yellow : Color.Black);
                         name_builder.Append("\\cf" + cols.Count + " ");
                     }
                 }
                 else
                 {
-                    col_index = this.GetColorIndex(ref cols, this.HTMLColorToColor(ff.NameColor));
+                    bg_test = ff.NameColor.ToUpper().Replace("#", String.Empty);
+
+                    if (bg_test == "000000" && this.IsBlack)
+                        bg_test = "#FFFF00";
+                    else if (bg_test == "FFFFFF" && !this.IsBlack)
+                        bg_test = "#000000";
+                    else
+                        bg_test = ff.NameColor;
+
+                    col_index = this.GetColorIndex(ref cols, this.HTMLColorToColor(bg_test));
 
                     if (col_index > -1)
                         name_builder.Append("\\cf" + (col_index + 1) + " ");
                     else
                     {
-                        cols.Add(this.HTMLColorToColor(ff.NameColor));
+                        cols.Add(this.HTMLColorToColor(bg_test));
                         name_builder.Append("\\cf" + cols.Count + " ");
                     }
                 }
 
-                col_index = this.GetColorIndex(ref cols, Color.White);
+                col_index = this.GetColorIndex(ref cols, this.IsBlack ? Color.Black : Color.White);
 
                 if (col_index > -1)
                     name_builder.Append("\\highlight" + (col_index + 1) + " ");
                 else
                 {
-                    cols.Add(Color.White);
+                    cols.Add(this.IsBlack ? Color.Black : Color.White);
                     name_builder.Append("\\highlight" + cols.Count + " ");
                 }
 
