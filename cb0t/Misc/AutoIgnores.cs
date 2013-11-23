@@ -83,29 +83,32 @@ namespace cb0t
             }
         }
 
-        public static AutoIgnoreType IgnoreType(String name)
+        public static AutoIgnoreType IgnoreType(String n)
         {
             AutoIgnoreItem[] tmp = Items.ToArray();
+            String space = " ";
+            String empty = "";
+            String name = n.ToUpper().Replace(space, empty);
 
             foreach (AutoIgnoreItem i in tmp)
                 if (i.Condition == AutoIgnoreCondition.Includes)
                 {
-                    if (name.Contains(i.Name))
+                    if (name.Contains(i.Name.ToUpper().Replace(space, empty)))
                         return i.Action;
                 }
                 else if (i.Condition == AutoIgnoreCondition.Ends)
                 {
-                    if (name.EndsWith(i.Name))
+                    if (name.EndsWith(i.Name.ToUpper().Replace(space, empty)))
                         return i.Action;
                 }
                 else if (i.Condition == AutoIgnoreCondition.Equals)
                 {
-                    if (name.Equals(i.Name))
+                    if (name.Equals(i.Name.ToUpper().Replace(space, empty)))
                         return i.Action;
                 }
                 else if (i.Condition == AutoIgnoreCondition.Starts)
                 {
-                    if (name.StartsWith(i.Name))
+                    if (name.StartsWith(i.Name.ToUpper().Replace(space, empty)))
                         return i.Action;
                 }
 

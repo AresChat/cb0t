@@ -131,50 +131,58 @@ namespace cb0t
             else if (e.Button == MouseButtons.Middle)
             {
                 int char_index = this.GetCharIndexFromPosition(e.Location);
-                int line_index = this.GetLineFromCharIndex(char_index);
-                int first_char_index = this.GetFirstCharIndexFromLine(line_index);
-                String line_text = this.Lines[line_index];
-                int space = line_text.IndexOf(" ");
-                bool ts = Settings.GetReg<bool>("can_timestamp", false);
 
-                if (space > -1)
+                if (char_index <= 0)
+                    return;
+
+                String[] _split = this.Text.Split(new String[] { "\n" }, StringSplitOptions.None);
+
+                int _start = 0;
+
+                for (int i = 0; i < _split.Length; i++)
                 {
-                    String name = null;
+                    if (char_index >= _start && char_index <= (_start + _split[i].Length))
+                    {
+                        String text = _split[i];
 
-                    if (ts)
-                        space = line_text.IndexOf(" ", space + 1);
-
-                    if (space > -1)
-                        name = line_text.Substring(0, space);
-
-                    if (!String.IsNullOrEmpty(name))
-                        if (name.EndsWith("*"))
+                        if (Settings.GetReg<bool>("can_timestamp", false))
                         {
-                            space = line_text.IndexOf(" ", space + 1);
+                            int first_space = text.IndexOf(" ");
 
-                            if (space > -1)
-                                name = line_text.Substring(0, space);
-                            else
-                                name = null;
+                            if (first_space == -1)
+                                return;
+
+                            text = text.Substring(first_space + 1);
                         }
 
-                    if (!String.IsNullOrEmpty(name))
-                        if (char_index <= (first_char_index + name.Length))
+                        int _gt = text.IndexOf(">");
+                        int star = text.IndexOf("* ");
+
+                        if (star == 0)
                         {
-                            if (ts)
-                                name = name.Substring(name.IndexOf(" ") + 1);
+                            text = text.Substring(2);
 
-                            if (name.StartsWith("* "))
-                                name = name.Substring(2);
-                            else if (name.EndsWith(">"))
-                                name = name.Substring(0, name.Length - 1);
+                            int first_space = text.IndexOf(" ");
 
-                            if (this.IsMainScreen)
-                            {
-                                this.NameClicked(name, EventArgs.Empty);
+                            if (first_space < 2 || first_space > 20)
                                 return;
+
+                            text = text.Substring(0, first_space);
+                            this.NameClicked(text, EventArgs.Empty);
+                        }
+                        else
+                        {
+                            if (_gt >= 2 && _gt <= 20)
+                            {
+                                text = text.Substring(0, _gt);
+                                this.NameClicked(text, EventArgs.Empty);
                             }
                         }
+
+                        return;
+                    }
+
+                    _start += (_split[i].Length + 1);
                 }
             }
 

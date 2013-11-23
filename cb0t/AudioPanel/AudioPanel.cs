@@ -352,6 +352,30 @@ namespace cb0t
             this.SavePlaylist();
         }
 
+        public void ImportFilesFromDialog(object arg)
+        {
+            Thread thread = new Thread(new ParameterizedThreadStart(this.ImportFiles));
+            thread.Start(arg);
+        }
+
+        public void ImportFolderFromDialog(String path)
+        {
+            String[] files = null;
+
+            try
+            {
+                files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+            }
+            catch { }
+
+            if (files != null)
+                if (files.Length > 0)
+                {
+                    Thread thread = new Thread(new ParameterizedThreadStart(this.ImportFiles));
+                    thread.Start(files);
+                }
+        }
+
         private void AddPlaylistItem(AudioPlayerItem item)
         {
             if (this.audioList1.InvokeRequired)
