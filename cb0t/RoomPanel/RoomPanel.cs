@@ -153,7 +153,10 @@ namespace cb0t
                     }
 
             PMTab new_tab = new PMTab(name);
-            new_tab.SetToBlack();
+
+            if (this.IsBlack)
+                new_tab.SetToBlack();
+
             new_tab.HashlinkClicked += this.LinkHashlinkClicked;
             new_tab.ImageIndex = 1;
             this.tabControl1.TabPages.Add(new_tab);
@@ -175,7 +178,10 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
-                new_tab.SetToBlack();
+
+                if (this.IsBlack)
+                    new_tab.SetToBlack();
+
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
@@ -238,7 +244,10 @@ namespace cb0t
                         }
 
                 PMTab new_tab = new PMTab(name);
-                new_tab.SetToBlack();
+
+                if (this.IsBlack)
+                    new_tab.SetToBlack();
+
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
