@@ -70,7 +70,20 @@ namespace cb0t
             if (e.Button == MouseButtons.Right)
             {
                 int char_index = this.GetCharIndexFromPosition(e.Location);
-                int line = this.GetLineFromCharIndex(char_index);
+                int line = -1;
+                int _start = 0;
+                String[] _split = this.Text.Split(new String[] { "\n" }, StringSplitOptions.None);
+
+                for (int i = 0; i < _split.Length; i++)
+                {
+                    if (char_index >= _start && char_index <= (_start + _split[i].Length))
+                    {
+                        line = i;
+                        break;
+                    }
+
+                    _start += (_split[i].Length + 1);
+                }
 
                 if (line > -1 && line < this.Lines.Length)
                 {
