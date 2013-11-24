@@ -42,7 +42,7 @@ namespace cb0t
             else if (this.Owner.Level == 2)
                 name_color = is_black ? Color.Lime : Color.Green;
             else if (this.Owner.Level == 1)
-                name_color = is_black ? Color.Aqua : Color.Black;
+                name_color = is_black ? Color.Aqua : Color.Blue;
 
             if (this.Owner.HasFiles)
             {

@@ -719,7 +719,7 @@ namespace cb0t
             {
                 this.toolStripDropDownButton1.HideDropDown();
                 SharedUI.OpenFolder.ShowNewFolderButton = false;
-                SharedUI.OpenFolder.RootFolder = Environment.SpecialFolder.MyMusic;
+                SharedUI.OpenFolder.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
                 if (SharedUI.OpenFolder.ShowDialog() == DialogResult.OK)
                 {

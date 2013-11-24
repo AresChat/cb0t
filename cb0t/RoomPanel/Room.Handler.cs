@@ -866,13 +866,13 @@ namespace cb0t
                 case "cb0t_scribble_once":
                     if (u != null)
                     {
-                        u.ScribbleBuffer.Clear();
+                        u.ScribbleBuffer = new List<byte>();
                         u.ScribbleBuffer.AddRange((byte[])packet);
                         this.Eval_Scribble(u);
                     }
                     else if (String.IsNullOrEmpty(sender))
                     {
-                        this.unknown_scribble_buffer.Clear();
+                        this.unknown_scribble_buffer = new List<byte>();
                         this.unknown_scribble_buffer.AddRange((byte[])packet);
                         this.Eval_Scribble_Unknown();
                     }
@@ -881,12 +881,12 @@ namespace cb0t
                 case "cb0t_scribble_first":
                     if (u != null)
                     {
-                        u.ScribbleBuffer.Clear();
+                        u.ScribbleBuffer = new List<byte>();
                         u.ScribbleBuffer.AddRange((byte[])packet);
                     }
                     else if (String.IsNullOrEmpty(sender))
                     {
-                        this.unknown_scribble_buffer.Clear();
+                        this.unknown_scribble_buffer = new List<byte>();
                         this.unknown_scribble_buffer.AddRange((byte[])packet);
                     }
                     break;
@@ -929,7 +929,7 @@ namespace cb0t
         private void Eval_Scribble(User user)
         {
             byte[] data = user.ScribbleBuffer.ToArray();
-            user.ScribbleBuffer.Clear();
+            user.ScribbleBuffer = new List<byte>();
 
             if (Settings.GetReg<bool>("receive_scribbles", true) && !user.Ignored)
                 if (ScriptEvents.OnScribbleReceiving(this, user))
@@ -949,7 +949,7 @@ namespace cb0t
         private void Eval_Scribble_Unknown()
         {
             byte[] data = this.unknown_scribble_buffer.ToArray();
-            this.unknown_scribble_buffer.Clear();
+            this.unknown_scribble_buffer = new List<byte>();
 
             if (Settings.GetReg<bool>("receive_scribbles", true))
             {
