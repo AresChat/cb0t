@@ -61,7 +61,7 @@ namespace cb0t
             }
 
             this.ScribbleBuffer.Clear();
-            this.ScribbleBuffer = null;
+            this.ScribbleBuffer = new List<byte>();
         }
 
         public void SetAvatar()

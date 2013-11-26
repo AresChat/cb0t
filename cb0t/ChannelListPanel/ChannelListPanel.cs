@@ -50,10 +50,13 @@ namespace cb0t
         {
             this.toolStripButton1.Enabled = false;
             this.full_channel_list.Clear();
+            this.full_channel_list = new List<ChannelListItem>();
             this.part_channel_list.Clear();
+            this.part_channel_list = new List<ChannelListItem>();
             this.channelListView1.Items.Clear();
             this.gfx_items.ForEach(x => x.Dispose());
             this.gfx_items.Clear();
+            this.gfx_items = new List<ChannelListViewItem>();
             this.RefreshList();
         }
 
@@ -63,10 +66,13 @@ namespace cb0t
             {
                 this.toolStripButton1.Enabled = false;
                 this.full_channel_list.Clear();
+                this.full_channel_list = new List<ChannelListItem>();
                 this.part_channel_list.Clear();
+                this.part_channel_list = new List<ChannelListItem>();
                 this.channelListView1.Items.Clear();
                 this.gfx_items.ForEach(x => x.Dispose());
                 this.gfx_items.Clear();
+                this.gfx_items = new List<ChannelListViewItem>();
                 this.RefreshList();
             }
         }
@@ -317,6 +323,7 @@ namespace cb0t
                 this.channelListView1.BeginUpdate();
                 this.channelListView1.Items.Clear();
                 this.part_channel_list.Clear();
+                this.part_channel_list = new List<ChannelListItem>();
 
                 for (int i = 0; i < this.full_channel_list.Count; i++)
                     if (this.full_channel_list[i].Name.ToUpper().Contains(text))

@@ -16,6 +16,7 @@ namespace cb0t
         public event EventHandler HashlinkClicked;
 
         public bool AutoReplySent { get; set; }
+        public bool First { get; set; }
 
         public PMTab(String name)
         {

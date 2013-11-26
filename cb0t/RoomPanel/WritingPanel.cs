@@ -35,11 +35,14 @@ namespace cb0t
             this.pen = null;
             this.rec.Dispose();
             this.rec = null;
+            this.writers.Clear();
+            this.writers = new List<String>();
         }
 
         public void ClearWriters()
         {
             this.writers.Clear();
+            this.writers = new List<String>();
             this.Invalidate();
         }
 

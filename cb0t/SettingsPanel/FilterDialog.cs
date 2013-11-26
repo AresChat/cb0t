@@ -78,7 +78,7 @@ namespace cb0t
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.comboBox1.SelectedIndex == 0 || this.comboBox1.SelectedIndex == 1)
+            if (this.comboBox1.SelectedIndex == 0 || this.comboBox1.SelectedIndex == 1 || this.comboBox1.SelectedIndex == 5)
             {
                 if (this.comboBox2.Items.Count == 2)
                 {

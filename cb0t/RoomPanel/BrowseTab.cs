@@ -119,6 +119,7 @@ namespace cb0t
             this.LeftContainer.Dispose();
             this.LeftContainer = null;
             this.files.Clear();
+            this.files = new List<BrowseItem>();
         }
 
         private void ChangeListContentsRequested(object sender, EventArgs e)

@@ -153,6 +153,7 @@ namespace cb0t
             this.StopClicked();
             this.audioList1.Items.Clear();
             this.play_list.Clear();
+            this.play_list = new List<AudioPlayerItem>();
             this.SavePlaylist();
         }
 

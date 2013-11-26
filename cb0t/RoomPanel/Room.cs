@@ -290,8 +290,8 @@ namespace cb0t
             }
             else if (this.Panel.Mode == ScreenMode.PM)
             {
-                this.Panel.PMTextReceived(this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...", null, PMTextReceivedType.Announce);
-                this.Panel.PMScribbleReceived(this.Panel.PMName, data);
+                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...", null, PMTextReceivedType.Announce);
+                this.Panel.PMScribbleReceived(null, null, this.Panel.PMName, data);
             }
 
             data = Zip.Compress(data);
@@ -462,9 +462,9 @@ namespace cb0t
             this.Panel = null;
             this.users.ForEach(x => x.Dispose());
             this.users.Clear();
-            this.users = null;
+            this.users = new List<User>();
             this.unknown_scribble_buffer.Clear();
-            this.unknown_scribble_buffer = null;
+            this.unknown_scribble_buffer = new List<byte>();
         }
 
         public void UpdatePersonalMessage()
