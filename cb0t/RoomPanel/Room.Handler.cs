@@ -126,6 +126,7 @@ namespace cb0t
             this.Panel.Userlist.ClearUserList();
             this.users.ForEach(x => x.Dispose());
             this.users.Clear();
+            this.users = new List<User>();
             this.Panel.ServerText("Logged in, retrieving user's list...");
             this.Panel.CanVC(false);
             this.CanVC = false;
@@ -459,13 +460,13 @@ namespace cb0t
         private void Eval_IsIgnoringYou(TCPPacketReader packet)
         {
             String name = packet.ReadString(this.crypto);
-            this.Panel.PMTextReceived(name, "User is ignoring you", null, PMTextReceivedType.Announce);
+            this.Panel.PMTextReceived(null, null, name, "User is ignoring you", null, PMTextReceivedType.Announce);
         }
 
         private void Eval_OfflineUser(TCPPacketReader packet)
         {
             String name = packet.ReadString(this.crypto);
-            this.Panel.PMTextReceived(name, "User is offline", null, PMTextReceivedType.Announce);
+            this.Panel.PMTextReceived(null, null, name, "User is offline", null, PMTextReceivedType.Announce);
         }
 
         private void Eval_Private(TCPPacketReader packet)
@@ -490,7 +491,7 @@ namespace cb0t
 
             if (ScriptEvents.OnPmReceiving(this, u, text))
             {
-                this.Panel.PMTextReceived(name, text, font, PMTextReceivedType.Text);
+                this.Panel.PMTextReceived(this, u, name, text, font, PMTextReceivedType.Text);
                 this.Panel.CheckUnreadStatus();
                 ScriptEvents.OnPmReceived(this, u, text);
             }
@@ -609,7 +610,7 @@ namespace cb0t
                         if (!u.Ignored)
                             if (ScriptEvents.OnVoiceClipReceiving(this, u))
                             {
-                                this.Panel.PMTextReceived(vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
                 }
@@ -644,7 +645,7 @@ namespace cb0t
                             if (!u.Ignored)
                                 if (ScriptEvents.OnVoiceClipReceiving(this, u))
                                 {
-                                    this.Panel.PMTextReceived(vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                    this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }
                     }
@@ -825,9 +826,14 @@ namespace cb0t
             {
                 case "cb0t_writing":
                     if (u == null) return;
-                    u.Writing = ((byte)packet) == 2;
-                    this.Panel.UpdateWriter(u);
-                    ScriptEvents.OnUserWritingStatusChanged(this, u);
+                    b = ((byte)packet) == 2;
+
+                    if (b != u.Writing)
+                    {
+                        u.Writing = b;
+                        this.Panel.UpdateWriter(u);
+                        ScriptEvents.OnUserWritingStatusChanged(this, u);
+                    }
                     break;
 
                 case "cb0t_latency_check":
@@ -939,7 +945,7 @@ namespace cb0t
                     if (user.Name == this.users[0].Name)
                         this.Panel.Scribble(data);
                     else
-                        this.Panel.PMScribbleReceived(user.Name, data);
+                        this.Panel.PMScribbleReceived(this, user, user.Name, data);
 
                     this.Panel.CheckUnreadStatus();
                     ScriptEvents.OnScribbleReceived(this, user);
@@ -980,7 +986,7 @@ namespace cb0t
 
             if (ScriptEvents.OnPmReceiving(this, u, text))
             {
-                this.Panel.PMTextReceived(name, text, font, PMTextReceivedType.Text);
+                this.Panel.PMTextReceived(this, u, name, text, font, PMTextReceivedType.Text);
                 this.Panel.CheckUnreadStatus();
                 ScriptEvents.OnPmReceived(this, u, text);
             }

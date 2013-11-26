@@ -53,7 +53,7 @@ namespace cb0t
         {
             byte[] buf = this.data_in.ToArray();
             this.data_in.Clear();
-            this.data_in = null;
+            this.data_in = new List<byte>();
 
             if (this.is_opus)
                 buf = Opus.Decode(buf);

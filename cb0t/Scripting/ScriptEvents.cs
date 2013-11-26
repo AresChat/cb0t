@@ -237,6 +237,30 @@ namespace cb0t
                 }
         }
 
+        public static void OnPmFirstReceived(Room room, User user)
+        {
+            if (Settings.GetReg<bool>("filter_on", false))
+                if (user.Name != room.MyName)
+                {
+                    FilterResult[] filters = Filter.GetFilters(room.Credentials.Name, FilterEvent.PMFirst, user.Name, null);
+
+                    foreach (FilterResult f in filters)
+                    {
+                        if (f.Task == FilterTask.Notify)
+                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                        else if (f.Task == FilterTask.Send)
+                        {
+                            if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                            else if (f.Text.StartsWith("/") && f.Text.Length > 1)
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                            else if (f.Text.Length > 0)
+                                room.SendText(f.Text.Replace("+n", user.Name));
+                        }
+                    }
+                }
+        }
+
         public static bool OnNudgeReceiving(Room room, User user)
         {
             AutoIgnoreType ai = AutoIgnores.IgnoreType(user.Name);

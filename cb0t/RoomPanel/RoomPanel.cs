@@ -163,7 +163,7 @@ namespace cb0t
             this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
         }
 
-        public void PMScribbleReceived(String name, byte[] data)
+        internal void PMScribbleReceived(Room room, User user, String name, byte[] data)
         {
             this.tabControl1.BeginInvoke((Action)(() =>
             {
@@ -174,6 +174,15 @@ namespace cb0t
                             PMTab tab = (PMTab)this.tabControl1.TabPages[i];
                             tab.Scribble(data);
                             tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == name);
+
+                            if (!tab.First)
+                            {
+                                tab.First = true;
+
+                                if (room != null && user != null)
+                                    ScriptEvents.OnPmFirstReceived(room, user);
+                            }
+
                             return;
                         }
 
@@ -186,10 +195,14 @@ namespace cb0t
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
                 new_tab.Scribble(data);
+                new_tab.First = true;
+
+                if (room != null && user != null)
+                    ScriptEvents.OnPmFirstReceived(room, user);
             }));
         }
 
-        public void PMTextReceived(String name, String text, AresFont font, PMTextReceivedType type)
+        internal void PMTextReceived(Room room, User user, String name, String text, AresFont font, PMTextReceivedType type)
         {
             this.tabControl1.BeginInvoke((Action)(() =>
             {
@@ -240,6 +253,14 @@ namespace cb0t
                                 }
                             }
 
+                            if (!tab.First)
+                            {
+                                tab.First = true;
+
+                                if (room != null && user != null)
+                                    ScriptEvents.OnPmFirstReceived(room, user);
+                            }
+
                             return;
                         }
 
@@ -282,6 +303,10 @@ namespace cb0t
                     }
 
                     new_tab.AutoReplySent = true;
+                    new_tab.First = true;
+
+                    if (room != null && user != null)
+                        ScriptEvents.OnPmFirstReceived(room, user);
                 }
             }));
         }

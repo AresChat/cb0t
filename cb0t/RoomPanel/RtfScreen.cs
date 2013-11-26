@@ -243,6 +243,8 @@ namespace cb0t
             this.ctx.Closed += this.CTXClosed;
             this.ctx.ItemClicked += this.CTXItemClicked;
             this.ContextMenuStrip = this.ctx;
+            this.paused_items.Clear();
+            this.paused_items = new List<PausedItem>();
         }
 
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -350,6 +352,7 @@ namespace cb0t
                         }
                     }
 
+                    this.paused_items = new List<PausedItem>();
                     this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- Screen unpaused");
                 }
                 else

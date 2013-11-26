@@ -150,7 +150,8 @@ namespace cb0t
         Part,
         Text,
         Emote,
-        PM
+        PM,
+        PMFirst
     }
 
     public enum FilterTask
