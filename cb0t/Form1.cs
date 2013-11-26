@@ -23,6 +23,7 @@ namespace cb0t
         private Thread sock_thread { get; set; }
         private Bitmap img_play { get; set; }
         private Bitmap img_pause { get; set; }
+        private VolumeControl volume { get; set; }
 
         private MediaIPC.WMP.WMPListener wmp { get; set; }
         private MediaIPC.Winamp.WinampListener winamp { get; set; }
@@ -314,6 +315,8 @@ namespace cb0t
                     this.showAsOnlineToolStripMenuItem.Enabled = false;
                 }
 
+                int vol = Settings.GetReg<int>("audio_volume", 70);
+                this.audio_content.SetVolume(vol);
                 this.audio_content.PlayPauseIconChanged += this.PlayPauseIconChanged;
                 this.audio_content.ShowAudioText += this.ShowAudioText;
                 this.toolStripButton5.Image = this.img_play;
@@ -324,12 +327,23 @@ namespace cb0t
                 this.vlc = new MediaIPC.VLC.VLCListener();
                 this.foobar = new MediaIPC.Foobar2000.FoobarListener();
 
+                this.volume = new VolumeControl();
+                this.volume.VolumeChanged += this.VolumeChanged;
+                this.volume.SetVolume(vol);
+
                 this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
                 this.sock_thread.Start();
                 this.timer2.Enabled = true;
 
                 this.clist_content.RefreshIfEmpty();
             }
+        }
+
+        private void VolumeChanged(object sender, VolumeControlValueChangedEventArgs e)
+        {
+            int vol = e.Volume;
+            Settings.SetReg("audio_volume", vol);
+            this.audio_content.SetVolume(vol);
         }
 
         private void SpellCheckUpdate2(object sender, EventArgs e)
@@ -667,7 +681,13 @@ namespace cb0t
             if (!AudioPanel.Available)
                 return;
 
-            if (e.ClickedItem.Equals(this.toolStripButton3))
+            if (e.ClickedItem.Equals(this.toolStripButton1))
+            {
+                this.volume.StartPosition = FormStartPosition.Manual;
+                this.volume.Location = new Point(MousePosition.X - 40, MousePosition.Y - 70);
+                this.volume.Show();
+            }
+            else if (e.ClickedItem.Equals(this.toolStripButton3))
                 this.audio_content.StopClicked();
             else if (e.ClickedItem.Equals(this.toolStripButton4))
                 this.audio_content.PreviousClicked();

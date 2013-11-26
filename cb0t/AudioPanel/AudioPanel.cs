@@ -59,6 +59,11 @@ namespace cb0t
             }
         }
 
+        public void SetVolume(int vol)
+        {
+            this.Player.settings.volume = vol;
+        }
+
         private void TimerTick(object sender, EventArgs e)
         {
             if (this.Player.playState == WMPPlayState.wmppsPlaying)

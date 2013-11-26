@@ -11,6 +11,7 @@ namespace cb0t
 {
     public partial class SettingsPanel : UserControl
     {
+        private ClientSettings client_settings { get; set; }
         private GlobalSettings global_settings { get; set; }
         private HashlinkSettings hashlink_settings { get; set; }
         private PersonalSettings personal_settings { get; set; }
@@ -30,6 +31,10 @@ namespace cb0t
 
         public void CreateSettings()
         {
+            this.client_settings = new ClientSettings();
+            this.client_settings.Dock = DockStyle.Fill;
+            this.client_settings.AutoScroll = true;
+            this.client_settings.Populate();
             this.global_settings = new GlobalSettings();
             this.global_settings.Dock = DockStyle.Fill;
             this.global_settings.AutoScroll = true;
@@ -83,18 +88,20 @@ namespace cb0t
                 this.panel1.Controls.RemoveAt(0);
 
             if (e.Node.Equals(this.treeView1.Nodes[0]))
-                this.panel1.Controls.Add(this.global_settings);
+                this.panel1.Controls.Add(this.client_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[1]))
-                this.panel1.Controls.Add(this.hashlink_settings);
+                this.panel1.Controls.Add(this.global_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[2]))
-                this.panel1.Controls.Add(this.personal_settings);
+                this.panel1.Controls.Add(this.hashlink_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[3]))
-                this.panel1.Controls.Add(this.audio_settings);
+                this.panel1.Controls.Add(this.personal_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[4]))
-                this.panel1.Controls.Add(this.filter_settings);
+                this.panel1.Controls.Add(this.audio_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[5]))
-                this.panel1.Controls.Add(this.menu_settings);
+                this.panel1.Controls.Add(this.filter_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[6]))
+                this.panel1.Controls.Add(this.menu_settings);
+            else if (e.Node.Equals(this.treeView1.Nodes[7]))
                 this.panel1.Controls.Add(this.privacy_settings);
         }
 

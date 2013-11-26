@@ -264,7 +264,13 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
             "None",
-            "English"});
+            "English",
+            "Dutch",
+            "French",
+            "Italian",
+            "Spanish",
+            "Spanish (Mexico)",
+            "Spanish (Catalan)"});
             this.comboBox2.Location = new System.Drawing.Point(32, 271);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(145, 21);

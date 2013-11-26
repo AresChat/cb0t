@@ -46,17 +46,18 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repeatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.importFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.content1 = new cb0t.Content();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.importFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.content1 = new cb0t.Content();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -151,6 +152,7 @@
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
+            this.toolStripButton1,
             this.toolStripSeparator2,
             this.toolStripButton3,
             this.toolStripButton4,
@@ -204,6 +206,23 @@
             this.repeatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.repeatToolStripMenuItem.Text = "Repeat";
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            // 
+            // importFilesToolStripMenuItem
+            // 
+            this.importFilesToolStripMenuItem.Name = "importFilesToolStripMenuItem";
+            this.importFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importFilesToolStripMenuItem.Text = "Import files";
+            // 
+            // importFolderToolStripMenuItem
+            // 
+            this.importFolderToolStripMenuItem.Name = "importFolderToolStripMenuItem";
+            this.importFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importFolderToolStripMenuItem.Text = "Import folder";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -245,16 +264,6 @@
             this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton6.Text = "next";
             // 
-            // content1
-            // 
-            this.content1.BackColor = System.Drawing.Color.White;
-            this.content1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.content1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.content1.Location = new System.Drawing.Point(0, 0);
-            this.content1.Name = "content1";
-            this.content1.Size = new System.Drawing.Size(884, 536);
-            this.content1.TabIndex = 1;
-            // 
             // timer1
             // 
             this.timer1.Interval = 1000;
@@ -265,22 +274,24 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // toolStripSeparator4
+            // toolStripButton1
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "volume";
             // 
-            // importFilesToolStripMenuItem
+            // content1
             // 
-            this.importFilesToolStripMenuItem.Name = "importFilesToolStripMenuItem";
-            this.importFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.importFilesToolStripMenuItem.Text = "Import files";
-            // 
-            // importFolderToolStripMenuItem
-            // 
-            this.importFolderToolStripMenuItem.Name = "importFolderToolStripMenuItem";
-            this.importFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.importFolderToolStripMenuItem.Text = "Import folder";
+            this.content1.BackColor = System.Drawing.Color.White;
+            this.content1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.content1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.content1.Location = new System.Drawing.Point(0, 0);
+            this.content1.Name = "content1";
+            this.content1.Size = new System.Drawing.Size(884, 536);
+            this.content1.TabIndex = 1;
             // 
             // Form1
             // 
@@ -340,6 +351,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem importFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 
