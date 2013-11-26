@@ -32,6 +32,36 @@ namespace cb0t
                     AFF = File.ReadAllBytes(Path.Combine(path, "english\\dictionary.aff"));
                     DIC = File.ReadAllBytes(Path.Combine(path, "english\\dictionary.dic"));
                     break;
+
+                case 2:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "dutch\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "dutch\\dictionary.dic"));
+                    break;
+
+                case 3:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "french\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "french\\dictionary.dic"));
+                    break;
+
+                case 4:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "italian\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "italian\\dictionary.dic"));
+                    break;
+
+                case 5:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "spanish\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "spanish\\dictionary.dic"));
+                    break;
+
+                case 6:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "spanish (mexico)\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "spanish (mexico)\\dictionary.dic"));
+                    break;
+
+                case 7:
+                    AFF = File.ReadAllBytes(Path.Combine(path, "spanish (catalan)\\dictionary.aff"));
+                    DIC = File.ReadAllBytes(Path.Combine(path, "spanish (catalan)\\dictionary.dic"));
+                    break;
             }
         }
 

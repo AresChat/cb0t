@@ -32,7 +32,7 @@ namespace cb0t
             if (e.ToolStrip is ToolStripDropDownMenu)
                 return;
 
-            bounds = new Rectangle(135, 3, e.ToolStrip.Width - 142, e.ToolStrip.Height - 6);
+            bounds = new Rectangle(155, 3, e.ToolStrip.Width - 162, e.ToolStrip.Height - 6);
 
             if (bounds.Width <= 0)
                 return;

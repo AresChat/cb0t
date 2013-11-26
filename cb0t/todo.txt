@@ -2,3 +2,4 @@
 single instance
 about tab with /cmds and version and links to data folder and codeplex
 locale
+audio player volume

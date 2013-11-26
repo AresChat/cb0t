@@ -86,6 +86,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SettingsPanel\ClientSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsPanel\ClientSettings.Designer.cs">
+      <DependentUpon>ClientSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="RoomPanel\Room.Handler.cs" />
     <Compile Include="VoiceClips\Opus.cs" />
     <Compile Include="RoomPanel\ClientFeatures.cs" />
@@ -387,8 +393,17 @@
     <Compile Include="VoiceClips\VoicePlayer.cs" />
     <Compile Include="VoiceClips\VoicePlayerState.cs" />
     <Compile Include="VoiceClips\VoiceRecorder.cs" />
+    <Compile Include="VolumeControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VolumeControl.Designer.cs">
+      <DependentUpon>VolumeControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPanel\ClientSettings.resx">
+      <DependentUpon>ClientSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Misc\ColorMenu.resx">
       <DependentUpon>ColorMenu.cs</DependentUpon>
@@ -471,6 +486,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RoomPanel\WritingPanel.resx">
       <DependentUpon>WritingPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VolumeControl.resx">
+      <DependentUpon>VolumeControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
