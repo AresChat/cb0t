@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.trackBar1 = new BorderlessTrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,6 +64,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TrackBar trackBar1;
+        private BorderlessTrackBar trackBar1;
     }
 }

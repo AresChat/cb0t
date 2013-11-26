@@ -86,6 +86,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\BorderlessTrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -393,10 +396,10 @@
     <Compile Include="VoiceClips\VoicePlayer.cs" />
     <Compile Include="VoiceClips\VoicePlayerState.cs" />
     <Compile Include="VoiceClips\VoiceRecorder.cs" />
-    <Compile Include="VolumeControl.cs">
+    <Compile Include="AudioPanel\VolumeControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VolumeControl.Designer.cs">
+    <Compile Include="AudioPanel\VolumeControl.Designer.cs">
       <DependentUpon>VolumeControl.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
@@ -487,7 +490,7 @@
     <EmbeddedResource Include="RoomPanel\WritingPanel.resx">
       <DependentUpon>WritingPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VolumeControl.resx">
+    <EmbeddedResource Include="AudioPanel\VolumeControl.resx">
       <DependentUpon>VolumeControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
