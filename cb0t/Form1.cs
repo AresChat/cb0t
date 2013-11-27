@@ -96,12 +96,17 @@ namespace cb0t
         }
 
         private IPEndPoint popup_ep = null;
+        private bool can_show_popup = true;
 
         public void ShowPopup(String title, String msg, IPEndPoint room, PopupSound sound)
         {
             if (Settings.GetReg<bool>("block_popups", false))
                 return;
 
+            if (!this.can_show_popup)
+                return;
+
+            this.can_show_popup = false;
             this.popup_ep = room;
             this.notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
             this.notifyIcon1.BalloonTipTitle = title;
@@ -807,6 +812,16 @@ namespace cb0t
             if (room != null)
                 if (e.KeyCode == Keys.F2)
                     room.StopRecording();
+        }
+
+        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        {
+            this.can_show_popup = true;
+        }
+
+        private void notifyIcon1_BalloonTipClosed(object sender, EventArgs e)
+        {
+            this.can_show_popup = true;
         }
     }
 }
