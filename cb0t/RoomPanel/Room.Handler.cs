@@ -373,7 +373,8 @@ namespace cb0t
             ScriptEvents.OnUserJoined(this, u);
 
             if (u.IsFriend)
-                this.ShowPopup("cb0t :: Friend", u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
+                if (!Settings.GetReg<bool>("block_friend_popup", false))
+                    this.ShowPopup("cb0t :: Friend", u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
         }
 
         private void Eval_Part(TCPPacketReader packet)

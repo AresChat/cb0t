@@ -34,6 +34,7 @@ namespace cb0t
             this.checkBox10.Checked = Settings.GetReg<bool>("block_cls", false);
             this.checkBox11.Checked = Settings.GetReg<bool>("block_popups", false);
             this.checkBox12.Checked = Settings.GetReg<bool>("back_bg", false);
+            this.checkBox13.Checked = Settings.GetReg<bool>("block_friend_popup", false);
 
             InstalledFontCollection fonts = new InstalledFontCollection();
 
@@ -135,6 +136,11 @@ namespace cb0t
         private void checkBox12_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SetReg("back_bg", this.checkBox12.Checked);
+        }
+
+        private void checkBox13_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SetReg("block_friend_popup", this.checkBox13.Checked);
         }
     }
 }

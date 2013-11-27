@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Client");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Global");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Chat");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Hashlink");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Personal");
             System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Audio");
@@ -78,7 +78,7 @@
             treeNode1.Name = "Node0";
             treeNode1.Text = "Client";
             treeNode2.Name = "Node0";
-            treeNode2.Text = "Global";
+            treeNode2.Text = "Chat";
             treeNode3.Name = "Node1";
             treeNode3.Text = "Hashlink";
             treeNode4.Name = "Node2";
