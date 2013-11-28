@@ -35,7 +35,7 @@
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Personal");
             System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Audio");
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Filter");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Menus");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Menu");
             System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Privacy");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -88,7 +88,7 @@
             treeNode6.Name = "Node0";
             treeNode6.Text = "Filter";
             treeNode7.Name = "Node1";
-            treeNode7.Text = "Menus";
+            treeNode7.Text = "Menu";
             treeNode8.Name = "Node2";
             treeNode8.Text = "Privacy";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {

@@ -17,6 +17,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.Settings, 3);
+        }
+
         public event EventHandler SpellCheckUpdate;
 
         public void Populate()

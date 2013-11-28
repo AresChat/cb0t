@@ -46,6 +46,11 @@ namespace cb0t
             this.BlackBG = black_bg;
         }
 
+        public void UpdateTemplate()
+        {
+
+        }
+
         public void ConnectEvents()
         {
             this.Panel.SendBox.KeyDown += this.SendBoxKeyDown;

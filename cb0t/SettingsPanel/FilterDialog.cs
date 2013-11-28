@@ -16,6 +16,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             bool needs_text = true;

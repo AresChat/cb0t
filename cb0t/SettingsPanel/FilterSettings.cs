@@ -18,6 +18,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.Settings, 11);
+        }
+
         public void Populate()
         {
             foreach (FilterItem f in Filter.Items)

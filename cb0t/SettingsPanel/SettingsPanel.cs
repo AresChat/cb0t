@@ -29,6 +29,21 @@ namespace cb0t
             this.treeView1.ExpandAll();
         }
 
+        public void UpdateTemplate()
+        {
+            this.client_settings.UpdateTemplate();
+            this.global_settings.UpdateTemplate();
+            this.hashlink_settings.UpdateTemplate();
+            this.personal_settings.UpdateTemplate();
+            this.audio_settings.UpdateTemplate();
+            this.filter_settings.UpdateTemplate();
+            this.menu_settings.UpdateTemplate();
+            this.privacy_settings.UpdateTemplate();
+
+            for (int i = 0; i < this.treeView1.Nodes.Count; i++)
+                this.treeView1.Nodes[i].Text = StringTemplate.Get(STType.Settings, (i * 2));
+        }
+
         public void CreateSettings()
         {
             this.client_settings = new ClientSettings();

@@ -31,6 +31,20 @@ namespace cb0t
             this.toolStripLabel1.BackColor = this.s_col;
         }
 
+        public void UpdateTemplate()
+        {
+            this.toolStripButton1.Text = StringTemplate.Get(STType.ScribbleEditor, 0);
+            this.toolStripButton2.Text = StringTemplate.Get(STType.ScribbleEditor, 1);
+            this.toolStripButton3.Text = StringTemplate.Get(STType.ScribbleEditor, 2);
+            this.toolStripButton4.Text = StringTemplate.Get(STType.ScribbleEditor, 3);
+            this.toolStripButton5.Text = StringTemplate.Get(STType.ScribbleEditor, 4);
+            this.toolStripButton6.Text = StringTemplate.Get(STType.ScribbleEditor, 5);
+            this.toolStripButton7.Text = StringTemplate.Get(STType.ScribbleEditor, 6);
+            this.toolStripButton8.Text = StringTemplate.Get(STType.ScribbleEditor, 7);
+            this.toolStripButton9.Text = StringTemplate.Get(STType.ScribbleEditor, 9);
+            this.toolStripButton10.Text = StringTemplate.Get(STType.ScribbleEditor, 8);
+        }
+
         public void ResetCanvas()
         {
             if (this.undo != null)
