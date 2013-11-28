@@ -17,6 +17,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.Settings, 7);
+        }
+
         public void Populate()
         {
             String str;

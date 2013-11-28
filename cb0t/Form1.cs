@@ -43,6 +43,7 @@ namespace cb0t
             AutoIgnores.Load();
             Narrator.Init();
             VoicePlayer.Init();
+            StringTemplate.Load();
 
             this.InitializeComponent();
             this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
@@ -336,12 +337,43 @@ namespace cb0t
                 this.volume.VolumeChanged += this.VolumeChanged;
                 this.volume.SetVolume(vol);
 
+                this.UpdateTemplate();
+
                 this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
                 this.sock_thread.Start();
                 this.timer2.Enabled = true;
 
                 this.clist_content.RefreshIfEmpty();
             }
+        }
+
+        private void UpdateTemplate()
+        {
+            this.settings_content.UpdateTemplate();
+            this.toolStripDropDownButton1.ToolTipText = StringTemplate.Get(STType.AudioBar, 0);
+            this.clearListToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 1);
+            this.randomToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 2);
+            this.repeatToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 3);
+            this.importFilesToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 4);
+            this.importFolderToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 5);
+            this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.AudioBar, 6);
+            this.toolStripButton3.ToolTipText = StringTemplate.Get(STType.AudioBar, 7);
+            this.toolStripButton4.ToolTipText = StringTemplate.Get(STType.AudioBar, 8);
+            this.toolStripButton5.ToolTipText = StringTemplate.Get(STType.AudioBar, 9);
+            this.toolStripButton6.ToolTipText = StringTemplate.Get(STType.AudioBar, 10);
+            this.toolStrip1.Items[0].ToolTipText = StringTemplate.Get(STType.TopBar, 0);
+            this.toolStrip1.Items[2].ToolTipText = StringTemplate.Get(STType.TopBar, 1);
+            this.toolStrip1.Items[4].ToolTipText = StringTemplate.Get(STType.TopBar, 2);
+
+            for (int i = 0; i < this.toolStrip1.Items.Count; i++)
+                if (this.toolStrip1.Items[i] is ChannelListButton)
+                {
+                    this.toolStrip1.Items[i].Text = this.toolStrip1.Items[i].Text.Replace("Channels", StringTemplate.Get(STType.TopBar, 2)).Replace("Searching", StringTemplate.Get(STType.TopBar, 3));
+                    break;
+                }
+
+            RoomPool.Rooms.ForEach(x => x.UpdateTemplate());
+            SharedUI.UpdateTemplate();
         }
 
         private void VolumeChanged(object sender, VolumeControlValueChangedEventArgs e)
@@ -557,7 +589,7 @@ namespace cb0t
                 for (int i = 0; i < this.toolStrip1.Items.Count; i++)
                     if (this.toolStrip1.Items[i] is ChannelListButton)
                     {
-                        this.toolStrip1.Items[i].Text = e.Text;
+                        this.toolStrip1.Items[i].Text = e.Text.Replace("Channels", StringTemplate.Get(STType.TopBar, 2)).Replace("Searching", StringTemplate.Get(STType.TopBar, 3));
                         break;
                     }
             }));

@@ -16,6 +16,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.Settings, 5);
+        }
+
         public event EventHandler JoinFromHashlink;
 
         public void Populate()

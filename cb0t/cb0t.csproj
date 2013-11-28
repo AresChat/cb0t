@@ -96,6 +96,7 @@
       <DependentUpon>ClientSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="RoomPanel\Room.Handler.cs" />
+    <Compile Include="StringTemplate.cs" />
     <Compile Include="VoiceClips\Opus.cs" />
     <Compile Include="RoomPanel\ClientFeatures.cs" />
     <Compile Include="MediaIPC\Foobar2000\FoobarListener.cs" />

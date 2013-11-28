@@ -26,5 +26,11 @@ namespace cb0t
             OpenFile = new OpenFileDialog();
             OpenFolder = new FolderBrowserDialog();
         }
+
+        public static void UpdateTemplate()
+        {
+            ScribbleEditor.UpdateTemplate();
+            ColorPicker.UpdateTemplate();
+        }
     }
 }

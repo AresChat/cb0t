@@ -17,6 +17,16 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label5.Text = StringTemplate.Get(STType.About, 0);
+            this.label6.Text = StringTemplate.Get(STType.About, 1);
+            this.label1.Text = StringTemplate.Get(STType.Settings, 1);
+            this.button1.Text = StringTemplate.Get(STType.ClientSettings, 0);
+            this.label4.Text = StringTemplate.Get(STType.ClientSettings, 1) + ":";
+            this.label7.Text = StringTemplate.Get(STType.ClientSettings, 2);
+        }
+
         public void Populate()
         {
             this.label3.Text = "version " + Settings.APP_VERSION;

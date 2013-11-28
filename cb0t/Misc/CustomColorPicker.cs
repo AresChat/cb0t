@@ -20,6 +20,13 @@ namespace cb0t
             this.doubleBufferedComboBox1.SelectedIndex = 0;
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.ColorPicker, 0) + ":";
+            this.label2.Text = StringTemplate.Get(STType.ColorPicker, 1) + ":";
+            this.label7.Text = StringTemplate.Get(STType.ColorPicker, 2) + ":";
+        }
+
         private Pen pen = new Pen(Brushes.Black, 1);
         private SolidBrush text_brush = new SolidBrush(Color.Black);
         private List<Color> list = new List<Color>();

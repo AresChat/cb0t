@@ -16,6 +16,11 @@ namespace cb0t
             InitializeComponent();
         }
 
+        public void UpdateTemplate()
+        {
+            this.label1.Text = StringTemplate.Get(STType.Settings, 13);
+        }
+
         public void Populate()
         {
             this.comboBox1.SelectedIndex = 0;
