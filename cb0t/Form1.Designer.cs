@@ -188,41 +188,41 @@
             // clearListToolStripMenuItem
             // 
             this.clearListToolStripMenuItem.Name = "clearListToolStripMenuItem";
-            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.clearListToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clearListToolStripMenuItem.Text = "Clear list";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // randomToolStripMenuItem
             // 
             this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
-            this.randomToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.randomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.randomToolStripMenuItem.Text = "Random";
             // 
             // repeatToolStripMenuItem
             // 
             this.repeatToolStripMenuItem.Name = "repeatToolStripMenuItem";
-            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.repeatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.repeatToolStripMenuItem.Text = "Repeat";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // importFilesToolStripMenuItem
             // 
             this.importFilesToolStripMenuItem.Name = "importFilesToolStripMenuItem";
-            this.importFilesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.importFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importFilesToolStripMenuItem.Text = "Import files";
             // 
             // importFolderToolStripMenuItem
             // 
             this.importFolderToolStripMenuItem.Name = "importFolderToolStripMenuItem";
-            this.importFolderToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.importFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importFolderToolStripMenuItem.Text = "Import folder";
             // 
             // toolStripButton1

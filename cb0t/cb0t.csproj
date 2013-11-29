@@ -574,8 +574,6 @@
     <Content Include="ni.ico" />
     <None Include="Resources\scribble.png" />
     <None Include="Resources\folder2.png" />
-    <None Include="Resources\audio_pause.png" />
-    <None Include="Resources\audio_play.png" />
     <None Include="Resources\note.png" />
     <None Include="Resources\tab_read.png" />
     <None Include="Resources\tab_unread.png" />
@@ -583,6 +581,8 @@
     <None Include="Resources\folder.png" />
     <None Include="Resources\button4bg.png" />
     <None Include="Resources\musicbg.png" />
+    <None Include="Resources\audio_pause.png" />
+    <None Include="Resources\audio_play.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

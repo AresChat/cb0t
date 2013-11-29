@@ -20,6 +20,23 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 3);
+            this.checkBox1.Text = StringTemplate.Get(STType.ChatSettings, 0);
+            this.checkBox12.Text = StringTemplate.Get(STType.ChatSettings, 1);
+            this.checkBox2.Text = StringTemplate.Get(STType.ChatSettings, 2);
+            this.checkBox3.Text = StringTemplate.Get(STType.ChatSettings, 3);
+            this.checkBox4.Text = StringTemplate.Get(STType.ChatSettings, 4);
+            this.checkBox5.Text = StringTemplate.Get(STType.ChatSettings, 5);
+            this.checkBox6.Text = StringTemplate.Get(STType.ChatSettings, 6);
+            this.checkBox7.Text = StringTemplate.Get(STType.ChatSettings, 7);
+            this.checkBox8.Text = StringTemplate.Get(STType.ChatSettings, 8);
+            this.checkBox9.Text = StringTemplate.Get(STType.ChatSettings, 9);
+            this.checkBox10.Text = StringTemplate.Get(STType.ChatSettings, 10);
+            this.checkBox11.Text = StringTemplate.Get(STType.ChatSettings, 11);
+            this.checkBox13.Text = StringTemplate.Get(STType.ChatSettings, 12);
+            this.label4.Text = StringTemplate.Get(STType.ChatSettings, 13) + ":";
+            this.groupBox1.Text = StringTemplate.Get(STType.ChatSettings, 14);
+            this.label3.Text = StringTemplate.Get(STType.ChatSettings, 15) + ":";
+            this.label2.Text = StringTemplate.Get(STType.ChatSettings, 16) + ":";
         }
 
         public event EventHandler SpellCheckUpdate;

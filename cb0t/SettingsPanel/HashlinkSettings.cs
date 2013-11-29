@@ -19,6 +19,7 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 5);
+            this.button1.Text = StringTemplate.Get(STType.HashlinkSettings, 0);
         }
 
         public event EventHandler JoinFromHashlink;
