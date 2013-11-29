@@ -57,7 +57,25 @@ namespace cb0t
             items.Add(new STItem { Type = STType.ClientSettings, Index = 1, Text = "1Template" });
             items.Add(new STItem { Type = STType.ClientSettings, Index = 2, Text = "1For in-room commands, type /cmds" });
 
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 0, Text = "1Enable timestamps" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 1, Text = "1Enable black background" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 2, Text = "1Enable emoticons" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 3, Text = "1Enable cb0t encryption protocol" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 4, Text = "1Send typing status" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 5, Text = "1Receive private messages" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 6, Text = "1Receive nudges" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 7, Text = "1Receive scribbles" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 8, Text = "1Receive server latency" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 9, Text = "1Block redirect requests" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 10, Text = "1Block clear screen requests" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 11, Text = "1Block all popups" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 12, Text = "1Block friend popups" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 13, Text = "1Spell checking" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 14, Text = "1Global font" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 15, Text = "1Font" });
+            items.Add(new STItem { Type = STType.ChatSettings, Index = 16, Text = "1Size" });
 
+            items.Add(new STItem { Type = STType.HashlinkSettings, Index = 0, Text = "1connect" });
 
 
 
