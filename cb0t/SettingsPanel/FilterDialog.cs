@@ -18,7 +18,7 @@ namespace cb0t
 
         public void UpdateTemplate()
         {
-
+            this.button1.Text = StringTemplate.Get(STType.FilterSettings, 4);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -33,7 +33,7 @@ namespace cb0t
                 if (String.IsNullOrEmpty(this.textBox3.Text))
                     if (this.textBox3.Text.Trim(' ').Length == 0)
                     {
-                        MessageBox.Show("Missing text in section 7", "cb0t", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(StringTemplate.Get(STType.FilterSettings, 5), "cb0t", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 

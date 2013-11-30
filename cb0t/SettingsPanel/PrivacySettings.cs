@@ -19,6 +19,15 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 15);
+            this.label2.Text = StringTemplate.Get(STType.PrivacySettings, 0) + ":";
+            this.dataGridView1.Columns[0].HeaderText = StringTemplate.Get(STType.PrivacySettings, 1);
+            this.label3.Text = StringTemplate.Get(STType.PrivacySettings, 1) + ":";
+            this.dataGridView1.Columns[1].HeaderText = StringTemplate.Get(STType.PrivacySettings, 2);
+            this.label4.Text = StringTemplate.Get(STType.PrivacySettings, 2) + ":";
+            this.dataGridView1.Columns[2].HeaderText = StringTemplate.Get(STType.PrivacySettings, 3);
+            this.label5.Text = StringTemplate.Get(STType.PrivacySettings, 3) + ":";
+            this.button1.Text = StringTemplate.Get(STType.PrivacySettings, 4);
+            this.removeToolStripMenuItem.Text = StringTemplate.Get(STType.PrivacySettings, 5);
         }
 
         public void Populate()

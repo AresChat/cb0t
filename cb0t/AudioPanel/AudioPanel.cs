@@ -36,6 +36,15 @@ namespace cb0t
         public static bool DoRandom { get; set; }
         public static String Song = String.Empty;
 
+        public void UpdateTemplate()
+        {
+            this.audioList1.Columns[0].Text = StringTemplate.Get(STType.AudioPlayer, 2);
+            this.audioList1.Columns[1].Text = StringTemplate.Get(STType.AudioPlayer, 3);
+            this.audioList1.Columns[2].Text = StringTemplate.Get(STType.AudioPlayer, 4);
+            this.audioList1.Columns[3].Text = StringTemplate.Get(STType.AudioPlayer, 5);
+            this.removeFromPlaylistToolStripMenuItem.Text = StringTemplate.Get(STType.AudioPlayer, 6);
+        }
+
         public AudioPanel()
         {
             this.InitializeComponent();
@@ -321,7 +330,7 @@ namespace cb0t
                 e.Graphics.FillRectangle(lb, r);
 
             e.Graphics.DrawRectangle(this.column_outline, r);
-            e.Graphics.DrawString("Now playing", this.Font, this.column_text_brush, new PointF(3, 5));
+            e.Graphics.DrawString(StringTemplate.Get(STType.AudioPlayer, 1), this.Font, this.column_text_brush, new PointF(3, 5));
         }
 
         private void AudioPanel_DragEnter(object sender, DragEventArgs e)

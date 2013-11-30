@@ -77,10 +77,59 @@ namespace cb0t
 
             items.Add(new STItem { Type = STType.HashlinkSettings, Index = 0, Text = "1connect" });
 
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 0, Text = "1Name" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 1, Text = "1Country" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 2, Text = "1Region" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 3, Text = "1Age" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 4, Text = "1Gender" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 5, Text = "1Secret" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 6, Text = "1Personal message" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 7, Text = "1update" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 8, Text = "1PM auto reply" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 9, Text = "1Enable PM auto reply" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 10, Text = "1Avatar" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 11, Text = "1clear" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 12, Text = "1User Font" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 13, Text = "1Text" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 14, Text = "1Font" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 15, Text = "1Size" });
+            items.Add(new STItem { Type = STType.PersonalSettings, Index = 16, Text = "1Enable user font" });
 
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 0, Text = "1Voice clips" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 1, Text = "1Record device" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 2, Text = "1Playback device" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 3, Text = "1Receive public voice clips" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 4, Text = "1Receive private voice clips" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 5, Text = "1Record using Opus codec" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 6, Text = "1Now playing" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 7, Text = "1Source" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 8, Text = "1Show songs in user list" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 9, Text = "1Play notication sounds" });
+            items.Add(new STItem { Type = STType.AudioSettings, Index = 10, Text = "1Enable chat narration" });
 
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 0, Text = "1Add" });
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 1, Text = "1Edit" });
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 2, Text = "1Remove" });
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 3, Text = "1Enable filter" });
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 4, Text = "1ok" });
+            items.Add(new STItem { Type = STType.FilterSettings, Index = 5, Text = "1missing text in section 7" });
 
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 0, Text = "1User list menu options" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 1, Text = "1Room menu options" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 2, Text = "1Name" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 3, Text = "1Action" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 4, Text = "1Remove" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 5, Text = "1Add new menu option" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 6, Text = "1Option name" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 7, Text = "1Action text" });
+            items.Add(new STItem { Type = STType.MenuSettings, Index = 8, Text = "1add" });
 
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 0, Text = "1Auto ignored users" });
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 1, Text = "1Condition" });
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 2, Text = "1Name" });
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 3, Text = "1Block" });
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 4, Text = "1add" });
+            items.Add(new STItem { Type = STType.PrivacySettings, Index = 5, Text = "1Remove" });
 
             items.Add(new STItem { Type = STType.ScribbleEditor, Index = 0, Text = "1thin brush" });
             items.Add(new STItem { Type = STType.ScribbleEditor, Index = 1, Text = "1medium brush" });
@@ -96,6 +145,14 @@ namespace cb0t
             items.Add(new STItem { Type = STType.ColorPicker, Index = 0, Text = "1Chosen color" });
             items.Add(new STItem { Type = STType.ColorPicker, Index = 1, Text = "1Pick a web color" });
             items.Add(new STItem { Type = STType.ColorPicker, Index = 2, Text = "1Pick an ares color" });
+
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 0, Text = "1Are you sure you want to clear your play list?" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 1, Text = "1Now playing" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 2, Text = "1Title" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 3, Text = "1Artist" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 4, Text = "1Album" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 5, Text = "1Duration" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 6, Text = "1remove from playlist" });
         }
 
         public static String Get(STType type, int index)
@@ -118,11 +175,9 @@ namespace cb0t
         FilterSettings = 9,
         MenuSettings = 10,
         PrivacySettings = 11,
-
-
-
-        ScribbleEditor = 40,
-        ColorPicker = 41
+        ScribbleEditor = 12,
+        ColorPicker = 13,
+        AudioPlayer = 14
     }
 
     class STItem
