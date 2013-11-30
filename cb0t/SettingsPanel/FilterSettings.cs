@@ -21,6 +21,11 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 11);
+            this.addToolStripMenuItem.Text = StringTemplate.Get(STType.FilterSettings, 0);
+            this.editToolStripMenuItem.Text = StringTemplate.Get(STType.FilterSettings, 1);
+            this.removeToolStripMenuItem.Text = StringTemplate.Get(STType.FilterSettings, 2);
+            this.checkBox1.Text = StringTemplate.Get(STType.FilterSettings, 3);
+            this.filter_dialog.UpdateTemplate();
         }
 
         public void Populate()

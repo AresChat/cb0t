@@ -19,7 +19,17 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 9);
-            
+            this.groupBox1.Text = StringTemplate.Get(STType.AudioSettings, 0);
+            this.label2.Text = StringTemplate.Get(STType.AudioSettings, 1) + ":";
+            this.label3.Text = StringTemplate.Get(STType.AudioSettings, 2) + ":";
+            this.checkBox1.Text = StringTemplate.Get(STType.AudioSettings, 3);
+            this.checkBox2.Text = StringTemplate.Get(STType.AudioSettings, 4);
+            this.checkBox6.Text = StringTemplate.Get(STType.AudioSettings, 5);
+            this.groupBox2.Text = StringTemplate.Get(STType.AudioSettings, 6);
+            this.label4.Text = StringTemplate.Get(STType.AudioSettings, 7) + ":";
+            this.checkBox3.Text = StringTemplate.Get(STType.AudioSettings, 8);
+            this.checkBox4.Text = StringTemplate.Get(STType.AudioSettings, 9);
+            this.checkBox5.Text = StringTemplate.Get(STType.AudioSettings, 10);
         }
 
         public void Populate()

@@ -20,6 +20,28 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.label1.Text = StringTemplate.Get(STType.Settings, 7);
+            this.label3.Text = StringTemplate.Get(STType.PersonalSettings, 0) + ":";
+            this.label9.Text = StringTemplate.Get(STType.PersonalSettings, 0) + ":";
+            this.label6.Text = StringTemplate.Get(STType.PersonalSettings, 1) + ":";
+            this.label7.Text = StringTemplate.Get(STType.PersonalSettings, 2) + ":";
+            this.label4.Text = StringTemplate.Get(STType.PersonalSettings, 3) + ":";
+            this.label5.Text = StringTemplate.Get(STType.PersonalSettings, 4) + ":";
+            this.comboBox2.Items[0] = StringTemplate.Get(STType.PersonalSettings, 5);
+            this.comboBox3.Items[0] = StringTemplate.Get(STType.PersonalSettings, 5);
+            this.comboBox4.Items[0] = StringTemplate.Get(STType.PersonalSettings, 5);
+            this.label2.Text = StringTemplate.Get(STType.PersonalSettings, 6) + ":";
+            this.button1.Text = StringTemplate.Get(STType.PersonalSettings, 7);
+            this.button2.Text = StringTemplate.Get(STType.PersonalSettings, 7);
+            this.button4.Text = StringTemplate.Get(STType.PersonalSettings, 7);
+            this.label8.Text = StringTemplate.Get(STType.PersonalSettings, 8) + ": [+n]";
+            this.checkBox1.Text = StringTemplate.Get(STType.PersonalSettings, 9);
+            this.groupBox4.Text = StringTemplate.Get(STType.PersonalSettings, 10);
+            this.button3.Text = StringTemplate.Get(STType.PersonalSettings, 11);
+            this.groupBox3.Text = StringTemplate.Get(STType.PersonalSettings, 12);
+            this.label10.Text = StringTemplate.Get(STType.PersonalSettings, 13) + ":";
+            this.label12.Text = StringTemplate.Get(STType.PersonalSettings, 14) + ":";
+            this.label11.Text = StringTemplate.Get(STType.PersonalSettings, 15) + ":";
+            this.checkBox2.Text = StringTemplate.Get(STType.PersonalSettings, 16);
         }
 
         public void Populate()

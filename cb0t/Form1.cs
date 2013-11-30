@@ -364,6 +364,7 @@ namespace cb0t
             this.toolStrip1.Items[0].ToolTipText = StringTemplate.Get(STType.TopBar, 0);
             this.toolStrip1.Items[2].ToolTipText = StringTemplate.Get(STType.TopBar, 1);
             this.toolStrip1.Items[4].ToolTipText = StringTemplate.Get(STType.TopBar, 2);
+            this.audio_content.UpdateTemplate();
 
             for (int i = 0; i < this.toolStrip1.Items.Count; i++)
                 if (this.toolStrip1.Items[i] is ChannelListButton)
@@ -748,7 +749,7 @@ namespace cb0t
                 AudioPanel.DoRepeat = !AudioPanel.DoRepeat;
             else if (e.ClickedItem.Equals(this.clearListToolStripMenuItem))
             {
-                DialogResult dr = MessageBox.Show("Are you sure you want to clear your play list?",
+                DialogResult dr = MessageBox.Show(StringTemplate.Get(STType.AudioPlayer, 0),
                                                   "cb0t",
                                                   MessageBoxButtons.YesNo,
                                                   MessageBoxIcon.Question);
