@@ -52,6 +52,25 @@ namespace cb0t
             this.userListBox1.ContextMenuStrip = this.ctx_menu;
         }
 
+        public void UpdateTemplate()
+        {
+            this.ctx_menu.Items[2].Text = StringTemplate.Get(STType.UserList, 1);
+            this.ctx_menu.Items[3].Text = StringTemplate.Get(STType.UserList, 2);
+            this.ctx_menu.Items[4].Text = StringTemplate.Get(STType.UserList, 3);
+            this.ctx_menu.Items[5].Text = StringTemplate.Get(STType.UserList, 4);
+            this.ctx_menu.Items[6].Text = StringTemplate.Get(STType.UserList, 5);
+            this.ctx_menu.Items[7].Text = StringTemplate.Get(STType.UserList, 6);
+            this.ctx_menu.Items[9].Text = StringTemplate.Get(STType.UserList, 7);
+            this.ctx_menu.Items[10].Text = StringTemplate.Get(STType.UserList, 8);
+            this.ctx_menu.Items[11].Text = StringTemplate.Get(STType.UserList, 9);
+            this.ctx_menu.Items[12].Text = StringTemplate.Get(STType.UserList, 10);
+            this.ctx_menu.Items[14].Text = StringTemplate.Get(STType.UserList, 11);
+            this.ctx_menu.Items[15].Text = StringTemplate.Get(STType.UserList, 12);
+            this.ctx_menu.Items[16].Text = StringTemplate.Get(STType.UserList, 13);
+            this.ctx_menu.Items[17].Text = StringTemplate.Get(STType.UserList, 14);
+            this.userListHeader1.UpdateTemplate();
+        }
+
         public void SetBlack()
         {
             this.userListBox1.BackColor = Color.Black;
@@ -121,7 +140,7 @@ namespace cb0t
                 {
                     can_show = true;
                     this.CTXUserName = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.Name;
-                    this.ctx_menu.Items[0].Text = "Options for: " + this.CTXUserName;
+                    this.ctx_menu.Items[0].Text = StringTemplate.Get(STType.UserList, 0) + ": " + this.CTXUserName;
                     this.ctx_menu.Items[7].Visible = ((UserListBoxItem)this.userListBox1.Items[i]).Owner.HasFiles;
 
                     for (int x = 8; x < 13; x++)
@@ -308,7 +327,7 @@ namespace cb0t
                     if (this.userListBox1.Items[i] is UserListBoxItem)
                         total_count++;
 
-                this.userListHeader1.HeaderText = "Users (" + total_count + ")";
+                this.userListHeader1.HeaderText = StringTemplate.Get(STType.UserList, 15) + " (" + total_count + ")";
                 this.userListHeader1.Invalidate();
             }));
         }
@@ -483,7 +502,7 @@ namespace cb0t
                     if (this.userListBox1.Items[i] is UserListBoxItem)
                         total_count++;
 
-                this.userListHeader1.HeaderText = "Users (" + total_count + ")";
+                this.userListHeader1.HeaderText = StringTemplate.Get(STType.UserList, 15) + " (" + total_count + ")";
                 this.userListHeader1.Invalidate();
             }));
         }

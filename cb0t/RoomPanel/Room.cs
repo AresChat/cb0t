@@ -48,7 +48,8 @@ namespace cb0t
 
         public void UpdateTemplate()
         {
-
+            this.Panel.Userlist.UpdateTemplate();
+            this.Panel.UpdateTemplate();
         }
 
         public void ConnectEvents()
@@ -72,6 +73,8 @@ namespace cb0t
                 this.Panel.Userlist.SetBlack();
                 this.Panel.SetToBlack();
             }
+
+            this.UpdateTemplate();
         }
 
         private void VoiceRecordingButtonClicked(object sender, EventArgs e)
@@ -797,6 +800,8 @@ namespace cb0t
                                     this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
                                 else if (text == "/lag")
                                     this.sock.SendPriority(TCPOutbound.ManualLag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                                else if (text == "/client")
+                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CLIENT, this.crypto));
                                 else if (text == "/np")
                                 {
                                     if (!String.IsNullOrEmpty(Helpers.NP))

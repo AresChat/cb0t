@@ -1,3 +1,8 @@
 ﻿cb0t://
 single instance
-locale
+locale:
+outbox
+button bar
+room menu
+messages
+browse tab

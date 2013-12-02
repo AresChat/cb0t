@@ -153,11 +153,61 @@ namespace cb0t
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 4, Text = "1Album" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 5, Text = "1Duration" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 6, Text = "1remove from playlist" });
+
+            items.Add(new STItem { Type = STType.ChannelList, Index = 0, Text = "1Refresh" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 1, Text = "1Find" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 2, Text = "1Language" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 3, Text = "1Name" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 4, Text = "1Topic" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 5, Text = "1Export hashlink" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 6, Text = "1Add to favourites" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 7, Text = "1Remove from favourites" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 8, Text = "1Auto join" });
+            items.Add(new STItem { Type = STType.ChannelList, Index = 9, Text = "1Admin password" });
+
+            items.Add(new STItem { Type = STType.Commands, Index = 0, Text = "1Time: +x" });
+            items.Add(new STItem { Type = STType.Commands, Index = 1, Text = "1Client: +x - running for +d days, +h hours, +m minutes" });
+            items.Add(new STItem { Type = STType.Commands, Index = 2, Text = "1Uptime: +d days, +h hours, +m minutes" });
+            items.Add(new STItem { Type = STType.Commands, Index = 3, Text = "1Graphics: +x" });
+            items.Add(new STItem { Type = STType.Commands, Index = 4, Text = "1Disk Space: +xGB out of +yGB available (+z% usage)" });
+            items.Add(new STItem { Type = STType.Commands, Index = 5, Text = "1Operating System: +x" });
+            items.Add(new STItem { Type = STType.Commands, Index = 6, Text = "1Processor: +x" });
+            items.Add(new STItem { Type = STType.Commands, Index = 7, Text = "1Memory: +xMB out of +yMB available (+z% usage)" });
+
+            items.Add(new STItem { Type = STType.UserList, Index = 0, Text = "1Options for" });
+            items.Add(new STItem { Type = STType.UserList, Index = 1, Text = "1Nudge" });
+            items.Add(new STItem { Type = STType.UserList, Index = 2, Text = "1Whois" });
+            items.Add(new STItem { Type = STType.UserList, Index = 3, Text = "1Ignore/Unignore" });
+            items.Add(new STItem { Type = STType.UserList, Index = 4, Text = "1Copy name to clipboard" });
+            items.Add(new STItem { Type = STType.UserList, Index = 5, Text = "1Add/Remove friend" });
+            items.Add(new STItem { Type = STType.UserList, Index = 6, Text = "1Browse" });
+            items.Add(new STItem { Type = STType.UserList, Index = 7, Text = "1Kill" });
+            items.Add(new STItem { Type = STType.UserList, Index = 8, Text = "1Ban" });
+            items.Add(new STItem { Type = STType.UserList, Index = 9, Text = "1Muzzle" });
+            items.Add(new STItem { Type = STType.UserList, Index = 10, Text = "1Unmuzzle" });
+            items.Add(new STItem { Type = STType.UserList, Index = 11, Text = "1Host kill" });
+            items.Add(new STItem { Type = STType.UserList, Index = 12, Text = "1Host ban" });
+            items.Add(new STItem { Type = STType.UserList, Index = 13, Text = "1Host muzzle" });
+            items.Add(new STItem { Type = STType.UserList, Index = 14, Text = "1Host unmuzzle" });
+            items.Add(new STItem { Type = STType.UserList, Index = 15, Text = "1Users" });
+            items.Add(new STItem { Type = STType.UserList, Index = 16, Text = "1Server" });
+            items.Add(new STItem { Type = STType.UserList, Index = 17, Text = "1Lag" });
+
+            items.Add(new STItem { Type = STType.InBox, Index = 0, Text = "1Cut" });
+            items.Add(new STItem { Type = STType.InBox, Index = 1, Text = "1Copy" });
+            items.Add(new STItem { Type = STType.InBox, Index = 2, Text = "1Paste" });
+            items.Add(new STItem { Type = STType.InBox, Index = 3, Text = "1Add to dictionary" });
         }
 
         public static String Get(STType type, int index)
         {
-            return items.Find(x => x.Type == type && x.Index == index).Text;
+            try
+            {
+                return items.Find(x => x.Type == type && x.Index == index).Text;
+            }
+            catch { }
+
+            return String.Empty;
         }
     }
 
@@ -177,7 +227,11 @@ namespace cb0t
         PrivacySettings = 11,
         ScribbleEditor = 12,
         ColorPicker = 13,
-        AudioPlayer = 14
+        AudioPlayer = 14,
+        ChannelList = 15,
+        Commands = 16,
+        UserList = 17,
+        InBox = 18
     }
 
     class STItem

@@ -16,7 +16,24 @@ namespace cb0t
         {
             get
             {
-                return "Time: " + DateTime.Now.ToString();
+                String a = DateTime.Now.ToString();
+                return StringTemplate.Get(STType.Commands, 0).Replace("+x", a);
+            }
+        }
+
+        public static String CMD_CLIENT
+        {
+            get
+            {
+                long ticks = (long)Settings.TimeLong;
+                ticks = (ticks - ticks - ticks);
+                TimeSpan ts = DateTime.Now.ToUniversalTime() - DateTime.Now.ToUniversalTime().AddMilliseconds(ticks);
+                String str = StringTemplate.Get(STType.Commands, 1);
+                str = str.Replace("+x", Settings.APP_NAME + " " + Settings.APP_VERSION);
+                str = str.Replace("+d", ts.Days.ToString());
+                str = str.Replace("+h", ts.Hours.ToString());
+                str = str.Replace("+m", ts.Minutes.ToString());
+                return str;
             }
         }
 
@@ -24,7 +41,7 @@ namespace cb0t
         {
             get
             {
-                String str = "Uptime: ";
+                String str = StringTemplate.Get(STType.Commands, 2);
 
                 try
                 {
@@ -32,7 +49,9 @@ namespace cb0t
                     {
                         DateTime lastBootUp = ManagementDateTimeConverter.ToDateTime(mo["LastBootUpTime"].ToString());
                         TimeSpan ts = DateTime.Now.ToUniversalTime() - lastBootUp.ToUniversalTime();
-                        str += ts.Days + " days, " + ts.Hours + " hours, " + ts.Minutes + " minutes";
+                        str = str.Replace("+d", ts.Days.ToString());
+                        str = str.Replace("+h", ts.Hours.ToString());
+                        str = str.Replace("+m", ts.Minutes.ToString());
                     }
                 }
                 catch
@@ -41,7 +60,9 @@ namespace cb0t
                     {
                         uptime.NextValue();
                         TimeSpan ts = TimeSpan.FromSeconds(uptime.NextValue());
-                        str += ts.Days + " days, " + ts.Hours + " hours, " + ts.Minutes + " minutes";
+                        str = str.Replace("+d", ts.Days.ToString());
+                        str = str.Replace("+h", ts.Hours.ToString());
+                        str = str.Replace("+m", ts.Minutes.ToString());
                     }
                 }
 
@@ -66,7 +87,7 @@ namespace cb0t
                     }
                 }
 
-                return "Graphics: " + result;
+                return StringTemplate.Get(STType.Commands, 3).Replace("+x", result);
             }
         }
 
@@ -96,7 +117,11 @@ namespace cb0t
                 double d_to = total;
                 d_to = Math.Round((double)(total / 1024 / 1024 / 1024));
                 double load = 100 - Math.Round((double)(d_av / d_to) * 100);
-                return "Disk Space: " + d_av + "GB out of " + d_to + "GB available (" + load + "% usage)";
+                String str = StringTemplate.Get(STType.Commands, 4);
+                str = str.Replace("+x", d_av.ToString());
+                str = str.Replace("+y", d_to.ToString());
+                str = str.Replace("+z", load.ToString());
+                return str;
             }
         }
 
@@ -106,7 +131,6 @@ namespace cb0t
             {
                 ObjectQuery query = new WqlObjectQuery("SELECT * FROM Win32_OperatingSystem");
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Operating System: ");
 
                 using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
                     foreach (ManagementObject obj in searcher.Get())
@@ -123,7 +147,7 @@ namespace cb0t
 
                 Version v = Environment.OSVersion.Version;
                 sb.Append(" (" + v.Major + "." + v.Minor + "." + v.Build + ")");
-                return sb.ToString();
+                return StringTemplate.Get(STType.Commands, 5).Replace("+x", sb.ToString());
             }
         }
 
@@ -145,7 +169,7 @@ namespace cb0t
                 while (result.Contains("  "))
                     result = result.Replace("  ", " ");
 
-                return "Processor: " + result;
+                return StringTemplate.Get(STType.Commands, 6).Replace("+x", result);
             }
         }
 
@@ -195,14 +219,22 @@ namespace cb0t
                     double av = (ms.AvailablePhysical / 1024 / 1024);
                     double tot = (ms.TotalPhysical / 1024 / 1024);
                     double load = 100 - Math.Round((double)(av / tot) * 100);
-                    return "Memory: " + av + "MB out of " + tot + "MB available (" + load + "% usage)";
+                    String str = StringTemplate.Get(STType.Commands, 7);
+                    str = str.Replace("+x", av.ToString());
+                    str = str.Replace("+y", tot.ToString());
+                    str = str.Replace("+z", load.ToString());
+                    return str;
                 }
                 else
                 {
                     double av = (mem.AvailablePhysical / 1024 / 1024);
                     double tot = (mem.TotalPhysical / 1024 / 1024);
                     double load = 100 - Math.Round((double)(av / tot) * 100);
-                    return "Memory: " + av + "MB out of " + tot + "MB available (" + load + "% usage)";
+                    String str = StringTemplate.Get(STType.Commands, 7);
+                    str = str.Replace("+x", av.ToString());
+                    str = str.Replace("+y", tot.ToString());
+                    str = str.Replace("+z", load.ToString());
+                    return str;
                 }
             }
         }

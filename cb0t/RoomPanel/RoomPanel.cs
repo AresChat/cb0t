@@ -76,6 +76,11 @@ namespace cb0t
             this.rtfScreen1.IsMainScreen = true;
         }
 
+        public void UpdateTemplate()
+        {
+            this.accuTextBox1.UpdateTemplate();
+        }
+
         private bool IsBlack { get; set; }
 
         public void SetToBlack()
