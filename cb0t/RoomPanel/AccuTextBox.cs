@@ -24,11 +24,11 @@ namespace cb0t
             this.ctx = new ContextMenuStrip();
             this.ctx.ShowImageMargin = false;
             this.ctx.ShowCheckMargin = false;
-            this.ctx.Items.Add("Cut");
-            this.ctx.Items.Add("Copy");
-            this.ctx.Items.Add("Paste");
+            this.ctx.Items.Add("Cut");//0
+            this.ctx.Items.Add("Copy");//1
+            this.ctx.Items.Add("Paste");//2
             this.ctx.Items.Add(new ToolStripSeparator());
-            this.ctx.Items.Add("Add to dictionary");
+            this.ctx.Items.Add("Add to dictionary");//4
             this.ctx.Items.Add(new ToolStripSeparator());
             this.ctx.Items[3].Visible = false;
             this.ctx.Items[4].Visible = false;
@@ -36,6 +36,14 @@ namespace cb0t
             this.ctx.Opening += this.CTXOpening;
             this.ctx.ItemClicked += this.CTXItemClicked;
             this.ContextMenuStrip = this.ctx;
+        }
+
+        public void UpdateTemplate()
+        {
+            this.ctx.Items[0].Text = StringTemplate.Get(STType.InBox, 0);
+            this.ctx.Items[1].Text = StringTemplate.Get(STType.InBox, 1);
+            this.ctx.Items[2].Text = StringTemplate.Get(STType.InBox, 2);
+            this.ctx.Items[4].Text = StringTemplate.Get(STType.InBox, 3);
         }
 
         private int char_index = -1;

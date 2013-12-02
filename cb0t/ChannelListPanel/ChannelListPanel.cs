@@ -22,6 +22,23 @@ namespace cb0t
             this.toolStrip1.Renderer = new ChannelListBar();
         }
 
+        public void UpdateTemplate()
+        {
+            this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.ChannelList, 0);
+            this.toolStripLabel1.Text = StringTemplate.Get(STType.ChannelList, 1) + ":";
+            this.toolStripLabel2.Text = StringTemplate.Get(STType.ChannelList, 2) + ":";
+            this.channelListView1.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
+            this.channelListView2.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
+            this.channelListView1.Columns[1].Text = StringTemplate.Get(STType.ChannelList, 4);
+            this.channelListView2.Columns[1].Text = StringTemplate.Get(STType.ChannelList, 4);
+            this.exportHashlinkToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 5);
+            this.exportHashlinkToolStripMenuItem1.Text = StringTemplate.Get(STType.ChannelList, 5);
+            this.addToFavouritesToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 6);
+            this.removeFromFavouritesToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 7);
+            this.autoJoinToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 8);
+            this.contextMenuStrip2.Items[4].Text = StringTemplate.Get(STType.ChannelList, 9) + ":";
+        }
+
         private bool setting_up = false;
 
         public void Create()

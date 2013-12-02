@@ -41,6 +41,12 @@ namespace cb0t
             this.MouseHover += this.ShowTip;
         }
 
+        public void UpdateTemplate()
+        {
+            this.HeaderText = this.HeaderText.Replace("Users", StringTemplate.Get(STType.UserList, 15));
+            this.Invalidate();
+        }
+
         public void Free()
         {
             this.MouseHover -= this.ShowTip;
@@ -73,10 +79,10 @@ namespace cb0t
                 sb.AppendLine(this.HeaderText);
 
             if (!String.IsNullOrEmpty(this.ServerVersion))
-                sb.AppendLine("Server (" + this.ServerVersion + ")");
+                sb.AppendLine(StringTemplate.Get(STType.UserList, 16) + " (" + this.ServerVersion + ")");
 
             if (this.lag > 0)
-                sb.AppendLine("Lag (" + this.lag + " ms)");
+                sb.AppendLine(StringTemplate.Get(STType.UserList, 17) + " (" + this.lag + " ms)");
 
             this.tip.SetToolTip(this, sb.ToString());
         }
