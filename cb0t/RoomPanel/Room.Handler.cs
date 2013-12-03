@@ -127,7 +127,7 @@ namespace cb0t
             this.users.ForEach(x => x.Dispose());
             this.users.Clear();
             this.users = new List<User>();
-            this.Panel.ServerText("Logged in, retrieving user's list...");
+            this.Panel.ServerText(StringTemplate.Get(STType.Messages, 18) + "...");
             this.Panel.CanVC(false);
             this.CanVC = false;
             this.CanOpusVC = false;
@@ -145,7 +145,7 @@ namespace cb0t
         private void Eval_Features(TCPPacketReader packet)
         {
             String version = packet.ReadString(this.crypto);
-            this.Panel.ServerText("Server: " + version);
+            this.Panel.ServerText(StringTemplate.Get(STType.Messages, 17) + ": " + version);
             this.Panel.Userlist.UpdateServerVersion(version);
 
             if (version.StartsWith("sb0t 5."))
@@ -175,7 +175,7 @@ namespace cb0t
                 this.Panel.Userlist.AcquireServerIcon(this.EndPoint);
 
             packet.SkipByte();
-            this.Panel.ServerText("Language: " + (RoomLanguage)((byte)packet));
+            this.Panel.ServerText(StringTemplate.Get(STType.Messages, 16) + ": " + (RoomLanguage)((byte)packet));
             uint cookie = packet;
 
             if (!String.IsNullOrEmpty(this.Credentials.Password))
@@ -249,7 +249,7 @@ namespace cb0t
                 this.ticks = (time - 19);
                 this.state = SessionState.Sleeping;
                 this.sock.Disconnect();
-                this.Panel.AnnounceText("Redirecting to " + redirect.Name + "...");
+                this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 15).Replace("+x", redirect.Name));
             }
         }
 
@@ -362,7 +362,7 @@ namespace cb0t
             this.Panel.Userlist.AddUserItem(u);
 
             if (ScriptEvents.OnUserJoining(this, u))
-                this.Panel.AnnounceText((this.BlackBG ? "\x000309" : "\x000303") + u.Name + " has joined");
+                this.Panel.AnnounceText((this.BlackBG ? "\x000309" : "\x000303") + StringTemplate.Get(STType.Messages, 13).Replace("+x", u.Name));
 
             if (u.Name == this.MyName)
             {
@@ -374,7 +374,7 @@ namespace cb0t
 
             if (u.IsFriend)
                 if (!Settings.GetReg<bool>("block_friend_popup", false))
-                    this.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 4), u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
+                    this.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 4), StringTemplate.Get(STType.Messages, 14).Replace("+x", u.Name).Replace("+y", this.Credentials.Name), PopupSound.Friend);
         }
 
         private void Eval_Part(TCPPacketReader packet)
@@ -394,7 +394,7 @@ namespace cb0t
                 this.Panel.Userlist.RemoveUserItem(u);
 
                 if (ScriptEvents.OnUserParting(this, u))
-                    this.Panel.AnnounceText("\x000307" + u.Name + " has parted");
+                    this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", u.Name));
 
                 ScriptEvents.OnUserParted(this, u);
                 u.Dispose();
@@ -452,7 +452,7 @@ namespace cb0t
         private void Eval_Topic(String text, bool updated)
         {
             if (updated)
-                this.Panel.ServerText("Topic update: " + text);
+                this.Panel.ServerText(StringTemplate.Get(STType.Messages, 11) + ": " + text);
 
             if (ScriptEvents.OnTopicReceiving(this, text))
                 this.Panel.SetTopic(text);
@@ -461,13 +461,13 @@ namespace cb0t
         private void Eval_IsIgnoringYou(TCPPacketReader packet)
         {
             String name = packet.ReadString(this.crypto);
-            this.Panel.PMTextReceived(null, null, name, "User is ignoring you", null, PMTextReceivedType.Announce);
+            this.Panel.PMTextReceived(null, null, name, StringTemplate.Get(STType.Messages, 10), null, PMTextReceivedType.Announce);
         }
 
         private void Eval_OfflineUser(TCPPacketReader packet)
         {
             String name = packet.ReadString(this.crypto);
-            this.Panel.PMTextReceived(null, null, name, "User is offline", null, PMTextReceivedType.Announce);
+            this.Panel.PMTextReceived(null, null, name, StringTemplate.Get(STType.Messages, 9), null, PMTextReceivedType.Announce);
         }
 
         private void Eval_Private(TCPPacketReader packet)
@@ -621,7 +621,7 @@ namespace cb0t
                         if (!u.Ignored)
                             if (ScriptEvents.OnVoiceClipReceiving(this, u))
                             {
-                                this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
                 }
@@ -656,7 +656,7 @@ namespace cb0t
                             if (!u.Ignored)
                                 if (ScriptEvents.OnVoiceClipReceiving(this, u))
                                 {
-                                    this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender, null, PMTextReceivedType.Announce);
+                                    this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }
                     }
@@ -688,7 +688,7 @@ namespace cb0t
                                     vc.Auto = true;
                                     VoicePlayer.QueueItem(vc);
                                 }
-                                else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
+                                else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender));
 
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
@@ -729,7 +729,7 @@ namespace cb0t
                                         vc.Auto = true;
                                         VoicePlayer.QueueItem(vc);
                                     }
-                                    else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " received from " + vc.Sender);
+                                    else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender));
 
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }
@@ -854,7 +854,7 @@ namespace cb0t
 
                 case "cb0t_latency_mcheck":
                     lag = (Helpers.UnixTimeMS - ((ulong)packet));
-                    this.sock.Send(TCPOutbound.Public("Lag test: " + lag + " milliseconds", this.crypto));
+                    this.sock.Send(TCPOutbound.Public(StringTemplate.Get(STType.Messages, 7) + ": " + lag + " milliseconds", this.crypto));
                     break;
 
                 case "cb0t_online_status":
@@ -1008,7 +1008,7 @@ namespace cb0t
             if (data.Length == 4)
                 if (data.SequenceEqual(new byte[] { 78, 65, 61, 61 }))
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + user.Name + " is not receiving nudges");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 6).Replace("+x", user.Name));
                     return;
                 }
 

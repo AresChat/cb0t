@@ -138,7 +138,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip has recorded and is now being sent...");
+                            this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
                         }
                         else
                         {
@@ -147,7 +147,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip has recorded and is now being sent...");
+                            this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
                         }
                     }
             }
@@ -163,9 +163,9 @@ namespace cb0t
                 this.Panel.UpdateVoiceTime(-1);
 
                 if (this.Panel.Mode == ScreenMode.PM)
-                    this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip was cancelled");
+                    this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 27));
                 else
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- your voice clip was cancelled");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 27));
             }
         }
 
@@ -293,12 +293,12 @@ namespace cb0t
 
             if (this.Panel.Mode == ScreenMode.Main)
             {
-                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...");
+                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
                 this.Panel.Scribble(data);
             }
             else if (this.Panel.Mode == ScreenMode.PM)
             {
-                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- Sending...", null, PMTextReceivedType.Announce);
+                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
                 this.Panel.PMScribbleReceived(null, null, this.Panel.PMName, data);
             }
 
@@ -602,9 +602,9 @@ namespace cb0t
                     this.new_sbot = false;
 
                     if (this.reconnect_count > 0)
-                        this.Panel.ServerText("Connecting to host, please wait... #" + this.reconnect_count);
+                        this.Panel.ServerText(StringTemplate.Get(STType.Messages, 25) + "... #" + this.reconnect_count);
                     else
-                        this.Panel.ServerText("Connecting to host, please wait...");
+                        this.Panel.ServerText(StringTemplate.Get(STType.Messages, 25) + "...");
 
                     ScriptEvents.OnConnecting(this);
                 }
@@ -616,7 +616,7 @@ namespace cb0t
                     this.state = SessionState.Connected;
                     this.ticks = time;
                     this.last_lag = time;
-                    this.Panel.ServerText("Connected, handshaking...");
+                    this.Panel.ServerText(StringTemplate.Get(STType.Messages, 24) + "...");
                     this.sock.Clear();
                     this.sock.Send(TCPOutbound.Login());
                 }
@@ -626,7 +626,7 @@ namespace cb0t
                     this.state = SessionState.Sleeping;
                     this.sock.Disconnect();
                     this.reconnect_count++;
-                    this.Panel.AnnounceText("Unable to connect");
+                    this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 23));
                     ScriptEvents.OnDisconnected(this);
                 }
             }
@@ -670,9 +670,9 @@ namespace cb0t
                     this.reconnect_count++;
 
                     if (this.sock.SockCode > 0)
-                        this.Panel.AnnounceText("Disconnected (" + this.sock.SockCode + ")");
+                        this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 22) + " (" + this.sock.SockCode + ")");
                     else
-                        this.Panel.AnnounceText("Disconnected (remote disconnect)");
+                        this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 22) + " (remote disconnect)");
                 }
             }
         }
@@ -683,7 +683,7 @@ namespace cb0t
             this.state = SessionState.Sleeping;
             this.sock.Disconnect();
             this.reconnect_count++;
-            this.Panel.AnnounceText("Reconnecting...");
+            this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 21) + "...");
         }
 
         private bool is_writing = false;
@@ -837,13 +837,13 @@ namespace cb0t
                                 else if (text == "/pretext" || text == "/pretext ")
                                 {
                                     Settings.SetReg("pretext", String.Empty);
-                                    this.Panel.AnnounceText("pre text disabled");
+                                    this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 20));
                                 }
                                 else if (text.StartsWith("/pretext "))
                                 {
                                     String arg = text.Substring(9);
                                     Settings.SetReg("pretext", arg);
-                                    this.Panel.AnnounceText("pre text updated");
+                                    this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 19));
                                 }
                                 else if (text.Length > 1)
                                     this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
@@ -869,7 +869,7 @@ namespace cb0t
                             else
                                 this.sock.Send(TCPOutbound.CustomPM(this.Panel.PMName, text, this.crypto));
                         }
-                        else this.Panel.MyPMAnnounce("User is offline");
+                        else this.Panel.MyPMAnnounce(StringTemplate.Get(STType.Messages, 9));
                     }
                 }
 
