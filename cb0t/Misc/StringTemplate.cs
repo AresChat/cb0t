@@ -249,6 +249,33 @@ namespace cb0t
             items.Add(new STItem { Type = STType.Messages, Index = 3, Text = "1Nudge" });
             items.Add(new STItem { Type = STType.Messages, Index = 4, Text = "1Friend" });
             items.Add(new STItem { Type = STType.Messages, Index = 5, Text = "1+x has nudged you!" });
+            items.Add(new STItem { Type = STType.Messages, Index = 6, Text = "1+x is not receiving nudges" });
+            items.Add(new STItem { Type = STType.Messages, Index = 7, Text = "1Lag test" });
+            items.Add(new STItem { Type = STType.Messages, Index = 8, Text = "1received from +x" });
+            items.Add(new STItem { Type = STType.Messages, Index = 9, Text = "1User is offline" });
+            items.Add(new STItem { Type = STType.Messages, Index = 10, Text = "1User is ignoring you" });
+            items.Add(new STItem { Type = STType.Messages, Index = 11, Text = "1Topic update" });
+            items.Add(new STItem { Type = STType.Messages, Index = 12, Text = "1+x has parted" });
+            items.Add(new STItem { Type = STType.Messages, Index = 13, Text = "1+x has joined" });
+            items.Add(new STItem { Type = STType.Messages, Index = 14, Text = "1+x has joined +y" });
+            items.Add(new STItem { Type = STType.Messages, Index = 15, Text = "1Redirecting to +x..." });
+            items.Add(new STItem { Type = STType.Messages, Index = 16, Text = "1Language" });
+            items.Add(new STItem { Type = STType.Messages, Index = 17, Text = "1Server" });
+            items.Add(new STItem { Type = STType.Messages, Index = 18, Text = "1Logged in, retrieving user's list" });
+            items.Add(new STItem { Type = STType.Messages, Index = 19, Text = "1pre text updated" });
+            items.Add(new STItem { Type = STType.Messages, Index = 20, Text = "1pre text disabled" });
+            items.Add(new STItem { Type = STType.Messages, Index = 21, Text = "1Reconnecting" });
+            items.Add(new STItem { Type = STType.Messages, Index = 22, Text = "1Disconnected" });
+            items.Add(new STItem { Type = STType.Messages, Index = 23, Text = "1Unable to connect" });
+            items.Add(new STItem { Type = STType.Messages, Index = 24, Text = "1Connected, handshaking" });
+            items.Add(new STItem { Type = STType.Messages, Index = 25, Text = "1Connecting to host, please wait" });
+            items.Add(new STItem { Type = STType.Messages, Index = 26, Text = "1Sending" });
+            items.Add(new STItem { Type = STType.Messages, Index = 27, Text = "1your voice clip was cancelled" });
+            items.Add(new STItem { Type = STType.Messages, Index = 28, Text = "1your voice clip has recorded and is now being sent" });
+
+            items.Add(new STItem { Type = STType.SystemTray, Index = 0, Text = "Show as Online" });
+            items.Add(new STItem { Type = STType.SystemTray, Index = 1, Text = "Show as Away" });
+            items.Add(new STItem { Type = STType.SystemTray, Index = 2, Text = "Exit" });
         }
 
         public static String Get(STType type, int index)
@@ -288,7 +315,8 @@ namespace cb0t
         ButtonBar = 20,
         RoomMenu = 21,
         BrowseTab = 22,
-        Messages = 23
+        Messages = 23,
+        SystemTray = 24
     }
 
     class STItem

@@ -364,6 +364,9 @@ namespace cb0t
             this.toolStrip1.Items[0].ToolTipText = StringTemplate.Get(STType.TopBar, 0);
             this.toolStrip1.Items[2].ToolTipText = StringTemplate.Get(STType.TopBar, 1);
             this.toolStrip1.Items[4].ToolTipText = StringTemplate.Get(STType.TopBar, 2);
+            this.showAsOnlineToolStripMenuItem.Text = StringTemplate.Get(STType.SystemTray, 0);
+            this.showAsAwayToolStripMenuItem.Text = StringTemplate.Get(STType.SystemTray, 1);
+            this.exitToolStripMenuItem.Text = StringTemplate.Get(STType.SystemTray, 2);
             this.audio_content.UpdateTemplate();
             this.clist_content.UpdateTemplate();
 
