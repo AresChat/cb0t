@@ -193,6 +193,8 @@ namespace cb0t
             items.Add(new STItem { Type = STType.UserList, Index = 15, Text = "Users" });
             items.Add(new STItem { Type = STType.UserList, Index = 16, Text = "Server" });
             items.Add(new STItem { Type = STType.UserList, Index = 17, Text = "Lag" });
+            items.Add(new STItem { Type = STType.UserList, Index = 18, Text = "Friends" });
+            items.Add(new STItem { Type = STType.UserList, Index = 19, Text = "Admins" });
 
             items.Add(new STItem { Type = STType.InBox, Index = 0, Text = "Cut" });
             items.Add(new STItem { Type = STType.InBox, Index = 1, Text = "Copy" });

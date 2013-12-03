@@ -69,6 +69,7 @@ namespace cb0t
             this.ctx_menu.Items[16].Text = StringTemplate.Get(STType.UserList, 13);
             this.ctx_menu.Items[17].Text = StringTemplate.Get(STType.UserList, 14);
             this.userListHeader1.UpdateTemplate();
+            this.userListBox1.Invalidate();
         }
 
         public void SetBlack()
