@@ -103,7 +103,7 @@ namespace cb0t
                     e.Graphics.DrawImage(this.pen, new Point(1, 0));
 
                     using (SolidBrush brush = new SolidBrush(this.IsBlack ? Color.White : Color.Black))
-                        e.Graphics.DrawString(StringTemplate.Get(STType.Messages, 1).Replace("+x", names), this.Font, brush, new PointF(16, 2));
+                        e.Graphics.DrawString(StringTemplate.Get(STType.Messages, 0).Replace("+x", names), this.Font, brush, new PointF(16, 2));
                 }
             }
             else

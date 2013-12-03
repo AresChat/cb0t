@@ -22,6 +22,7 @@ namespace cb0t
 
         public event EventHandler JoinFromHashlinkClicked;
         public event EventHandler SpellCheckUpdate2;
+        public event EventHandler OnTemplateChanged;
 
         public SettingsPanel()
         {
@@ -47,6 +48,7 @@ namespace cb0t
         public void CreateSettings()
         {
             this.client_settings = new ClientSettings();
+            this.client_settings.TemplateChanged += this.TemplateChanged;
             this.client_settings.Dock = DockStyle.Fill;
             this.client_settings.AutoScroll = true;
             this.client_settings.Populate();
@@ -82,6 +84,11 @@ namespace cb0t
             this.privacy_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
+        }
+
+        private void TemplateChanged(object sender, EventArgs e)
+        {
+            this.OnTemplateChanged(sender, e);
         }
 
         private void SpellCheckUpdate(object sender, EventArgs e)
