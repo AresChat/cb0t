@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -153,7 +154,6 @@ namespace cb0t
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 4, Text = "1Album" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 5, Text = "1Duration" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 6, Text = "1remove from playlist" });
-            items.Add(new STItem { Type = STType.AudioPlayer, Index = 7, Text = "1Now playing" });
 
             items.Add(new STItem { Type = STType.ChannelList, Index = 0, Text = "1Refresh" });
             items.Add(new STItem { Type = STType.ChannelList, Index = 1, Text = "1Find" });
@@ -273,9 +273,9 @@ namespace cb0t
             items.Add(new STItem { Type = STType.Messages, Index = 27, Text = "1your voice clip was cancelled" });
             items.Add(new STItem { Type = STType.Messages, Index = 28, Text = "1your voice clip has recorded and is now being sent" });
 
-            items.Add(new STItem { Type = STType.SystemTray, Index = 0, Text = "Show as Online" });
-            items.Add(new STItem { Type = STType.SystemTray, Index = 1, Text = "Show as Away" });
-            items.Add(new STItem { Type = STType.SystemTray, Index = 2, Text = "Exit" });
+            items.Add(new STItem { Type = STType.SystemTray, Index = 0, Text = "1Show as Online" });
+            items.Add(new STItem { Type = STType.SystemTray, Index = 1, Text = "1Show as Away" });
+            items.Add(new STItem { Type = STType.SystemTray, Index = 2, Text = "1Exit" });
         }
 
         public static String Get(STType type, int index)
