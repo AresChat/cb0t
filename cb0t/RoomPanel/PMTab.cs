@@ -56,6 +56,11 @@ namespace cb0t
             this.Controls.Add(this.container);
         }
 
+        public void UpdateTemplate()
+        {
+            this.rtf.UpdateTemplate();
+        }
+
         public void SetToBlack()
         {
             this.rec.IsBlack = true;

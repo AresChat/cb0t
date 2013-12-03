@@ -37,6 +37,16 @@ namespace cb0t
 
         public bool CanSelectNode { get; set; }
 
+        public void UpdateTemplate()
+        {
+            this.treeView1.Nodes[0].Text = this.treeView1.Nodes[0].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 1));
+            this.treeView1.Nodes[1].Text = this.treeView1.Nodes[1].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 2));
+            this.treeView1.Nodes[2].Text = this.treeView1.Nodes[2].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 3));
+            this.treeView1.Nodes[3].Text = this.treeView1.Nodes[3].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 4));
+            this.treeView1.Nodes[4].Text = this.treeView1.Nodes[4].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 5));
+            this.treeView1.Nodes[5].Text = this.treeView1.Nodes[5].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 6));
+            this.treeView1.Nodes[6].Text = this.treeView1.Nodes[6].Text.Replace("All", StringTemplate.Get(STType.BrowseTab, 7));
+        }
 
         private void AfterNodeClicked(object sender, TreeViewEventArgs e)
         {

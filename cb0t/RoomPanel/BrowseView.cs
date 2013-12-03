@@ -59,6 +59,16 @@ namespace cb0t
             this.Scrollable = true;
         }
 
+        public void UpdateTemplate()
+        {
+            this.Columns[0].Text = StringTemplate.Get(STType.BrowseTab, 8);
+            this.Columns[1].Text = StringTemplate.Get(STType.BrowseTab, 9);
+            this.Columns[2].Text = StringTemplate.Get(STType.BrowseTab, 10);
+            this.Columns[3].Text = StringTemplate.Get(STType.BrowseTab, 11);
+            this.Columns[4].Text = StringTemplate.Get(STType.BrowseTab, 12);
+            this.Columns[5].Text = StringTemplate.Get(STType.BrowseTab, 13);
+        }
+
         protected override void OnColumnWidthChanging(ColumnWidthChangingEventArgs e)
         {
             e.Cancel = true;

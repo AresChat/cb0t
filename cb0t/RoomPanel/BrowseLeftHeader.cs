@@ -21,7 +21,7 @@ namespace cb0t
         public BrowseLeftHeader()
         {
             this.InitializeComponent();
-            this.HeaderText = "Loading...";
+            this.HeaderText = StringTemplate.Get(STType.BrowseTab, 0) + "...";
         }
 
         private void BrowseLeftHeader_Paint(object sender, PaintEventArgs e)

@@ -49,7 +49,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
@@ -99,7 +99,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", name).Replace("+t", text), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
@@ -135,7 +135,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
@@ -161,7 +161,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
@@ -223,7 +223,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name).Replace("+t", text), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name).Replace("+t", text), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
@@ -247,7 +247,7 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: Notification", f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)

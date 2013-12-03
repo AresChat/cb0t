@@ -374,7 +374,7 @@ namespace cb0t
 
             if (u.IsFriend)
                 if (!Settings.GetReg<bool>("block_friend_popup", false))
-                    this.ShowPopup("cb0t :: Friend", u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
+                    this.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 4), u.Name + " has joined " + this.Credentials.Name, PopupSound.Friend);
         }
 
         private void Eval_Part(TCPPacketReader packet)
@@ -586,10 +586,20 @@ namespace cb0t
                     this.Eval_VC_PM_Chunk(e.Packet);
                     break;
 
+                case TCPMsg.MSG_CHAT_SERVER_FAVICON:
+                    this.Eval_FavIcon(e.Packet);
+                    break;
+
                 default:
                     this.Panel.AnnounceText(msg.ToString());
                     break;
             }
+        }
+
+        private void Eval_FavIcon(TCPPacketReader packet)
+        {
+            byte[] buf = packet;
+            this.Panel.Userlist.HereFavicon(buf);
         }
 
         private void Eval_VC_PM_First(TCPPacketReader packet)
@@ -1010,9 +1020,9 @@ namespace cb0t
 
                 if (ScriptEvents.OnNudgeReceiving(this, user))
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + user.Name + " has nudged you!");
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 5).Replace("+x", user.Name));
                     this.owner_frm.Nudge();
-                    this.ShowPopup("cb0t :: Nudge", user.Name + " nudged you", PopupSound.None);
+                    this.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 3), StringTemplate.Get(STType.Messages, 5).Replace("+x", user.Name), PopupSound.None);
                 }
                 else this.sock.Send(TCPOutbound.NudgeReject(user.Name, this.crypto));
             }
