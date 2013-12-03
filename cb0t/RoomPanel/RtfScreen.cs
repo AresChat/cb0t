@@ -231,20 +231,31 @@ namespace cb0t
             this.ctx = new ContextMenuStrip();
             this.ctx.ShowImageMargin = false;
             this.ctx.ShowCheckMargin = false;
-            this.ctx.Items.Add("Save image...");
+            this.ctx.Items.Add("Save image...");//0
             this.ctx.Items[0].Visible = false;
-            this.ctx.Items.Add("Save voice clip...");
+            this.ctx.Items.Add("Save voice clip...");//1
             this.ctx.Items[1].Visible = false;
-            this.ctx.Items.Add("Clear screen");
-            this.ctx.Items.Add("Export text");
-            this.ctx.Items.Add("Copy to clipboard");
-            this.ctx.Items.Add("Pause/Unpause screen");
+            this.ctx.Items.Add("Clear screen");//2
+            this.ctx.Items.Add("Export text");//3
+            this.ctx.Items.Add("Copy to clipboard");//4
+            this.ctx.Items.Add("Pause/Unpause screen");//5
             this.ctx.Opening += this.CTXOpening;
             this.ctx.Closed += this.CTXClosed;
             this.ctx.ItemClicked += this.CTXItemClicked;
             this.ContextMenuStrip = this.ctx;
             this.paused_items.Clear();
             this.paused_items = new List<PausedItem>();
+            this.UpdateTemplate();
+        }
+
+        public void UpdateTemplate()
+        {
+            this.ctx.Items[0].Text = StringTemplate.Get(STType.OutBox, 0) + "...";
+            this.ctx.Items[1].Text = StringTemplate.Get(STType.OutBox, 1) + "...";
+            this.ctx.Items[2].Text = StringTemplate.Get(STType.OutBox, 2);
+            this.ctx.Items[3].Text = StringTemplate.Get(STType.OutBox, 3);
+            this.ctx.Items[4].Text = StringTemplate.Get(STType.OutBox, 4);
+            this.ctx.Items[5].Text = StringTemplate.Get(STType.OutBox, 5);
         }
 
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -353,11 +364,11 @@ namespace cb0t
                     }
 
                     this.paused_items = new List<PausedItem>();
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- Screen unpaused");
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 6));
                 }
                 else
                 {
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- Screen paused");
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 7));
                     this.IsPaused = true;
                 }
             }

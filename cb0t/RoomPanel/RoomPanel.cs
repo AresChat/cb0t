@@ -55,11 +55,11 @@ namespace cb0t
             this.toolStrip1.Renderer = this.topic;
             this.toolStripButton1.Image = (Bitmap)Properties.Resources.close.Clone();
             this.toolStripDropDownButton1.Image = (Bitmap)Properties.Resources.settings.Clone();
-            this.toolStripDropDownButton1.DropDownItems.Add("Export hashlink");
-            this.toolStripDropDownButton1.DropDownItems.Add("Add to favourites");
-            this.toolStripDropDownButton1.DropDownItems.Add("Copy room name to clipboard");
-            this.toolStripDropDownButton1.DropDownItems.Add("Auto play voice clips");
-            this.toolStripDropDownButton1.DropDownItems.Add("Close sub tabs");
+            this.toolStripDropDownButton1.DropDownItems.Add("Export hashlink");//0
+            this.toolStripDropDownButton1.DropDownItems.Add("Add to favourites");//1
+            this.toolStripDropDownButton1.DropDownItems.Add("Copy room name to clipboard");//2
+            this.toolStripDropDownButton1.DropDownItems.Add("Auto play voice clips");//3
+            this.toolStripDropDownButton1.DropDownItems.Add("Close sub tabs");//4
             this.toolStripDropDownButton1.DropDownItems.Add(new ToolStripSeparator());
             this.toolStripDropDownButton1.DropDownItems[5].Visible = false;
             this.toolStrip2.Renderer = new ButtonBar();
@@ -79,6 +79,28 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.accuTextBox1.UpdateTemplate();
+            this.rtfScreen1.UpdateTemplate();
+            this.toolStripButton2.ToolTipText = StringTemplate.Get(STType.ButtonBar, 0);
+            this.toolStripButton3.ToolTipText = StringTemplate.Get(STType.ButtonBar, 1);
+            this.toolStripButton4.ToolTipText = StringTemplate.Get(STType.ButtonBar, 2);
+            this.toolStripButton5.ToolTipText = StringTemplate.Get(STType.ButtonBar, 3);
+            this.toolStripButton6.ToolTipText = StringTemplate.Get(STType.ButtonBar, 4);
+            this.toolStripButton7.ToolTipText = StringTemplate.Get(STType.ButtonBar, 5);
+            this.toolStripButton8.ToolTipText = StringTemplate.Get(STType.ButtonBar, 6) + "\r\n" + StringTemplate.Get(STType.ButtonBar, 7);
+            this.toolStripButton9.ToolTipText = StringTemplate.Get(STType.ButtonBar, 8);
+            this.toolStripDropDownButton1.ToolTipText = StringTemplate.Get(STType.RoomMenu, 0);
+            this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.RoomMenu, 1);
+            this.toolStripDropDownButton1.DropDownItems[0].Text = StringTemplate.Get(STType.RoomMenu, 2);
+            this.toolStripDropDownButton1.DropDownItems[1].Text = StringTemplate.Get(STType.RoomMenu, 3);
+            this.toolStripDropDownButton1.DropDownItems[2].Text = StringTemplate.Get(STType.RoomMenu, 4);
+            this.toolStripDropDownButton1.DropDownItems[3].Text = StringTemplate.Get(STType.RoomMenu, 5);
+            this.toolStripDropDownButton1.DropDownItems[4].Text = StringTemplate.Get(STType.RoomMenu, 6);
+
+            for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                if (this.tabControl1.TabPages[i] is PMTab)
+                    ((PMTab)this.tabControl1.TabPages[i]).UpdateTemplate();
+                else if (this.tabControl1.TabPages[i] is BrowseTab)
+                    ((BrowseTab)this.tabControl1.TabPages[i]).UpdateTemplate();
         }
 
         private bool IsBlack { get; set; }

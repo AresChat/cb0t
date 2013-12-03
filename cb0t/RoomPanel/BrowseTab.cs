@@ -25,7 +25,13 @@ namespace cb0t
         public void StartReceived(ushort count)
         {
             this.expected = count;
-            this.LeftContainer.SetHeader("Loading... (0 / " + count + ")");
+            this.LeftContainer.SetHeader(StringTemplate.Get(STType.BrowseTab, 0) + "... (0 / " + count + ")");
+        }
+
+        public void UpdateTemplate()
+        {
+            this.LeftContainer.UpdateTemplate();
+            this.Viewer.UpdateTemplate();
         }
 
         public void ItemReceived(BrowseItem item)
@@ -36,18 +42,18 @@ namespace cb0t
             if (this.so_far >= (this.last_update + 50))
             {
                 this.last_update = this.so_far;
-                this.LeftContainer.SetHeader("Loading... (" + this.so_far + " / " + this.expected + ")");
+                this.LeftContainer.SetHeader(StringTemplate.Get(STType.BrowseTab, 0) + "... (" + this.so_far + " / " + this.expected + ")");
             }
         }
 
         public void ErrorReceived()
         {
-            this.LeftContainer.SetHeader("Browse failed");
+            this.LeftContainer.SetHeader(StringTemplate.Get(STType.BrowseTab, 15));
         }
 
         public void EndReceived()
         {
-            this.LeftContainer.SetHeader("Files (" + this.so_far + ")");
+            this.LeftContainer.SetHeader(StringTemplate.Get(STType.BrowseTab, 14) + " (" + this.so_far + ")");
             int a = this.files.Count;
             int b = this.files.FindAll(x => x.Mime == BrowseType.Audio).Count;
             int c = this.files.FindAll(x => x.Mime == BrowseType.Image).Count;
@@ -99,6 +105,8 @@ namespace cb0t
             this.UseVisualStyleBackColor = true;
             this.ImageIndex = 3;
             this.Controls.Add(this.Panels);
+
+            this.UpdateTemplate();
         }
 
         public void Free()
@@ -215,12 +223,12 @@ namespace cb0t
                     if (item != null)
                     {
                         StringBuilder sb = new StringBuilder();
-                        sb.AppendLine("Title: " + item.SubItems[0].Text);
-                        sb.AppendLine("Artist: " + item.SubItems[1].Text);
-                        sb.AppendLine("Media: " + item.SubItems[2].Text);
-                        sb.AppendLine("Category: " + item.SubItems[3].Text);
-                        sb.AppendLine("Size: " + item.SubItems[4].Text);
-                        sb.AppendLine("Filename: " + item.SubItems[5].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 8) + ": " + item.SubItems[0].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 9) + ": " + item.SubItems[1].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 10) + ": " + item.SubItems[2].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 11) + ": " + item.SubItems[3].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 12) + ": " + item.SubItems[4].Text);
+                        sb.AppendLine(StringTemplate.Get(STType.BrowseTab, 13) + ": " + item.SubItems[5].Text);
                         String path = Settings.DataPath + "filelog.txt";
                         File.WriteAllText(path, sb.ToString());
                         Process.Start("notepad.exe", path);

@@ -43,7 +43,7 @@ namespace cb0t
                 e.Graphics.DrawImage(this.rec, new Point(1, 0));
 
                 using (SolidBrush brush = new SolidBrush(this.IsBlack ? Color.White : Color.Black))
-                    e.Graphics.DrawString("RECORDING [" + (15 - this.RecordingTime) + " seconds remaining]", this.Font, brush, new PointF(16, 1));
+                    e.Graphics.DrawString(StringTemplate.Get(STType.Messages, 1).Replace("+x", (15 - this.RecordingTime).ToString()), this.Font, brush, new PointF(16, 1));
             }
         }
     }

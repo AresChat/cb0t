@@ -511,5 +511,10 @@ namespace cb0t
         {
             this.userListHeader1.SetCrypto(is_crypto);
         }
+
+        public void HereFavicon(byte[] data)
+        {
+            this.userListHeader1.HereFavicon(data);
+        }
     }
 }

@@ -41,6 +41,17 @@ namespace cb0t
             this.MouseHover += this.ShowTip;
         }
 
+        public void HereFavicon(byte[] data)
+        {
+            this.server_icon = data;
+
+            try
+            {
+                this.BeginInvoke((Action)(() => this.Refresh()));
+            }
+            catch { }
+        }
+
         public void UpdateTemplate()
         {
             this.HeaderText = this.HeaderText.Replace("Users", StringTemplate.Get(STType.UserList, 15));
@@ -111,11 +122,15 @@ namespace cb0t
 
             if (this.server_icon != null)
             {
-                using (MemoryStream ms = new MemoryStream(this.server_icon))
-                using (Bitmap bmp = new Bitmap(ms))
-                    e.Graphics.DrawImage(bmp, new Point(3 + (icons_drawn * 17), 3));
+                try
+                {
+                    using (MemoryStream ms = new MemoryStream(this.server_icon))
+                    using (Bitmap bmp = new Bitmap(ms))
+                        e.Graphics.DrawImage(bmp, new Point(3 + (icons_drawn * 17), 3));
 
-                icons_drawn++;
+                    icons_drawn++;
+                }
+                catch { }
             }
 
             if (this.lag > 0)

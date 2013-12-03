@@ -153,6 +153,7 @@ namespace cb0t
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 4, Text = "1Album" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 5, Text = "1Duration" });
             items.Add(new STItem { Type = STType.AudioPlayer, Index = 6, Text = "1remove from playlist" });
+            items.Add(new STItem { Type = STType.AudioPlayer, Index = 7, Text = "1Now playing" });
 
             items.Add(new STItem { Type = STType.ChannelList, Index = 0, Text = "1Refresh" });
             items.Add(new STItem { Type = STType.ChannelList, Index = 1, Text = "1Find" });
@@ -197,6 +198,57 @@ namespace cb0t
             items.Add(new STItem { Type = STType.InBox, Index = 1, Text = "1Copy" });
             items.Add(new STItem { Type = STType.InBox, Index = 2, Text = "1Paste" });
             items.Add(new STItem { Type = STType.InBox, Index = 3, Text = "1Add to dictionary" });
+
+            items.Add(new STItem { Type = STType.OutBox, Index = 0, Text = "1Save image" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 1, Text = "1Save voice clip" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 2, Text = "1Clear screen" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 3, Text = "1Export text" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 4, Text = "1Copy to clipboard" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 5, Text = "1Pause/Unpause screen" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 6, Text = "1Screen unpaused" });
+            items.Add(new STItem { Type = STType.OutBox, Index = 7, Text = "1Screen paused" });
+
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 0, Text = "1bold" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 1, Text = "1italic" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 2, Text = "1underline" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 3, Text = "1foreground" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 4, Text = "1background" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 5, Text = "1emoticons" });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 6, Text = "1To record a Voice Clip, hold down this button or press F2." });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 7, Text = "1Release the button to send your message." });
+            items.Add(new STItem { Type = STType.ButtonBar, Index = 8, Text = "1scribble" });
+
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 0, Text = "1Options" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 1, Text = "1Close" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 2, Text = "1Export hashlink" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 3, Text = "1Add to favourites" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 4, Text = "1Copy room name to clipboard" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 5, Text = "1Auto play voice clips" });
+            items.Add(new STItem { Type = STType.RoomMenu, Index = 6, Text = "1Close sub tabs" });
+
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 0, Text = "1Loading" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 1, Text = "1All" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 2, Text = "1Audio" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 3, Text = "1Image" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 4, Text = "1Video" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 5, Text = "1Document" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 6, Text = "1Software" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 7, Text = "1Other" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 8, Text = "1Title" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 9, Text = "1Artist" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 10, Text = "1Media" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 11, Text = "1Category" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 12, Text = "1Size" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 13, Text = "1Filename" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 14, Text = "1Files" });
+            items.Add(new STItem { Type = STType.BrowseTab, Index = 15, Text = "1Browse failed" });
+
+            items.Add(new STItem { Type = STType.Messages, Index = 0, Text = "1Typing: +x" });
+            items.Add(new STItem { Type = STType.Messages, Index = 1, Text = "1RECORDING [+x seconds remaining]" });
+            items.Add(new STItem { Type = STType.Messages, Index = 2, Text = "1Notification" });
+            items.Add(new STItem { Type = STType.Messages, Index = 3, Text = "1Nudge" });
+            items.Add(new STItem { Type = STType.Messages, Index = 4, Text = "1Friend" });
+            items.Add(new STItem { Type = STType.Messages, Index = 5, Text = "1+x has nudged you!" });
         }
 
         public static String Get(STType type, int index)
@@ -231,7 +283,12 @@ namespace cb0t
         ChannelList = 15,
         Commands = 16,
         UserList = 17,
-        InBox = 18
+        InBox = 18,
+        OutBox = 19,
+        ButtonBar = 20,
+        RoomMenu = 21,
+        BrowseTab = 22,
+        Messages = 23
     }
 
     class STItem

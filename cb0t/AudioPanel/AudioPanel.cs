@@ -106,7 +106,7 @@ namespace cb0t
                         this.PlayPauseIconChanged(false, EventArgs.Empty);
                         this.ShowAudioText("♫ 0:00 " + this.play_list[pos].ToAudioTextString() + " ♫", EventArgs.Empty);
                         this.albumArtBox1.UpdateArt(this.play_list[pos]);
-                        this.label1.Text = "Now playing:\r\n\r\n" + this.play_list[pos].ToAudioTextString();
+                        this.label1.Text = StringTemplate.Get(STType.AudioPlayer, 7) + ":\r\n\r\n" + this.play_list[pos].ToAudioTextString();
                     }
 
                     break;
