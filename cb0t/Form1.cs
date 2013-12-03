@@ -301,11 +301,8 @@ namespace cb0t
                 this.notifyIcon1.MouseClick += this.SysTrayMouseClicked;
                 this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
                 this.settings_content.SpellCheckUpdate2 += this.SpellCheckUpdate2;
+                this.settings_content.OnTemplateChanged += this.OnTemplateChanged;
                 this.settings_content.CreateSettings();
-
-                foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
-                    this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
-
                 this.audio_content.LoadPlaylist();
 
                 Settings.CAN_WRITE_REG = true;
@@ -339,12 +336,20 @@ namespace cb0t
 
                 this.UpdateTemplate();
 
+                foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
+                    this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
+
                 this.sock_thread = new Thread(new ThreadStart(this.SocketThread));
                 this.sock_thread.Start();
                 this.timer2.Enabled = true;
-
                 this.clist_content.RefreshIfEmpty();
             }
+        }
+
+        private void OnTemplateChanged(object sender, EventArgs e)
+        {
+            StringTemplate.Load();
+            this.UpdateTemplate();
         }
 
         private void UpdateTemplate()
