@@ -31,8 +31,9 @@ namespace cb0t
         private MediaIPC.Foobar2000.FoobarListener foobar { get; set; }
 
         private ulong last_trickle = 0;
+        private String inithash = null;
 
-        public Form1()
+        public Form1(String init_hashlink)
         {
             Settings.Create();
             Friends.Load();
@@ -46,6 +47,7 @@ namespace cb0t
             StringTemplate.Load();
 
             this.InitializeComponent();
+            this.inithash = init_hashlink;
             this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
             this.img_pause = (Bitmap)Properties.Resources.audio_pause.Clone();
             this.toolStrip1.Items.Add(new SettingsButton());
@@ -75,6 +77,8 @@ namespace cb0t
 
             Aero.HideIconAndText(this);
         }
+
+
 
         public void AddToFavourite(FavouritesListItem f)
         {
@@ -280,6 +284,7 @@ namespace cb0t
 
         private bool do_once = false;
         private bool terminate = false;
+        private IPCListener ipc { get; set; }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -343,7 +348,52 @@ namespace cb0t
                 this.sock_thread.Start();
                 this.timer2.Enabled = true;
                 this.clist_content.RefreshIfEmpty();
+
+                this.ipc = new IPCListener();
+                this.ipc.HashlinkReceived += this.IPCHashlinkReceived;
+
+                if (!String.IsNullOrEmpty(this.inithash))
+                {
+                    if (this.inithash.StartsWith("cb0t://"))
+                        this.inithash = this.inithash.Substring(7);
+
+                    DecryptedHashlink dh = Hashlink.DecodeHashlink(this.inithash);
+
+                    if (dh == null)
+                        if (this.inithash.EndsWith("/"))
+                            this.inithash = this.inithash.Substring(0, this.inithash.Length - 1);
+
+                    dh = Hashlink.DecodeHashlink(this.inithash);
+
+                    if (dh != null)
+                        this.IPCHashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                }
+
+                this.ipc.Start();
             }
+        }
+
+        private void IPCHashlinkReceived(object sender, IPCListenerEventArgs e)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                if (!this.Visible)
+                    this.Show();
+
+                if (this.WindowState == FormWindowState.Minimized)
+                    this.WindowState = FormWindowState.Normal;
+
+                this.Activate();
+
+                FavouritesListItem fav = new FavouritesListItem();
+
+                fav.IP = e.Hashlink.IP;
+                fav.Name = e.Hashlink.Name;
+                fav.Port = e.Hashlink.Port;
+                fav.Topic = e.Hashlink.Name;
+
+                this.OpenChannel(null, new OpenChannelEventArgs { Room = fav });
+            }));
         }
 
         private void OnTemplateChanged(object sender, EventArgs e)
