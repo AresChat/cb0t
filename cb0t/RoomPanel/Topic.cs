@@ -36,7 +36,7 @@ namespace cb0t
             using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.Gainsboro, Color.WhiteSmoke, LinearGradientMode.Vertical))
                 e.Graphics.FillRectangle(brush, bounds);
 
-            if (e.ConnectedArea.Width > 0)
+            if (e.ToolStrip is ToolStripDropDownMenu)
                 return;
 
             // topic

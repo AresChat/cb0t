@@ -33,18 +33,14 @@ namespace cb0t
         public bool SupportsPMEnc { get; set; }
         public bool SupportsVC { get; set; }
         public bool SupportsOpusVC { get; set; }
-
-        private Bitmap dav { get; set; }
+        private byte[] AvatarData { get; set; }
 
         public User()
         {
-            this.dav = (Bitmap)Properties.Resources.dav.Clone();
             this.PersonalMessage = String.Empty;
             this.Ident = Helpers.UserIdent++;
             this.ScribbleBuffer = new List<byte>();
         }
-
-        private byte[] AvatarData { get; set; }
 
         public void Dispose()
         {
@@ -54,17 +50,12 @@ namespace cb0t
                 this.Avatar = null;
             }
 
-            if (this.dav != null)
-            {
-                this.dav.Dispose();
-                this.dav = null;
-            }
-
             this.ScribbleBuffer.Clear();
             this.ScribbleBuffer = new List<byte>();
+            this.AvatarData = new byte[] { };
         }
 
-        public void SetAvatar()
+        public void SetAvatar(byte[] data)
         {
             if (this.Avatar != null)
             {
@@ -72,13 +63,16 @@ namespace cb0t
                 this.Avatar = null;
             }
 
-            if (this.AvatarData == null)
+            this.AvatarData = data;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(this.AvatarData))
+                using (Bitmap org = new Bitmap(ms))
                 using (Bitmap sized = new Bitmap(53, 53))
                 using (Graphics sized_g = Graphics.FromImage(sized))
                 {
-                    sized_g.SmoothingMode = SmoothingMode.HighQuality;
-                    sized_g.CompositingQuality = CompositingQuality.HighQuality;
-                    sized_g.DrawImage(this.dav, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
+                    sized_g.DrawImage(org, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
                     this.Avatar = new Bitmap(53, 53);
 
                     using (Graphics av_g = Graphics.FromImage(this.Avatar))
@@ -97,54 +91,17 @@ namespace cb0t
                             av_g.DrawPath(pen, path);
                     }
                 }
-            else
-            {
-                try
-                {
-                    using (MemoryStream ms = new MemoryStream(this.AvatarData))
-                    using (Bitmap org = new Bitmap(ms))
-                    using (Bitmap sized = new Bitmap(53, 53))
-                    using (Graphics sized_g = Graphics.FromImage(sized))
-                    {
-                        sized_g.DrawImage(org, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
-                        this.Avatar = new Bitmap(53, 53);
-
-                        using (Graphics av_g = Graphics.FromImage(this.Avatar))
-                        using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
-                        using (TextureBrush brush = new TextureBrush(sized))
-                        {
-                            av_g.SmoothingMode = SmoothingMode.HighQuality;
-                            av_g.CompositingQuality = CompositingQuality.HighQuality;
-
-                            using (SolidBrush sb = new SolidBrush(Color.White))
-                                av_g.FillPath(sb, path);
-
-                            av_g.FillPath(brush, path);
-
-                            using (Pen pen = new Pen(Color.Gainsboro, 1))
-                                av_g.DrawPath(pen, path);
-                        }
-                    }
-
-                    this.AvatarData = null;
-                }
-                catch
-                {
-                    this.ClearAvatar();
-                    this.SetAvatar();
-                }
             }
-        }
-
-        public void SetAvatar(byte[] data)
-        {
-            if (this.Avatar != null)
+            catch
             {
-                this.Avatar.Dispose();
-                this.Avatar = null;
-            }
+                if (this.Avatar != null)
+                {
+                    this.Avatar.Dispose();
+                    this.Avatar = null;
+                }
 
-            this.AvatarData = data;
+                this.AvatarData = null;
+            }
         }
 
         public void ClearAvatar()

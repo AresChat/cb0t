@@ -14,8 +14,12 @@ namespace cb0t
         public static byte[] Data { get; set; }
         public static Bitmap Image { get; set; }
 
+        public static byte[] DefaultAvatar { get; set; }
+
         public static void Load()
         {
+            DefaultAvatar = (byte[])Properties.Resources.dav;
+
             try
             {
                 String path = Settings.DataPath + "avatar_big.dat";

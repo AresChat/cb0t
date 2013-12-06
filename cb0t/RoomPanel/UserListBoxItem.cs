@@ -16,11 +16,8 @@ namespace cb0t
             this.Owner = owner;
         }
 
-        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc, bool is_black)
+        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc, bool is_black, ref Bitmap dav)
         {
-            if (this.Owner.Avatar == null)
-                this.Owner.SetAvatar();
-
             Color item_bg = is_black ? Color.Black : Color.White;
 
             if (tracked)
@@ -31,7 +28,10 @@ namespace cb0t
             using (SolidBrush brush = new SolidBrush(item_bg))
                 e.Graphics.FillRectangle(brush, e.Bounds);
 
-            e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
+            if (this.Owner.Avatar != null)
+                e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
+            else
+                e.Graphics.DrawImage(dav, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
 
             int img_x = 58;
 

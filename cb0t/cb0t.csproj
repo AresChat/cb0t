@@ -507,6 +507,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\dav.dat" />
     <None Include="Resources\read.png" />
   </ItemGroup>
   <ItemGroup>

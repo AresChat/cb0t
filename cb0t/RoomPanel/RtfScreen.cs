@@ -614,7 +614,7 @@ namespace cb0t
             return null;
         }
 
-        private void Render(String txt, String name, bool can_col, int first_col, AresFont ff)
+        private void Render(String txt, String name, bool can_col, int first_col, AresFont _ff)
         {
             String text = txt.Replace("\r\n", "\r").Replace("\n",
                 "\r").Replace("", "").Replace("]̽", "").Replace(" ̽",
@@ -625,6 +625,10 @@ namespace cb0t
             StringBuilder rtf = new StringBuilder();
             int col_index;
             String bg_test;
+            AresFont ff = _ff;
+
+            if (!Settings.GetReg<bool>("receive_ppl_fonts", true))
+                ff = null;
 
             if (ff == null)
                 cols.Add(this.GetColorFromCode(first_col));

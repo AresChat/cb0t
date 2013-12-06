@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace cb0t
 {

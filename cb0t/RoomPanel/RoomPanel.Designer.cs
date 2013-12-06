@@ -35,6 +35,7 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.accuTextBox1 = new cb0t.AccuTextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -52,7 +53,6 @@
             this.rtfScreen1 = new cb0t.RtfScreen();
             this.writingPanel1 = new cb0t.WritingPanel();
             this.userListContainer1 = new cb0t.UserListContainer();
-            this.accuTextBox1 = new cb0t.AccuTextBox();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -123,6 +123,23 @@
             this.panel3.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.panel3.Size = new System.Drawing.Size(550, 23);
             this.panel3.TabIndex = 1;
+            // 
+            // accuTextBox1
+            // 
+            this.accuTextBox1.BackColor = System.Drawing.Color.White;
+            this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.accuTextBox1.DetectUrls = false;
+            this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.accuTextBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accuTextBox1.HideSelection = false;
+            this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
+            this.accuTextBox1.Multiline = false;
+            this.accuTextBox1.Name = "accuTextBox1";
+            this.accuTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.accuTextBox1.Size = new System.Drawing.Size(546, 21);
+            this.accuTextBox1.TabIndex = 0;
+            this.accuTextBox1.Text = "";
+            this.accuTextBox1.WordWrap = false;
             // 
             // toolStrip2
             // 
@@ -248,6 +265,7 @@
             this.tabControl1.Size = new System.Drawing.Size(550, 277);
             this.tabControl1.TabIndex = 3;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseClick);
             // 
             // tabPage1
             // 
@@ -296,6 +314,7 @@
             this.rtfScreen1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtfScreen1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtfScreen1.HideSelection = false;
+            this.rtfScreen1.IsBlack = false;
             this.rtfScreen1.IsMainScreen = false;
             this.rtfScreen1.Location = new System.Drawing.Point(0, 0);
             this.rtfScreen1.Name = "rtfScreen1";
@@ -308,6 +327,7 @@
             // 
             this.writingPanel1.BackColor = System.Drawing.Color.White;
             this.writingPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.writingPanel1.IsBlack = false;
             this.writingPanel1.Location = new System.Drawing.Point(0, 233);
             this.writingPanel1.Mode = cb0t.WritingPanelMode.Writing;
             this.writingPanel1.Name = "writingPanel1";
@@ -324,23 +344,6 @@
             this.userListContainer1.Name = "userListContainer1";
             this.userListContainer1.Size = new System.Drawing.Size(224, 251);
             this.userListContainer1.TabIndex = 0;
-            // 
-            // accuTextBox1
-            // 
-            this.accuTextBox1.BackColor = System.Drawing.Color.White;
-            this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.accuTextBox1.DetectUrls = false;
-            this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.accuTextBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accuTextBox1.HideSelection = false;
-            this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
-            this.accuTextBox1.Multiline = false;
-            this.accuTextBox1.Name = "accuTextBox1";
-            this.accuTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.accuTextBox1.Size = new System.Drawing.Size(546, 21);
-            this.accuTextBox1.TabIndex = 0;
-            this.accuTextBox1.Text = "";
-            this.accuTextBox1.WordWrap = false;
             // 
             // RoomPanel
             // 

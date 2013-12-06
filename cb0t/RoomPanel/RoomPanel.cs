@@ -34,6 +34,8 @@ namespace cb0t
         public event EventHandler<RoomMenuItemClickedEventArgs> RoomMenuItemClicked;
         public event EventHandler HashlinkClicked;
 
+        private ContextMenuStrip rc_ctx { get; set; }
+
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
@@ -74,6 +76,14 @@ namespace cb0t
             this.rtfScreen1.HashlinkClicked += this.LinkHashlinkClicked;
             this.rtfScreen1.NameClicked += this.ScreenNameClicked;
             this.rtfScreen1.IsMainScreen = true;
+            this.rc_ctx = new ContextMenuStrip();
+            this.rc_ctx.Items.Add("Close");
+            this.rc_ctx.ItemClicked += this.CTXItemClicked;
+        }
+
+        private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            this.toolStripButton1_Click(null, EventArgs.Empty);
         }
 
         public void UpdateTemplate()
@@ -95,6 +105,7 @@ namespace cb0t
             this.toolStripDropDownButton1.DropDownItems[2].Text = StringTemplate.Get(STType.RoomMenu, 4);
             this.toolStripDropDownButton1.DropDownItems[3].Text = StringTemplate.Get(STType.RoomMenu, 5);
             this.toolStripDropDownButton1.DropDownItems[4].Text = StringTemplate.Get(STType.RoomMenu, 6);
+            this.rc_ctx.Items[0].Text = StringTemplate.Get(STType.RoomMenu, 1);
 
             for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
                 if (this.tabControl1.TabPages[i] is PMTab)
@@ -513,6 +524,7 @@ namespace cb0t
         public void Free()
         {
             this.tabControl1.SelectedIndexChanged -= this.tabControl1_SelectedIndexChanged;
+            this.tabControl1.MouseClick -= this.tabControl1_MouseClick;
 
             while (this.Controls.Count > 0)
                 this.Controls.RemoveAt(0);
@@ -627,6 +639,13 @@ namespace cb0t
             this.writingPanel1 = null;
             this.Font.Dispose();
             this.Font = null;
+            this.rc_ctx.ItemClicked += this.CTXItemClicked;
+
+            while (this.rc_ctx.Items.Count > 0)
+                this.rc_ctx.Items[0].Dispose();
+
+            this.rc_ctx.Dispose();
+            this.rc_ctx = null;
         }
 
         public void CloseAllTabs(bool including_main)
@@ -905,6 +924,12 @@ namespace cb0t
         private void toolStripButton8_MouseLeave(object sender, EventArgs e)
         {
             this.VoiceRecordingButtonClicked(false, EventArgs.Empty);
+        }
+
+        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                this.rc_ctx.Show(this.tabControl1, e.Location);
         }
     }
 }
