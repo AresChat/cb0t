@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace cb0t
 {
@@ -16,6 +18,7 @@ namespace cb0t
         private int hover_item = -1;
         private bool updating = false;
         private UserListToolTip popup;
+        private Bitmap def_av = null;
 
         public bool IsBlack { get; set; }
 
@@ -32,6 +35,39 @@ namespace cb0t
             this.away_icon = (Bitmap)Properties.Resources.away.Clone();
             this.voice_icon = (Bitmap)Properties.Resources.button4.Clone();
             this.popup = new UserListToolTip();
+
+            if (Avatar.DefaultAvatar != null)
+                this.createdefav();
+        }
+
+        private void createdefav()
+        {
+            using (MemoryStream ms = new MemoryStream(Avatar.DefaultAvatar))
+            using (Bitmap dav = new Bitmap(ms))
+            using (Bitmap sized = new Bitmap(53, 53))
+            using (Graphics sized_g = Graphics.FromImage(sized))
+            {
+                sized_g.SmoothingMode = SmoothingMode.HighQuality;
+                sized_g.CompositingQuality = CompositingQuality.HighQuality;
+                sized_g.DrawImage(dav, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
+                this.def_av = new Bitmap(53, 53);
+
+                using (Graphics av_g = Graphics.FromImage(this.def_av))
+                using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                using (TextureBrush brush = new TextureBrush(sized))
+                {
+                    av_g.SmoothingMode = SmoothingMode.HighQuality;
+                    av_g.CompositingQuality = CompositingQuality.HighQuality;
+
+                    using (SolidBrush sb = new SolidBrush(Color.White))
+                        av_g.FillPath(sb, path);
+
+                    av_g.FillPath(brush, path);
+
+                    using (Pen pen = new Pen(Color.Gainsboro, 1))
+                        av_g.DrawPath(pen, path);
+                }
+            }
         }
 
         public void UpdateBlackImgs()
@@ -55,6 +91,12 @@ namespace cb0t
             this.away_icon = null;
             this.voice_icon.Dispose();
             this.voice_icon = null;
+
+            if (this.def_av != null)
+            {
+                this.def_av.Dispose();
+                this.def_av = null;
+            }
         }
 
         public new void BeginUpdate()
@@ -237,7 +279,7 @@ namespace cb0t
             if (e.Index > -1)
             {
                 if (this.Items[e.Index] is UserListBoxItem)
-                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon, this.IsBlack);
+                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon, this.IsBlack, ref this.def_av);
                 else if (this.Items[e.Index] is UserListBoxSectionItem)
                     ((UserListBoxSectionItem)this.Items[e.Index]).Draw(e);
                 else if (this.Items[e.Index] is UserListBoxEmptyItem)

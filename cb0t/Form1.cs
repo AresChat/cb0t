@@ -424,14 +424,6 @@ namespace cb0t
             this.exitToolStripMenuItem.Text = StringTemplate.Get(STType.SystemTray, 2);
             this.audio_content.UpdateTemplate();
             this.clist_content.UpdateTemplate();
-
-            for (int i = 0; i < this.toolStrip1.Items.Count; i++)
-                if (this.toolStrip1.Items[i] is ChannelListButton)
-                {
-                    this.toolStrip1.Items[i].Text = this.toolStrip1.Items[i].Text.Replace("Channels", StringTemplate.Get(STType.TopBar, 2)).Replace("Searching", StringTemplate.Get(STType.TopBar, 3));
-                    break;
-                }
-
             RoomPool.Rooms.ForEach(x => x.UpdateTemplate());
             SharedUI.UpdateTemplate();
         }

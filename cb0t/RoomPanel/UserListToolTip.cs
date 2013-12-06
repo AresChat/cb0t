@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -12,13 +13,47 @@ namespace cb0t
     {
         public User CurrentUser { get; set; }
         private Font Font { get; set; }
+        private Bitmap def_av = null;
 
         public UserListToolTip()
         {
+            if (Avatar.DefaultAvatar != null)
+                this.createdefav();
+
             this.Font = new Font("Tahoma", 12f, FontStyle.Bold, GraphicsUnit.Pixel, 0);
             this.OwnerDraw = true;
             this.Popup += this.OnPopup;
             this.Draw += this.OnDraw;
+        }
+
+        private void createdefav()
+        {
+            using (MemoryStream ms = new MemoryStream(Avatar.DefaultAvatar))
+            using (Bitmap dav = new Bitmap(ms))
+            using (Bitmap sized = new Bitmap(53, 53))
+            using (Graphics sized_g = Graphics.FromImage(sized))
+            {
+                sized_g.SmoothingMode = SmoothingMode.HighQuality;
+                sized_g.CompositingQuality = CompositingQuality.HighQuality;
+                sized_g.DrawImage(dav, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
+                this.def_av = new Bitmap(53, 53);
+
+                using (Graphics av_g = Graphics.FromImage(this.def_av))
+                using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                using (TextureBrush brush = new TextureBrush(sized))
+                {
+                    av_g.SmoothingMode = SmoothingMode.HighQuality;
+                    av_g.CompositingQuality = CompositingQuality.HighQuality;
+
+                    using (SolidBrush sb = new SolidBrush(Color.White))
+                        av_g.FillPath(sb, path);
+
+                    av_g.FillPath(brush, path);
+
+                    using (Pen pen = new Pen(Color.Gainsboro, 1))
+                        av_g.DrawPath(pen, path);
+                }
+            }
         }
 
         public void Free()
@@ -28,6 +63,12 @@ namespace cb0t
             this.CurrentUser = null;
             this.Font.Dispose();
             this.Font = null;
+
+            if (this.def_av != null)
+            {
+                this.def_av.Dispose();
+                this.def_av = null;
+            }
         }
 
         private void OnDraw(object sender, DrawToolTipEventArgs e)
@@ -37,10 +78,11 @@ namespace cb0t
                 using (LinearGradientBrush brush = new LinearGradientBrush(e.Bounds, Color.WhiteSmoke, Color.Silver, LinearGradientMode.Vertical))
                     e.Graphics.FillRectangle(brush, e.Bounds);
 
-                if (this.CurrentUser.Avatar == null)
-                    this.CurrentUser.SetAvatar();
+                if (this.CurrentUser.Avatar != null)
+                    e.Graphics.DrawImage(this.CurrentUser.Avatar, new Rectangle(5, 5, 80, 80));
+                else
+                    e.Graphics.DrawImage(this.def_av, new Rectangle(5, 5, 80, 80));
 
-                e.Graphics.DrawImage(this.CurrentUser.Avatar, new Rectangle(5, 5, 80, 80));
                 this.DrawString(this.CurrentUser.Name, e.Graphics);
             }
         }

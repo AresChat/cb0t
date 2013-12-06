@@ -295,17 +295,14 @@ namespace cb0t
                 if (!ScriptEvents.OnUserAvatarReceiving(this, u))
                     return;
 
-                this.Panel.Userlist.BeginInvoke((Action)(() =>
-                {
-                    byte[] data = packet;
+                byte[] data = packet;
 
-                    if (data.Length <= 10)
-                        u.ClearAvatar();
-                    else
-                        u.SetAvatar(data);
+                if (data.Length <= 10)
+                    u.ClearAvatar();
+                else
+                    u.SetAvatar(data);
 
-                    this.Panel.Userlist.UpdateUserAppearance(u);
-                }));
+                this.Panel.Userlist.UpdateUserAppearance(u);
             }
         }
 
