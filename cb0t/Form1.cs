@@ -560,6 +560,9 @@ namespace cb0t
             }
             else
             {
+                if (String.IsNullOrEmpty(e.Room.Name))
+                    return;
+
                 Room room = new Room(Settings.Time, e.Room, this, Settings.GetReg<bool>("back_bg", false));
                 room.Button = new ChannelButton(room.Credentials);
                 room.Panel = new RoomPanel(room.Credentials);
