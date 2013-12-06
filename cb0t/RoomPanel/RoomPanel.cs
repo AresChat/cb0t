@@ -488,16 +488,21 @@ namespace cb0t
             this.ScribblePMAvailable = can;
         }
 
+        private delegate void InitScribbleDelegate();
         public void InitScribbleButton()
         {
-            this.toolStrip2.BeginInvoke((Action)(() =>
+            if (!this.toolStrip2.IsHandleCreated)
+                return;
+
+            if (this.toolStrip2.InvokeRequired)
+                this.toolStrip2.BeginInvoke(new InitScribbleDelegate(this.InitScribbleButton));
+            else
             {
-                if (this.tabControl1.SelectedIndex == 0)
+                if (this.Mode == ScreenMode.Main)
                     this.toolStripButton9.Enabled = this.ScribbleAllAvailable;
-                else if (this.tabControl1.SelectedTab != null)
-                    if (this.tabControl1.SelectedTab is PMTab)
-                        this.toolStripButton9.Enabled = this.ScribblePMAvailable;
-            }));
+                else if (this.Mode == ScreenMode.PM)
+                    this.toolStripButton9.Enabled = this.ScribblePMAvailable;
+            }
         }
 
         private String url_tag = String.Empty;
