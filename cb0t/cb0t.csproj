@@ -553,9 +553,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\dav.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\crypto.png" />
   </ItemGroup>
   <ItemGroup>
