@@ -355,6 +355,27 @@ namespace cb0t
                     u.SupportsVC = true;
             }
 
+            User ghost = this.users.Find(x => x.Name == u.Name);
+
+            if (ghost != null)
+            {
+                this.users.RemoveAll(x => x.Name == ghost.Name);
+                this.Panel.Userlist.RemoveUserItem(ghost);
+
+                if (ghost.Writing)
+                {
+                    ghost.Writing = false;
+                    this.Panel.UpdateWriter(ghost);
+                }
+
+                if (ScriptEvents.OnUserParting(this, ghost))
+                    this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", ghost.Name));
+
+                ScriptEvents.OnUserParted(this, ghost);
+                ghost.Dispose();
+                ghost = null;
+            }
+
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
 
@@ -430,6 +451,10 @@ namespace cb0t
             }
 
             u.IsFriend = Friends.IsFriend(u.Name);
+
+            if (this.users.Find(x => x.Name == u.Name) != null)
+                return;
+
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
 
