@@ -100,7 +100,7 @@ namespace cb0t
         MSG_CHAT_CLIENT_SCRIBBLEROOM_CHUNK = 241,
 
 
-
+        MSG_CHAT_CLIENT_BLOCK_CUSTOMNAMES = 242, // 1 byte -> 0=no 1=yes
         MSG_LINK_PROTO = 251
     }
 }

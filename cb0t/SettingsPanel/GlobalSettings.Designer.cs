@@ -50,6 +50,7 @@
             this.checkBox12 = new System.Windows.Forms.CheckBox();
             this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.checkBox14 = new System.Windows.Forms.CheckBox();
+            this.checkBox15 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -192,7 +193,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(32, 339);
+            this.groupBox1.Location = new System.Drawing.Point(32, 357);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(256, 134);
             this.groupBox1.TabIndex = 12;
@@ -254,7 +255,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(29, 291);
+            this.label4.Location = new System.Drawing.Point(29, 309);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 13);
             this.label4.TabIndex = 13;
@@ -273,7 +274,7 @@
             "Spanish",
             "Spanish (Mexico)",
             "Spanish (Catalan)"});
-            this.comboBox2.Location = new System.Drawing.Point(32, 307);
+            this.comboBox2.Location = new System.Drawing.Point(32, 325);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(145, 21);
             this.comboBox2.TabIndex = 14;
@@ -312,11 +313,23 @@
             this.checkBox14.UseVisualStyleBackColor = true;
             this.checkBox14.CheckedChanged += new System.EventHandler(this.checkBox14_CheckedChanged);
             // 
+            // checkBox15
+            // 
+            this.checkBox15.AutoSize = true;
+            this.checkBox15.Location = new System.Drawing.Point(32, 284);
+            this.checkBox15.Name = "checkBox15";
+            this.checkBox15.Size = new System.Drawing.Size(124, 17);
+            this.checkBox15.TabIndex = 18;
+            this.checkBox15.Text = "Block custom names";
+            this.checkBox15.UseVisualStyleBackColor = true;
+            this.checkBox15.CheckedChanged += new System.EventHandler(this.checkBox15_CheckedChanged);
+            // 
             // GlobalSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.checkBox15);
             this.Controls.Add(this.checkBox14);
             this.Controls.Add(this.checkBox13);
             this.Controls.Add(this.checkBox12);
@@ -369,5 +382,6 @@
         private System.Windows.Forms.CheckBox checkBox12;
         private System.Windows.Forms.CheckBox checkBox13;
         private System.Windows.Forms.CheckBox checkBox14;
+        private System.Windows.Forms.CheckBox checkBox15;
     }
 }

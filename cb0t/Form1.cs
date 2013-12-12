@@ -307,6 +307,7 @@ namespace cb0t
                 this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
                 this.settings_content.SpellCheckUpdate2 += this.SpellCheckUpdate2;
                 this.settings_content.OnTemplateChanged += this.OnTemplateChanged;
+                this.settings_content.BlockCustomNamesUpdate2 += this.BlockCustomNamesUpdate;
                 this.settings_content.CreateSettings();
                 this.audio_content.LoadPlaylist();
 
@@ -328,6 +329,7 @@ namespace cb0t
                 this.audio_content.PlayPauseIconChanged += this.PlayPauseIconChanged;
                 this.audio_content.ShowAudioText += this.ShowAudioText;
                 this.toolStripButton5.Image = this.img_play;
+                this.playpauseToolStripMenuItem.Image = this.img_play;
                 this.toolStrip1.Items[2].Enabled = AudioPanel.Available;
                 this.toolStrip2.Enabled = AudioPanel.Available;
                 this.wmp = new MediaIPC.WMP.WMPListener(this, AudioPanel.Available);
@@ -373,6 +375,12 @@ namespace cb0t
             }
         }
 
+        private void BlockCustomNamesUpdate(object sender, EventArgs e)
+        {
+            bool block = Settings.GetReg<bool>("block_custom_names", false);
+            RoomPool.Rooms.ForEach(x => x.UpdateBlockCustomNamesStatus(block));
+        }
+
         private void IPCHashlinkReceived(object sender, IPCListenerEventArgs e)
         {
             this.BeginInvoke((Action)(() =>
@@ -416,6 +424,11 @@ namespace cb0t
             this.toolStripButton4.ToolTipText = StringTemplate.Get(STType.AudioBar, 8);
             this.toolStripButton5.ToolTipText = StringTemplate.Get(STType.AudioBar, 9);
             this.toolStripButton6.ToolTipText = StringTemplate.Get(STType.AudioBar, 10);
+            this.audioToolStripMenuItem.Text = StringTemplate.Get(STType.TopBar, 1);
+            this.nextToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 10);
+            this.playpauseToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 9);
+            this.previousToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 8);
+            this.stopToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 7);
             this.toolStrip1.Items[0].ToolTipText = StringTemplate.Get(STType.TopBar, 0);
             this.toolStrip1.Items[2].ToolTipText = StringTemplate.Get(STType.TopBar, 1);
             this.toolStrip1.Items[4].ToolTipText = StringTemplate.Get(STType.TopBar, 2);
@@ -450,6 +463,7 @@ namespace cb0t
         private void PlayPauseIconChanged(object sender, EventArgs e)
         {
             this.toolStripButton5.Image = ((bool)sender) ? this.img_play : this.img_pause;
+            this.playpauseToolStripMenuItem.Image = ((bool)sender) ? this.img_play : this.img_pause;
         }
 
         private void SysTrayMouseClicked(object sender, MouseEventArgs e)
@@ -909,6 +923,26 @@ namespace cb0t
         private void notifyIcon1_BalloonTipClosed(object sender, EventArgs e)
         {
             this.can_show_popup = true;
+        }
+
+        private void nextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.audio_content.NextClicked();
+        }
+
+        private void playpauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.audio_content.PlayPauseClicked();
+        }
+
+        private void previousToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.audio_content.PreviousClicked();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.audio_content.StopClicked();
         }
     }
 }

@@ -223,6 +223,18 @@ namespace cb0t
                     }
         }
 
+        public String GetSelectedName
+        {
+            get
+            {
+                if (this.userListBox1.SelectedItem != null)
+                    if (this.userListBox1.SelectedItem is UserListBoxItem)
+                        return ((UserListBoxItem)this.userListBox1.SelectedItem).Owner.Name;
+
+                return null;
+            }
+        }
+
         public void UpdateServerVersion(String text)
         {
             this.userListHeader1.ServerVersion = text;

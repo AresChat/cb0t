@@ -376,6 +376,7 @@ namespace cb0t
 
         private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
+            this.img_data = new byte[] { };
             this.img_data = null;
             this.vc_sc = 0;
         }
@@ -660,6 +661,7 @@ namespace cb0t
             bool can_emoticon = Settings.GetReg<bool>("can_emoticon", true);
             int emote_count = 0;
             Color back_color = this.IsBlack ? Color.Black : Color.White;
+            bool bg_code_used = false;
 
             String tmp;
             int itmp;
@@ -692,6 +694,14 @@ namespace cb0t
 
                                 if (Helpers.IsHexCode(tmp))
                                 {
+                                    if (!bg_code_used)
+                                    {
+                                        if (this.IsBlack && tmp == "#000000")
+                                            itmp = 0;
+                                        else if (!this.IsBlack && tmp.ToUpper() == "#FFFFFF")
+                                            itmp = 1;
+                                    }
+
                                     col_index = this.GetColorIndex(ref cols, this.HTMLColorToColor(tmp));
 
                                     if (col_index > -1)
@@ -713,6 +723,14 @@ namespace cb0t
 
                                 if (int.TryParse(tmp, out itmp))
                                 {
+                                    if (!bg_code_used)
+                                    {
+                                        if (this.IsBlack && itmp == 1)
+                                            itmp = 0;
+                                        else if (!this.IsBlack && itmp == 0)
+                                            itmp = 1;
+                                    }
+
                                     col_index = this.GetColorIndex(ref cols, this.GetColorFromCode(itmp));
 
                                     if (col_index > -1)
@@ -747,6 +765,7 @@ namespace cb0t
                                         rtf.Append("\\highlight0\\highlight" + cols.Count + " ");
                                     }
 
+                                    bg_code_used = true;
                                     i += 7;
                                     break;
                                 }
@@ -769,6 +788,7 @@ namespace cb0t
                                         rtf.Append("\\highlight0\\highlight" + cols.Count + " ");
                                     }
 
+                                    bg_code_used = true;
                                     i += 2;
                                     break;
                                 }

@@ -272,6 +272,13 @@ namespace cb0t
             }
         }
 
+        public void UpdateBlockCustomNamesStatus(bool block)
+        {
+            if (this.state == SessionState.Connected)
+                if (this.sock != null)
+                    this.sock.SendTrickle(TCPOutbound.BlockCustomNames(block));
+        }
+
         public void CancelWritingStatus()
         {
             this.Panel.UpdateMyWriting(this.MyName, false);
@@ -400,7 +407,13 @@ namespace cb0t
                 if (this.state != SessionState.Connected)
                     return;
 
-                this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
+                User u = this.users.Find(x => x.Name == name);
+
+                if (u != null)
+                {
+                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.UserList, 1) + " " + u.Name);
+                    this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
+                }
             }
             else if (e.Task == ULCTXTask.Whois)
             {
@@ -849,7 +862,17 @@ namespace cb0t
                                     this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
                             }
                         }
-                        else this.sock.Send(TCPOutbound.Public(Settings.GetReg<String>("pretext", String.Empty) + text, this.crypto));
+                        else
+                        {
+                            if (e.Shift)
+                            {
+                                String whisper_name = this.Panel.Userlist.GetSelectedName;
+
+                                if (!String.IsNullOrEmpty(whisper_name))
+                                    this.sock.Send(TCPOutbound.Command("whisper \"" + whisper_name + "\" " + text, this.crypto));
+                            }
+                            else this.sock.Send(TCPOutbound.Public(Settings.GetReg<String>("pretext", String.Empty) + text, this.crypto));
+                        }
                     }
                     else if (this.Panel.Mode == ScreenMode.PM)
                     {

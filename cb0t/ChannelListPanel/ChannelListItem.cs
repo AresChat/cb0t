@@ -10,6 +10,7 @@ namespace cb0t
     {
         public String Name { get; set; }
         public String Topic { get; set; }
+        public String StrippedTopic { get; set; }
         public ushort Port { get; set; }
         public IPAddress IP { get; set; }
         public IPEndPoint[] Servers { get; set; }
@@ -25,6 +26,7 @@ namespace cb0t
         {
             this.Name = name;
             this.Topic = topic;
+            this.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(this.Topic)).ToUpper();
             this.Port = port;
             this.IP = ip;
             this.Servers = new IPEndPoint[] { };
@@ -39,6 +41,7 @@ namespace cb0t
             this.Users = packet.ReadUInt16();
             this.Name = packet.ReadString();
             this.Topic = packet.ReadString();
+            this.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(this.Topic)).ToUpper();
             this.Lang = (RoomLanguage)packet.ReadByte();
             packet.ReadString();
             byte count = packet.ReadByte();
