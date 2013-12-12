@@ -119,7 +119,7 @@ namespace cb0t
                             this.gfx.RenderChannelListItem(item, rooms[i]);
                             this.gfx_items.Add(item);
 
-                            if (rooms[i].Name.ToUpper().Contains(text))
+                            if (rooms[i].Name.ToUpper().Contains(text) || rooms[i].StrippedTopic.Contains(text))
                                 if (rooms[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
                                 {
                                     this.part_channel_list.Add(rooms[i]);
@@ -343,7 +343,7 @@ namespace cb0t
                 this.part_channel_list = new List<ChannelListItem>();
 
                 for (int i = 0; i < this.full_channel_list.Count; i++)
-                    if (this.full_channel_list[i].Name.ToUpper().Contains(text))
+                    if (this.full_channel_list[i].Name.ToUpper().Contains(text) || this.full_channel_list[i].StrippedTopic.Contains(text))
                         if (this.full_channel_list[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
                         {
                             this.part_channel_list.Add(this.full_channel_list[i]);
@@ -416,6 +416,7 @@ namespace cb0t
                     item.Lang = (RoomLanguage)buf.ReadByte();
                     item.Name = buf.ReadString();
                     item.Topic = buf.ReadString();
+                    item.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(item.Topic)).ToUpper();
                     item.Users = buf.ReadUInt16();
                     this.full_channel_list.Add(item);
                     ChannelListViewItem vitem = new ChannelListViewItem();

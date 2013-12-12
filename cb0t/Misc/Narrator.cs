@@ -72,41 +72,41 @@ namespace cb0t
 
                         if (s.ToUpper().Equals("LOL"))
                             s = "laugh out loud";
-                        else if (s.ToUpper().Contains("LMAO"))
+                        else if (s.ToUpper().Equals("LMAO"))
                             s = "laughing my ass off";
-                        else if (s.ToUpper().Contains("PMSL"))
+                        else if (s.ToUpper().Equals("PMSL"))
                             s = "pissing myself laugh";
-                        else if (s.ToUpper().Contains("OMG"))
+                        else if (s.ToUpper().Equals("OMG"))
                             s = "oh my god";
-                        else if (s.ToUpper().Contains("ROFL"))
+                        else if (s.ToUpper().Equals("ROFL"))
                             s = "rolling on the floor laughing";
-                        else if (s.ToUpper().Contains("LMFAO"))
+                        else if (s.ToUpper().Equals("LMFAO"))
                             s = "laughing my fucking ass off";
-                        else if (s.ToUpper().Contains("OMFG"))
+                        else if (s.ToUpper().Equals("OMFG"))
                             s = "oh my fucking god";
-                        else if (s.ToUpper().Contains("WTF"))
+                        else if (s.ToUpper().Equals("WTF"))
                             s = "what the fuck?";
-                        else if (s.ToUpper().Contains("WB"))
+                        else if (s.ToUpper().Equals("WB"))
                             s = "welcome back";
-                        else if (s.ToUpper().Contains("TY"))
+                        else if (s.ToUpper().Equals("TY"))
                             s = "thank you";
-                        else if (s.ToUpper().Contains("THX"))
+                        else if (s.ToUpper().Equals("THX"))
                             s = "thank you";
-                        else if (s.ToUpper().Contains("YW"))
+                        else if (s.ToUpper().Equals("YW"))
                             s = "you're welcome";
-                        else if (s.ToUpper().Contains("BRB"))
+                        else if (s.ToUpper().Equals("BRB"))
                             s = "be right back";
-                        else if (s.ToUpper().Contains("BBL"))
+                        else if (s.ToUpper().Equals("BBL"))
                             s = "be back later";
-                        else if (s.ToUpper().Contains("BBS"))
+                        else if (s.ToUpper().Equals("BBS"))
                             s = "be back soon";
-                        else if (s.ToUpper().Contains("BBIAB"))
+                        else if (s.ToUpper().Equals("BBIAB"))
                             s = "be back in a bit";
-                        else if (s.ToUpper().Contains("BIAB"))
+                        else if (s.ToUpper().Equals("BIAB"))
                             s = "back in a bit";
-                        else if (s.ToUpper().Contains("TYT"))
+                        else if (s.ToUpper().Equals("TYT"))
                             s = "take your time";
-                        else if (s.ToUpper().Contains("TTYL"))
+                        else if (s.ToUpper().Equals("TTYL"))
                             s = "talk to you later";
 
                         words[i] = s;

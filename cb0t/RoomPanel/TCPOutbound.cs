@@ -16,7 +16,7 @@ namespace cb0t
             packet.WriteGuid(Settings.Guid);
             packet.WriteUInt16(0);
             packet.WriteByte((byte)Settings.GetReg<int>("crypto", 250));
-            packet.WriteUInt16(220);
+            packet.WriteUInt16(Settings.Port);
             packet.WriteIP("0.0.0.0");
             packet.WriteUInt16(65535);
             packet.WriteUInt32(0);
@@ -80,6 +80,16 @@ namespace cb0t
             packet.WriteByte((byte)(Settings.GetReg<bool>("vc_public", true) ? 1 : 0));
             packet.WriteByte((byte)(Settings.GetReg<bool>("vc_private", true) ? 1 : 0));
             byte[] buf = packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_VC_SUPPORTED);
+            packet = new TCPPacketWriter();
+            packet.WriteBytes(buf);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL);
+        }
+
+        public static byte[] BlockCustomNames(bool block)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteByte((byte)(block ? 1 : 0));
+            byte[] buf = packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_BLOCK_CUSTOMNAMES);
             packet = new TCPPacketWriter();
             packet.WriteBytes(buf);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_ADVANCED_FEATURES_PROTOCOL);

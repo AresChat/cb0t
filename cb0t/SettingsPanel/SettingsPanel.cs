@@ -23,6 +23,7 @@ namespace cb0t
         public event EventHandler JoinFromHashlinkClicked;
         public event EventHandler SpellCheckUpdate2;
         public event EventHandler OnTemplateChanged;
+        public event EventHandler BlockCustomNamesUpdate2;
 
         public SettingsPanel()
         {
@@ -56,6 +57,7 @@ namespace cb0t
             this.global_settings.Dock = DockStyle.Fill;
             this.global_settings.AutoScroll = true;
             this.global_settings.SpellCheckUpdate += this.SpellCheckUpdate;
+            this.global_settings.BlockCustomNamesUpdate += this.BlockCustomNamesUpdate;
             this.global_settings.Populate();
             this.hashlink_settings = new HashlinkSettings();
             this.hashlink_settings.Dock = DockStyle.Fill;
@@ -84,6 +86,12 @@ namespace cb0t
             this.privacy_settings.Populate();
 
             this.treeView1.SelectedNode = this.treeView1.Nodes[0];
+        }
+
+        private void BlockCustomNamesUpdate(object sender, EventArgs e)
+        {
+            if (this.BlockCustomNamesUpdate2 != null)
+                this.BlockCustomNamesUpdate2(sender, e);
         }
 
         private void TemplateChanged(object sender, EventArgs e)

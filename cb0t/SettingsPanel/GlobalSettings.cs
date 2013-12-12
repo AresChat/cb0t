@@ -38,9 +38,11 @@ namespace cb0t
             this.label3.Text = StringTemplate.Get(STType.ChatSettings, 15) + ":";
             this.label2.Text = StringTemplate.Get(STType.ChatSettings, 16) + ":";
             this.checkBox14.Text = StringTemplate.Get(STType.ChatSettings, 17);
+            this.checkBox15.Text = StringTemplate.Get(STType.ChatSettings, 18);
         }
 
         public event EventHandler SpellCheckUpdate;
+        public event EventHandler BlockCustomNamesUpdate;
 
         public void Populate()
         {
@@ -59,6 +61,7 @@ namespace cb0t
             this.checkBox12.Checked = Settings.GetReg<bool>("back_bg", false);
             this.checkBox13.Checked = Settings.GetReg<bool>("block_friend_popup", false);
             this.checkBox14.Checked = Settings.GetReg<bool>("receive_ppl_fonts", true);
+            this.checkBox15.Checked = Settings.GetReg<bool>("block_custom_names", false);
 
             InstalledFontCollection fonts = new InstalledFontCollection();
 
@@ -170,6 +173,14 @@ namespace cb0t
         private void checkBox14_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SetReg("receive_ppl_fonts", this.checkBox14.Checked);
+        }
+
+        private void checkBox15_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SetReg("block_custom_names", this.checkBox15.Checked);
+
+            if (this.BlockCustomNamesUpdate != null)
+                this.BlockCustomNamesUpdate(null, EventArgs.Empty);
         }
     }
 }

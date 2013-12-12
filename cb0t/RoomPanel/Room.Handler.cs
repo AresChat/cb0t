@@ -158,6 +158,8 @@ namespace cb0t
 
                 this.new_sbot = (vnum >= 514);
             }
+            else if (version.StartsWith("Ares 2.") || version.StartsWith("Ares_2."))
+                this.new_sbot = true; // maybe future Ares Server will support cb0t Custom Fonts?
 
             ServerFeatures flag = (ServerFeatures)((byte)packet);
             this.CanVC = ((flag & ServerFeatures.SERVER_SUPPORTS_VC) == ServerFeatures.SERVER_SUPPORTS_VC);
@@ -188,6 +190,9 @@ namespace cb0t
 
             if (Settings.GetReg<bool>("user_font_enabled", false))
                 this.sock.SendTrickle(TCPOutbound.Font(this.new_sbot, this.crypto));
+
+            if (Settings.GetReg<bool>("block_custom_names", false))
+                this.sock.SendTrickle(TCPOutbound.BlockCustomNames(true));
 
             ScriptEvents.OnConnected(this);
         }

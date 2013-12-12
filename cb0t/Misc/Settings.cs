@@ -13,7 +13,7 @@ namespace cb0t
     class Settings
     {
         public const String APP_NAME = "cb0t";
-        public const String APP_VERSION = "3.05";
+        public const String APP_VERSION = "3.06";
 
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }
@@ -91,6 +91,23 @@ namespace cb0t
                 }
 
                 return new Guid(buf);
+            }
+        }
+
+        public static ushort Port
+        {
+            get
+            {
+                int p = GetReg<int>("data_port", 0);
+
+                if (p == 0)
+                {
+                    Random rnd = new Random((int)Helpers.UnixTime);
+                    p = rnd.Next(1000, 60000);
+                    SetReg("data_port", p);
+                }
+
+                return (ushort)p;
             }
         }
 
