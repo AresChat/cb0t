@@ -58,7 +58,7 @@ namespace cb0t
                             g.ReleaseHdc(ptr);
 
                             using (Graphics gfx = Graphics.FromImage(meta))
-                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
                             ptr = meta.GetHenhmetafile();
                             uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);

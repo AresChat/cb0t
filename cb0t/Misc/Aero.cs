@@ -74,7 +74,7 @@ namespace cb0t
                 (uint)Marshal.SizeOf(typeof(WTA_OPTIONS)));
         }
 
-        public static void ExtendTop(Form form, int pixels)
+        public static void ExtendAero(Form form, int top_pixels, int bottom_pixels)
         {
             if (!CanAero)
                 return;
@@ -82,8 +82,8 @@ namespace cb0t
             MARGINS m = new MARGINS();
             m.left = 0;
             m.right = 0;
-            m.top = pixels;
-            m.bottom = 0;
+            m.top = top_pixels;
+            m.bottom = bottom_pixels;
 
             DwmExtendFrameIntoClientArea(form.Handle, ref m);
         }

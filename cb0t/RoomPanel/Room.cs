@@ -911,7 +911,7 @@ namespace cb0t
 
                 foreach (String str in lines)
                 {
-                    String text = str.Replace("+n", pmname);
+                    String text = Helpers.FormatAresColorCodes(str.Replace("+n", pmname));
 
                     if (!String.IsNullOrEmpty(text))
                     {

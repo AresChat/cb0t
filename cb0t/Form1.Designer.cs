@@ -36,6 +36,12 @@
             this.moveRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.audioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playpauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.showAsOnlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAsAwayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,12 +63,6 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.audioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.nextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.playpauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.previousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.content1 = new cb0t.Content();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
@@ -126,7 +126,55 @@
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(156, 126);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(156, 104);
+            // 
+            // audioToolStripMenuItem
+            // 
+            this.audioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nextToolStripMenuItem,
+            this.playpauseToolStripMenuItem,
+            this.previousToolStripMenuItem,
+            this.stopToolStripMenuItem});
+            this.audioToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("audioToolStripMenuItem.Image")));
+            this.audioToolStripMenuItem.Name = "audioToolStripMenuItem";
+            this.audioToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.audioToolStripMenuItem.Text = "Audio";
+            // 
+            // nextToolStripMenuItem
+            // 
+            this.nextToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nextToolStripMenuItem.Image")));
+            this.nextToolStripMenuItem.Name = "nextToolStripMenuItem";
+            this.nextToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.nextToolStripMenuItem.Text = "next";
+            this.nextToolStripMenuItem.Click += new System.EventHandler(this.nextToolStripMenuItem_Click);
+            // 
+            // playpauseToolStripMenuItem
+            // 
+            this.playpauseToolStripMenuItem.Name = "playpauseToolStripMenuItem";
+            this.playpauseToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.playpauseToolStripMenuItem.Text = "play/pause";
+            this.playpauseToolStripMenuItem.Click += new System.EventHandler(this.playpauseToolStripMenuItem_Click);
+            // 
+            // previousToolStripMenuItem
+            // 
+            this.previousToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("previousToolStripMenuItem.Image")));
+            this.previousToolStripMenuItem.Name = "previousToolStripMenuItem";
+            this.previousToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.previousToolStripMenuItem.Text = "previous";
+            this.previousToolStripMenuItem.Click += new System.EventHandler(this.previousToolStripMenuItem_Click);
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("stopToolStripMenuItem.Image")));
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.stopToolStripMenuItem.Text = "stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
             // 
             // showAsOnlineToolStripMenuItem
             // 
@@ -158,6 +206,7 @@
             // 
             // toolStrip2
             // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Black;
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -293,54 +342,6 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // audioToolStripMenuItem
-            // 
-            this.audioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nextToolStripMenuItem,
-            this.playpauseToolStripMenuItem,
-            this.previousToolStripMenuItem,
-            this.stopToolStripMenuItem});
-            this.audioToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("audioToolStripMenuItem.Image")));
-            this.audioToolStripMenuItem.Name = "audioToolStripMenuItem";
-            this.audioToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.audioToolStripMenuItem.Text = "Audio";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
-            // 
-            // nextToolStripMenuItem
-            // 
-            this.nextToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nextToolStripMenuItem.Image")));
-            this.nextToolStripMenuItem.Name = "nextToolStripMenuItem";
-            this.nextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.nextToolStripMenuItem.Text = "next";
-            this.nextToolStripMenuItem.Click += new System.EventHandler(this.nextToolStripMenuItem_Click);
-            // 
-            // playpauseToolStripMenuItem
-            // 
-            this.playpauseToolStripMenuItem.Name = "playpauseToolStripMenuItem";
-            this.playpauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.playpauseToolStripMenuItem.Text = "play/pause";
-            this.playpauseToolStripMenuItem.Click += new System.EventHandler(this.playpauseToolStripMenuItem_Click);
-            // 
-            // previousToolStripMenuItem
-            // 
-            this.previousToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("previousToolStripMenuItem.Image")));
-            this.previousToolStripMenuItem.Name = "previousToolStripMenuItem";
-            this.previousToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.previousToolStripMenuItem.Text = "previous";
-            this.previousToolStripMenuItem.Click += new System.EventHandler(this.previousToolStripMenuItem_Click);
-            // 
-            // stopToolStripMenuItem
-            // 
-            this.stopToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("stopToolStripMenuItem.Image")));
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.stopToolStripMenuItem.Text = "stop";
-            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
-            // 
             // content1
             // 
             this.content1.BackColor = System.Drawing.Color.White;
@@ -355,6 +356,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(884, 561);
             this.Controls.Add(this.content1);
             this.Controls.Add(this.toolStrip2);

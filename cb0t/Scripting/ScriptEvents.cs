@@ -135,15 +135,15 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
-                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.StartsWith("/") && f.Text.Length > 1)
-                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.Length > 0)
-                                room.SendText(f.Text.Replace("+n", user.Name));
+                                room.SendText(f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                         }
                     }
                 }
@@ -161,15 +161,15 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
-                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.StartsWith("/") && f.Text.Length > 1)
-                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.Length > 0)
-                                room.SendText(f.Text.Replace("+n", user.Name));
+                                room.SendText(f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                         }
                     }
                 }
@@ -247,15 +247,15 @@ namespace cb0t
                     foreach (FilterResult f in filters)
                     {
                         if (f.Task == FilterTask.Notify)
-                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name), PopupSound.Notify);
+                            room.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 2), f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name), PopupSound.Notify);
                         else if (f.Task == FilterTask.Send)
                         {
                             if (f.Text.StartsWith("/me ") && f.Text.Length > 4)
-                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name));
+                                room.SendEmote(f.Text.Substring(4).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.StartsWith("/") && f.Text.Length > 1)
-                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name));
+                                room.SendCommand(f.Text.Substring(1).Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                             else if (f.Text.Length > 0)
-                                room.SendText(f.Text.Replace("+n", user.Name));
+                                room.SendText(f.Text.Replace("+n", user.Name).Replace("+t", room.Credentials.Name));
                         }
                     }
                 }

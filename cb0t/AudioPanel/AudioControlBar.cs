@@ -12,7 +12,7 @@ namespace cb0t
     {
         private Color bg1 = Color.FromArgb(238, 241, 224);
         private Color bg2 = Color.FromArgb(223, 227, 202);
-        private Pen bgp = new Pen(Color.Silver);
+        private Pen bgp = new Pen(Color.Gray);
         private SolidBrush npt = new SolidBrush(Color.FromArgb(28, 28, 28));
 
         public String DisplayText { get; set; }
@@ -26,13 +26,25 @@ namespace cb0t
         {
             Rectangle bounds = new Rectangle(0, 0, e.ToolStrip.Width, e.ToolStrip.Height);
 
-            using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.WhiteSmoke, Color.Gainsboro, LinearGradientMode.Vertical))
-                e.Graphics.FillRectangle(brush, bounds);
-
             if (e.ToolStrip is ToolStripDropDownMenu)
-                return;
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.WhiteSmoke, Color.Gainsboro, LinearGradientMode.Vertical))
+                    e.Graphics.FillRectangle(brush, bounds);
 
-            bounds = new Rectangle(155, 3, e.ToolStrip.Width - 162, e.ToolStrip.Height - 6);
+                return;
+            }
+            else
+            {
+                if (Aero.CanAero)
+                    e.Graphics.Clear(Color.Transparent);
+                else
+                {
+                    using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.Gainsboro, Color.Silver, LinearGradientMode.Vertical))
+                        e.Graphics.FillRectangle(brush, bounds);
+                }
+            }
+
+            bounds = new Rectangle(155, 3, e.ToolStrip.Width - 156, e.ToolStrip.Height - 6);
 
             if (bounds.Width <= 0)
                 return;
@@ -73,7 +85,7 @@ namespace cb0t
             if (e.Item.Selected || e.Item.Pressed)
             {
                 using (GraphicsPath path = new Rectangle(1, 1, e.Item.Width - 3, e.Item.Height - 3).Rounded(2))
-                using (Pen pen = new Pen(Color.Silver))
+                using (Pen pen = new Pen(Color.Black))
                     e.Graphics.DrawPath(pen, path);
             }
         }
@@ -83,7 +95,7 @@ namespace cb0t
             if (e.Item.Selected || e.Item.Pressed)
             {
                 using (GraphicsPath path = new Rectangle(1, 1, e.Item.Width - 3, e.Item.Height - 3).Rounded(2))
-                using (Pen pen = new Pen(Color.Silver))
+                using (Pen pen = new Pen(Color.Black))
                     e.Graphics.DrawPath(pen, path);
             }
         }
