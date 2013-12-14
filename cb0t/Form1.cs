@@ -279,7 +279,7 @@ namespace cb0t
 
         private void toolStrip1_Resize(object sender, EventArgs e)
         {
-            Aero.ExtendTop(this, this.toolStrip1.Height);
+            Aero.ExtendAero(this, this.toolStrip1.Height, this.toolStrip2.Height);
         }
 
         private bool do_once = false;
@@ -297,7 +297,7 @@ namespace cb0t
                     this.ClientSize = new Size(frm_size_x, frm_size_y);
 
                 this.do_once = true;
-                Aero.ExtendTop(this, this.toolStrip1.Height);
+                Aero.ExtendAero(this, this.toolStrip1.Height, this.toolStrip2.Height);
                 SharedUI.Init();
                 Settings.CAN_WRITE_REG = false;
                 this.clist_content.LabelChanged += this.ChannelListLabelChanged;
