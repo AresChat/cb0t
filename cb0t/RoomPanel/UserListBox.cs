@@ -35,6 +35,7 @@ namespace cb0t
             this.away_icon = (Bitmap)Properties.Resources.away.Clone();
             this.voice_icon = (Bitmap)Properties.Resources.button4.Clone();
             this.popup = new UserListToolTip();
+            this.def_av = new Bitmap(53, 53);
 
             if (Avatar.DefaultAvatar != null)
                 this.createdefav();
@@ -50,22 +51,24 @@ namespace cb0t
                 sized_g.SmoothingMode = SmoothingMode.HighQuality;
                 sized_g.CompositingQuality = CompositingQuality.HighQuality;
                 sized_g.DrawImage(dav, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
-                this.def_av = new Bitmap(53, 53);
 
-                using (Graphics av_g = Graphics.FromImage(this.def_av))
-                using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
-                using (TextureBrush brush = new TextureBrush(sized))
+                lock (this.def_av)
                 {
-                    av_g.SmoothingMode = SmoothingMode.HighQuality;
-                    av_g.CompositingQuality = CompositingQuality.HighQuality;
+                    using (Graphics av_g = Graphics.FromImage(this.def_av))
+                    using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                    using (TextureBrush brush = new TextureBrush(sized))
+                    {
+                        av_g.SmoothingMode = SmoothingMode.HighQuality;
+                        av_g.CompositingQuality = CompositingQuality.HighQuality;
 
-                    using (SolidBrush sb = new SolidBrush(Color.White))
-                        av_g.FillPath(sb, path);
+                        using (SolidBrush sb = new SolidBrush(Color.White))
+                            av_g.FillPath(sb, path);
 
-                    av_g.FillPath(brush, path);
+                        av_g.FillPath(brush, path);
 
-                    using (Pen pen = new Pen(Color.Gainsboro, 1))
-                        av_g.DrawPath(pen, path);
+                        using (Pen pen = new Pen(Color.Gainsboro, 1))
+                            av_g.DrawPath(pen, path);
+                    }
                 }
             }
         }

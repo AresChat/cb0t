@@ -29,9 +29,17 @@ namespace cb0t
                 e.Graphics.FillRectangle(brush, e.Bounds);
 
             if (this.Owner.Avatar != null)
-                e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
-            else
-                e.Graphics.DrawImage(dav, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
+            {
+                lock (this.Owner.Avatar)
+                    try { e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2)); }
+                    catch { }
+            }
+            else if (dav != null)
+            {
+                lock (dav)
+                    try { e.Graphics.DrawImage(dav, new Point(e.Bounds.X + 1, e.Bounds.Y + 2)); }
+                    catch { }
+            }
 
             int img_x = 58;
 

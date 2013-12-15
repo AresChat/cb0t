@@ -75,20 +75,23 @@ namespace cb0t
                     sized_g.DrawImage(org, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
                     this.Avatar = new Bitmap(53, 53);
 
-                    using (Graphics av_g = Graphics.FromImage(this.Avatar))
-                    using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
-                    using (TextureBrush brush = new TextureBrush(sized))
+                    lock (this.Avatar)
                     {
-                        av_g.SmoothingMode = SmoothingMode.HighQuality;
-                        av_g.CompositingQuality = CompositingQuality.HighQuality;
+                        using (Graphics av_g = Graphics.FromImage(this.Avatar))
+                        using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                        using (TextureBrush brush = new TextureBrush(sized))
+                        {
+                            av_g.SmoothingMode = SmoothingMode.HighQuality;
+                            av_g.CompositingQuality = CompositingQuality.HighQuality;
 
-                        using (SolidBrush sb = new SolidBrush(Color.White))
-                            av_g.FillPath(sb, path);
+                            using (SolidBrush sb = new SolidBrush(Color.White))
+                                av_g.FillPath(sb, path);
 
-                        av_g.FillPath(brush, path);
+                            av_g.FillPath(brush, path);
 
-                        using (Pen pen = new Pen(Color.Gainsboro, 1))
-                            av_g.DrawPath(pen, path);
+                            using (Pen pen = new Pen(Color.Gainsboro, 1))
+                                av_g.DrawPath(pen, path);
+                        }
                     }
                 }
             }

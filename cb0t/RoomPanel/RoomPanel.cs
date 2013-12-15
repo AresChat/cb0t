@@ -36,10 +36,17 @@ namespace cb0t
 
         private ContextMenuStrip rc_ctx { get; set; }
 
+        public void UpdateFont()
+        {
+            this.accuTextBox1.Font.Dispose();
+            this.accuTextBox1.Font = new Font(Settings.GetReg<String>("global_font", "Tahoma"), 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+        }
+
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
             this.Mode = ScreenMode.Main;
+            this.accuTextBox1.Font = new Font(Settings.GetReg<String>("global_font", "Tahoma"), 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.PMName = String.Empty;
             this.MyName = String.Empty;
             this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
@@ -79,6 +86,41 @@ namespace cb0t
             this.rc_ctx = new ContextMenuStrip();
             this.rc_ctx.Items.Add("Close");
             this.rc_ctx.ItemClicked += this.CTXItemClicked;
+            this.splitContainer1.SplitterMoved += this.SplitterMoved;
+            this.SetUserlistWidth();
+        }
+
+        private bool can_resize = true;
+
+        public void SetUserlistWidth()
+        {
+            int ul_split = Settings.GetReg<int>("userlist_width", -1);
+
+            if (ul_split > 0 && (this.splitContainer1.ClientSize.Width - ul_split) > 0)
+            {
+                this.can_resize = false;
+                this.splitContainer1.SplitterDistance = (this.splitContainer1.ClientSize.Width - ul_split);
+                this.can_resize = true;
+            }
+        }
+
+        private void SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (this.can_resize)
+            {
+                int ul_split = Settings.GetReg<int>("userlist_width", -1);
+
+                if (this.splitContainer1.Panel2.Width != ul_split)
+                {
+                    Settings.SetReg("userlist_width", this.splitContainer1.Panel2.Width + 4);
+                    
+                    RoomPool.Rooms.ForEach((x) =>
+                    {
+                        if (!x.EndPoint.Equals(this.EndPoint))
+                            x.Panel.SetUserlistWidth();
+                    });
+                }
+            }
         }
 
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -528,6 +570,7 @@ namespace cb0t
 
         public void Free()
         {
+            this.splitContainer1.SplitterMoved -= this.SplitterMoved;
             this.tabControl1.SelectedIndexChanged -= this.tabControl1_SelectedIndexChanged;
             this.tabControl1.MouseClick -= this.tabControl1_MouseClick;
 

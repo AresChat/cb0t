@@ -208,7 +208,50 @@ namespace cb0t
         private void scribbleCanvas1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
+            {
                 this.SetUndo(e.Location);
+
+                if (e.X <= 396 && e.Y <= 396)
+                    using (Graphics g = this.scribbleCanvas1.CreateGraphics())
+                    {
+                        switch (this.ts.BrushWeight)
+                        {
+                            case ScribbleBrush.Thin:
+                                using (SolidBrush sb = new SolidBrush(this.s_col))
+                                using (Pen pen = new Pen(sb, 2))
+                                {
+                                    g.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    this.g_current.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    this.SetCurrentRectangle(e.Location);
+                                }
+                                break;
+
+                            case ScribbleBrush.Medium:
+                                using (SolidBrush sb = new SolidBrush(this.s_col))
+                                using (Pen pen = new Pen(sb, 10))
+                                {
+                                    g.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    g.FillEllipse(sb, new Rectangle(e.X - 5, e.Y - 5, 10, 10));
+                                    this.g_current.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    this.g_current.FillEllipse(sb, new Rectangle(e.X - 5, e.Y - 5, 10, 10));
+                                    this.SetCurrentRectangle(e.Location);
+                                }
+                                break;
+
+                            case ScribbleBrush.Thick:
+                                using (SolidBrush sb = new SolidBrush(this.s_col))
+                                using (Pen pen = new Pen(sb, 20))
+                                {
+                                    g.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    g.FillEllipse(sb, new Rectangle(e.X - 10, e.Y - 10, 20, 20));
+                                    this.g_current.DrawLine(pen, e.X, e.Y, e.X + 1, e.Y + 1);
+                                    this.g_current.FillEllipse(sb, new Rectangle(e.X - 10, e.Y - 10, 20, 20));
+                                    this.SetCurrentRectangle(e.Location);
+                                }
+                                break;
+                        }
+                    }
+            }
         }
 
         private void scribbleCanvas1_MouseMove(object sender, MouseEventArgs e)
