@@ -43,6 +43,7 @@ namespace cb0t
 
         public event EventHandler SpellCheckUpdate;
         public event EventHandler BlockCustomNamesUpdate;
+        private bool setting_up_font = false;
 
         public void Populate()
         {
@@ -69,6 +70,7 @@ namespace cb0t
                 this.comboBox1.Items.Add(fonts.Families[i].Name);
 
             String str = Settings.GetReg<String>("global_font", "Tahoma");
+            this.setting_up_font = true;
 
             for (int i = 0; i < this.comboBox1.Items.Count; i++)
                 if ((String)this.comboBox1.Items[i] == str)
@@ -77,6 +79,7 @@ namespace cb0t
                     break;
                 }
 
+            this.setting_up_font = false;
             this.numericUpDown1.Value = Settings.GetReg<int>("global_font_size", 10);
         }
 
@@ -141,7 +144,12 @@ namespace cb0t
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.comboBox1.SelectedIndex > -1)
+            {
                 Settings.SetReg("global_font", (String)this.comboBox1.SelectedItem);
+
+                if (!this.setting_up_font)
+                    RoomPool.Rooms.ForEach(x => x.Panel.UpdateFont());
+            }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)

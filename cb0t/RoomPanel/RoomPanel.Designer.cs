@@ -130,7 +130,6 @@
             this.accuTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.accuTextBox1.DetectUrls = false;
             this.accuTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.accuTextBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accuTextBox1.HideSelection = false;
             this.accuTextBox1.Location = new System.Drawing.Point(1, 0);
             this.accuTextBox1.Multiline = false;
