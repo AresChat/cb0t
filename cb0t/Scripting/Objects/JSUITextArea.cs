@@ -56,7 +56,7 @@ namespace cb0t.Scripting.Objects
 
         // begin
 
-        public TextBox UITextBox { get; set; }
+        private TextBox UITextBox { get; set; }
 
         private bool can_do_change_event = true;
         private void UITextBoxTextChanged(object sender, EventArgs e)
