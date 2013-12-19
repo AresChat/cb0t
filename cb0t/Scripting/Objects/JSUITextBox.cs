@@ -52,7 +52,7 @@ namespace cb0t.Scripting.Objects
 
         // begin
 
-        public TextBox UITextBox { get; set; }
+        private TextBox UITextBox { get; set; }
 
         private bool can_do_change_event = true;
         private void UITextBoxTextChanged(object sender, EventArgs e)
@@ -224,13 +224,6 @@ namespace cb0t.Scripting.Objects
                 else
                     this.UITextBox.Width = value;
             }
-        }
-
-        [JSProperty(Name = "height")]
-        public int Height
-        {
-            get { return 0; }
-            set { }
         }
 
         [JSFunction(Name = "focus", IsEnumerable = true, IsWritable = false)]

@@ -50,6 +50,24 @@ namespace cb0t.Scripting.Objects
                 return null;
         }
 
+        [JSFunction(Name = "createCheckBox", IsWritable = false, IsEnumerable = true)]
+        public JSUICheckBox CreateCheckBox()
+        {
+            if (this.CanAddControls)
+                return new JSUICheckBox(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
+        [JSFunction(Name = "createLabel", IsWritable = false, IsEnumerable = true)]
+        public JSUILabel CreateLabel()
+        {
+            if (this.CanAddControls)
+                return new JSUILabel(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
         [JSFunction(Name = "create", IsWritable = false, IsEnumerable = true)]
         public bool Create()
         {
@@ -63,7 +81,6 @@ namespace cb0t.Scripting.Objects
 
             return false;
         }
-
 
     }
 }
