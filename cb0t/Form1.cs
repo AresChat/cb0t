@@ -17,7 +17,8 @@ namespace cb0t
         private ChannelBar channel_bar { get; set; }
         private AudioControlBar audio_bar { get; set; }
         
-        private SettingsPanel settings_content { get; set; }
+        public static SettingsPanel SettingsContent { get; set; }
+
         private AudioPanel audio_content { get; set; }
         private ChannelListPanel clist_content { get; set; }
         private Thread sock_thread { get; set; }
@@ -60,11 +61,11 @@ namespace cb0t
             this.audio_bar = new AudioControlBar();
             this.toolStrip2.Renderer = this.audio_bar;
 
-            this.settings_content = new SettingsPanel();
-            this.settings_content.BackColor = Color.White;
-            this.settings_content.Dock = DockStyle.Fill;
-            this.settings_content.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.settings_content.JoinFromHashlinkClicked += this.JoinFromHashlinkClicked;
+            SettingsContent = new SettingsPanel();
+            SettingsContent.BackColor = Color.White;
+            SettingsContent.Dock = DockStyle.Fill;
+            SettingsContent.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            SettingsContent.JoinFromHashlinkClicked += this.JoinFromHashlinkClicked;
             this.audio_content = new AudioPanel();
             this.audio_content.BackColor = Color.White;
             this.audio_content.Dock = DockStyle.Fill;
@@ -244,7 +245,7 @@ namespace cb0t
             while (this.content1.Controls.Count > 0)
                 this.content1.Controls.RemoveAt(0);
 
-            this.content1.Controls.Add(this.settings_content);
+            this.content1.Controls.Add(SettingsContent);
             Narrator.ClearList();
         }
 
@@ -305,10 +306,10 @@ namespace cb0t
                 this.clist_content.Create();
                 this.notifyIcon1.MouseClick += this.SysTrayMouseClicked;
                 this.notifyIcon1.BalloonTipClicked += this.PopupClicked;
-                this.settings_content.SpellCheckUpdate2 += this.SpellCheckUpdate2;
-                this.settings_content.OnTemplateChanged += this.OnTemplateChanged;
-                this.settings_content.BlockCustomNamesUpdate2 += this.BlockCustomNamesUpdate;
-                this.settings_content.CreateSettings();
+                SettingsContent.SpellCheckUpdate2 += this.SpellCheckUpdate2;
+                SettingsContent.OnTemplateChanged += this.OnTemplateChanged;
+                SettingsContent.BlockCustomNamesUpdate2 += this.BlockCustomNamesUpdate;
+                SettingsContent.CreateSettings();
                 this.audio_content.LoadPlaylist();
 
                 Settings.CAN_WRITE_REG = true;
@@ -342,6 +343,8 @@ namespace cb0t
                 this.volume.SetVolume(vol);
 
                 this.UpdateTemplate();
+
+                Scripting.ScriptManager.Init();
 
                 foreach (FavouritesListItem f in this.clist_content.GetAutoJoinRooms())
                     this.OpenChannel(null, new OpenChannelEventArgs { Room = f });
@@ -412,7 +415,7 @@ namespace cb0t
 
         private void UpdateTemplate()
         {
-            this.settings_content.UpdateTemplate();
+            SettingsContent.UpdateTemplate();
             this.toolStripDropDownButton1.ToolTipText = StringTemplate.Get(STType.AudioBar, 0);
             this.clearListToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 1);
             this.randomToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 2);
@@ -494,6 +497,7 @@ namespace cb0t
                 if (this.terminate)
                     return;
 
+                Scripting.ScriptManager.EventCycle();
                 Room[] pool = RoomPool.Rooms.ToArray();
                 uint time = Settings.Time;
                 ulong time_long = Settings.TimeLong;
