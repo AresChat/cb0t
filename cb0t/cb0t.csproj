@@ -69,6 +69,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>bin\Debug\Interop.WMPLib.dll</HintPath>
     </Reference>
+    <Reference Include="Jurassic">
+      <HintPath>..\..\..\..\..\Jurassic.dll</HintPath>
+    </Reference>
     <Reference Include="NHunspell, Version=1.1.1.0, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\NHunspell.dll</HintPath>
@@ -86,10 +89,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scripting\CustomScriptSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scripting\CustomScriptSettings.Designer.cs">
+      <DependentUpon>CustomScriptSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Misc\IPCListener.cs" />
     <Compile Include="Misc\BorderlessTrackBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Misc\SafeQueue.cs" />
+    <Compile Include="Scripting\ICustomUI.cs" />
+    <Compile Include="Scripting\JSGlobal.cs" />
+    <Compile Include="Scripting\JSScript.cs" />
+    <Compile Include="Scripting\JSUIEventItem.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUITextArea.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUITextBox.cs" />
+    <Compile Include="Scripting\Objects\JSUI.cs" />
+    <Compile Include="Scripting\Objects\JSUITextArea.cs" />
+    <Compile Include="Scripting\Objects\JSUITextBox.cs" />
+    <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -407,6 +428,9 @@
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scripting\CustomScriptSettings.resx">
+      <DependentUpon>CustomScriptSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsPanel\ClientSettings.resx">
       <DependentUpon>ClientSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -583,6 +607,10 @@
     <None Include="Resources\audio_pause.png" />
     <None Include="Resources\audio_play.png" />
     <Content Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripting\Instances\" />
+    <Folder Include="Scripting\Statics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

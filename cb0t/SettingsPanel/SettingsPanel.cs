@@ -46,6 +46,18 @@ namespace cb0t
                 this.treeView1.Nodes[i].Text = StringTemplate.Get(STType.Settings, (i * 2));
         }
 
+        public CustomScriptSettings CreateCustomScriptSettings(String script_name)
+        {
+            CustomScriptSettings panel = new CustomScriptSettings(script_name);
+            panel.Dock = DockStyle.Fill;
+            TreeNode node = new TreeNode();
+            node.Text = script_name;
+            node.ImageIndex = 1;
+            node.SelectedImageIndex = 1;
+            this.treeView1.Nodes.Add(node);
+            return panel;
+        }
+
         public void CreateSettings()
         {
             this.client_settings = new ClientSettings();
@@ -133,6 +145,15 @@ namespace cb0t
                 this.panel1.Controls.Add(this.menu_settings);
             else if (e.Node.Equals(this.treeView1.Nodes[7]))
                 this.panel1.Controls.Add(this.privacy_settings);
+            else
+            {
+                String script_name = e.Node.Text;
+                Scripting.JSScript script = Scripting.ScriptManager.Scripts.Find(x => x.ScriptName == script_name);
+
+                if (script != null)
+                    if (script.UI.UIPanel != null)
+                        this.panel1.Controls.Add(script.UI.UIPanel);
+            }
         }
 
         private void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
