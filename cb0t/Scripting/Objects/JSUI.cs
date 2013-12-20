@@ -68,6 +68,30 @@ namespace cb0t.Scripting.Objects
                 return null;
         }
 
+        [JSFunction(Name = "createButton", IsWritable = false, IsEnumerable = true)]
+        public JSUIButton CreateButton()
+        {
+            if (this.CanAddControls)
+                return new JSUIButton(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
+        [JSFunction(Name = "createRadioButton", IsWritable = false, IsEnumerable = true)]
+        public JSUIRadioButton CreateRadioButton(object a)
+        {
+            if (this.CanAddControls)
+                if (!(a is Undefined))
+                {
+                    String str = a.ToString();
+
+                    if (!String.IsNullOrEmpty(str))
+                        return new JSUIRadioButton(this.Engine.Object.InstancePrototype, this, str);
+                }
+
+            return null;
+        }
+
         [JSFunction(Name = "create", IsWritable = false, IsEnumerable = true)]
         public bool Create()
         {

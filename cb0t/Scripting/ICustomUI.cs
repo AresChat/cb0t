@@ -14,5 +14,9 @@ namespace cb0t.Scripting
         void KeyPressCallback(int k);
         void ValueChangedCallback();
         void ClickCallback();
+        void SelectCallback();
+
+        // radio buttons
+        String Group { get; }
     }
 }

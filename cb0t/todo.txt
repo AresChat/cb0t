@@ -1,1 +1,1 @@
-﻿script UI types: ListBox, ComboBox, RadioButton, Button, ImageContainer
+﻿script UI types: ListBox, ComboBox, ImageContainer
