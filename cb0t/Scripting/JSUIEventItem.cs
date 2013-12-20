@@ -16,6 +16,7 @@ namespace cb0t.Scripting
     {
         KeyPressed,
         ValueChanged,
-        Click
+        Click,
+        Select
     }
 }

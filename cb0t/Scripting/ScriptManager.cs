@@ -27,6 +27,8 @@ namespace cb0t.Scripting
                         item.Element.ValueChangedCallback();
                     else if (item.EventType == JSUIEventType.Click)
                         item.Element.ClickCallback();
+                    else if (item.EventType == JSUIEventType.Select)
+                        item.Element.SelectCallback();
                 }
             }
         }

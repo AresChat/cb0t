@@ -50,11 +50,14 @@ namespace cb0t.Scripting.Objects
 
         // begin
 
+        public String Group { get { return String.Empty; } }
+
         private bool can_do_change_event = true;
         private CheckBox UICheckBox { get; set; }
 
         public void ClickCallback() { }
         public void KeyPressCallback(int k) { }
+        public void SelectCallback() { }
 
         [JSProperty(Name = "onchange")]
         public UserDefinedFunction OnChangeFunction { get; set; }

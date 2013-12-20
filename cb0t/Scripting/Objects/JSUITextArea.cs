@@ -58,6 +58,9 @@ namespace cb0t.Scripting.Objects
 
         private TextBox UITextBox { get; set; }
 
+        public String Group { get { return String.Empty; } }
+        public void SelectCallback() { }
+
         private bool can_do_change_event = true;
         private void UITextBoxTextChanged(object sender, EventArgs e)
         {

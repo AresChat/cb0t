@@ -55,8 +55,11 @@ namespace cb0t.Scripting.Objects
 
         private Label UILabel { get; set; }
 
+        public String Group { get { return String.Empty; } }
+
         public void KeyPressCallback(int k) { }
         public void ValueChangedCallback() { }
+        public void SelectCallback() { }
 
         private void UILabelMouseClick(object sender, MouseEventArgs e)
         {
@@ -200,7 +203,7 @@ namespace cb0t.Scripting.Objects
         }
 
         private int _size;
-        [JSProperty(Name = "size")]
+        [JSProperty(Name = "fontSize")]
         public int Size
         {
             get { return this._size; }
