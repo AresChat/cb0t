@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -16,7 +17,7 @@ namespace cb0t
             this.Owner = owner;
         }
 
-        public void Draw(DrawItemEventArgs e, ref Bitmap bi, ref Bitmap mu, bool selected, bool tracked, ref Bitmap aw, ref Bitmap vc, bool is_black, ref Bitmap dav)
+        public void Draw(DrawItemEventArgs e, bool selected, bool tracked, bool is_black)
         {
             Color item_bg = is_black ? Color.Black : Color.White;
 
@@ -28,17 +29,17 @@ namespace cb0t
             using (SolidBrush brush = new SolidBrush(item_bg))
                 e.Graphics.FillRectangle(brush, e.Bounds);
 
-            if (this.Owner.Avatar != null)
+            if (this.Owner.AvatarBytes.Length > 0)
             {
-                lock (this.Owner.Avatar)
-                    try { e.Graphics.DrawImage(this.Owner.Avatar, new Point(e.Bounds.X + 1, e.Bounds.Y + 2)); }
-                    catch { }
+                using (MemoryStream ms = new MemoryStream(this.Owner.AvatarBytes))
+                using (Bitmap bmp = new Bitmap(ms))
+                    e.Graphics.DrawImage(bmp, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
             }
-            else if (dav != null)
+            else
             {
-                lock (dav)
-                    try { e.Graphics.DrawImage(dav, new Point(e.Bounds.X + 1, e.Bounds.Y + 2)); }
-                    catch { }
+                using (MemoryStream ms = new MemoryStream(Avatar.DefaultAvatar))
+                using (Bitmap bmp = new Bitmap(ms))
+                    e.Graphics.DrawImage(bmp, new Point(e.Bounds.X + 1, e.Bounds.Y + 2));
             }
 
             int img_x = 58;
@@ -54,19 +55,28 @@ namespace cb0t
 
             if (this.Owner.HasFiles)
             {
-                e.Graphics.DrawImage(bi, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                using (MemoryStream ms = new MemoryStream(Avatar.BrowseIcon))
+                using (Bitmap bmp = new Bitmap(ms))
+                    e.Graphics.DrawImage(bmp, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+
                 img_x += 15;
             }
 
             if (this.Owner.IsAway)
             {
-                e.Graphics.DrawImage(aw, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                using (MemoryStream ms = new MemoryStream(Avatar.AwayIcon))
+                using (Bitmap bmp = new Bitmap(ms))
+                    e.Graphics.DrawImage(bmp, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+
                 img_x += 15;
             }
 
             if (this.Owner.SupportsVC)
             {
-                e.Graphics.DrawImage(vc, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+                using (MemoryStream ms = new MemoryStream(is_black ? Avatar.VoiceIconBlack : Avatar.VoiceIcon))
+                using (Bitmap bmp = new Bitmap(ms))
+                    e.Graphics.DrawImage(bmp, new Rectangle(e.Bounds.X + img_x, e.Bounds.Y + 7, 14, 14));
+
                 img_x += 15;
             }
 
@@ -103,7 +113,10 @@ namespace cb0t
 
                 if (is_song)
                 {
-                    e.Graphics.DrawImage(mu, new RectangleF(x, y, 14, 14));
+                    using (MemoryStream ms = new MemoryStream(is_black ? Avatar.MusicIconBlack : Avatar.MusicIcon))
+                    using (Bitmap bmp = new Bitmap(ms))
+                        e.Graphics.DrawImage(bmp, new RectangleF(x, y, 14, 14));
+
                     x += 15;
                 }
 

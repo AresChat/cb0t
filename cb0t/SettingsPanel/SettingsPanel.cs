@@ -42,7 +42,7 @@ namespace cb0t
             this.menu_settings.UpdateTemplate();
             this.privacy_settings.UpdateTemplate();
 
-            for (int i = 0; i < this.treeView1.Nodes.Count; i++)
+            for (int i = 0; i < 8; i++) // 8 = number of regular settings panels
                 this.treeView1.Nodes[i].Text = StringTemplate.Get(STType.Settings, (i * 2));
         }
 
