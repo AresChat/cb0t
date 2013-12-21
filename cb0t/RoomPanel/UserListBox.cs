@@ -11,14 +11,9 @@ namespace cb0t
 {
     class UserListBox : ListBox
     {
-        private Bitmap browse_icon = null;
-        private Bitmap music_icon = null;
-        private Bitmap away_icon = null;
-        private Bitmap voice_icon = null;
         private int hover_item = -1;
         private bool updating = false;
         private UserListToolTip popup;
-        private Bitmap def_av = null;
 
         public bool IsBlack { get; set; }
 
@@ -30,55 +25,12 @@ namespace cb0t
             this.ScrollAlwaysVisible = true;
             this.BackColor = Color.White;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
-            this.browse_icon = (Bitmap)Properties.Resources.folder.Clone();
-            this.music_icon = (Bitmap)Properties.Resources.music.Clone();
-            this.away_icon = (Bitmap)Properties.Resources.away.Clone();
-            this.voice_icon = (Bitmap)Properties.Resources.button4.Clone();
             this.popup = new UserListToolTip();
-            this.def_av = new Bitmap(53, 53);
-
-            if (Avatar.DefaultAvatar != null)
-                this.createdefav();
-        }
-
-        private void createdefav()
-        {
-            using (MemoryStream ms = new MemoryStream(Avatar.DefaultAvatar))
-            using (Bitmap dav = new Bitmap(ms))
-            using (Bitmap sized = new Bitmap(53, 53))
-            using (Graphics sized_g = Graphics.FromImage(sized))
-            {
-                sized_g.SmoothingMode = SmoothingMode.HighQuality;
-                sized_g.CompositingQuality = CompositingQuality.HighQuality;
-                sized_g.DrawImage(dav, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
-
-                lock (this.def_av)
-                {
-                    using (Graphics av_g = Graphics.FromImage(this.def_av))
-                    using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
-                    using (TextureBrush brush = new TextureBrush(sized))
-                    {
-                        av_g.SmoothingMode = SmoothingMode.HighQuality;
-                        av_g.CompositingQuality = CompositingQuality.HighQuality;
-
-                        using (SolidBrush sb = new SolidBrush(Color.White))
-                            av_g.FillPath(sb, path);
-
-                        av_g.FillPath(brush, path);
-
-                        using (Pen pen = new Pen(Color.Gainsboro, 1))
-                            av_g.DrawPath(pen, path);
-                    }
-                }
-            }
         }
 
         public void UpdateBlackImgs()
         {
-            this.music_icon.Dispose();
-            this.voice_icon.Dispose();
-            this.music_icon = (Bitmap)Properties.Resources.musicbg.Clone();
-            this.voice_icon = (Bitmap)Properties.Resources.button4bg.Clone();
+
         }
 
         public void Free()
@@ -86,20 +38,6 @@ namespace cb0t
             this.popup.Free();
             this.popup.Dispose();
             this.popup = null;
-            this.browse_icon.Dispose();
-            this.browse_icon = null;
-            this.music_icon.Dispose();
-            this.music_icon = null;
-            this.away_icon.Dispose();
-            this.away_icon = null;
-            this.voice_icon.Dispose();
-            this.voice_icon = null;
-
-            if (this.def_av != null)
-            {
-                this.def_av.Dispose();
-                this.def_av = null;
-            }
         }
 
         public new void BeginUpdate()
@@ -282,7 +220,7 @@ namespace cb0t
             if (e.Index > -1)
             {
                 if (this.Items[e.Index] is UserListBoxItem)
-                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, ref browse_icon, ref music_icon, this.SelectedIndex == e.Index, this.hover_item == e.Index, ref this.away_icon, ref this.voice_icon, this.IsBlack, ref this.def_av);
+                    ((UserListBoxItem)this.Items[e.Index]).Draw(e, this.SelectedIndex == e.Index, this.hover_item == e.Index, this.IsBlack);
                 else if (this.Items[e.Index] is UserListBoxSectionItem)
                     ((UserListBoxSectionItem)this.Items[e.Index]).Draw(e);
                 else if (this.Items[e.Index] is UserListBoxEmptyItem)

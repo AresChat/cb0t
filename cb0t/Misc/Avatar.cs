@@ -15,10 +15,94 @@ namespace cb0t
         public static Bitmap Image { get; set; }
 
         public static byte[] DefaultAvatar { get; set; }
+        public static byte[] BrowseIcon { get; set; }
+        public static byte[] MusicIcon { get; set; }
+        public static byte[] AwayIcon { get; set; }
+        public static byte[] VoiceIcon { get; set; }
+        public static byte[] MusicIconBlack { get; set; }
+        public static byte[] VoiceIconBlack { get; set; }
+
+        private static void CreateUserlistImages()
+        {
+            byte[] data = (byte[])Properties.Resources.dav;
+
+            using (MemoryStream ms = new MemoryStream(data))
+            using (Bitmap org = new Bitmap(ms))
+            using (Bitmap sized = new Bitmap(53, 53))
+            using (Graphics sized_g = Graphics.FromImage(sized))
+            {
+                sized_g.DrawImage(org, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
+
+                using (Bitmap Av = new Bitmap(53, 53))
+                using (Graphics av_g = Graphics.FromImage(Av))
+                using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                using (TextureBrush brush = new TextureBrush(sized))
+                {
+                    av_g.SmoothingMode = SmoothingMode.HighQuality;
+                    av_g.CompositingQuality = CompositingQuality.HighQuality;
+
+                    using (SolidBrush sb = new SolidBrush(Color.White))
+                        av_g.FillPath(sb, path);
+
+                    av_g.FillPath(brush, path);
+
+                    using (Pen pen = new Pen(Color.Gainsboro, 1))
+                        av_g.DrawPath(pen, path);
+
+                    using (MemoryStream save_stream = new MemoryStream())
+                    {
+                        Av.Save(save_stream, ImageFormat.Png);
+                        DefaultAvatar = save_stream.ToArray();
+                    }
+                }
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.folder.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                BrowseIcon = save_stream.ToArray();
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.music.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                MusicIcon = save_stream.ToArray();
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.away.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                AwayIcon = save_stream.ToArray();
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.button4.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                VoiceIcon = save_stream.ToArray();
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.musicbg.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                MusicIconBlack = save_stream.ToArray();
+            }
+
+            using (Bitmap bmp = (Bitmap)Properties.Resources.button4bg.Clone())
+            using (MemoryStream save_stream = new MemoryStream())
+            {
+                bmp.Save(save_stream, ImageFormat.Png);
+                VoiceIconBlack = save_stream.ToArray();
+            }
+        }
 
         public static void Load()
         {
-            DefaultAvatar = (byte[])Properties.Resources.dav;
+            CreateUserlistImages();
 
             try
             {

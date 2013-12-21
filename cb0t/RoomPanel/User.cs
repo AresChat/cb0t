@@ -6,6 +6,7 @@ using System.Net;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace cb0t
 {
@@ -16,7 +17,6 @@ namespace cb0t
         public IPAddress LocalIP { get; set; }
         public ushort Port { get; set; }
         public String PersonalMessage { get; set; }
-        public Bitmap Avatar { get; set; }
         public byte Level { get; set; }
         public byte Age { get; set; }
         public byte Gender { get; set; }
@@ -33,89 +33,64 @@ namespace cb0t
         public bool SupportsPMEnc { get; set; }
         public bool SupportsVC { get; set; }
         public bool SupportsOpusVC { get; set; }
-        private byte[] AvatarData { get; set; }
+        public byte[] AvatarBytes { get; set; }
 
         public User()
         {
             this.PersonalMessage = String.Empty;
             this.Ident = Helpers.UserIdent++;
             this.ScribbleBuffer = new List<byte>();
+            this.AvatarBytes = new byte[] { };
         }
 
         public void Dispose()
         {
-            if (this.Avatar != null)
-            {
-                this.Avatar.Dispose();
-                this.Avatar = null;
-            }
-
             this.ScribbleBuffer.Clear();
             this.ScribbleBuffer = new List<byte>();
-            this.AvatarData = new byte[] { };
+            this.AvatarBytes = new byte[] { };
         }
 
         public void SetAvatar(byte[] data)
         {
-            if (this.Avatar != null)
-            {
-                this.Avatar.Dispose();
-                this.Avatar = null;
-            }
-
-            this.AvatarData = data;
-
             try
             {
-                using (MemoryStream ms = new MemoryStream(this.AvatarData))
+                using (MemoryStream ms = new MemoryStream(data))
                 using (Bitmap org = new Bitmap(ms))
                 using (Bitmap sized = new Bitmap(53, 53))
                 using (Graphics sized_g = Graphics.FromImage(sized))
                 {
                     sized_g.DrawImage(org, new Rectangle(0, 0, 53, 53), new Rectangle(0, 0, 48, 48), GraphicsUnit.Pixel);
-                    this.Avatar = new Bitmap(53, 53);
 
-                    lock (this.Avatar)
+                    using (Bitmap Av = new Bitmap(53, 53))
+                    using (Graphics av_g = Graphics.FromImage(Av))
+                    using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
+                    using (TextureBrush brush = new TextureBrush(sized))
                     {
-                        using (Graphics av_g = Graphics.FromImage(this.Avatar))
-                        using (GraphicsPath path = new Rectangle(0, 0, 52, 52).Rounded(8))
-                        using (TextureBrush brush = new TextureBrush(sized))
+                        av_g.SmoothingMode = SmoothingMode.HighQuality;
+                        av_g.CompositingQuality = CompositingQuality.HighQuality;
+
+                        using (SolidBrush sb = new SolidBrush(Color.White))
+                            av_g.FillPath(sb, path);
+
+                        av_g.FillPath(brush, path);
+
+                        using (Pen pen = new Pen(Color.Gainsboro, 1))
+                            av_g.DrawPath(pen, path);
+
+                        using (MemoryStream save_stream = new MemoryStream())
                         {
-                            av_g.SmoothingMode = SmoothingMode.HighQuality;
-                            av_g.CompositingQuality = CompositingQuality.HighQuality;
-
-                            using (SolidBrush sb = new SolidBrush(Color.White))
-                                av_g.FillPath(sb, path);
-
-                            av_g.FillPath(brush, path);
-
-                            using (Pen pen = new Pen(Color.Gainsboro, 1))
-                                av_g.DrawPath(pen, path);
+                            Av.Save(save_stream, ImageFormat.Png);
+                            this.AvatarBytes = save_stream.ToArray();
                         }
                     }
                 }
             }
-            catch
-            {
-                if (this.Avatar != null)
-                {
-                    this.Avatar.Dispose();
-                    this.Avatar = null;
-                }
-
-                this.AvatarData = null;
-            }
+            catch { this.AvatarBytes = new byte[] { }; }
         }
 
         public void ClearAvatar()
         {
-            if (this.Avatar != null)
-            {
-                this.Avatar.Dispose();
-                this.Avatar = null;
-            }
-
-            this.AvatarData = null;
+            this.AvatarBytes = new byte[] { };
         }
 
         public String ToASLString()
