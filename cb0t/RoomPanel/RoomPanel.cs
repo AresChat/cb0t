@@ -45,6 +45,7 @@ namespace cb0t
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
+            this.toolStripDropDownButton1.DropDownDirection = ToolStripDropDownDirection.BelowLeft;
             this.Mode = ScreenMode.Main;
             this.accuTextBox1.Font = new Font(Settings.GetReg<String>("global_font", "Tahoma"), 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.PMName = String.Empty;

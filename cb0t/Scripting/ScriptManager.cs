@@ -29,6 +29,10 @@ namespace cb0t.Scripting
                         item.Element.ClickCallback();
                     else if (item.EventType == JSUIEventType.Select)
                         item.Element.SelectCallback();
+                    else if (item.EventType == JSUIEventType.ItemDoubleClick)
+                        item.Element.ItemDoubleClickCallback();
+                    else if (item.EventType == JSUIEventType.SelectedItemChanged)
+                        item.Element.SelectedItemChangedCallback();
                 }
             }
         }
@@ -60,15 +64,12 @@ namespace cb0t.Scripting
                 script.LoadScript(path);
                 script.UI.CanCreate = true;
 
-                try
-                {
-                    script.JS.CallGlobalFunction("onload", script.UI);
-                }
-                catch (Jurassic.JavaScriptException e)
-                {
-                    System.Windows.Forms.MessageBox.Show("error in onload: " + e.Message);
-                }
-                catch { }
+                if (script.EVENT_ONLOAD != null)
+                    try
+                    {
+                        script.EVENT_ONLOAD.Call(script.JS.Global, script.UI);
+                    }
+                    catch { }
 
                 script.UI.CanCreate = false;
                 script.UI.CanAddControls = false;

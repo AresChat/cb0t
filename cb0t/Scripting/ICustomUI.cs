@@ -15,8 +15,10 @@ namespace cb0t.Scripting
         void ValueChangedCallback();
         void ClickCallback();
         void SelectCallback();
+        void SelectedItemChangedCallback();
+        void ItemDoubleClickCallback();
 
         // radio buttons
-        String Group { get; }
+        String Group { get; set; }
     }
 }

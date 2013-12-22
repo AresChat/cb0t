@@ -55,11 +55,13 @@ namespace cb0t.Scripting.Objects
 
         private Label UILabel { get; set; }
 
-        public String Group { get { return String.Empty; } }
+        public String Group { get { return String.Empty; } set { } }
 
         public void KeyPressCallback(int k) { }
         public void ValueChangedCallback() { }
         public void SelectCallback() { }
+        public void ItemDoubleClickCallback() { }
+        public void SelectedItemChangedCallback() { }
 
         private void UILabelMouseClick(object sender, MouseEventArgs e)
         {

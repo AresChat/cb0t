@@ -48,8 +48,9 @@ namespace cb0t.Scripting
 
                     if (script != null)
                         foreach (ICustomUI item in script.Elements)
-                            if (item.ID == id)
-                                return item;
+                            if (!String.IsNullOrEmpty(item.ID))
+                                if (item.ID == id)
+                                    return item;
                 }
             }
 
