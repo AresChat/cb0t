@@ -2,6 +2,7 @@
 using Jurassic.Library;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,10 +16,17 @@ namespace cb0t.Scripting
         public Objects.JSUI UI { get; private set; }
         public List<ICustomUI> Elements { get; private set; }
 
+        public String ScriptPath { get; private set; }
+        public String DataPath { get; private set; }
+
+        public UserDefinedFunction EVENT_ONLOAD { get; set; }
+
         public JSScript(String name)
         {
             this.Elements = new List<ICustomUI>();
             this.ScriptName = name;
+            this.ScriptPath = Path.Combine(Settings.ScriptPath, name);
+            this.DataPath = Path.Combine(this.ScriptPath, "data");
 
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -30,10 +38,6 @@ namespace cb0t.Scripting
             this.JS.EmbedObjectPrototypes(types.Where(x => x.Namespace == "cb0t.Scripting.ObjectPrototypes" && x.IsSubclassOf(typeof(ClrFunction))).ToArray());
 
             this.UI = new Objects.JSUI(this.JS.Object.InstancePrototype);
-
-            StringBuilder events = new StringBuilder();
-            events.AppendLine("function onload(ui) { }");
-            this.JS.Evaluate(events.ToString());
         }
 
         public void LoadScript(String path)

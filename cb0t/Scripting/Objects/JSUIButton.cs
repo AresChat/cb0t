@@ -52,8 +52,10 @@ namespace cb0t.Scripting.Objects
 
         // begin
 
-        public String Group { get { return String.Empty; } }
+        public String Group { get { return String.Empty; } set { } }
         public void SelectCallback() { }
+        public void ItemDoubleClickCallback() { }
+        public void SelectedItemChangedCallback() { }
 
         private void UIButtonMouseClick(object sender, MouseEventArgs e)
         {

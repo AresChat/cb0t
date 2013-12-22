@@ -92,6 +92,33 @@ namespace cb0t.Scripting.Objects
             return null;
         }
 
+        [JSFunction(Name = "createListBox", IsWritable = false, IsEnumerable = true)]
+        public JSUIListBox CreateListBox()
+        {
+            if (this.CanAddControls)
+                return new JSUIListBox(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
+        [JSFunction(Name = "createComboBox", IsWritable = false, IsEnumerable = true)]
+        public JSUIComboBox CreateComboBox()
+        {
+            if (this.CanAddControls)
+                return new JSUIComboBox(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
+        [JSFunction(Name = "createImage", IsWritable = false, IsEnumerable = true)]
+        public JSUIImage CreateImage()
+        {
+            if (this.CanAddControls)
+                return new JSUIImage(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
         [JSFunction(Name = "create", IsWritable = false, IsEnumerable = true)]
         public bool Create()
         {

@@ -66,6 +66,8 @@ namespace cb0t.Scripting.Objects
         public void KeyPressCallback(int k) { }
         public void ClickCallback() { }
         public void ValueChangedCallback() { }
+        public void ItemDoubleClickCallback() { }
+        public void SelectedItemChangedCallback() { }
 
         [JSProperty(Name = "onselect")]
         public UserDefinedFunction OnSelectFunction { get; set; }

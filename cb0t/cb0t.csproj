@@ -107,18 +107,25 @@
     <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUICheckBox.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUIComboBox.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUIImage.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUILabel.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUIListBox.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIRadioButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextArea.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextBox.cs" />
     <Compile Include="Scripting\Objects\JSUI.cs" />
     <Compile Include="Scripting\Objects\JSUIButton.cs" />
     <Compile Include="Scripting\Objects\JSUICheckBox.cs" />
+    <Compile Include="Scripting\Objects\JSUIComboBox.cs" />
+    <Compile Include="Scripting\Objects\JSUIImage.cs" />
     <Compile Include="Scripting\Objects\JSUILabel.cs" />
+    <Compile Include="Scripting\Objects\JSUIListBox.cs" />
     <Compile Include="Scripting\Objects\JSUIRadioButton.cs" />
     <Compile Include="Scripting\Objects\JSUITextArea.cs" />
     <Compile Include="Scripting\Objects\JSUITextBox.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="Scripting\Statics\JSEvents.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -618,7 +625,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripting\Instances\" />
-    <Folder Include="Scripting\Statics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
