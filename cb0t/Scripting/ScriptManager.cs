@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Net;
 
 namespace cb0t.Scripting
 {
@@ -11,15 +12,52 @@ namespace cb0t.Scripting
         public const int SCRIPT_VERSION = 1001;
 
         public static List<JSScript> Scripts { get; private set; }
-        public static SafeQueue<JSUIEventItem> PendingEvents { get; private set; }
+        public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
+        public static SafeQueue<IPEndPoint> PendingTerminators { get; private set; }
+
+        public static void AddRoom(IPEndPoint ep)
+        {
+            foreach (JSScript script in Scripts)
+                script.Rooms.Add(new Objects.JSRoom(script.JS.Object.InstancePrototype, ep));
+        }
+
+        public static void AddUser(IPEndPoint ep, User u)
+        {
+            foreach (JSScript script in Scripts)
+                foreach (Objects.JSRoom room in script.Rooms)
+                    if (room.EndPoint.Equals(ep))
+                        room.UserList.Add(new Objects.JSUser(script.JS.Object.InstancePrototype, u));
+        }
+
+        public static void RemoveUser(IPEndPoint ep, User u)
+        {
+            foreach (JSScript script in Scripts)
+                foreach (Objects.JSRoom room in script.Rooms)
+                    if (room.EndPoint.Equals(ep))
+                        for (int i = (room.UserList.Count - 1); i > -1; i--)
+                            if (room.UserList[i].U_Name == u.Name)
+                            {
+                                room.UserList[i].SetToNull();
+                                room.UserList.RemoveAt(i);
+                            }
+        }
 
         public static void EventCycle()
         {
-            if (PendingEvents.Pending)
+            if (PendingTerminators.Pending)
+            {
+                IPEndPoint ep = null;
+
+                while (PendingTerminators.TryDequeue(out ep))
+                    foreach (JSScript script in Scripts)
+                        script.Rooms.RemoveAll(x => x.EndPoint.Equals(ep));
+            }
+
+            if (PendingUIEvents.Pending)
             {
                 JSUIEventItem item = null;
 
-                while (PendingEvents.TryDequeue(out item))
+                while (PendingUIEvents.TryDequeue(out item))
                 {
                     if (item.EventType == JSUIEventType.KeyPressed)
                         item.Element.KeyPressCallback((int)item.Arg);
@@ -40,7 +78,8 @@ namespace cb0t.Scripting
         public static void Init()
         {
             Scripts = new List<JSScript>();
-            PendingEvents = new SafeQueue<JSUIEventItem>();
+            PendingUIEvents = new SafeQueue<JSUIEventItem>();
+            PendingTerminators = new SafeQueue<IPEndPoint>();
 
             DirectoryInfo dir = new DirectoryInfo(Settings.ScriptPath);
 

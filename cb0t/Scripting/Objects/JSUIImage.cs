@@ -74,7 +74,7 @@ namespace cb0t.Scripting.Objects
                 return;
 
             if (e.Button == MouseButtons.Left)
-                ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                 {
                     Arg = null,
                     Element = this,

@@ -69,7 +69,7 @@ namespace cb0t.Scripting.Objects
             this._value = this.UITextBox.Text;
 
             if (this.can_do_change_event)
-                ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                 {
                     Arg = null,
                     Element = this,
@@ -91,7 +91,7 @@ namespace cb0t.Scripting.Objects
 
         private void UITextBoxKeyPress(object sender, KeyPressEventArgs e)
         {
-            ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+            ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
             {
                 Arg = (int)e.KeyChar,
                 Element = this,
@@ -114,7 +114,7 @@ namespace cb0t.Scripting.Objects
         private void UITextBoxMouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                 {
                     Arg = null,
                     Element = this,

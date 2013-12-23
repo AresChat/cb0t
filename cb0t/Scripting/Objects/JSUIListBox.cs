@@ -94,8 +94,8 @@ namespace cb0t.Scripting.Objects
         private void UIListBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             this._selectedindex = this.UIListBox.SelectedIndex;
-            
-            ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+
+            ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
             {
                 Arg = null,
                 Element = this,
@@ -119,7 +119,7 @@ namespace cb0t.Scripting.Objects
         {
             if (e.Button == MouseButtons.Left)
                 if (this.UIListBox.SelectedIndex > -1)
-                    ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                    ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                     {
                         Arg = null,
                         Element = this,

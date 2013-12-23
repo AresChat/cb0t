@@ -104,6 +104,7 @@
     <Compile Include="Scripting\JSGlobal.cs" />
     <Compile Include="Scripting\JSScript.cs" />
     <Compile Include="Scripting\JSUIEventItem.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSRoom.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUICheckBox.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="Scripting\ObjectPrototypes\JSUIRadioButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextArea.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextBox.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUser.cs" />
+    <Compile Include="Scripting\Objects\JSRoom.cs" />
     <Compile Include="Scripting\Objects\JSUI.cs" />
     <Compile Include="Scripting\Objects\JSUIButton.cs" />
     <Compile Include="Scripting\Objects\JSUICheckBox.cs" />
@@ -124,6 +127,7 @@
     <Compile Include="Scripting\Objects\JSUIRadioButton.cs" />
     <Compile Include="Scripting\Objects\JSUITextArea.cs" />
     <Compile Include="Scripting\Objects\JSUITextBox.cs" />
+    <Compile Include="Scripting\Objects\JSUser.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Scripting\Statics\JSEvents.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">

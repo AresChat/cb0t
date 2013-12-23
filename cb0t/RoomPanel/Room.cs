@@ -35,6 +35,7 @@ namespace cb0t
         private bool CanVC { get; set; }
         private bool CanOpusVC { get; set; }
         private bool BlackBG { get; set; }
+        private bool ScriptObjectCreated { get; set; }
 
         public Room(uint time, FavouritesListItem item, Form1 f, bool black_bg)
         {
@@ -457,6 +458,7 @@ namespace cb0t
 
         public void Release()
         {
+            Scripting.ScriptManager.PendingTerminators.Enqueue(this.EndPoint);
             this.owner_frm = null;
             this.Panel.VoiceRecordingButtonClicked -= this.VoiceRecordingButtonClicked;
             this.Panel.GetUserByName -= this.PanelGetUserByName;
@@ -604,6 +606,12 @@ namespace cb0t
             {
                 if (time >= (this.ticks + 20))
                 {
+                    if (!this.ScriptObjectCreated)
+                    {
+                        this.ScriptObjectCreated = true;
+                        Scripting.ScriptManager.AddRoom(this.EndPoint);
+                    }
+
                     this.state = SessionState.Connecting;
                     this.sock.Connect(new IPEndPoint(this.Credentials.IP, this.Credentials.Port));
                     this.ticks = time;
