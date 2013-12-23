@@ -66,7 +66,7 @@ namespace cb0t.Scripting.Objects
         {
             this._selectedindex = this.UIComboBox.SelectedIndex;
 
-            ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+            ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
             {
                 Arg = null,
                 Element = this,

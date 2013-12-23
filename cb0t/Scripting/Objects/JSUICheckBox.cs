@@ -79,7 +79,7 @@ namespace cb0t.Scripting.Objects
             this._checked = this.UICheckBox.Checked;
 
             if (this.can_do_change_event)
-                ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                 {
                     Arg = null,
                     Element = this,

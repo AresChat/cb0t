@@ -383,6 +383,7 @@ namespace cb0t
 
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
+            Scripting.ScriptManager.AddUser(this.EndPoint, u);
 
             if (ScriptEvents.OnUserJoining(this, u))
                 this.Panel.AnnounceText((this.BlackBG ? "\x000309" : "\x000303") + StringTemplate.Get(STType.Messages, 13).Replace("+x", u.Name));
@@ -420,6 +421,7 @@ namespace cb0t
                     this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", u.Name));
 
                 ScriptEvents.OnUserParted(this, u);
+                Scripting.ScriptManager.RemoveUser(this.EndPoint, u);
                 u.Dispose();
                 u = null;
             }
@@ -462,6 +464,7 @@ namespace cb0t
 
             this.users.Add(u);
             this.Panel.Userlist.AddUserItem(u);
+            Scripting.ScriptManager.AddUser(this.EndPoint, u);
 
             if (u.Name == this.MyName)
             {

@@ -11,7 +11,22 @@ namespace cb0t
 
         public static void OnConnecting(Room room) { }
 
-        public static void OnConnected(Room room) { }
+        public static void OnConnected(Room room)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONCONNECTED != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONCONNECTED.Call(script.JS.Global, r);
+                            }
+                            catch { }
+
+                            break;
+                        }
+        }
 
         public static bool OnRedirecting(Room room, Redirect redirect) { return true; }
 
@@ -121,7 +136,22 @@ namespace cb0t
 
         public static void OnAnnounceReceived(Room room, String text) { }
 
-        public static void OnUserlistReceived(Room room) { }
+        public static void OnUserlistReceived(Room room)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONUSERLISTRECEIVED != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONUSERLISTRECEIVED.Call(script.JS.Global, r);
+                            }
+                            catch { }
+
+                            break;
+                        }
+        }
 
         public static bool OnUserJoining(Room room, User user) { return true; }
 

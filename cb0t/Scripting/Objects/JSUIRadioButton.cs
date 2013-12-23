@@ -109,7 +109,7 @@ namespace cb0t.Scripting.Objects
                                     r.ForceUnselect();
                             }
 
-                ScriptManager.PendingEvents.Enqueue(new JSUIEventItem
+                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
                 {
                     Arg = null,
                     Element = this,

@@ -15,15 +15,19 @@ namespace cb0t.Scripting
         public ScriptEngine JS { get; private set; }
         public Objects.JSUI UI { get; private set; }
         public List<ICustomUI> Elements { get; private set; }
+        public List<Objects.JSRoom> Rooms { get; private set; }
 
         public String ScriptPath { get; private set; }
         public String DataPath { get; private set; }
 
         public UserDefinedFunction EVENT_ONLOAD { get; set; }
+        public UserDefinedFunction EVENT_ONCONNECTED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERLISTRECEIVED { get; set; }
 
         public JSScript(String name)
         {
             this.Elements = new List<ICustomUI>();
+            this.Rooms = new List<Objects.JSRoom>();
             this.ScriptName = name;
             this.ScriptPath = Path.Combine(Settings.ScriptPath, name);
             this.DataPath = Path.Combine(this.ScriptPath, "data");
