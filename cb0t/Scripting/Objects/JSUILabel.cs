@@ -29,6 +29,7 @@ namespace cb0t.Scripting.Objects
                 script.Elements.Add(this);
 
             this.UILabel = new Label();
+            this.UILabel.BackColor = Color.Transparent;
             this.UILabel.Font = new Font("Tahoma", (float)9, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.UILabel.AutoSize = true;
             this.UILabel.Location = new Point(32, 32);
@@ -233,6 +234,24 @@ namespace cb0t.Scripting.Objects
                     this.UILabel.Font = new Font("Tahoma", (float)this._size, this._link ? FontStyle.Underline : FontStyle.Regular, GraphicsUnit.Point, ((byte)0));
                 }
             }
+        }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UILabel.IsHandleCreated)
+                this.UILabel.BeginInvoke((Action)(() => this.UILabel.BringToFront()));
+            else
+                this.UILabel.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UILabel.IsHandleCreated)
+                this.UILabel.BeginInvoke((Action)(() => this.UILabel.SendToBack()));
+            else
+                this.UILabel.SendToBack();
         }
     }
 }

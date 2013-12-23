@@ -28,6 +28,7 @@ namespace cb0t.Scripting.Objects
                 script.Elements.Add(this);
 
             this.UICheckBox = new CheckBox();
+            this.UICheckBox.BackColor = Color.Transparent;
             this.UICheckBox.Location = new Point(32, 32);
             this.UICheckBox.AutoSize = true;
             this.UICheckBox.UseVisualStyleBackColor = true;
@@ -198,6 +199,24 @@ namespace cb0t.Scripting.Objects
                     this.can_do_change_event = true;
                 }
             }
+        }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UICheckBox.IsHandleCreated)
+                this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.BringToFront()));
+            else
+                this.UICheckBox.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UICheckBox.IsHandleCreated)
+                this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.SendToBack()));
+            else
+                this.UICheckBox.SendToBack();
         }
     }
 }

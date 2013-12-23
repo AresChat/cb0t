@@ -363,5 +363,23 @@ namespace cb0t.Scripting.Objects
                     this.UITextBox.Enabled = value;
             }
         }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UITextBox.IsHandleCreated)
+                this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.BringToFront()));
+            else
+                this.UITextBox.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UITextBox.IsHandleCreated)
+                this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.SendToBack()));
+            else
+                this.UITextBox.SendToBack();
+        }
     }
 }

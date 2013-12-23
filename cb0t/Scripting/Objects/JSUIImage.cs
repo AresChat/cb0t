@@ -105,6 +105,9 @@ namespace cb0t.Scripting.Objects
                 {
                     String path = Path.Combine(this.DataPath, a.ToString());
 
+                    if (new FileInfo(path).Directory.FullName != new DirectoryInfo(this.DataPath).FullName)
+                        return;
+
                     if (this.UIImage.Image != null)
                         this.UIImage.Image = null;
 
@@ -127,6 +130,9 @@ namespace cb0t.Scripting.Objects
             else
             {
                 String path = Path.Combine(this.DataPath, a.ToString());
+
+                if (new FileInfo(path).Directory.FullName != new DirectoryInfo(this.DataPath).FullName)
+                    return;
 
                 if (this.UIImage.Image != null)
                     this.UIImage.Image = null;
@@ -285,6 +291,24 @@ namespace cb0t.Scripting.Objects
                 else
                     this.UIImage.Height = value;
             }
+        }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UIImage.IsHandleCreated)
+                this.UIImage.BeginInvoke((Action)(() => this.UIImage.BringToFront()));
+            else
+                this.UIImage.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UIImage.IsHandleCreated)
+                this.UIImage.BeginInvoke((Action)(() => this.UIImage.SendToBack()));
+            else
+                this.UIImage.SendToBack();
         }
     }
 }

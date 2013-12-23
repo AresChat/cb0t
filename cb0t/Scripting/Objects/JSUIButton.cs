@@ -211,5 +211,23 @@ namespace cb0t.Scripting.Objects
                     this.UIButton.Height = value;
             }
         }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UIButton.IsHandleCreated)
+                this.UIButton.BeginInvoke((Action)(() => this.UIButton.BringToFront()));
+            else
+                this.UIButton.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UIButton.IsHandleCreated)
+                this.UIButton.BeginInvoke((Action)(() => this.UIButton.SendToBack()));
+            else
+                this.UIButton.SendToBack();
+        }
     }
 }

@@ -28,6 +28,7 @@ namespace cb0t.Scripting.Objects
                 script.Elements.Add(this);
 
             this.UIRadioButton = new RadioButton();
+            this.UIRadioButton.BackColor = Color.Transparent;
             this.UIRadioButton.UseVisualStyleBackColor = true;
             this.UIRadioButton.AutoSize = true;
             this.UIRadioButton.Location = new Point(32, 32);
@@ -220,6 +221,24 @@ namespace cb0t.Scripting.Objects
                 else
                     this.UIRadioButton.Enabled = value;
             }
+        }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UIRadioButton.IsHandleCreated)
+                this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.BringToFront()));
+            else
+                this.UIRadioButton.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UIRadioButton.IsHandleCreated)
+                this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.SendToBack()));
+            else
+                this.UIRadioButton.SendToBack();
         }
     }
 }
