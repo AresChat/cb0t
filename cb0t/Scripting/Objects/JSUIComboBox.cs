@@ -291,5 +291,23 @@ namespace cb0t.Scripting.Objects
                     this.UIComboBox.Width = value;
             }
         }
+
+        [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
+        public void DoPromote()
+        {
+            if (this.UIComboBox.IsHandleCreated)
+                this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.BringToFront()));
+            else
+                this.UIComboBox.BringToFront();
+        }
+
+        [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
+        public void DoDemote()
+        {
+            if (this.UIComboBox.IsHandleCreated)
+                this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.SendToBack()));
+            else
+                this.UIComboBox.SendToBack();
+        }
     }
 }
