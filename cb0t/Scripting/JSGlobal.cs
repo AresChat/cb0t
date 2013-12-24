@@ -56,5 +56,85 @@ namespace cb0t.Scripting
 
             return null;
         }
+
+        [JSFunction(Name = "user")]
+        public static Objects.JSUser GetUser(object a, object b)
+        {
+            if (a is Objects.JSRoom)
+                if (!(b is Undefined))
+                {
+                    Objects.JSRoom r = (Objects.JSRoom)a;
+                    String str = b.ToString();
+
+                    if (!String.IsNullOrEmpty(str))
+                    {
+                        foreach (Objects.JSUser u in r.UserList)
+                            if (u.U_Name == str)
+                                return u;
+
+                        foreach (Objects.JSUser u in r.UserList)
+                            if (u.U_Name.StartsWith(str))
+                                return u;
+                    }
+                }
+
+            return null;
+        }
+
+        [JSFunction(Name = "users")]
+        public static void DoUsersTask(object a, object b)
+        {
+            if (a is Objects.JSRoom && b is UserDefinedFunction)
+            {
+                Objects.JSRoom r = (Objects.JSRoom)a;
+                UserDefinedFunction f = (UserDefinedFunction)b;
+
+                foreach (Objects.JSUser u in r.UserList)
+                    try { f.Call(r.Engine.Global, u); }
+                    catch { }
+            }
+        }
+
+        [JSFunction(Name = "room", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static Objects.JSRoom GetRoom(ScriptEngine eng, object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                    if (script != null)
+                    {
+                        foreach (Objects.JSRoom r in script.Rooms)
+                            if (r.R_Name == str)
+                                return r;
+
+                        foreach (Objects.JSRoom r in script.Rooms)
+                            if (r.R_Name.StartsWith(str))
+                                return r;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [JSFunction(Name = "rooms", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static void DoRoomsTask(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                UserDefinedFunction f = (UserDefinedFunction)a;
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                    foreach (Objects.JSRoom r in script.Rooms)
+                        try { f.Call(script.JS.Global, r); }
+                        catch { }
+            }
+        }
     }
 }

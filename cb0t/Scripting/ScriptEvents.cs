@@ -7,9 +7,39 @@ namespace cb0t
 {
     class ScriptEvents
     {
-        public static void OnDisconnected(Room room) { }
+        public static void OnDisconnected(Room room)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONDISCONNECTED != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONDISCONNECTED.Call(script.JS.Global, r);
+                            }
+                            catch { }
 
-        public static void OnConnecting(Room room) { }
+                            break;
+                        }
+        }
+
+        public static void OnConnecting(Room room)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONCONNECTING != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONCONNECTING.Call(script.JS.Global, r);
+                            }
+                            catch { }
+
+                            break;
+                        }
+        }
 
         public static void OnConnected(Room room)
         {
@@ -28,9 +58,58 @@ namespace cb0t
                         }
         }
 
-        public static bool OnRedirecting(Room room, Redirect redirect) { return true; }
+        public static bool OnRedirecting(Room room, Redirect redirect)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONREDIRECTING != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (redirect != null)
+                        {
+                            Scripting.Objects.JSRedirect target = new Scripting.Objects.JSRedirect(script.JS.Object.InstancePrototype, redirect);
 
-        public static bool OnCommand(Room room, String text) { return true; }
+                            if (r.EndPoint.Equals(room.EndPoint))
+                            {
+                                try
+                                {
+                                    object obj = script.EVENT_ONREDIRECTING.Call(script.JS.Global, r, target);
+
+                                    if (obj != null)
+                                        if (obj is bool)
+                                            if (!((bool)obj))
+                                                return false;
+                                }
+                                catch { }
+
+                                break;
+                            }
+                        }
+
+            return true;
+        }
+
+        public static bool OnCommand(Room room, String text)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONCOMMAND != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                object obj = script.EVENT_ONCOMMAND.Call(script.JS.Global, r, text);
+
+                                if (obj != null)
+                                    if (obj is bool)
+                                        if (!((bool)obj))
+                                            return false;
+                            }
+                            catch { }
+
+                            break;
+                        }
+
+            return true;
+        }
 
         public static bool OnTextReceiving(Room room, String name, String text)
         {
@@ -324,7 +403,22 @@ namespace cb0t
             }
         }
 
-        public static void OnTimer(Room room) { }
+        public static void OnTimer(Room room)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONTIMER != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONTIMER.Call(script.JS.Global, r);
+                            }
+                            catch { }
+
+                            break;
+                        }
+        }
 
         public static bool OnVoiceClipReceiving(Room room, User user) { return true; }
 

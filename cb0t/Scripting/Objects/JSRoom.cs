@@ -81,5 +81,26 @@ namespace cb0t.Scripting.Objects
             }
         }
 
+        [JSFunction(Name = "user", IsEnumerable = true, IsWritable = false)]
+        public Objects.JSUser R_GetUser(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    foreach (Objects.JSUser u in this.UserList)
+                        if (u.U_Name == str)
+                            return u;
+
+                    foreach (Objects.JSUser u in this.UserList)
+                        if (u.U_Name.StartsWith(str))
+                            return u;
+                }
+            }
+
+            return null;
+        }
     }
 }
