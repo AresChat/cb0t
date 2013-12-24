@@ -102,8 +102,10 @@
     <Compile Include="Misc\SafeQueue.cs" />
     <Compile Include="Scripting\ICustomUI.cs" />
     <Compile Include="Scripting\JSGlobal.cs" />
+    <Compile Include="Scripting\JSOutboundCommand.cs" />
     <Compile Include="Scripting\JSScript.cs" />
     <Compile Include="Scripting\JSUIEventItem.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSRedirect.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSRoom.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Scripting\ObjectPrototypes\JSUITextArea.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextBox.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUser.cs" />
+    <Compile Include="Scripting\Objects\JSRedirect.cs" />
     <Compile Include="Scripting\Objects\JSRoom.cs" />
     <Compile Include="Scripting\Objects\JSUI.cs" />
     <Compile Include="Scripting\Objects\JSUIButton.cs" />

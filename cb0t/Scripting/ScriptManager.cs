@@ -14,6 +14,7 @@ namespace cb0t.Scripting
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
         public static SafeQueue<IPEndPoint> PendingTerminators { get; private set; }
+        public static SafeQueue<JSOutboundCommand> PendingCommands { get; private set; }
 
         public static void AddRoom(IPEndPoint ep)
         {
@@ -53,6 +54,20 @@ namespace cb0t.Scripting
                         script.Rooms.RemoveAll(x => x.EndPoint.Equals(ep));
             }
 
+            if (PendingCommands.Pending)
+            {
+                JSOutboundCommand cmd = null;
+
+                while (PendingCommands.TryDequeue(out cmd))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(cmd.EndPoint));
+
+                    if (r != null)
+                        if (ScriptEvents.OnCommand(r, cmd.Text))
+                            r.SendCommand(cmd.Text);
+                }
+            }
+
             if (PendingUIEvents.Pending)
             {
                 JSUIEventItem item = null;
@@ -80,6 +95,7 @@ namespace cb0t.Scripting
             Scripts = new List<JSScript>();
             PendingUIEvents = new SafeQueue<JSUIEventItem>();
             PendingTerminators = new SafeQueue<IPEndPoint>();
+            PendingCommands = new SafeQueue<JSOutboundCommand>();
 
             DirectoryInfo dir = new DirectoryInfo(Settings.ScriptPath);
 

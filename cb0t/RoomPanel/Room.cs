@@ -803,71 +803,74 @@ namespace cb0t
                         }
                         else if (text.StartsWith("/"))
                         {
-                            if (ScriptEvents.OnCommand(this, text.Substring(1)))
+                            if (text == "/time")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
+                            else if (text == "/uptime")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
+                            else if (text == "/gfx")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
+                            else if (text == "/hdd")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
+                            else if (text == "/os")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
+                            else if (text == "/cpu")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
+                            else if (text == "/ram")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
+                            else if (text == "/lag")
+                                this.sock.SendPriority(TCPOutbound.ManualLag(this.MyName, Helpers.UnixTimeMS, this.crypto));
+                            else if (text == "/client")
+                                this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CLIENT, this.crypto));
+                            else if (text == "/np")
                             {
-                                if (text == "/time")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_TIME, this.crypto));
-                                else if (text == "/uptime")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_UPTIME, this.crypto));
-                                else if (text == "/gfx")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_GFX, this.crypto));
-                                else if (text == "/hdd")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_HDD, this.crypto));
-                                else if (text == "/os")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_OS, this.crypto));
-                                else if (text == "/cpu")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CPU, this.crypto));
-                                else if (text == "/ram")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_RAM, this.crypto));
-                                else if (text == "/lag")
-                                    this.sock.SendPriority(TCPOutbound.ManualLag(this.MyName, Helpers.UnixTimeMS, this.crypto));
-                                else if (text == "/client")
-                                    this.sock.Send(TCPOutbound.Public(InternalCommands.CMD_CLIENT, this.crypto));
-                                else if (text == "/np")
-                                {
-                                    if (!String.IsNullOrEmpty(Helpers.NP))
-                                        this.sock.Send(TCPOutbound.Emote("np: " + Helpers.NP, this.crypto));
-                                }
-                                else if (text == "/cmds")
-                                {
-                                    foreach (String item in Helpers.cmds)
-                                        this.Panel.AnnounceText(item);
-                                }
-                                else if (text.StartsWith("/all "))
-                                {
-                                    text = text.Substring(5);
+                                if (!String.IsNullOrEmpty(Helpers.NP))
+                                    this.sock.Send(TCPOutbound.Emote("np: " + Helpers.NP, this.crypto));
+                            }
+                            else if (text == "/cmds")
+                            {
+                                foreach (String item in Helpers.cmds)
+                                    this.Panel.AnnounceText(item);
+                            }
+                            else if (text.StartsWith("/all "))
+                            {
+                                text = text.Substring(5);
 
-                                    if (text.StartsWith("/me ") && text.Length > 4)
-                                        RoomPool.Rooms.ForEach(x => x.SendEmote(text.Substring(4)));
-                                    else if (text.StartsWith("/") && text.Length > 1)
-                                        RoomPool.Rooms.ForEach(x => x.SendCommand(text.Substring(1)));
-                                    else
-                                        RoomPool.Rooms.ForEach(x => x.SendText(text));
-                                }
-                                else if (text.StartsWith("/find "))
-                                {
-                                    String arg = text.Substring(6);
-                                    User u = this.users.Find(x => x.Name == arg);
+                                if (text.StartsWith("/me ") && text.Length > 4)
+                                    RoomPool.Rooms.ForEach(x => x.SendEmote(text.Substring(4)));
+                                else if (text.StartsWith("/") && text.Length > 1)
+                                    RoomPool.Rooms.ForEach(x => x.SendCommand(text.Substring(1)));
+                                else
+                                    RoomPool.Rooms.ForEach(x => x.SendText(text));
+                            }
+                            else if (text.StartsWith("/find "))
+                            {
+                                String arg = text.Substring(6);
+                                User u = this.users.Find(x => x.Name == arg);
 
-                                    if (u == null)
-                                        u = this.users.Find(x => x.Name.StartsWith(arg));
+                                if (u == null)
+                                    u = this.users.Find(x => x.Name.StartsWith(arg));
 
-                                    if (u != null)
-                                        this.Panel.Userlist.SetToUser(u.Name);
-                                }
-                                else if (text == "/pretext" || text == "/pretext ")
+                                if (u != null)
+                                    this.Panel.Userlist.SetToUser(u.Name);
+                            }
+                            else if (text == "/pretext" || text == "/pretext ")
+                            {
+                                Settings.SetReg("pretext", String.Empty);
+                                this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 20));
+                            }
+                            else if (text.StartsWith("/pretext "))
+                            {
+                                String arg = text.Substring(9);
+                                Settings.SetReg("pretext", arg);
+                                this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 19));
+                            }
+                            else if (text.Length > 1)
+                            {
+                                Scripting.ScriptManager.PendingCommands.Enqueue(new Scripting.JSOutboundCommand
                                 {
-                                    Settings.SetReg("pretext", String.Empty);
-                                    this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 20));
-                                }
-                                else if (text.StartsWith("/pretext "))
-                                {
-                                    String arg = text.Substring(9);
-                                    Settings.SetReg("pretext", arg);
-                                    this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 19));
-                                }
-                                else if (text.Length > 1)
-                                    this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
+                                    EndPoint = this.EndPoint,
+                                    Text = text.Substring(1)
+                                });
                             }
                         }
                         else

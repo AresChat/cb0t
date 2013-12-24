@@ -23,6 +23,11 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONLOAD { get; set; }
         public UserDefinedFunction EVENT_ONCONNECTED { get; set; }
         public UserDefinedFunction EVENT_ONUSERLISTRECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONDISCONNECTED { get; set; }
+        public UserDefinedFunction EVENT_ONCONNECTING { get; set; }
+        public UserDefinedFunction EVENT_ONREDIRECTING { get; set; }
+        public UserDefinedFunction EVENT_ONCOMMAND { get; set; }
+        public UserDefinedFunction EVENT_ONTIMER { get; set; }
 
         public JSScript(String name)
         {
