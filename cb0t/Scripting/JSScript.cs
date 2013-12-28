@@ -26,8 +26,27 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONDISCONNECTED { get; set; }
         public UserDefinedFunction EVENT_ONCONNECTING { get; set; }
         public UserDefinedFunction EVENT_ONREDIRECTING { get; set; }
-        public UserDefinedFunction EVENT_ONCOMMAND { get; set; }
+        public UserDefinedFunction EVENT_ONCOMMANDSENDING { get; set; }
+        public UserDefinedFunction EVENT_ONEMOTESENDING { get; set; }
+        public UserDefinedFunction EVENT_ONTEXTSENDING { get; set; }
+        public UserDefinedFunction EVENT_ONPMSENDING { get; set; }
         public UserDefinedFunction EVENT_ONTIMER { get; set; }
+        public UserDefinedFunction EVENT_ONTEXTRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONTEXTRECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONEMOTERECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONEMOTERECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONANNOUNCERECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONANNOUNCERECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERJOINING { get; set; }
+        public UserDefinedFunction EVENT_ONUSERJOINED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERPARTING { get; set; }
+        public UserDefinedFunction EVENT_ONUSERPARTED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERLEVELCHANGED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERAVATARRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONUSERMESSAGERECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONTOPICRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONURLRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONUSERFONTCHANGING { get; set; }
 
         public JSScript(String name)
         {
@@ -57,7 +76,7 @@ namespace cb0t.Scripting
             }
             catch (JavaScriptException e)
             {
-                System.Windows.Forms.MessageBox.Show("error in script: " + e.Message);
+                
             }
             catch { }
         }

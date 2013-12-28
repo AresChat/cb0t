@@ -21,8 +21,8 @@ namespace cb0t.Scripting.Statics
             get { return "Events"; }
         }
 
-        [JSFunction(Name = "onload", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
-        public static bool EventOnLoad(ScriptEngine eng, object a)
+        [JSFunction(Name = "onannouncereceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnAnnounceReceived(ScriptEngine eng, object a)
         {
             if (a is UserDefinedFunction)
             {
@@ -30,7 +30,41 @@ namespace cb0t.Scripting.Statics
 
                 if (script != null)
                 {
-                    script.EVENT_ONLOAD = (UserDefinedFunction)a;
+                    script.EVENT_ONANNOUNCERECEIVED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onannouncereceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnAnnounceReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONANNOUNCERECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "oncommandsending", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnCommandSending(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONCOMMANDSENDING = (UserDefinedFunction)a;
                     return true;
                 }
             }
@@ -48,23 +82,6 @@ namespace cb0t.Scripting.Statics
                 if (script != null)
                 {
                     script.EVENT_ONCONNECTED = (UserDefinedFunction)a;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        [JSFunction(Name = "onuserlistreceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
-        public static bool EventOnUserListReceived(ScriptEngine eng, object a)
-        {
-            if (a is UserDefinedFunction)
-            {
-                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
-
-                if (script != null)
-                {
-                    script.EVENT_ONUSERLISTRECEIVED = (UserDefinedFunction)a;
                     return true;
                 }
             }
@@ -106,6 +123,91 @@ namespace cb0t.Scripting.Statics
             return false;
         }
 
+        [JSFunction(Name = "onemotereceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnEmoteReceived(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONEMOTERECEIVED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onemotereceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnEmoteReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONEMOTERECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onemotesending", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnEmoteSending(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONEMOTESENDING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onload", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnLoad(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONLOAD = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onpmsending", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnPmSending(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONPMSENDING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         [JSFunction(Name = "onredirecting", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
         public static bool EventOnRedirecting(ScriptEngine eng, object a)
         {
@@ -123,8 +225,8 @@ namespace cb0t.Scripting.Statics
             return false;
         }
 
-        [JSFunction(Name = "oncommand", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
-        public static bool EventOnCommand(ScriptEngine eng, object a)
+        [JSFunction(Name = "ontextsending", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnTextSending(ScriptEngine eng, object a)
         {
             if (a is UserDefinedFunction)
             {
@@ -132,7 +234,41 @@ namespace cb0t.Scripting.Statics
 
                 if (script != null)
                 {
-                    script.EVENT_ONCOMMAND = (UserDefinedFunction)a;
+                    script.EVENT_ONTEXTSENDING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "ontextreceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnTextReceived(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONTEXTRECEIVED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "ontextreceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnTextReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONTEXTRECEIVING = (UserDefinedFunction)a;
                     return true;
                 }
             }
@@ -156,5 +292,194 @@ namespace cb0t.Scripting.Statics
 
             return false;
         }
+
+        [JSFunction(Name = "ontopicreceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnTopicReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONTOPICRECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onurlreceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUrlReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONURLRECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuseravatarreceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserAvatarReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERAVATARRECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserfontchanging", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserFontChanging(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERFONTCHANGING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserjoined", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserJoined(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERJOINED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserjoining", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserJoining(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERJOINING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserlevelchanged", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserLevelChanged(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERLEVELCHANGED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserlistreceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserListReceived(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERLISTRECEIVED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onusermessagereceiving", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserMessageReceiving(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERMESSAGERECEIVING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserparted", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserParted(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERPARTED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onuserparting", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnUserParting(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONUSERPARTING = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 }

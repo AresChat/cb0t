@@ -127,6 +127,7 @@ namespace cb0t
             this.users.ForEach(x => x.Dispose());
             this.users.Clear();
             this.users = new List<User>();
+            Scripting.ScriptManager.ClearUsers(this.EndPoint);
             this.Panel.ServerText(StringTemplate.Get(STType.Messages, 18) + "...");
             this.Panel.CanVC(false);
             this.CanVC = false;
@@ -226,8 +227,9 @@ namespace cb0t
         private void Eval_Announce(TCPPacketReader packet)
         {
             String text = packet.ReadString(this.crypto);
+            text = ScriptEvents.OnAnnounceReceiving(this, text);
 
-            if (ScriptEvents.OnAnnounceReceiving(this, text))
+            if (!String.IsNullOrEmpty(text))
             {
                 this.Panel.AnnounceText(text);
                 ScriptEvents.OnAnnounceReceived(this, text);
@@ -285,8 +287,9 @@ namespace cb0t
         {
             String addr = packet.ReadString(this.crypto);
             String text = packet.ReadString(this.crypto);
+            text = ScriptEvents.OnUrlReceiving(this, text, addr);
 
-            if (ScriptEvents.OnUrlReceiving(this, text, addr))
+            if (!String.IsNullOrEmpty(text))
                 this.Panel.SetURL(text, addr);
         }
 
@@ -365,7 +368,6 @@ namespace cb0t
             if (ghost != null)
             {
                 this.users.RemoveAll(x => x.Name == ghost.Name);
-                this.Panel.Userlist.RemoveUserItem(ghost);
 
                 if (ghost.Writing)
                 {
@@ -373,10 +375,13 @@ namespace cb0t
                     this.Panel.UpdateWriter(ghost);
                 }
 
+                this.Panel.Userlist.RemoveUserItem(ghost);
+
                 if (ScriptEvents.OnUserParting(this, ghost))
                     this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", ghost.Name));
 
                 ScriptEvents.OnUserParted(this, ghost);
+                Scripting.ScriptManager.RemoveUser(this.EndPoint, u);
                 ghost.Dispose();
                 ghost = null;
             }
@@ -484,7 +489,9 @@ namespace cb0t
             if (updated)
                 this.Panel.ServerText(StringTemplate.Get(STType.Messages, 11) + ": " + text);
 
-            if (ScriptEvents.OnTopicReceiving(this, text))
+            String str = ScriptEvents.OnTopicReceiving(this, text);
+
+            if (!String.IsNullOrEmpty(str))
                 this.Panel.SetTopic(text);
         }
 
@@ -520,7 +527,9 @@ namespace cb0t
             if (u.Ignored)
                 return;
 
-            if (ScriptEvents.OnPmReceiving(this, u, text))
+            text = ScriptEvents.OnPmReceiving(this, u, text);
+
+            if (!String.IsNullOrEmpty(text))
             {
                 this.Panel.PMTextReceived(this, u, name, text, font, PMTextReceivedType.Text);
                 this.Panel.CheckUnreadStatus();
@@ -544,7 +553,9 @@ namespace cb0t
                     font = u.Font;
             }
 
-            if (ScriptEvents.OnTextReceiving(this, name, text))
+            text = ScriptEvents.OnTextReceiving(this, name, text);
+
+            if (!String.IsNullOrEmpty(text))
             {
                 this.Panel.PublicText(name, text, font);
                 this.Panel.CheckUnreadStatus();
@@ -568,7 +579,9 @@ namespace cb0t
                     font = u.Font;
             }
 
-            if (ScriptEvents.OnEmoteReceiving(this, name, text))
+            text = ScriptEvents.OnEmoteReceiving(this, name, text);
+
+            if (!String.IsNullOrEmpty(text))
             {
                 this.Panel.EmoteText(name, text, font);
                 this.Panel.CheckUnreadStatus();
@@ -821,7 +834,8 @@ namespace cb0t
             User u = this.users.Find(x => x.Name == name);
 
             if (u != null)
-                if (ScriptEvents.OnUserFontChanging(this, u))
+            {
+                if (packet.Remaining > 2)
                 {
                     AresFont f = new AresFont();
                     f.Size = (int)((byte)packet);
@@ -850,8 +864,11 @@ namespace cb0t
                     if (String.IsNullOrEmpty(f.TextColor))
                         f.TextColor = Helpers.AresColorToHTMLColor(oldT);
 
-                    u.Font = f;
+                    if (ScriptEvents.OnUserFontChanging(this, u, f))
+                        u.Font = f;
                 }
+                else u.Font = null;
+            }
         }
 
         private void CustomProtoReceived(TCPPacketReader packet, uint time)
@@ -1025,7 +1042,9 @@ namespace cb0t
             if (u.Font != null)
                 font = u.Font;
 
-            if (ScriptEvents.OnPmReceiving(this, u, text))
+            text = ScriptEvents.OnPmReceiving(this, u, text);
+
+            if (!String.IsNullOrEmpty(text))
             {
                 this.Panel.PMTextReceived(this, u, name, text, font, PMTextReceivedType.Text);
                 this.Panel.CheckUnreadStatus();

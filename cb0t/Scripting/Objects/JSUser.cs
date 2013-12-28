@@ -3,6 +3,7 @@ using Jurassic.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace cb0t.Scripting.Objects
@@ -30,7 +31,7 @@ namespace cb0t.Scripting.Objects
         // begin
 
         private User parent { get; set; }
-
+        
         public void SetToNull()
         {
             this.parent = null;
@@ -42,7 +43,5 @@ namespace cb0t.Scripting.Objects
             get { return this.parent.Name; }
             set { }
         }
-
-
     }
 }
