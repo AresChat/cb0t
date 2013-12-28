@@ -799,7 +799,12 @@ namespace cb0t
                         if (text.StartsWith("/me "))
                         {
                             if (text.Length > 4)
-                                this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
+                                Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
+                                {
+                                    EndPoint = this.EndPoint,
+                                    Text = text.Substring(4),
+                                    Type = Scripting.JSOutboundTextItemType.Emote
+                                });
                         }
                         else if (text.StartsWith("/"))
                         {
@@ -866,10 +871,11 @@ namespace cb0t
                             }
                             else if (text.Length > 1)
                             {
-                                Scripting.ScriptManager.PendingCommands.Enqueue(new Scripting.JSOutboundCommand
+                                Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
                                 {
                                     EndPoint = this.EndPoint,
-                                    Text = text.Substring(1)
+                                    Text = text.Substring(1),
+                                    Type = Scripting.JSOutboundTextItemType.Command
                                 });
                             }
                         }
@@ -880,36 +886,59 @@ namespace cb0t
                                 String whisper_name = this.Panel.Userlist.GetSelectedName;
 
                                 if (!String.IsNullOrEmpty(whisper_name))
-                                    this.sock.Send(TCPOutbound.Command("whisper \"" + whisper_name + "\" " + text, this.crypto));
+                                    Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
+                                    {
+                                        EndPoint = this.EndPoint,
+                                        Text = "whisper \"" + whisper_name + "\" " + text,
+                                        Type = Scripting.JSOutboundTextItemType.Command
+                                    });
                             }
-                            else this.sock.Send(TCPOutbound.Public(Settings.GetReg<String>("pretext", String.Empty) + text, this.crypto));
+                            else Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
+                            {
+                                EndPoint = this.EndPoint,
+                                Text = Settings.GetReg<String>("pretext", String.Empty) + text,
+                                Type = Scripting.JSOutboundTextItemType.Public
+                            });
                         }
                     }
                     else if (this.Panel.Mode == ScreenMode.PM)
-                    {
-                        User u = this.users.Find(x => x.Name == this.Panel.PMName);
-
-                        if (u != null)
+                        Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
                         {
-                            AresFont f = null;
-
-                            if (Settings.MyFont != null)
-                                f = Settings.MyFont.Copy();
-
-                            this.Panel.MyPMText(text, f); // my font
-
-                            if (!u.SupportsPMEnc)
-                                this.sock.Send(TCPOutbound.Private(this.Panel.PMName, text, this.crypto));
-                            else
-                                this.sock.Send(TCPOutbound.CustomPM(this.Panel.PMName, text, this.crypto));
-                        }
-                        else this.Panel.MyPMAnnounce(StringTemplate.Get(STType.Messages, 9));
-                    }
+                            EndPoint = this.EndPoint,
+                            Name = this.Panel.PMName,
+                            Text = text,
+                            Type = Scripting.JSOutboundTextItemType.Private
+                        });
                 }
 
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }
+        }
+
+        public void SendPM(String name, String text)
+        {
+            if (this.Panel.Mode == ScreenMode.PM)
+                if (name == this.Panel.PMName)
+                {
+                    User u = this.users.Find(x => x.Name == this.Panel.PMName);
+
+                    if (u != null)
+                    {
+                        AresFont f = null;
+
+                        if (Settings.MyFont != null)
+                            f = Settings.MyFont.Copy();
+
+                        this.Panel.MyPMText(text, f); // my font
+
+                        if (!u.SupportsPMEnc)
+                            this.sock.Send(TCPOutbound.Private(this.Panel.PMName, text, this.crypto));
+                        else
+                            this.sock.Send(TCPOutbound.CustomPM(this.Panel.PMName, text, this.crypto));
+                    }
+                    else this.Panel.MyPMAnnounce(StringTemplate.Get(STType.Messages, 9));
+                }
         }
 
         private void SendAutoReply(object sender, EventArgs e)

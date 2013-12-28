@@ -211,16 +211,22 @@ namespace cb0t
 
         public void MyPMText(String text, AresFont font)
         {
-            if (this.tabControl1.SelectedTab != null)
-                if (this.tabControl1.SelectedTab is PMTab)
-                    ((PMTab)this.tabControl1.SelectedTab).PM(this.MyName, text, font);
+            this.tabControl1.BeginInvoke((Action)(() =>
+            {
+                if (this.tabControl1.SelectedTab != null)
+                    if (this.tabControl1.SelectedTab is PMTab)
+                        ((PMTab)this.tabControl1.SelectedTab).PM(this.MyName, text, font);
+            }));
         }
 
         public void MyPMAnnounce(String text)
         {
-            if (this.tabControl1.SelectedTab != null)
-                if (this.tabControl1.SelectedTab is PMTab)
-                    ((PMTab)this.tabControl1.SelectedTab).Announce(text);
+            this.tabControl1.BeginInvoke((Action)(() =>
+            {
+                if (this.tabControl1.SelectedTab != null)
+                    if (this.tabControl1.SelectedTab is PMTab)
+                        ((PMTab)this.tabControl1.SelectedTab).Announce(text);
+            }));
         }
 
         public void MyPMCreateOrShowTab(String name)

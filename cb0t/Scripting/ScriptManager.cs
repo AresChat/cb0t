@@ -14,7 +14,7 @@ namespace cb0t.Scripting
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
         public static SafeQueue<IPEndPoint> PendingTerminators { get; private set; }
-        public static SafeQueue<JSOutboundCommand> PendingCommands { get; private set; }
+        public static SafeQueue<JSOutboundTextItem> PendingUIText { get; private set; }
 
         public static void AddRoom(IPEndPoint ep)
         {
@@ -43,6 +43,18 @@ namespace cb0t.Scripting
                             }
         }
 
+        public static void ClearUsers(IPEndPoint ep)
+        {
+            foreach (JSScript script in Scripts)
+                foreach (Objects.JSRoom room in script.Rooms)
+                    if (room.EndPoint.Equals(ep))
+                        for (int i = (room.UserList.Count - 1); i > -1; i--)
+                        {
+                            room.UserList[i].SetToNull();
+                            room.UserList.RemoveAt(i);
+                        }
+        }
+
         public static void EventCycle()
         {
             if (PendingTerminators.Pending)
@@ -50,21 +62,51 @@ namespace cb0t.Scripting
                 IPEndPoint ep = null;
 
                 while (PendingTerminators.TryDequeue(out ep))
+                {
+                    ClearUsers(ep);
+
                     foreach (JSScript script in Scripts)
                         script.Rooms.RemoveAll(x => x.EndPoint.Equals(ep));
+                }
             }
 
-            if (PendingCommands.Pending)
+            if (PendingUIText.Pending)
             {
-                JSOutboundCommand cmd = null;
+                JSOutboundTextItem item = null;
 
-                while (PendingCommands.TryDequeue(out cmd))
+                while (PendingUIText.TryDequeue(out item))
                 {
-                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(cmd.EndPoint));
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(item.EndPoint));
 
                     if (r != null)
-                        if (ScriptEvents.OnCommand(r, cmd.Text))
-                            r.SendCommand(cmd.Text);
+                        if (item.Type == JSOutboundTextItemType.Command)
+                        {
+                            String str = ScriptEvents.OnCommandSending(r, item.Text);
+
+                            if (!String.IsNullOrEmpty(str))
+                                r.SendCommand(str);
+                        }
+                        else if (item.Type == JSOutboundTextItemType.Public)
+                        {
+                            String str = ScriptEvents.OnTextSending(r, item.Text);
+
+                            if (!String.IsNullOrEmpty(str))
+                                r.SendText(str);
+                        }
+                        else if (item.Type == JSOutboundTextItemType.Emote)
+                        {
+                            String str = ScriptEvents.OnEmoteSending(r, item.Text);
+
+                            if (!String.IsNullOrEmpty(str))
+                                r.SendEmote(str);
+                        }
+                        else if (item.Type == JSOutboundTextItemType.Private)
+                        {
+                            String str = ScriptEvents.OnPmSending(r, item.Name, item.Text);
+
+                            if (!String.IsNullOrEmpty(str))
+                                r.SendPM(item.Name, str);
+                        }
                 }
             }
 
@@ -95,7 +137,7 @@ namespace cb0t.Scripting
             Scripts = new List<JSScript>();
             PendingUIEvents = new SafeQueue<JSUIEventItem>();
             PendingTerminators = new SafeQueue<IPEndPoint>();
-            PendingCommands = new SafeQueue<JSOutboundCommand>();
+            PendingUIText = new SafeQueue<JSOutboundTextItem>();
 
             DirectoryInfo dir = new DirectoryInfo(Settings.ScriptPath);
 

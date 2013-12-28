@@ -245,9 +245,12 @@ namespace cb0t
             this.userListHeader1.AcquireServerIcon(ep);
         }
 
+        private delegate void CUHandler();
         public void ClearUserList()
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new CUHandler(this.ClearUserList));
+            else
             {
                 this.userListBox1.Items.Clear();
                 this.userListBox1.BeginUpdate();
@@ -257,17 +260,22 @@ namespace cb0t
                 this.userListBox1.Items.Add(new UserListBoxEmptyItem(UserListBoxSectionType.Admins));
                 this.userListBox1.Items.Add(new UserListBoxSectionItem(UserListBoxSectionType.Users));
                 this.userListBox1.Items.Add(new UserListBoxEmptyItem(UserListBoxSectionType.Users));
-            }));
+            }
         }
 
         public void ResumeUserlist()
         {
-            this.userListBox1.BeginInvoke((Action)(() => this.userListBox1.EndUpdate()));
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new CUHandler(this.ResumeUserlist));
+            else
+                this.userListBox1.EndUpdate();
         }
 
         public void AddUserItem(User user)
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new RUIHandler(this.AddUserItem), user);
+            else
             {
                 if (user.IsFriend)
                 {
@@ -344,7 +352,7 @@ namespace cb0t
 
                 this.userListHeader1.HeaderText = StringTemplate.Get(STType.UserList, 15) + " (" + total_count + ")";
                 this.userListHeader1.Invalidate();
-            }));
+            }
         }
 
         private void CheckSectionEmpty(UserListBoxSectionType section)
@@ -396,7 +404,9 @@ namespace cb0t
 
         public void UpdateUserAppearance(User user)
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new RUIHandler(this.UpdateUserAppearance), user);
+            else
             {
                 for (int i = 0; i < this.userListBox1.Items.Count; i++)
                     if (this.userListBox1.Items[i] is UserListBoxItem)
@@ -405,12 +415,15 @@ namespace cb0t
                             this.userListBox1.Invalidate(this.userListBox1.GetItemRectangle(i));
                             break;
                         }
-            }));
+            }
         }
 
+        private delegate void UULHandler(User user, byte before);
         public void UpdateUserLevel(User user, byte before)
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new UULHandler(this.UpdateUserLevel), user, before);
+            else
             {
                 bool section_changing = ((before == 0 && user.Level > 0) || (before > 0 && user.Level == 0)) && !user.IsFriend;
                 int index = -1;
@@ -444,12 +457,14 @@ namespace cb0t
                     }
                     else this.userListBox1.Invalidate(this.userListBox1.GetItemRectangle(index));
                 }
-            }));
+            }
         }
 
         public void UpdateUserFriendship(User user)
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new RUIHandler(this.UpdateUserFriendship), user);
+            else
             {
                 int index = -1;
                 UserListBoxSectionType section = UserListBoxSectionType.Friends;
@@ -477,12 +492,15 @@ namespace cb0t
                     this.userListBox1.TopIndex = ti < this.userListBox1.Items.Count ? ti : (this.userListBox1.Items.Count - 1);
                     this.AddUserItem(user);
                 }
-            }));
+            }
         }
 
+        private delegate void RUIHandler(User u);
         public void RemoveUserItem(User user)
         {
-            this.userListBox1.BeginInvoke((Action)(() =>
+            if (this.userListBox1.InvokeRequired)
+                this.userListBox1.BeginInvoke(new RUIHandler(this.RemoveUserItem), user);
+            else
             {
                 int index = -1;
                 UserListBoxSectionType section = UserListBoxSectionType.Friends;
@@ -501,7 +519,6 @@ namespace cb0t
 
                 if (index > -1)
                 {
-
                     int ti = this.userListBox1.TopIndex;
                     this.userListBox1.OnItemRemoved(index);
                     this.userListBox1.Items.RemoveAt(index);
@@ -519,7 +536,7 @@ namespace cb0t
 
                 this.userListHeader1.HeaderText = StringTemplate.Get(STType.UserList, 15) + " (" + total_count + ")";
                 this.userListHeader1.Invalidate();
-            }));
+            }
         }
 
         public void SetCrypto(bool is_crypto)
