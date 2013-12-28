@@ -173,6 +173,7 @@ namespace cb0t
             this.Panel.CanScribbleAll(has_scribble);
             this.Panel.CanScribblePM(has_pm_scribble);
             this.Panel.InitScribbleButton();
+            this.CanNP = true;
 
             if (has_html)
                 this.Panel.Userlist.AcquireServerIcon(this.EndPoint);
@@ -633,8 +634,8 @@ namespace cb0t
                     this.Eval_FavIcon(e.Packet);
                     break;
 
-                default:
-                    this.Panel.AnnounceText(msg.ToString());
+                case TCPMsg.MSG_CHAT_SERVER_NOW_PLAYING_EVENT:
+                    this.CanNP = ((byte)e.Packet) == 1;
                     break;
             }
         }

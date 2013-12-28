@@ -19,6 +19,7 @@ namespace cb0t
         public IPEndPoint EndPoint { get; set; }
         public String MyName = String.Empty;
         public bool RoomIsVisible { get; set; }
+        public bool CanNP { get; set; }
 
         private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
@@ -573,13 +574,13 @@ namespace cb0t
                 this.sock.SendTrickle(TCPOutbound.PersonalMessage(this.crypto));
         }
 
-        public void ForEachUser(Action<User> u)
+        public void SendCustomData(String ident, String data)
         {
             if (this.state != SessionState.Connected)
                 return;
 
-            if (this.users != null)
-                this.users.ForEach(u);
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.CustomCbotData(ident, Encoding.UTF8.GetBytes(data), this.crypto));
         }
 
         public void ShowPopup(String title, String msg, PopupSound sound)

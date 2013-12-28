@@ -86,6 +86,7 @@ namespace cb0t
         MSG_CHAT_SERVER_ROOM_SCRIBBLE = 225,
         MSG_CHAT_SERVER_CRYPTO_KEY = 230,
         MSG_CHAT_SERVER_FAVICON = 231,
+        MSG_CHAT_SERVER_NOW_PLAYING_EVENT = 232, // 1 byte -> 0=not allowed 1=allowed
 
 
 
