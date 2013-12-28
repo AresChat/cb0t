@@ -47,6 +47,17 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONTOPICRECEIVING { get; set; }
         public UserDefinedFunction EVENT_ONURLRECEIVING { get; set; }
         public UserDefinedFunction EVENT_ONUSERFONTCHANGING { get; set; }
+        public UserDefinedFunction EVENT_ONUSERWRITINGSTATUSCHANGED { get; set; }
+        public UserDefinedFunction EVENT_ONUSERONLINESTATUSCHANGED { get; set; }
+        public UserDefinedFunction EVENT_ONPMRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONPMRECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONNUDGERECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONSCRIBBLERECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONSCRIBBLERECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONSONGCHANGED { get; set; }
+        public UserDefinedFunction EVENT_ONVOICECLIPRECEIVING { get; set; }
+        public UserDefinedFunction EVENT_ONVOICECLIPRECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONCUSTOMDATARECEIVED { get; set; }
 
         public JSScript(String name)
         {

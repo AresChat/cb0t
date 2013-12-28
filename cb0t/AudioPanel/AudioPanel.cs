@@ -70,7 +70,8 @@ namespace cb0t
 
         public void SetVolume(int vol)
         {
-            this.Player.settings.volume = vol;
+            if (this.Player != null)
+                this.Player.settings.volume = vol;
         }
 
         private void TimerTick(object sender, EventArgs e)

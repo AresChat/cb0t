@@ -66,6 +66,58 @@ namespace cb0t.Scripting.Objects
             }
         }
 
+        [JSFunction(Name = "sendEmote", IsEnumerable = true, IsWritable = false)]
+        public void R_SendEmote(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendEmote(str);
+                }
+            }
+        }
+
+        [JSFunction(Name = "sendCommand", IsEnumerable = true, IsWritable = false)]
+        public void R_SendCommand(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendCommand(str);
+                }
+            }
+        }
+
+        [JSFunction(Name = "sendCustomData", IsEnumerable = true, IsWritable = false)]
+        public void R_SendCustomData(object a, object b)
+        {
+            if (!(a is Undefined) && !(b is Undefined))
+            {
+                String ident = a.ToString();
+                String data = a.ToString();
+
+                if (!String.IsNullOrEmpty(ident) && !String.IsNullOrEmpty(data))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendCustomData(ident, data);
+                }
+            }
+        }
+
         [JSFunction(Name = "users", IsEnumerable = true, IsWritable = false)]
         public void R_Users(object a)
         {
