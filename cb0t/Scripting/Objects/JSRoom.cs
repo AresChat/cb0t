@@ -49,6 +49,51 @@ namespace cb0t.Scripting.Objects
             set { }
         }
 
+        [JSProperty(Name = "topic")]
+        public String R_Topic
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.Credentials.Topic;
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "hashlink")]
+        public String R_Hashlink
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return Hashlink.EncodeHashlink(r.Credentials);
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "userName")]
+        public String R_UserName
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.MyName;
+                else
+                    return null;
+            }
+            set { }
+        }
+
         [JSFunction(Name = "sendText", IsEnumerable = true, IsWritable = false)]
         public void R_SendText(object a)
         {

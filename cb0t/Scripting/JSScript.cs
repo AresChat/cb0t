@@ -59,12 +59,19 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONVOICECLIPRECEIVED { get; set; }
         public UserDefinedFunction EVENT_ONCUSTOMDATARECEIVED { get; set; }
 
-        public JSScript(String name)
+        public JSScript(String name, bool is_subscript)
         {
-            this.Elements = new List<ICustomUI>();
+            if (!is_subscript)
+                this.Elements = new List<ICustomUI>();
+
             this.Rooms = new List<Objects.JSRoom>();
             this.ScriptName = name;
-            this.ScriptPath = Path.Combine(Settings.ScriptPath, name);
+
+            if (is_subscript)
+                this.ScriptPath = Path.Combine(Settings.ScriptPath, name + ".js");
+            else
+                this.ScriptPath = Path.Combine(Settings.ScriptPath, name);
+
             this.DataPath = Path.Combine(this.ScriptPath, "data");
 
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
@@ -76,7 +83,8 @@ namespace cb0t.Scripting
             this.JS.EmbedInstances(types.Where(x => x.Namespace == "cb0t.Scripting.Instances" && x.IsSubclassOf(typeof(ClrFunction))).ToArray());
             this.JS.EmbedObjectPrototypes(types.Where(x => x.Namespace == "cb0t.Scripting.ObjectPrototypes" && x.IsSubclassOf(typeof(ClrFunction))).ToArray());
 
-            this.UI = new Objects.JSUI(this.JS.Object.InstancePrototype);
+            if (!is_subscript)
+                this.UI = new Objects.JSUI(this.JS.Object.InstancePrototype);
         }
 
         public void LoadScript(String path)
@@ -85,11 +93,101 @@ namespace cb0t.Scripting
             {
                 this.JS.ExecuteFile(path);
             }
-            catch (JavaScriptException e)
+            catch { }
+        }
+
+        public void ResetScript()
+        {
+            this.EVENT_ONANNOUNCERECEIVED = null;
+            this.EVENT_ONANNOUNCERECEIVING = null;
+            this.EVENT_ONCOMMANDSENDING = null;
+            this.EVENT_ONCONNECTED = null;
+            this.EVENT_ONCONNECTING = null;
+            this.EVENT_ONCUSTOMDATARECEIVED = null;
+            this.EVENT_ONDISCONNECTED = null;
+            this.EVENT_ONEMOTERECEIVED = null;
+            this.EVENT_ONEMOTERECEIVING = null;
+            this.EVENT_ONEMOTESENDING = null;
+            this.EVENT_ONLOAD = null;
+            this.EVENT_ONNUDGERECEIVING = null;
+            this.EVENT_ONPMRECEIVED = null;
+            this.EVENT_ONPMRECEIVING = null;
+            this.EVENT_ONPMSENDING = null;
+            this.EVENT_ONREDIRECTING = null;
+            this.EVENT_ONSCRIBBLERECEIVED = null;
+            this.EVENT_ONSCRIBBLERECEIVING = null;
+            this.EVENT_ONSONGCHANGED = null;
+            this.EVENT_ONTEXTRECEIVED = null;
+            this.EVENT_ONTEXTRECEIVING = null;
+            this.EVENT_ONTEXTSENDING = null;
+            this.EVENT_ONTIMER = null;
+            this.EVENT_ONTOPICRECEIVING = null;
+            this.EVENT_ONURLRECEIVING = null;
+            this.EVENT_ONUSERAVATARRECEIVING = null;
+            this.EVENT_ONUSERFONTCHANGING = null;
+            this.EVENT_ONUSERJOINED = null;
+            this.EVENT_ONUSERJOINING = null;
+            this.EVENT_ONUSERLEVELCHANGED = null;
+            this.EVENT_ONUSERLISTRECEIVED = null;
+            this.EVENT_ONUSERMESSAGERECEIVING = null;
+            this.EVENT_ONUSERONLINESTATUSCHANGED = null;
+            this.EVENT_ONUSERPARTED = null;
+            this.EVENT_ONUSERPARTING = null;
+            this.EVENT_ONUSERWRITINGSTATUSCHANGED = null;
+            this.EVENT_ONVOICECLIPRECEIVED = null;
+            this.EVENT_ONVOICECLIPRECEIVING = null;
+
+            for (int i = (this.Rooms.Count - 1); i > -1; i--)
             {
-                
+                for (int x = (this.Rooms[i].UserList.Count - 1); x > -1; x--)
+                {
+                    this.Rooms[i].UserList[x].SetToNull();
+                    this.Rooms[i].UserList.RemoveAt(x);
+                }
+
+                this.Rooms.RemoveAt(i);
+            }
+
+            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+
+            this.JS = new ScriptEngine();
+            this.JS.ScriptName = this.ScriptName;
+            this.JS.EmbedGlobalClass(typeof(JSGlobal));
+            this.JS.EmbedStatics(types.Where(x => x.Namespace == "cb0t.Scripting.Statics" && x.IsSubclassOf(typeof(ObjectInstance))).ToArray());
+            this.JS.EmbedInstances(types.Where(x => x.Namespace == "cb0t.Scripting.Instances" && x.IsSubclassOf(typeof(ClrFunction))).ToArray());
+            this.JS.EmbedObjectPrototypes(types.Where(x => x.Namespace == "cb0t.Scripting.ObjectPrototypes" && x.IsSubclassOf(typeof(ClrFunction))).ToArray());
+
+            foreach (Room room in RoomPool.Rooms)
+            {
+                this.Rooms.Add(new Objects.JSRoom(this.JS.Object.InstancePrototype, room.EndPoint));
+
+                foreach (User user in room.UserPool)
+                    this.Rooms[this.Rooms.Count - 1].UserList.Add(new Objects.JSUser(this.JS.Object.InstancePrototype, user, room.EndPoint));
+            }
+        }
+
+        public String Eval(String src)
+        {
+            String result = null;
+
+            try
+            {
+                object eval = this.JS.Evaluate(src);
+
+                if (eval != null)
+                {
+                    if (eval is bool)
+                        result = eval.ToString().ToLower();
+                    else
+                        result = eval.ToString();
+
+                    if (result == "undefined")
+                        result = null;
+                }
             }
             catch { }
+
+            return result;
         }
     }
 }

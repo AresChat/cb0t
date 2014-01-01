@@ -229,32 +229,33 @@ namespace cb0t
 
             String str = text;
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONTEXTRECEIVING != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
-
-                            if (user != null)
+            if (name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONTEXTRECEIVING != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
+                                Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
+
+                                if (user != null)
                                 {
-                                    object obj = script.EVENT_ONTEXTRECEIVING.Call(script.JS.Global, r, user, str);
-
-                                    if (obj != null)
+                                    try
                                     {
-                                        str = obj.ToString();
+                                        object obj = script.EVENT_ONTEXTRECEIVING.Call(script.JS.Global, r, user, str);
 
-                                        if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
-                                            return null;
+                                        if (obj != null)
+                                        {
+                                            str = obj.ToString();
+
+                                            if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
+                                                return null;
+                                        }
                                     }
+                                    catch { }
                                 }
-                                catch { }
-                            }
 
-                            break;
-                        }
+                                break;
+                            }
 
             return str;
         }
@@ -286,24 +287,25 @@ namespace cb0t
                 if (Settings.GetReg<bool>("can_narrate", false))
                     Narrator.Say(text);
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONTEXTRECEIVED != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
-
-                            if (user != null)
+            if (name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONTEXTRECEIVED != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
-                                {
-                                    script.EVENT_ONTEXTRECEIVED.Call(script.JS.Global, r, user, text);
-                                }
-                                catch { }
-                            }
+                                Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
 
-                            break;
-                        }
+                                if (user != null)
+                                {
+                                    try
+                                    {
+                                        script.EVENT_ONTEXTRECEIVED.Call(script.JS.Global, r, user, text);
+                                    }
+                                    catch { }
+                                }
+
+                                break;
+                            }
         }
 
         public static String OnEmoteReceiving(Room room, String name, String text)
@@ -327,32 +329,33 @@ namespace cb0t
 
             String str = text;
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONEMOTERECEIVING != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
-
-                            if (user != null)
+            if (name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONEMOTERECEIVING != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
+                                Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
+
+                                if (user != null)
                                 {
-                                    object obj = script.EVENT_ONEMOTERECEIVING.Call(script.JS.Global, r, user, str);
-
-                                    if (obj != null)
+                                    try
                                     {
-                                        str = obj.ToString();
+                                        object obj = script.EVENT_ONEMOTERECEIVING.Call(script.JS.Global, r, user, str);
 
-                                        if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
-                                            return null;
+                                        if (obj != null)
+                                        {
+                                            str = obj.ToString();
+
+                                            if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
+                                                return null;
+                                        }
                                     }
+                                    catch { }
                                 }
-                                catch { }
-                            }
 
-                            break;
-                        }
+                                break;
+                            }
 
             return str;
         }
@@ -384,24 +387,25 @@ namespace cb0t
                 if (Settings.GetReg<bool>("can_narrate", false))
                     Narrator.Say(text);
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONEMOTERECEIVED != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
-
-                            if (user != null)
+            if (name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONEMOTERECEIVED != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
-                                {
-                                    script.EVENT_ONEMOTERECEIVED.Call(script.JS.Global, r, user, text);
-                                }
-                                catch { }
-                            }
+                                Scripting.Objects.JSUser user = r.UserList.Find(x => x.U_Name == name);
 
-                            break;
-                        }
+                                if (user != null)
+                                {
+                                    try
+                                    {
+                                        script.EVENT_ONEMOTERECEIVED.Call(script.JS.Global, r, user, text);
+                                    }
+                                    catch { }
+                                }
+
+                                break;
+                            }
         }
 
         public static String OnAnnounceReceiving(Room room, String text)
@@ -845,32 +849,33 @@ namespace cb0t
 
             String str = text;
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONPMRECEIVING != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser userobj = r.UserList.Find(x => x.U_Name == user.Name);
-
-                            if (user != null)
+            if (user.Name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONPMRECEIVING != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
+                                Scripting.Objects.JSUser userobj = r.UserList.Find(x => x.U_Name == user.Name);
+
+                                if (user != null)
                                 {
-                                    object obj = script.EVENT_ONPMRECEIVING.Call(script.JS.Global, r, userobj, str);
-
-                                    if (obj != null)
+                                    try
                                     {
-                                        str = obj.ToString();
+                                        object obj = script.EVENT_ONPMRECEIVING.Call(script.JS.Global, r, userobj, str);
 
-                                        if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
-                                            return null;
+                                        if (obj != null)
+                                        {
+                                            str = obj.ToString();
+
+                                            if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
+                                                return null;
+                                        }
                                     }
+                                    catch { }
                                 }
-                                catch { }
-                            }
 
-                            break;
-                        }
+                                break;
+                            }
 
             return str;
         }
@@ -898,24 +903,25 @@ namespace cb0t
                     }
                 }
 
-            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                if (script.EVENT_ONPMRECEIVED != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            Scripting.Objects.JSUser userobj = r.UserList.Find(x => x.U_Name == user.Name);
-
-                            if (user != null)
+            if (user.Name != room.MyName)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONPMRECEIVED != null)
+                        foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                            if (r.EndPoint.Equals(room.EndPoint))
                             {
-                                try
-                                {
-                                    script.EVENT_ONPMRECEIVED.Call(script.JS.Global, r, userobj, text);
-                                }
-                                catch { }
-                            }
+                                Scripting.Objects.JSUser userobj = r.UserList.Find(x => x.U_Name == user.Name);
 
-                            break;
-                        }
+                                if (user != null)
+                                {
+                                    try
+                                    {
+                                        script.EVENT_ONPMRECEIVED.Call(script.JS.Global, r, userobj, text);
+                                    }
+                                    catch { }
+                                }
+
+                                break;
+                            }
         }
 
         public static void OnPmFirstReceived(Room room, User user)
