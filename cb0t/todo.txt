@@ -1,3 +1,1 @@
-﻿investigate better pop ups
-sbot blocks np
-improve cross threading
+﻿

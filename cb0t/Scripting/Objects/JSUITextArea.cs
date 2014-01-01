@@ -28,6 +28,7 @@ namespace cb0t.Scripting.Objects
                 script.Elements.Add(this);
 
             this.UITextBox = new TextBox();
+            this.UITextBox.Font = new Font("Tahoma", (float)9, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.UITextBox.Multiline = true;
             this.UITextBox.ScrollBars = ScrollBars.Vertical;
             this.UITextBox.Text = String.Empty;
@@ -345,6 +346,31 @@ namespace cb0t.Scripting.Objects
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Visible = value));
                 else
                     this.UITextBox.Visible = value;
+            }
+        }
+
+        private bool _mono;
+        [JSProperty(Name = "mono")]
+        public bool Mono
+        {
+            get { return this._mono; }
+            set
+            {
+                this._mono = value;
+
+                if (this.UITextBox.IsHandleCreated)
+                {
+                    this.UITextBox.BeginInvoke((Action)(() =>
+                    {
+                        this.UITextBox.Font.Dispose();
+                        this.UITextBox.Font = new Font(value ? "Courier New" : "Tahoma", (float)9, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+                    }));
+                }
+                else
+                {
+                    this.UITextBox.Font.Dispose();
+                    this.UITextBox.Font = new Font(value ? "Courier New" : "Tahoma", (float)9, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+                }
             }
         }
 

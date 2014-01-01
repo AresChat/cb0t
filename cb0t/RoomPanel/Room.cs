@@ -48,6 +48,24 @@ namespace cb0t
             this.BlackBG = black_bg;
         }
 
+        public void UpdateIgnoreFromScripting(User u)
+        {
+            if (this.state == SessionState.Connected)
+                if (this.sock != null)
+                    this.sock.Send(TCPOutbound.Ignore(u.Name, u.Ignored, this.crypto));
+        }
+
+        public void DeleteAvatarFromScripting(User u)
+        {
+            u.ClearAvatar();
+            this.Panel.Userlist.UpdateUserAppearance(u);
+        }
+
+        public User[] UserPool
+        {
+            get { return this.users.ToArray(); }
+        }
+
         public void UpdateTemplate()
         {
             this.Panel.Userlist.UpdateTemplate();

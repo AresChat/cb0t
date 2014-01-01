@@ -134,6 +134,7 @@
     <Compile Include="Scripting\Objects\JSUITextBox.cs" />
     <Compile Include="Scripting\Objects\JSUser.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="Scripting\Statics\JSChildScript.cs" />
     <Compile Include="Scripting\Statics\JSEvents.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>

@@ -493,7 +493,10 @@ namespace cb0t
             String str = ScriptEvents.OnTopicReceiving(this, text);
 
             if (!String.IsNullOrEmpty(str))
+            {
+                this.Credentials.Topic = str;
                 this.Panel.SetTopic(text);
+            }
         }
 
         private void Eval_IsIgnoringYou(TCPPacketReader packet)

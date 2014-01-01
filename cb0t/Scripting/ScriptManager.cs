@@ -27,7 +27,7 @@ namespace cb0t.Scripting
             foreach (JSScript script in Scripts)
                 foreach (Objects.JSRoom room in script.Rooms)
                     if (room.EndPoint.Equals(ep))
-                        room.UserList.Add(new Objects.JSUser(script.JS.Object.InstancePrototype, u));
+                        room.UserList.Add(new Objects.JSUser(script.JS.Object.InstancePrototype, u, ep));
         }
 
         public static void RemoveUser(IPEndPoint ep, User u)
@@ -156,7 +156,7 @@ namespace cb0t.Scripting
                 if (Scripts.Find(x => x.ScriptName == name) != null)
                     return;
 
-                JSScript script = new JSScript(file.Name);
+                JSScript script = new JSScript(file.Name, false);
                 Scripts.Add(script);
                 script.LoadScript(path);
                 script.UI.CanCreate = true;
@@ -170,8 +170,10 @@ namespace cb0t.Scripting
 
                 script.UI.CanCreate = false;
                 script.UI.CanAddControls = false;
+
+                JSScript sscript = new JSScript(Path.GetFileNameWithoutExtension(file.Name), true);
+                Scripts.Add(sscript);
             }
         }
-
     }
 }
