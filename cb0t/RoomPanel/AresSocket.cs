@@ -23,11 +23,11 @@ namespace cb0t
         public void Free()
         {
             this.data_in.Clear();
-            this.data_in = null;
+            this.data_in = new List<byte>();
             this.data_out.Clear();
-            this.data_out = null;
+            this.data_out = new List<byte[]>();
             this.trickle_out.Clear();
-            this.trickle_out = null;
+            this.trickle_out = new List<byte[]>();
         }
 
         public void DequeueTrickle()
