@@ -42,10 +42,16 @@ namespace cb0t
         {
             this.owner_frm = f;
             this.Credentials = item.Copy();
+            this.Credentials.Server = String.Empty;
             this.EndPoint = new IPEndPoint(item.IP, item.Port);
             this.ticks = (time - 19);
             this.sock.PacketReceived += this.PacketReceived;
             this.BlackBG = black_bg;
+        }
+
+        public void FlashRoomFromScripting(bool flash)
+        {
+
         }
 
         public void UpdateIgnoreFromScripting(User u)

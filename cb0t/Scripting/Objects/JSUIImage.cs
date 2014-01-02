@@ -103,7 +103,9 @@ namespace cb0t.Scripting.Objects
             if (this.UIImage.IsHandleCreated)
                 this.UIImage.BeginInvoke((Action)(() =>
                 {
-                    String path = Path.Combine(this.DataPath, a.ToString());
+                    String path = a.ToString();
+                    path = new String(path.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
+                    path = Path.Combine(this.DataPath, path);
 
                     if (new FileInfo(path).Directory.FullName != new DirectoryInfo(this.DataPath).FullName)
                         return;

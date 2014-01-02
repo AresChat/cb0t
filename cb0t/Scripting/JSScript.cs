@@ -74,6 +74,10 @@ namespace cb0t.Scripting
 
             this.DataPath = Path.Combine(this.ScriptPath, "data");
 
+            if (!Directory.Exists(this.DataPath))
+                try { Directory.CreateDirectory(this.DataPath); }
+                catch { }
+
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
             this.JS = new ScriptEngine();

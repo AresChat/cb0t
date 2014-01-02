@@ -23,6 +23,8 @@ namespace cb0t
             mciSendString("close cb3_notify", null, 0, IntPtr.Zero);
             mciSendString("stop cb3_friend", null, 0, IntPtr.Zero);
             mciSendString("close cb3_friend", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_script", null, 0, IntPtr.Zero);
             mciSendString("open \"" + path + "\" type mpegvideo alias cb3_nudge", null, 0, IntPtr.Zero);
             mciSendString("play cb3_nudge", null, 0, IntPtr.Zero);
         }
@@ -39,6 +41,8 @@ namespace cb0t
             mciSendString("close cb3_notify", null, 0, IntPtr.Zero);
             mciSendString("stop cb3_friend", null, 0, IntPtr.Zero);
             mciSendString("close cb3_friend", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_script", null, 0, IntPtr.Zero);
             mciSendString("open \"" + path + "\" type mpegvideo alias cb3_notify", null, 0, IntPtr.Zero);
             mciSendString("play cb3_notify", null, 0, IntPtr.Zero);
         }
@@ -55,8 +59,24 @@ namespace cb0t
             mciSendString("close cb3_notify", null, 0, IntPtr.Zero);
             mciSendString("stop cb3_friend", null, 0, IntPtr.Zero);
             mciSendString("close cb3_friend", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_script", null, 0, IntPtr.Zero);
             mciSendString("open \"" + path + "\" type mpegvideo alias cb3_friend", null, 0, IntPtr.Zero);
             mciSendString("play cb3_friend", null, 0, IntPtr.Zero);
+        }
+
+        public static void Script(String path)
+        {
+            mciSendString("stop cb3_nudge", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_nudge", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_notify", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_notify", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_friend", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_friend", null, 0, IntPtr.Zero);
+            mciSendString("stop cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("close cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("open \"" + path + "\" type mpegvideo alias cb3_script", null, 0, IntPtr.Zero);
+            mciSendString("play cb3_script", null, 0, IntPtr.Zero);
         }
     }
 }

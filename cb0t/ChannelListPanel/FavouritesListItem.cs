@@ -14,6 +14,7 @@ namespace cb0t
         public IPAddress IP { get; set; }
         public String Password { get; set; }
         public bool AutoJoin { get; set; }
+        public String Server { get; set; }
 
         public FavouritesListItem()
         {

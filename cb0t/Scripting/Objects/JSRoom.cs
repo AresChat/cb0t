@@ -34,97 +34,31 @@ namespace cb0t.Scripting.Objects
         public IPEndPoint EndPoint { get; private set; }
         public List<JSUser> UserList { get; private set; }
 
-        [JSProperty(Name = "name")]
-        public String R_Name
+        [JSFunction(Name = "popup", IsEnumerable = true, IsWritable = false)]
+        public void R_Popup(object a, object b)
         {
-            get
-            {
-                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+            if (!(a is Undefined))
+                if (!(b is Undefined))
+                {
+                    String caption = "cb0t :: " + a.ToString();
+                    String text = b.ToString();
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
 
-                if (r != null)
-                    return r.Credentials.Name;
-                else
-                    return null;
-            }
-            set { }
+                    if (r != null)
+                        r.ShowPopup(caption, text, PopupSound.Notify);
+                }
         }
 
-        [JSProperty(Name = "topic")]
-        public String R_Topic
-        {
-            get
-            {
-                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
-
-                if (r != null)
-                    return r.Credentials.Topic;
-                else
-                    return null;
-            }
-            set { }
-        }
-
-        [JSProperty(Name = "hashlink")]
-        public String R_Hashlink
-        {
-            get
-            {
-                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
-
-                if (r != null)
-                    return Hashlink.EncodeHashlink(r.Credentials);
-                else
-                    return null;
-            }
-            set { }
-        }
-
-        [JSProperty(Name = "userName")]
-        public String R_UserName
-        {
-            get
-            {
-                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
-
-                if (r != null)
-                    return r.MyName;
-                else
-                    return null;
-            }
-            set { }
-        }
-
-        [JSFunction(Name = "sendText", IsEnumerable = true, IsWritable = false)]
-        public void R_SendText(object a)
+        [JSFunction(Name = "print", IsEnumerable = true, IsWritable = false)]
+        public void R_Print(object a)
         {
             if (!(a is Undefined))
             {
                 String str = a.ToString();
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
 
-                if (!String.IsNullOrEmpty(str))
-                {
-                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
-
-                    if (r != null)
-                        r.SendText(str);
-                }
-            }
-        }
-
-        [JSFunction(Name = "sendEmote", IsEnumerable = true, IsWritable = false)]
-        public void R_SendEmote(object a)
-        {
-            if (!(a is Undefined))
-            {
-                String str = a.ToString();
-
-                if (!String.IsNullOrEmpty(str))
-                {
-                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
-
-                    if (r != null)
-                        r.SendEmote(str);
-                }
+                if (r != null)
+                    r.ShowAnnounceText(str);
             }
         }
 
@@ -163,18 +97,37 @@ namespace cb0t.Scripting.Objects
             }
         }
 
-        [JSFunction(Name = "users", IsEnumerable = true, IsWritable = false)]
-        public void R_Users(object a)
+        [JSFunction(Name = "sendEmote", IsEnumerable = true, IsWritable = false)]
+        public void R_SendEmote(object a)
         {
-            if (a is UserDefinedFunction)
+            if (!(a is Undefined))
             {
-                UserDefinedFunction f = (UserDefinedFunction)a;
-                
-                this.UserList.ForEach(x =>
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
                 {
-                    try { f.Call(this.Engine.Global, x); }
-                    catch { }
-                });
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendEmote(str);
+                }
+            }
+        }
+
+        [JSFunction(Name = "sendText", IsEnumerable = true, IsWritable = false)]
+        public void R_SendText(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendText(str);
+                }
             }
         }
 
@@ -198,6 +151,111 @@ namespace cb0t.Scripting.Objects
             }
 
             return null;
+        }
+
+        [JSFunction(Name = "users", IsEnumerable = true, IsWritable = false)]
+        public void R_Users(object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                UserDefinedFunction f = (UserDefinedFunction)a;
+
+                this.UserList.ForEach(x =>
+                {
+                    try { f.Call(this.Engine.Global, x); }
+                    catch { }
+                });
+            }
+        }
+
+        [JSProperty(Name = "hashlink")]
+        public String R_Hashlink
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return Hashlink.EncodeHashlink(r.Credentials);
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "name")]
+        public String R_Name
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.Credentials.Name;
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "selected")]
+        public bool R_Selected
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.RoomIsVisible;
+                else
+                    return false;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "server")]
+        public String R_Server
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.Credentials.Server;
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "topic")]
+        public String R_Topic
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.Credentials.Topic;
+                else
+                    return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "userName")]
+        public String R_UserName
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.MyName;
+                else
+                    return null;
+            }
+            set { }
         }
     }
 }

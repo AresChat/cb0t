@@ -20,6 +20,12 @@ namespace cb0t.Scripting
             }
         }
 
+        [JSFunction(Name = "clientVersion")]
+        public static String DoClientVersion()
+        {
+            return Settings.APP_NAME + " " + Settings.APP_VERSION;
+        }
+
         [JSFunction(Name = "confirm", Flags = JSFunctionFlags.HasEngineParameter)]
         public static bool Confirm(ScriptEngine eng, object a)
         {
@@ -55,44 +61,6 @@ namespace cb0t.Scripting
             }
 
             return null;
-        }
-
-        [JSFunction(Name = "user")]
-        public static Objects.JSUser GetUser(object a, object b)
-        {
-            if (a is Objects.JSRoom)
-                if (!(b is Undefined))
-                {
-                    Objects.JSRoom r = (Objects.JSRoom)a;
-                    String str = b.ToString();
-
-                    if (!String.IsNullOrEmpty(str))
-                    {
-                        foreach (Objects.JSUser u in r.UserList)
-                            if (u.U_Name == str)
-                                return u;
-
-                        foreach (Objects.JSUser u in r.UserList)
-                            if (u.U_Name.StartsWith(str))
-                                return u;
-                    }
-                }
-
-            return null;
-        }
-
-        [JSFunction(Name = "users")]
-        public static void DoUsersTask(object a, object b)
-        {
-            if (a is Objects.JSRoom && b is UserDefinedFunction)
-            {
-                Objects.JSRoom r = (Objects.JSRoom)a;
-                UserDefinedFunction f = (UserDefinedFunction)b;
-
-                foreach (Objects.JSUser u in r.UserList)
-                    try { f.Call(r.Engine.Global, u); }
-                    catch { }
-            }
         }
 
         [JSFunction(Name = "room", Flags = JSFunctionFlags.HasEngineParameter)]
@@ -135,6 +103,18 @@ namespace cb0t.Scripting
                         try { f.Call(script.JS.Global, r); }
                         catch { }
             }
+        }
+
+        [JSFunction(Name = "scriptName", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static String DoScriptName(ScriptEngine eng)
+        {
+            return eng.ScriptName;
+        }
+
+        [JSFunction(Name = "scriptVersion")]
+        public static int DoScriptVersion()
+        {
+            return ScriptManager.SCRIPT_VERSION;
         }
     }
 }

@@ -146,6 +146,7 @@ namespace cb0t
         private void Eval_Features(TCPPacketReader packet)
         {
             String version = packet.ReadString(this.crypto);
+            this.Credentials.Server = version;
             this.Panel.ServerText(StringTemplate.Get(STType.Messages, 17) + ": " + version);
             this.Panel.Userlist.UpdateServerVersion(version);
 
