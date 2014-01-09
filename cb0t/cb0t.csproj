@@ -105,8 +105,13 @@
     <Compile Include="Scripting\JSOutboundTextItem.cs" />
     <Compile Include="Scripting\JSScript.cs" />
     <Compile Include="Scripting\JSUIEventItem.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSChannel.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSChannelCollection.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSCryptoResult.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSFont.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSHashlinkResult.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSRedirect.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSRegistryKeyCollection.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSRoom.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
@@ -119,8 +124,13 @@
     <Compile Include="Scripting\ObjectPrototypes\JSUITextArea.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUITextBox.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUser.cs" />
+    <Compile Include="Scripting\Objects\JSChannel.cs" />
+    <Compile Include="Scripting\Objects\JSChannelCollection.cs" />
+    <Compile Include="Scripting\Objects\JSCryptoResult.cs" />
     <Compile Include="Scripting\Objects\JSFont.cs" />
+    <Compile Include="Scripting\Objects\JSHashlinkResult.cs" />
     <Compile Include="Scripting\Objects\JSRedirect.cs" />
+    <Compile Include="Scripting\Objects\JSRegistryKeyCollection.cs" />
     <Compile Include="Scripting\Objects\JSRoom.cs" />
     <Compile Include="Scripting\Objects\JSUI.cs" />
     <Compile Include="Scripting\Objects\JSUIButton.cs" />
@@ -134,9 +144,15 @@
     <Compile Include="Scripting\Objects\JSUITextBox.cs" />
     <Compile Include="Scripting\Objects\JSUser.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="Scripting\Statics\JSBase64.cs" />
+    <Compile Include="Scripting\Statics\JSChannels.cs" />
     <Compile Include="Scripting\Statics\JSChildScript.cs" />
+    <Compile Include="Scripting\Statics\JSCrypto.cs" />
     <Compile Include="Scripting\Statics\JSEvents.cs" />
     <Compile Include="Scripting\Statics\JSFile.cs" />
+    <Compile Include="Scripting\Statics\JSHashlink.cs" />
+    <Compile Include="Scripting\Statics\JSRegistry.cs" />
+    <Compile Include="Scripting\Statics\JSZip.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
