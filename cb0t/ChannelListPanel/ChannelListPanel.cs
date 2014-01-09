@@ -66,8 +66,8 @@ namespace cb0t
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             this.toolStripButton1.Enabled = false;
-            this.full_channel_list.Clear();
-            this.full_channel_list = new List<ChannelListItem>();
+            full_channel_list.Clear();
+            full_channel_list = new List<ChannelListItem>();
             this.part_channel_list.Clear();
             this.part_channel_list = new List<ChannelListItem>();
             this.channelListView1.Items.Clear();
@@ -79,11 +79,11 @@ namespace cb0t
 
         public void RefreshIfEmpty()
         {
-            if (this.full_channel_list.Count == 0)
+            if (full_channel_list.Count == 0)
             {
                 this.toolStripButton1.Enabled = false;
-                this.full_channel_list.Clear();
-                this.full_channel_list = new List<ChannelListItem>();
+                full_channel_list.Clear();
+                full_channel_list = new List<ChannelListItem>();
                 this.part_channel_list.Clear();
                 this.part_channel_list = new List<ChannelListItem>();
                 this.channelListView1.Items.Clear();
@@ -98,7 +98,7 @@ namespace cb0t
         public event EventHandler<ChannelListLabelChangedEventArgs> LabelChanged;
         public event EventHandler<OpenChannelEventArgs> OpenChannel;
 
-        private List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
+        internal static List<ChannelListItem> full_channel_list = new List<ChannelListItem>();
         private List<ChannelListItem> part_channel_list = new List<ChannelListItem>();
         private List<ChannelListViewItem> gfx_items = new List<ChannelListViewItem>();
         private ChannelListTopicRenderer gfx = new ChannelListTopicRenderer();
@@ -114,7 +114,7 @@ namespace cb0t
                     for (int i = 0; i < rooms.Length; i++)
                         if (rooms[i].Users > 0)
                         {
-                            this.full_channel_list.Add(rooms[i]);
+                            full_channel_list.Add(rooms[i]);
                             ChannelListViewItem item = new ChannelListViewItem();
                             this.gfx.RenderChannelListItem(item, rooms[i]);
                             this.gfx_items.Add(item);
@@ -127,10 +127,10 @@ namespace cb0t
                                 }
                         }
 
-                    if (this.full_channel_list.Count == this.part_channel_list.Count)
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
+                    if (full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + full_channel_list.Count + ")" });
                     else
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
                 }));
             }
             catch { }
@@ -220,10 +220,10 @@ namespace cb0t
                             this.SaveServers();
                             this.SaveCache();
 
-                            if (this.full_channel_list.Count == this.part_channel_list.Count)
-                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.full_channel_list.Count + ")" });
+                            if (full_channel_list.Count == this.part_channel_list.Count)
+                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + full_channel_list.Count + ")" });
                             else
-                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                                this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
 
                             return;
                         }
@@ -276,11 +276,11 @@ namespace cb0t
 
         private void SaveServers()
         {
-            if (this.full_channel_list.Count > 10)
+            if (full_channel_list.Count > 10)
             {
                 List<byte> list = new List<byte>();
 
-                foreach (ChannelListItem i in this.full_channel_list)
+                foreach (ChannelListItem i in full_channel_list)
                 {
                     list.AddRange(i.IP.GetAddressBytes());
                     list.AddRange(BitConverter.GetBytes(i.Port));
@@ -342,11 +342,11 @@ namespace cb0t
                 this.part_channel_list.Clear();
                 this.part_channel_list = new List<ChannelListItem>();
 
-                for (int i = 0; i < this.full_channel_list.Count; i++)
-                    if (this.full_channel_list[i].Name.ToUpper().Contains(text) || this.full_channel_list[i].StrippedTopic.Contains(text))
-                        if (this.full_channel_list[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
+                for (int i = 0; i < full_channel_list.Count; i++)
+                    if (full_channel_list[i].Name.ToUpper().Contains(text) || full_channel_list[i].StrippedTopic.Contains(text))
+                        if (full_channel_list[i].Lang == this.filter_lang || this.filter_lang == RoomLanguage.Any)
                         {
-                            this.part_channel_list.Add(this.full_channel_list[i]);
+                            this.part_channel_list.Add(full_channel_list[i]);
                             this.channelListView1.Items.Add(this.gfx_items[i]);
                         }
 
@@ -354,28 +354,28 @@ namespace cb0t
 
                 if (this.reloading_list)
                 {
-                    if (this.full_channel_list.Count == this.part_channel_list.Count)
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.full_channel_list.Count + ")" });
+                    if (full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + full_channel_list.Count + ")" });
                     else
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
                 }
                 else
                 {
-                    if (this.full_channel_list.Count == this.part_channel_list.Count)
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.full_channel_list.Count + ")" });
+                    if (full_channel_list.Count == this.part_channel_list.Count)
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + full_channel_list.Count + ")" });
                     else
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + this.full_channel_list.Count + ")" });
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Channels (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
                 }
             }
         }
 
         private void SaveCache()
         {
-            if (this.full_channel_list.Count > 10)
+            if (full_channel_list.Count > 10)
             {
                 List<byte> list = new List<byte>();
 
-                foreach (ChannelListItem i in this.full_channel_list)
+                foreach (ChannelListItem i in full_channel_list)
                 {
                     list.AddRange(i.IP.GetAddressBytes());
                     list.AddRange(BitConverter.GetBytes(i.Port));
@@ -418,7 +418,7 @@ namespace cb0t
                     item.Topic = buf.ReadString();
                     item.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(item.Topic)).ToUpper();
                     item.Users = buf.ReadUInt16();
-                    this.full_channel_list.Add(item);
+                    full_channel_list.Add(item);
                     ChannelListViewItem vitem = new ChannelListViewItem();
                     this.gfx.RenderChannelListItem(vitem, item);
                     this.gfx_items.Add(vitem);
