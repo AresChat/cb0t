@@ -22,6 +22,7 @@ namespace cb0t
 
         public event EventHandler HashlinkClicked;
         public event EventHandler NameClicked;
+        public event EventHandler EditScribbleClicked;
 
         public bool IsMainScreen { get; set; }
         public bool IsBlack { get; set; }
@@ -233,12 +234,14 @@ namespace cb0t
             this.ctx.ShowCheckMargin = false;
             this.ctx.Items.Add("Save image...");//0
             this.ctx.Items[0].Visible = false;
-            this.ctx.Items.Add("Save voice clip...");//1
+            this.ctx.Items.Add("Edit...");//1
             this.ctx.Items[1].Visible = false;
-            this.ctx.Items.Add("Clear screen");//2
-            this.ctx.Items.Add("Export text");//3
-            this.ctx.Items.Add("Copy to clipboard");//4
-            this.ctx.Items.Add("Pause/Unpause screen");//5
+            this.ctx.Items.Add("Save voice clip...");//2
+            this.ctx.Items[2].Visible = false;
+            this.ctx.Items.Add("Clear screen");//3
+            this.ctx.Items.Add("Export text");//4
+            this.ctx.Items.Add("Copy to clipboard");//5
+            this.ctx.Items.Add("Pause/Unpause screen");//6
             this.ctx.Opening += this.CTXOpening;
             this.ctx.Closed += this.CTXClosed;
             this.ctx.ItemClicked += this.CTXItemClicked;
@@ -251,11 +254,12 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.ctx.Items[0].Text = StringTemplate.Get(STType.OutBox, 0) + "...";
-            this.ctx.Items[1].Text = StringTemplate.Get(STType.OutBox, 1) + "...";
-            this.ctx.Items[2].Text = StringTemplate.Get(STType.OutBox, 2);
-            this.ctx.Items[3].Text = StringTemplate.Get(STType.OutBox, 3);
-            this.ctx.Items[4].Text = StringTemplate.Get(STType.OutBox, 4);
-            this.ctx.Items[5].Text = StringTemplate.Get(STType.OutBox, 5);
+            this.ctx.Items[1].Text = StringTemplate.Get(STType.FilterSettings, 1) + "...";
+            this.ctx.Items[2].Text = StringTemplate.Get(STType.OutBox, 1) + "...";
+            this.ctx.Items[3].Text = StringTemplate.Get(STType.OutBox, 2);
+            this.ctx.Items[4].Text = StringTemplate.Get(STType.OutBox, 3);
+            this.ctx.Items[5].Text = StringTemplate.Get(STType.OutBox, 4);
+            this.ctx.Items[6].Text = StringTemplate.Get(STType.OutBox, 5);
         }
 
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -282,6 +286,15 @@ namespace cb0t
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[1]))
             {
+                if (this.img_data != null)
+                {
+                    byte[] tmp = this.img_data;
+                    this.ctx.Hide();
+                    this.EditScribbleClicked(tmp, EventArgs.Empty);
+                }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[2]))
+            {
                 VoicePlayerItem item = VoicePlayer.Records.Find(x => x.ShortCut == this.vc_sc);
                 this.ctx.Hide();
                 SharedUI.SaveFile.Filter = "Wav|*.wav";
@@ -301,14 +314,14 @@ namespace cb0t
                     catch { }
                 }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[2]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[3]))
             {
                 this.Clear();
 
                 while (this.CanUndo)
                     this.ClearUndo();
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[3]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[4]))
             {
                 try
                 {
@@ -317,7 +330,7 @@ namespace cb0t
                 }
                 catch { }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[4]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[5]))
             {
                 try
                 {
@@ -328,7 +341,7 @@ namespace cb0t
                 }
                 catch { }
             }
-            else if (e.ClickedItem.Equals(this.ctx.Items[5]))
+            else if (e.ClickedItem.Equals(this.ctx.Items[6]))
             {
                 if (this.IsPaused)
                 {
@@ -384,7 +397,8 @@ namespace cb0t
         private void CTXOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.ctx.Items[0].Visible = this.img_data != null;
-            this.ctx.Items[1].Visible = this.vc_sc > 0;
+            this.ctx.Items[1].Visible = this.img_data != null;
+            this.ctx.Items[2].Visible = this.vc_sc > 0;
         }        
 
         public void ScrollDown()

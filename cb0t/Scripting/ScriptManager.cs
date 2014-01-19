@@ -9,12 +9,15 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 1001;
+        public const int SCRIPT_VERSION = 2001;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
         public static SafeQueue<IPEndPoint> PendingTerminators { get; private set; }
         public static SafeQueue<JSOutboundTextItem> PendingUIText { get; private set; }
+        public static SafeQueue<IScriptingCallback> PendingScriptingCallbacks { get; private set; }
+        public static List<CustomJSMenuOption> UserListMenuOptions { get; private set; }
+        public static List<CustomJSMenuOption> RoomMenuOptions { get; private set; }
 
         public static void AddRoom(IPEndPoint ep)
         {
@@ -130,6 +133,48 @@ namespace cb0t.Scripting
                         item.Element.SelectedItemChangedCallback();
                 }
             }
+
+            if (PendingScriptingCallbacks.Pending)
+            {
+                IScriptingCallback item = null;
+
+                while (PendingScriptingCallbacks.TryDequeue(out item))
+                {
+                    if (item is CustomJSUserListMenuCallback)
+                    {
+                        CustomJSUserListMenuCallback cb = (CustomJSUserListMenuCallback)item;
+                        JSScript script = Scripts.Find(x => x.ScriptName == cb.Callback.Engine.ScriptName);
+
+                        if (script != null)
+                        {
+                            Objects.JSRoom room = script.Rooms.Find(x => x.EndPoint.Equals(cb.Room));
+
+                            if (room != null)
+                            {
+                                Objects.JSUser user = room.UserList.Find(x => x.U_Name == cb.Target);
+
+                                if (user != null)
+                                    try { cb.Callback.Call(script.JS.Global, room, user); }
+                                    catch { }
+                            }
+                        }
+                    }
+                    else if (item is CustomJSRoomMenuCallback)
+                    {
+                        CustomJSRoomMenuCallback cb = (CustomJSRoomMenuCallback)item;
+                        JSScript script = Scripts.Find(x => x.ScriptName == cb.Callback.Engine.ScriptName);
+
+                        if (script != null)
+                        {
+                            Objects.JSRoom room = script.Rooms.Find(x => x.EndPoint.Equals(cb.Room));
+
+                            if (room != null)
+                                try { cb.Callback.Call(script.JS.Global, room); }
+                                catch { }
+                        }
+                    }
+                }
+            }
         }
 
         public static void Init()
@@ -138,6 +183,9 @@ namespace cb0t.Scripting
             PendingUIEvents = new SafeQueue<JSUIEventItem>();
             PendingTerminators = new SafeQueue<IPEndPoint>();
             PendingUIText = new SafeQueue<JSOutboundTextItem>();
+            UserListMenuOptions = new List<CustomJSMenuOption>();
+            RoomMenuOptions = new List<CustomJSMenuOption>();
+            PendingScriptingCallbacks = new SafeQueue<IScriptingCallback>();
 
             DirectoryInfo dir = new DirectoryInfo(Settings.ScriptPath);
 

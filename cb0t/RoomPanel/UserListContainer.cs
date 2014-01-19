@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Drawing.Drawing2D;
 using System.IO;
+using Jurassic.Library;
 
 namespace cb0t
 {
@@ -126,6 +127,23 @@ namespace cb0t
                                     String ctext = Menus.UserList[index].Text.Replace("+n", this.CTXUserName);
                                     this.CustomOptionClicked(ctext, EventArgs.Empty);
                                 }
+                                else
+                                {
+                                    index -= Menus.UserList.Count;
+
+                                    if (index >= 0 && index < Scripting.ScriptManager.UserListMenuOptions.Count)
+                                    {
+                                        UserDefinedFunction cback = Scripting.ScriptManager.UserListMenuOptions[index].Callback;
+                                        
+                                        Scripting.CustomJSUserListMenuCallback js = new Scripting.CustomJSUserListMenuCallback
+                                        {
+                                            Callback = cback,
+                                            Target = this.CTXUserName
+                                        };
+
+                                        this.CustomOptionClicked(js, EventArgs.Empty);
+                                    }
+                                }
 
                                 break;
                             }
@@ -156,12 +174,26 @@ namespace cb0t
             while (this.ctx_menu.Items.Count > 19)
                 this.ctx_menu.Items[19].Dispose();
 
+            bool custom_options = false;
+
             if (Menus.UserList.Count > 0)
             {
                 this.ctx_menu.Items[18].Visible = true;
                 Menus.UserList.ForEach(x => this.ctx_menu.Items.Add(x.Name));
+                custom_options = true;
             }
-            else this.ctx_menu.Items[18].Visible = false;
+
+            if (Scripting.ScriptManager.UserListMenuOptions.Count > 0)
+            {
+                if (!this.ctx_menu.Items[18].Visible)
+                    this.ctx_menu.Items[18].Visible = true;
+
+                Scripting.ScriptManager.UserListMenuOptions.ForEach(x => this.ctx_menu.Items.Add(x.Text));
+                custom_options = true;
+            }
+
+            if (!custom_options)
+                this.ctx_menu.Items[18].Visible = false;
 
             if (!can_show)
                 e.Cancel = true;

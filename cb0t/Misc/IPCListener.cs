@@ -9,6 +9,8 @@ namespace cb0t
     class IPCListener
     {
         public event EventHandler<IPCListenerEventArgs> HashlinkReceived;
+        public event EventHandler<IPCListenerEventArgs> CommandReceived;
+
         private NamedPipeServerStream listener;
 
         public void Start()
@@ -36,18 +38,25 @@ namespace cb0t
             if (!String.IsNullOrEmpty(str))
             {
                 if (str.StartsWith("cb0t://"))
+                {
                     str = str.Substring(7);
 
-                DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
+                    DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
 
-                if (dh == null)
-                    if (str.EndsWith("/"))
-                        str = str.Substring(0, str.Length - 1);
+                    if (dh == null)
+                        if (str.EndsWith("/"))
+                            str = str.Substring(0, str.Length - 1);
 
-                dh = Hashlink.DecodeHashlink(str);
+                    dh = Hashlink.DecodeHashlink(str);
 
-                if (dh != null)
-                    this.HashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                    if (dh != null)
+                        this.HashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                }
+                else if (str.StartsWith("cbjl_"))
+                {
+                    str = str.Substring(5);
+                    this.CommandReceived(null, new IPCListenerEventArgs { Command = str });
+                }
             }
 
             this.listener.Disconnect();
@@ -58,5 +67,6 @@ namespace cb0t
     class IPCListenerEventArgs : EventArgs
     {
         public DecryptedHashlink Hashlink { get; set; }
+        public String Command { get; set; }
     }
 }

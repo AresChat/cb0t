@@ -20,4 +20,9 @@ namespace cb0t
         public RoomMenuItem Item { get; set; }
         public object Arg { get; set; }
     }
+
+    public class RoomMenuJSItemClickedEventArgs : EventArgs
+    {
+        internal Scripting.CustomJSRoomMenuCallback Item { get; set; }
+    }
 }

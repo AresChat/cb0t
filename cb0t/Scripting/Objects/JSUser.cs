@@ -200,11 +200,33 @@ namespace cb0t.Scripting.Objects
             set { }
         }
 
+        [JSFunction(Name = "nudge", IsWritable = false, IsEnumerable = true)]
+        public void Nudge()
+        {
+            Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+            if (r != null)
+                r.NudgeUser(this.parent);
+        }
+
         [JSProperty(Name = "personalMessage")]
         public String PersonalMessage
         {
             get { return this.parent.PersonalMessage; }
             set { }
+        }
+
+        [JSFunction(Name = "pm", IsEnumerable = true, IsWritable = false)]
+        public void SendPM(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String text = a.ToString();
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    r.SendJSPM(this.parent.Name, text);
+            }
         }
 
         [JSProperty(Name = "port")]

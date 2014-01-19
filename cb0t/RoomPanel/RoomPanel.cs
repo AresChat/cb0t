@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Drawing.Drawing2D;
+using Jurassic.Library;
 
 namespace cb0t
 {
@@ -32,7 +33,9 @@ namespace cb0t
         public event EventHandler SendAutoReply;
         public event EventHandler WantScribble;
         public event EventHandler<RoomMenuItemClickedEventArgs> RoomMenuItemClicked;
+        public event EventHandler<RoomMenuJSItemClickedEventArgs> RoomMenuJSItemClicked;
         public event EventHandler HashlinkClicked;
+        public event EventHandler EditScribbleClicked;
 
         private ContextMenuStrip rc_ctx { get; set; }
 
@@ -82,6 +85,7 @@ namespace cb0t
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
             this.rtfScreen1.HashlinkClicked += this.LinkHashlinkClicked;
+            this.rtfScreen1.EditScribbleClicked += this.DoEditScribbleClicked;
             this.rtfScreen1.NameClicked += this.ScreenNameClicked;
             this.rtfScreen1.IsMainScreen = true;
             this.rc_ctx = new ContextMenuStrip();
@@ -89,6 +93,11 @@ namespace cb0t
             this.rc_ctx.ItemClicked += this.CTXItemClicked;
             this.splitContainer1.SplitterMoved += this.SplitterMoved;
             this.SetUserlistWidth();
+        }
+
+        private void DoEditScribbleClicked(object sender, EventArgs e)
+        {
+            this.EditScribbleClicked(sender, e);
         }
 
         private bool can_resize = true;
@@ -219,6 +228,36 @@ namespace cb0t
             }));
         }
 
+        private delegate void MyPMJSTextHandler(String target, String text, AresFont font);
+        public void MyPMJSText(String target, String text, AresFont font)
+        {
+            if (this.tabControl1.InvokeRequired)
+                this.tabControl1.BeginInvoke(new MyPMJSTextHandler(this.MyPMJSText), target, text, font);
+            else
+            {
+                for (int i = 0; i < this.tabControl1.TabPages.Count; i++)
+                    if (this.tabControl1.TabPages[i] is PMTab)
+                        if (this.tabControl1.TabPages[i].Text == target)
+                        {
+                            PMTab tab = (PMTab)this.tabControl1.TabPages[i];
+                            tab.PM(this.MyName, text, font);
+                            tab.SetRead(this.Mode == ScreenMode.PM && this.PMName == target);
+                            return;
+                        }
+
+                PMTab new_tab = new PMTab(target);
+
+                if (this.IsBlack)
+                    new_tab.SetToBlack();
+
+                new_tab.HashlinkClicked += this.LinkHashlinkClicked;
+                new_tab.EditScribbleClicked += this.DoEditScribbleClicked;
+                new_tab.ImageIndex = 2;
+                this.tabControl1.TabPages.Add(new_tab);
+                new_tab.PM(this.MyName, text, font);
+            }
+        }
+
         public void MyPMAnnounce(String text)
         {
             this.tabControl1.BeginInvoke((Action)(() =>
@@ -245,6 +284,7 @@ namespace cb0t
                 new_tab.SetToBlack();
 
             new_tab.HashlinkClicked += this.LinkHashlinkClicked;
+            new_tab.EditScribbleClicked += this.DoEditScribbleClicked;
             new_tab.ImageIndex = 1;
             this.tabControl1.TabPages.Add(new_tab);
             this.tabControl1.SelectedIndex = (this.tabControl1.TabPages.Count - 1);
@@ -279,6 +319,7 @@ namespace cb0t
                     new_tab.SetToBlack();
 
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
+                new_tab.EditScribbleClicked += this.DoEditScribbleClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
                 new_tab.Scribble(data);
@@ -357,6 +398,7 @@ namespace cb0t
                     new_tab.SetToBlack();
 
                 new_tab.HashlinkClicked += this.LinkHashlinkClicked;
+                new_tab.EditScribbleClicked += this.DoEditScribbleClicked;
                 new_tab.ImageIndex = 2;
                 this.tabControl1.TabPages.Add(new_tab);
 
@@ -686,6 +728,7 @@ namespace cb0t
             this.panel2.Dispose();
             this.panel2 = null;
             this.rtfScreen1.HashlinkClicked -= this.LinkHashlinkClicked;
+            this.rtfScreen1.EditScribbleClicked -= this.DoEditScribbleClicked;
             this.rtfScreen1.Free();
             this.rtfScreen1.Dispose();
             this.rtfScreen1 = null;
@@ -736,6 +779,7 @@ namespace cb0t
                     PMTab pm = (PMTab)this.tabControl1.TabPages[i];
                     this.tabControl1.TabPages.RemoveAt(i);
                     pm.HashlinkClicked -= this.LinkHashlinkClicked;
+                    pm.EditScribbleClicked -= this.DoEditScribbleClicked;
                     pm.Free();
                     pm.Dispose();
                     pm = null;
@@ -768,6 +812,7 @@ namespace cb0t
                         PMTab pm = (PMTab)this.tabControl1.TabPages[index];
                         this.tabControl1.TabPages.RemoveAt(index);
                         pm.HashlinkClicked -= this.LinkHashlinkClicked;
+                        pm.EditScribbleClicked -= this.DoEditScribbleClicked;
                         pm.Free();
                         pm.Dispose();
                         pm = null;
@@ -789,12 +834,26 @@ namespace cb0t
             while (this.toolStripDropDownButton1.DropDownItems.Count > 6)
                 this.toolStripDropDownButton1.DropDownItems.RemoveAt(6);
 
+            bool custom_options = false;
+
             if (Menus.Room.Count > 0)
             {
                 this.toolStripDropDownButton1.DropDownItems[5].Visible = true;
                 Menus.Room.ForEach(x => this.toolStripDropDownButton1.DropDownItems.Add(x.Name));
+                custom_options = true;
             }
-            else this.toolStripDropDownButton1.DropDownItems[5].Visible = false;
+
+            if (Scripting.ScriptManager.RoomMenuOptions.Count > 0)
+            {
+                if (!this.toolStripDropDownButton1.DropDownItems[5].Visible)
+                    this.toolStripDropDownButton1.DropDownItems[5].Visible = true;
+
+                Scripting.ScriptManager.RoomMenuOptions.ForEach(x => this.toolStripDropDownButton1.DropDownItems.Add(x.Text));
+                custom_options = true;
+            }
+
+            if (!custom_options)
+                this.toolStripDropDownButton1.DropDownItems[5].Visible = false;
         }
 
         private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -815,7 +874,7 @@ namespace cb0t
                 this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.CloseSubTabs });
             else
             {
-                for (int i=6;i<this.toolStripDropDownButton1.DropDownItems.Count;i++)
+                for (int i = 6; i < this.toolStripDropDownButton1.DropDownItems.Count; i++)
                     if (e.ClickedItem.Equals(this.toolStripDropDownButton1.DropDownItems[i]))
                     {
                         int index = (i - 6);
@@ -824,6 +883,17 @@ namespace cb0t
                         {
                             String ctext = Menus.Room[index].Text;
                             this.RoomMenuItemClicked(null, new RoomMenuItemClickedEventArgs { Item = RoomMenuItem.Custom, Arg = ctext });
+                        }
+                        else
+                        {
+                            index -= Menus.Room.Count;
+
+                            if (index >= 0 && index < Scripting.ScriptManager.RoomMenuOptions.Count)
+                            {
+                                UserDefinedFunction cback = Scripting.ScriptManager.RoomMenuOptions[index].Callback;
+                                Scripting.CustomJSRoomMenuCallback js = new Scripting.CustomJSRoomMenuCallback { Callback = cback };
+                                this.RoomMenuJSItemClicked(null, new RoomMenuJSItemClickedEventArgs { Item = js });
+                            }
                         }
 
                         break;
