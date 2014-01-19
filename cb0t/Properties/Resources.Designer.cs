@@ -103,6 +103,16 @@ namespace cb0t.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap awayoverlay {
+            get {
+                object obj = ResourceManager.GetObject("awayoverlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap button3 {
             get {
                 object obj = ResourceManager.GetObject("button3", resourceCulture);

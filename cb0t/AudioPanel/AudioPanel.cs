@@ -68,6 +68,11 @@ namespace cb0t
             }
         }
 
+        public bool IsPlaying
+        {
+            get { return this.Player.playState == WMPPlayState.wmppsPlaying; }
+        }
+
         public void SetVolume(int vol)
         {
             if (this.Player != null)
@@ -76,18 +81,22 @@ namespace cb0t
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (this.Player.playState == WMPPlayState.wmppsPlaying)
+            try
             {
-                IWMPMedia m = this.Player.currentMedia;
-                int pos = this.play_list.FindIndex(x => x.Playing);
-
-                if (m != null && pos > -1)
+                if (this.Player.playState == WMPPlayState.wmppsPlaying)
                 {
-                    TimeSpan ts = new TimeSpan(0, 0, (int)this.Player.controls.currentPosition);
-                    String text = String.Format("{0:0}:{1:00}", Math.Floor(ts.TotalMinutes), ts.Seconds) + " ";
-                    this.ShowAudioText("♫ " + text + this.play_list[pos].ToAudioTextString() + " ♫", EventArgs.Empty);
+                    IWMPMedia m = this.Player.currentMedia;
+                    int pos = this.play_list.FindIndex(x => x.Playing);
+
+                    if (m != null && pos > -1)
+                    {
+                        TimeSpan ts = new TimeSpan(0, 0, (int)this.Player.controls.currentPosition);
+                        String text = String.Format("{0:0}:{1:00}", Math.Floor(ts.TotalMinutes), ts.Seconds) + " ";
+                        this.ShowAudioText("♫ " + text + this.play_list[pos].ToAudioTextString() + " ♫", EventArgs.Empty);
+                    }
                 }
             }
+            catch { }
         }
 
         private int prepare_for_auto_next_track = 0;

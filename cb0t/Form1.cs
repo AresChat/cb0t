@@ -9,10 +9,12 @@ using System.Windows.Forms;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
+using FormEx;
+using FormEx.JumpListEx;
 
 namespace cb0t
 {
-    public partial class Form1 : Form
+    public partial class Form1 : DwmForm
     {
         private ChannelBar channel_bar { get; set; }
         private AudioControlBar audio_bar { get; set; }
@@ -47,6 +49,22 @@ namespace cb0t
             VoicePlayer.Init();
             StringTemplate.Load();
 
+            if (this.JumpList != null)
+            {
+                this.JumpList.ImageResource = Settings.AppPath + "listres.dll";
+                this.JumpList.Add(new JumpListItem("show as away", "cbjl_online"), 6);
+                this.JumpList.Add(new JumpListSeparator());
+                this.JumpList.Add(new JumpListItem("next", "cbjl_next"), 0);
+                this.JumpList.Add(new JumpListItem("play/pause", "cbjl_playpause"), 1);
+                this.JumpList.Add(new JumpListItem("previous", "cbjl_previous"), 3);
+                this.JumpList.Add(new JumpListItem("stop", "cbjl_stop"), 4);
+                this.JumpList.Add(new JumpListSeparator());
+                this.JumpList.Add(new JumpListItem("exit", "cbjl_exit"));
+            }
+
+            if (this.OverlayIcon != null)
+                this.OverlayIcon.Image = (Bitmap)Properties.Resources.awayoverlay.Clone();
+
             this.InitializeComponent();
             this.inithash = init_hashlink;
             this.img_play = (Bitmap)Properties.Resources.audio_play.Clone();
@@ -78,8 +96,6 @@ namespace cb0t
 
             Aero.HideIconAndText(this);
         }
-
-
 
         public void AddToFavourite(FavouritesListItem f)
         {
@@ -356,23 +372,24 @@ namespace cb0t
 
                 this.ipc = new IPCListener();
                 this.ipc.HashlinkReceived += this.IPCHashlinkReceived;
-
+                this.ipc.CommandReceived += this.IPCCommandReceived;
                 if (!String.IsNullOrEmpty(this.inithash))
-                {
                     if (this.inithash.StartsWith("cb0t://"))
+                    {
+
                         this.inithash = this.inithash.Substring(7);
 
-                    DecryptedHashlink dh = Hashlink.DecodeHashlink(this.inithash);
+                        DecryptedHashlink dh = Hashlink.DecodeHashlink(this.inithash);
 
-                    if (dh == null)
-                        if (this.inithash.EndsWith("/"))
-                            this.inithash = this.inithash.Substring(0, this.inithash.Length - 1);
+                        if (dh == null)
+                            if (this.inithash.EndsWith("/"))
+                                this.inithash = this.inithash.Substring(0, this.inithash.Length - 1);
 
-                    dh = Hashlink.DecodeHashlink(this.inithash);
+                        dh = Hashlink.DecodeHashlink(this.inithash);
 
-                    if (dh != null)
-                        this.IPCHashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
-                }
+                        if (dh != null)
+                            this.IPCHashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                    }
 
                 this.ipc.Start();
             }
@@ -407,6 +424,51 @@ namespace cb0t
             }));
         }
 
+        private void IPCCommandReceived(object sender, IPCListenerEventArgs e)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new EventHandler<IPCListenerEventArgs>(this.IPCCommandReceived), sender, e);
+            else
+            {
+                switch (e.Command)
+                {
+                    case "online":
+                        if (!Settings.IsAway)
+                            this.showAsAwayToolStripMenuItem_Click(null, EventArgs.Empty);
+                        else
+                            this.showAsOnlineToolStripMenuItem_Click(null, EventArgs.Empty);
+
+                        this.BeginInvoke((Action)(() => this.Activate()));
+                        break;
+
+                    case "next":
+                        this.audio_content.NextClicked();
+                        this.BeginInvoke((Action)(() => this.Activate()));
+                        break;
+
+                    case "playpause":
+                        this.audio_content.PlayPauseClicked();
+                        this.BeginInvoke((Action)(() => this.Activate()));
+                        break;
+
+                    case "previous":
+                        this.audio_content.PreviousClicked();
+                        this.BeginInvoke((Action)(() => this.Activate()));
+                        break;
+
+                    case "stop":
+                        this.audio_content.StopClicked();
+                        this.BeginInvoke((Action)(() => this.Activate()));
+                        break;
+
+                    case "exit":
+                        this.can_close = true;
+                        this.Close();
+                        break;
+                }
+            }
+        }
+
         private void OnTemplateChanged(object sender, EventArgs e)
         {
             StringTemplate.Load();
@@ -416,6 +478,31 @@ namespace cb0t
         private void UpdateTemplate()
         {
             SettingsContent.UpdateTemplate();
+
+            if (this.JumpList != null)
+            {
+                this.JumpList.Clear();
+
+                if (Settings.IsAway)
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 0), "cbjl_online"), 5);
+                else
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 1), "cbjl_online"), 6);
+
+                this.JumpList.Add(new JumpListSeparator());
+
+                if (AudioPanel.Available)
+                {
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.AudioBar, 10), "cbjl_next"), 0);
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.AudioBar, 9), "cbjl_playpause"), this.audio_content.IsPlaying ? 2 : 1);
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.AudioBar, 8), "cbjl_previous"), 3);
+                    this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.AudioBar, 7), "cbjl_stop"), 4);
+                    this.JumpList.Add(new JumpListSeparator());
+                }
+
+                this.audioToolStripMenuItem.Enabled = AudioPanel.Available;
+                this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 2), "cbjl_exit"));
+            }
+
             this.toolStripDropDownButton1.ToolTipText = StringTemplate.Get(STType.AudioBar, 0);
             this.clearListToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 1);
             this.randomToolStripMenuItem.Text = StringTemplate.Get(STType.AudioBar, 2);
@@ -467,6 +554,12 @@ namespace cb0t
         {
             this.toolStripButton5.Image = ((bool)sender) ? this.img_play : this.img_pause;
             this.playpauseToolStripMenuItem.Image = ((bool)sender) ? this.img_play : this.img_pause;
+
+            if (this.JumpList != null)
+            {
+                this.JumpList.RemoveAt(3);
+                this.JumpList.Insert(3, new JumpListItem(StringTemplate.Get(STType.AudioBar, 9), "cbjl_playpause"), ((bool)sender) ? 1 : 2);
+            }
         }
 
         private void SysTrayMouseClicked(object sender, MouseEventArgs e)
@@ -481,6 +574,10 @@ namespace cb0t
                         this.WindowState = FormWindowState.Normal;
 
                     this.Activate();
+
+                    if (Settings.IsAway)
+                        if (this.OverlayIcon != null)
+                            this.OverlayIcon.Show();
                 }));
         }
 
@@ -768,6 +865,16 @@ namespace cb0t
         {
             this.showAsAwayToolStripMenuItem.Enabled = true;
             this.showAsOnlineToolStripMenuItem.Enabled = false;
+
+            if (this.JumpList != null)
+            {
+                this.JumpList.RemoveAt(0);
+                this.JumpList.Insert(0, new JumpListItem(StringTemplate.Get(STType.SystemTray, 1), "cbjl_online"), 6);
+            }
+
+            if (this.OverlayIcon != null)
+                this.OverlayIcon.Hide();
+
             Settings.IsAway = false;
             RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(false));
         }
@@ -776,6 +883,16 @@ namespace cb0t
         {
             this.showAsAwayToolStripMenuItem.Enabled = false;
             this.showAsOnlineToolStripMenuItem.Enabled = true;
+
+            if (this.JumpList != null)
+            {
+                this.JumpList.RemoveAt(0);
+                this.JumpList.Insert(0, new JumpListItem(StringTemplate.Get(STType.SystemTray, 0), "cbjl_online"), 5);
+            }
+
+            if (this.OverlayIcon != null)
+                this.OverlayIcon.Show();
+
             Settings.IsAway = true;
             RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(true));
         }

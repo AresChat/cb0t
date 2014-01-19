@@ -130,6 +130,9 @@
   <data name="away" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\away.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="awayoverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\awayoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="button3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\button3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

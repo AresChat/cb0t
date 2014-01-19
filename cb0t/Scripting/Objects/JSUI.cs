@@ -32,6 +32,54 @@ namespace cb0t.Scripting.Objects
         public bool CanCreate { get; set; }
         public bool CanAddControls { get; set; }
 
+        [JSFunction(Name = "createUserListMenuOption", IsWritable = false, IsEnumerable = true)]
+        public bool CreateUserListMenuOption(object a, object b)
+        {
+            if (this.CanAddControls || this.CanCreate)
+                if (!(a is Undefined) && b is UserDefinedFunction)
+                {
+                    String text = a.ToString();
+                    UserDefinedFunction callback = (UserDefinedFunction)b;
+
+                    if (ScriptManager.UserListMenuOptions.Find(x => x.Text == text) == null)
+                    {
+                        ScriptManager.UserListMenuOptions.Add(new CustomJSMenuOption
+                        {
+                            Callback = callback,
+                            Text = text
+                        });
+
+                        return true;
+                    }
+                }
+
+            return false;
+        }
+
+        [JSFunction(Name = "createRoomMenuOption", IsWritable = false, IsEnumerable = true)]
+        public bool CreateRoomMenuOption(object a, object b)
+        {
+            if (this.CanAddControls || this.CanCreate)
+                if (!(a is Undefined) && b is UserDefinedFunction)
+                {
+                    String text = a.ToString();
+                    UserDefinedFunction callback = (UserDefinedFunction)b;
+
+                    if (ScriptManager.RoomMenuOptions.Find(x => x.Text == text) == null)
+                    {
+                        ScriptManager.RoomMenuOptions.Add(new CustomJSMenuOption
+                        {
+                            Callback = callback,
+                            Text = text
+                        });
+
+                        return true;
+                    }
+                }
+
+            return false;
+        }
+
         [JSFunction(Name = "createTextBox", IsWritable = false, IsEnumerable = true)]
         public JSUITextBox CreateTextBox()
         {

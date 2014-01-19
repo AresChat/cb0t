@@ -72,10 +72,18 @@
     <Reference Include="Jurassic">
       <HintPath>..\..\..\..\..\Jurassic.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\..\..\..\..\Windows API Code Pack 1.1\Windows API Code Pack 1.1\binaries\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\..\..\..\..\Windows API Code Pack 1.1\Windows API Code Pack 1.1\binaries\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="NHunspell, Version=1.1.1.0, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\NHunspell.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -87,8 +95,27 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormEx\DwmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEx\IJumpListItem.cs" />
+    <Compile Include="FormEx\JumpListContainer.cs" />
+    <Compile Include="FormEx\JumpListHelpers.cs" />
+    <Compile Include="FormEx\JumpListItem.cs" />
+    <Compile Include="FormEx\JumpListItemType.cs" />
+    <Compile Include="FormEx\JumpListSeparator.cs" />
+    <Compile Include="FormEx\OverlayIcon.cs" />
+    <Compile Include="FormEx\PreviewToolStripContainer.cs" />
+    <Compile Include="FormEx\PreviewToolStripItem.cs" />
+    <Compile Include="FormEx\PreviewToolStripItemClickedEventArgs.cs" />
+    <Compile Include="FormEx\TaskBarProgress.cs" />
+    <Compile Include="FormEx\TaskBarProgressColor.cs" />
+    <Compile Include="Scripting\CustomJSMenuOption.cs" />
+    <Compile Include="Scripting\CustomJSRoomMenuCallback.cs" />
+    <Compile Include="Scripting\CustomJSUserListMenuCallback.cs" />
     <Compile Include="Scripting\CustomScriptSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -101,6 +128,7 @@
     </Compile>
     <Compile Include="Misc\SafeQueue.cs" />
     <Compile Include="Scripting\ICustomUI.cs" />
+    <Compile Include="Scripting\IScriptingCallback.cs" />
     <Compile Include="Scripting\JSGlobal.cs" />
     <Compile Include="Scripting\JSOutboundTextItem.cs" />
     <Compile Include="Scripting\JSScript.cs" />
@@ -648,6 +676,7 @@
     <None Include="Resources\musicbg.png" />
     <None Include="Resources\audio_pause.png" />
     <None Include="Resources\audio_play.png" />
+    <None Include="Resources\awayoverlay.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>

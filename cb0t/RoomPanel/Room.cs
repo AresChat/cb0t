@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
 using System.Diagnostics;
+using Jurassic.Library;
 
 namespace cb0t
 {
@@ -49,11 +50,6 @@ namespace cb0t
             this.BlackBG = black_bg;
         }
 
-        public void FlashRoomFromScripting(bool flash)
-        {
-
-        }
-
         public void UpdateIgnoreFromScripting(User u)
         {
             if (this.state == SessionState.Connected)
@@ -90,9 +86,11 @@ namespace cb0t
             this.Panel.Userlist.CustomOptionClicked += this.UserlistCustomOptionClicked;
             this.Panel.WantScribble += this.WantScribble;
             this.Panel.RoomMenuItemClicked += this.RoomMenuItemClicked;
+            this.Panel.RoomMenuJSItemClicked += this.RoomMenuJSItemClicked;
             this.Panel.HashlinkClicked += this.PanelHashlinkClicked;
             this.Panel.GetUserByName += this.PanelGetUserByName;
             this.Panel.VoiceRecordingButtonClicked += this.VoiceRecordingButtonClicked;
+            this.Panel.EditScribbleClicked += this.EditScribbleClicked;
 
             if (this.BlackBG)
             {
@@ -101,6 +99,13 @@ namespace cb0t
             }
 
             this.UpdateTemplate();
+        }
+
+        private void RoomMenuJSItemClicked(object sender, RoomMenuJSItemClickedEventArgs e)
+        {
+            Scripting.CustomJSRoomMenuCallback cb = e.Item;
+            cb.Room = this.EndPoint;
+            Scripting.ScriptManager.PendingScriptingCallbacks.Enqueue(cb);
         }
 
         private void VoiceRecordingButtonClicked(object sender, EventArgs e)
@@ -230,14 +235,23 @@ namespace cb0t
             if (this.state != SessionState.Connected)
                 return;
 
-            String text = (String)sender;
+            if (sender is Scripting.CustomJSUserListMenuCallback)
+            {
+                Scripting.CustomJSUserListMenuCallback cb = (Scripting.CustomJSUserListMenuCallback)sender;
+                cb.Room = this.EndPoint;
+                Scripting.ScriptManager.PendingScriptingCallbacks.Enqueue(cb);
+            }
+            else
+            {
+                String text = (String)sender;
 
-            if (text.StartsWith("/me ") && text.Length > 4)
-                this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
-            else if (text.StartsWith("/") && text.Length > 1)
-                this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
-            else if (text.Length > 0)
-                this.sock.Send(TCPOutbound.Public(text, this.crypto));
+                if (text.StartsWith("/me ") && text.Length > 4)
+                    this.sock.Send(TCPOutbound.Emote(text.Substring(4), this.crypto));
+                else if (text.StartsWith("/") && text.Length > 1)
+                    this.sock.Send(TCPOutbound.Command(text.Substring(1), this.crypto));
+                else if (text.Length > 0)
+                    this.sock.Send(TCPOutbound.Public(text, this.crypto));
+            }
         }
 
         private void RoomMenuItemClicked(object sender, RoomMenuItemClickedEventArgs e)
@@ -313,6 +327,81 @@ namespace cb0t
                 this.sock.Send(TCPOutbound.Writing(false, this.crypto));
         }
 
+        private void EditScribbleClicked(object sender, EventArgs e)
+        {
+            if (this.state != SessionState.Connected)
+                return;
+
+            SharedUI.ScribbleEditor.StartPosition = FormStartPosition.CenterParent;
+            byte[] data = SharedUI.ScribbleEditor.GetScribble((byte[])sender);
+
+            if (data == null)
+                return;
+
+            if (this.Panel.Mode == ScreenMode.Main)
+            {
+                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
+                this.Panel.Scribble(data);
+            }
+            else if (this.Panel.Mode == ScreenMode.PM)
+            {
+                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
+                this.Panel.PMScribbleReceived(null, null, this.Panel.PMName, data);
+            }
+
+            data = Zip.Compress(data);
+
+            List<byte> full = new List<byte>(data);
+            data = null;
+
+            if (full.Count <= 4000)
+            {
+                if (this.Panel.Mode == ScreenMode.Main)
+                    this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst((uint)full.Count, 0, full.ToArray()));
+                else if (this.Panel.Mode == ScreenMode.PM)
+                    this.sock.SendTrickle(TCPOutbound.PMScribbleOnce(this.Panel.PMName, full.ToArray(), this.crypto));
+            }
+            else
+            {
+                List<byte[]> p = new List<byte[]>();
+                uint s_size = (uint)full.Count;
+
+                while (full.Count > 4000)
+                {
+                    p.Add(full.GetRange(0, 4000).ToArray());
+                    full.RemoveRange(0, 4000);
+                }
+
+                if (full.Count > 0)
+                    p.Add(full.ToArray());
+
+                if (this.Panel.Mode == ScreenMode.Main)
+                {
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst(s_size, (ushort)(p.Count - 1), p[i]));
+                        else
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomChunk(p[i]));
+                }
+                else if (this.Panel.Mode == ScreenMode.PM)
+                {
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleFirst(this.Panel.PMName, p[i], this.crypto));
+                        else if (i == (p.Count - 1))
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleLast(this.Panel.PMName, p[i], this.crypto));
+                        else
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleChunk(this.Panel.PMName, p[i], this.crypto));
+                }
+
+                p.Clear();
+                p = null;
+            }
+
+            full.Clear();
+            full = null;
+        }
+
         private void WantScribble(object sender, EventArgs e)
         {
             if (this.state != SessionState.Connected)
@@ -386,6 +475,13 @@ namespace cb0t
 
             full.Clear();
             full = null;
+        }
+
+        public void NudgeUser(User u)
+        {
+            if (this.state == SessionState.Connected)
+                if (this.sock != null)
+                    this.sock.Send(TCPOutbound.Nudge(this.MyName, u.Name, this.crypto));
         }
 
         private void UserlistMenuTask(object sender, ULCTXTaskEventArgs e)
@@ -492,12 +588,14 @@ namespace cb0t
             this.Panel.SendBox.KeyUp -= this.SendBoxKeyUp;
             this.Panel.SendAutoReply -= this.SendAutoReply;
             this.Panel.RoomMenuItemClicked -= this.RoomMenuItemClicked;
+            this.Panel.RoomMenuJSItemClicked -= this.RoomMenuJSItemClicked;
             this.Panel.Userlist.OpenPMRequested -= this.OpenPMRequested;
             this.Panel.Userlist.SendAdminCommand -= this.SendAdminCommand;
             this.Panel.Userlist.MenuTask -= this.UserlistMenuTask;
             this.Panel.Userlist.CustomOptionClicked -= this.UserlistCustomOptionClicked;
             this.Panel.HashlinkClicked -= this.PanelHashlinkClicked;
             this.Panel.WantScribble -= this.WantScribble;
+            this.Panel.EditScribbleClicked -= this.EditScribbleClicked;
             this.sock.Disconnect();
             this.sock.PacketReceived -= this.PacketReceived;
             this.sock.Free();
@@ -964,6 +1062,26 @@ namespace cb0t
                     }
                     else this.Panel.MyPMAnnounce(StringTemplate.Get(STType.Messages, 9));
                 }
+        }
+
+        public void SendJSPM(String name, String text)
+        {
+            User u = this.users.Find(x => x.Name == name);
+
+            if (u != null)
+            {
+                AresFont f = null;
+
+                if (Settings.MyFont != null)
+                    f = Settings.MyFont.Copy();
+
+                this.Panel.MyPMJSText(name, text, f); // my font
+
+                if (!u.SupportsPMEnc)
+                    this.sock.Send(TCPOutbound.Private(this.Panel.PMName, text, this.crypto));
+                else
+                    this.sock.Send(TCPOutbound.CustomPM(this.Panel.PMName, text, this.crypto));
+            }
         }
 
         private void SendAutoReply(object sender, EventArgs e)

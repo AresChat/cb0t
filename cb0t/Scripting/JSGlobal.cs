@@ -1,7 +1,10 @@
 ﻿using Jurassic;
 using Jurassic.Library;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -61,6 +64,80 @@ namespace cb0t.Scripting
             }
 
             return null;
+        }
+
+        [JSFunction(Name = "include", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static bool DoInclude(ScriptEngine eng, object a)
+        {
+            if (!(a is Undefined))
+            {
+                String file = a.ToString();
+
+                if (!String.IsNullOrEmpty(file))
+                {
+                    JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                    if (script != null)
+                    {
+                        file = new String(file.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
+                        file = Path.Combine(script.ScriptPath, file);
+
+                        if (new FileInfo(file).Directory.FullName != new DirectoryInfo(script.ScriptPath).FullName)
+                            return false;
+
+                        try
+                        {
+                            script.JS.ExecuteFile(file);
+                        }
+                        catch { }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "openBrowser")]
+        public static bool DoOpenBrowser(object a)
+        {
+            if (a is Undefined)
+                return false;
+
+            String url = a.ToString();
+
+            if (url.StartsWith("http://") || url.StartsWith("https://"))
+            {
+                RegistryKey key = Registry.ClassesRoot.OpenSubKey("http\\shell\\open\\command");
+
+                if (key != null)
+                {
+                    object value = key.GetValue(String.Empty);
+
+                    if (value is String)
+                    {
+                        String browser = (String)value;
+
+                        if (browser.StartsWith("\""))
+                            browser = browser.Substring(1);
+
+                        int i = browser.IndexOf("\"");
+
+                        if (i > -1)
+                            browser = browser.Substring(0, i);
+
+                        try
+                        {
+                            Process.Start(browser, url);
+                            return true;
+                        }
+                        catch { }
+                    }
+                }
+            }
+
+            return false;
         }
 
         [JSFunction(Name = "room", Flags = JSFunctionFlags.HasEngineParameter)]

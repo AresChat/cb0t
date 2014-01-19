@@ -14,6 +14,7 @@ namespace cb0t
         private RtfScreen rtf { get; set; }
 
         public event EventHandler HashlinkClicked;
+        public event EventHandler EditScribbleClicked;
 
         public bool AutoReplySent { get; set; }
         public bool First { get; set; }
@@ -38,6 +39,7 @@ namespace cb0t
             this.rtf.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             this.rtf.Size = new Size(540, 233);
             this.rtf.HashlinkClicked += this.LinkHashlinkClicked;
+            this.rtf.EditScribbleClicked += this.rtf_EditScribbleClicked;
 
             this.container = new Panel();
             this.container.BackColor = Color.White;
@@ -54,6 +56,11 @@ namespace cb0t
             this.ImageIndex = 2;
             this.UseVisualStyleBackColor = true;
             this.Controls.Add(this.container);
+        }
+
+        private void rtf_EditScribbleClicked(object sender, EventArgs e)
+        {
+            this.EditScribbleClicked(sender, e);
         }
 
         public void UpdateTemplate()
@@ -124,6 +131,7 @@ namespace cb0t
             this.rec.Dispose();
             this.rec = null;
             this.rtf.HashlinkClicked -= this.LinkHashlinkClicked;
+            this.rtf.EditScribbleClicked -= this.rtf_EditScribbleClicked;
             this.rtf.Free();
             this.rtf.Dispose();
             this.rtf = null;

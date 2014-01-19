@@ -92,6 +92,85 @@ namespace cb0t
             this.DialogResult = DialogResult.OK;
         }
 
+        public byte[] GetScribble(byte[] org)
+        {
+            this.current = new Bitmap(396, 396);
+            this.g_current = Graphics.FromImage(this.current);
+            this.g_current.Clear(Color.White);
+            this.toolStripButton6.Enabled = false;
+            this.toolStripButton7.Enabled = false;
+            this.current_rect = new ScribbleArea();
+            this.undo_rect = new ScribbleArea();
+            this.redo_rect = new ScribbleArea();
+
+            try
+            {
+                using (MemoryStream org_stream = new MemoryStream(org))
+                using (Bitmap org_img = new Bitmap(org_stream))
+                    this.ImportExternalImage(org_img);
+            }
+            catch { return null; }
+
+            byte[] result = null;
+
+            if (this.ShowDialog() == DialogResult.OK)
+                if (this.current_rect.max_x > this.current_rect.min_x && this.current_rect.max_y > this.current_rect.min_y)
+                    using (Bitmap sized = new Bitmap((this.current_rect.max_x - this.current_rect.min_x) + 20, (this.current_rect.max_y - this.current_rect.min_y) + 20))
+                    using (Graphics g = Graphics.FromImage(sized))
+                    {
+                        int x1 = this.current_rect.min_x - 10;
+                        int y1 = this.current_rect.min_y - 10;
+
+                        if (x1 < 0)
+                            x1 = 0;
+
+                        if (y1 < 0)
+                            y1 = 0;
+
+                        int x2 = sized.Width;
+                        int y2 = sized.Height;
+
+                        if ((x1 + x2) > 396)
+                            x2 -= ((x1 + x2) - 396);
+
+                        if ((y1 + y2) > 396)
+                            y2 -= ((y1 + y2) - 396);
+
+                        using (SolidBrush sb = new SolidBrush(Color.White))
+                            g.FillRectangle(sb, new Rectangle(0, 0, sized.Width, sized.Height));
+
+                        g.DrawImage(this.current, new Rectangle(0, 0, sized.Width, sized.Height), new Rectangle(x1, y1, x2, y2), GraphicsUnit.Pixel);
+                        ImageCodecInfo info = ImageCodecInfo.GetImageEncoders().FirstOrDefault(x => x.MimeType == "image/jpeg");
+                        EncoderParameters encoding = new EncoderParameters();
+                        encoding.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 75L);
+
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            sized.Save(ms, info, encoding);
+                            result = ms.ToArray();
+                        }
+                    }
+
+            this.g_current.Dispose();
+            this.g_current = null;
+            this.current.Dispose();
+            this.current = null;
+
+            if (this.undo != null)
+            {
+                this.undo.Dispose();
+                this.undo = null;
+            }
+
+            if (this.redo != null)
+            {
+                this.redo.Dispose();
+                this.redo = null;
+            }
+
+            return result;
+        }
+
         public byte[] GetScribble()
         {
             this.current = new Bitmap(396, 396);
