@@ -15,10 +15,14 @@ namespace FormEx
 
         public DwmForm()
         {
-            bool can_win7 = cb0t.Aero.CanAero;
+            bool can_win7 = false;
 
-            if (can_win7)
-                can_win7 = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported;
+            if (Environment.OSVersion.Version.Major > 6)
+                can_win7 = true;
+
+            if (Environment.OSVersion.Version.Major == 6)
+                if (Environment.OSVersion.Version.Minor >= 1)
+                    can_win7 = true;
 
             if (!can_win7)
             {

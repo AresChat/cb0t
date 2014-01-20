@@ -128,6 +128,8 @@
     </Compile>
     <Compile Include="Misc\SafeQueue.cs" />
     <Compile Include="Scripting\ICustomUI.cs" />
+    <Compile Include="Scripting\Instances\JSHttpRequest.cs" />
+    <Compile Include="Scripting\Instances\JSHttpRequestInstance.cs" />
     <Compile Include="Scripting\Instances\JSXmlParser.cs" />
     <Compile Include="Scripting\Instances\JSXmlParserInstance.cs" />
     <Compile Include="Scripting\IScriptingCallback.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Scripting\ObjectPrototypes\JSCryptoResult.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSFont.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSHashlinkResult.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSHttpRequestResult.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSNode.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSNodeAttributes.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSNodeCollection.cs" />
@@ -162,6 +165,7 @@
     <Compile Include="Scripting\Objects\JSCryptoResult.cs" />
     <Compile Include="Scripting\Objects\JSFont.cs" />
     <Compile Include="Scripting\Objects\JSHashlinkResult.cs" />
+    <Compile Include="Scripting\Objects\JSHttpRequestResult.cs" />
     <Compile Include="Scripting\Objects\JSNode.cs" />
     <Compile Include="Scripting\Objects\JSNodeAttributes.cs" />
     <Compile Include="Scripting\Objects\JSNodeCollection.cs" />
