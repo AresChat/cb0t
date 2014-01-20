@@ -288,11 +288,16 @@ namespace cb0t
         private void Eval_URL(TCPPacketReader packet)
         {
             String addr = packet.ReadString(this.crypto);
-            String text = packet.ReadString(this.crypto);
-            text = ScriptEvents.OnUrlReceiving(this, text, addr);
+            String check = addr.ToUpper();
 
-            if (!String.IsNullOrEmpty(text))
-                this.Panel.SetURL(text, addr);
+            if (check.StartsWith("HTTP://") || check.StartsWith("ARLNK://") || check.StartsWith("WWW") || check.StartsWith("HTTPS://"))
+            {
+                String text = packet.ReadString(this.crypto);
+                text = ScriptEvents.OnUrlReceiving(this, text, addr);
+
+                if (!String.IsNullOrEmpty(text))
+                    this.Panel.SetURL(text, addr);
+            }
         }
 
         private void Eval_Avatar(TCPPacketReader packet)

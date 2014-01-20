@@ -58,6 +58,7 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONVOICECLIPRECEIVING { get; set; }
         public UserDefinedFunction EVENT_ONVOICECLIPRECEIVED { get; set; }
         public UserDefinedFunction EVENT_ONCUSTOMDATARECEIVED { get; set; }
+        public UserDefinedFunction EVENT_ONLINKCLICKED { get; set; }
 
         public JSScript(String name, bool is_subscript)
         {

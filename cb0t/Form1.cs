@@ -11,6 +11,8 @@ using System.Threading;
 using System.Diagnostics;
 using FormEx;
 using FormEx.JumpListEx;
+using FormEx.PreviewToolStripEx;
+using FormEx.TaskBarProgressBarEx;
 
 namespace cb0t
 {
@@ -59,11 +61,22 @@ namespace cb0t
                 this.JumpList.Add(new JumpListItem("previous", "cbjl_previous"), 3);
                 this.JumpList.Add(new JumpListItem("stop", "cbjl_stop"), 4);
                 this.JumpList.Add(new JumpListSeparator());
-                this.JumpList.Add(new JumpListItem("exit", "cbjl_exit"));
+                this.JumpList.Add(new JumpListItem("exit", "cbjl_exit"), 7);
             }
 
             if (this.OverlayIcon != null)
                 this.OverlayIcon.Image = (Bitmap)Properties.Resources.awayoverlay.Clone();
+
+            if (this.PreviewToolStrip != null)
+            {
+                this.PreviewToolStrip.ItemClicked += this.PreviewToolStripItemClicked;
+                PreviewToolStripItem item1 = new PreviewToolStripItem((Bitmap)Properties.Resources.online.Clone(), "show as online");
+                item1.Tag = 1;
+                PreviewToolStripItem item2 = new PreviewToolStripItem((Bitmap)Properties.Resources.away.Clone(), "show as away");
+                item2.Tag = 2;
+                this.PreviewToolStrip.CreateItems(item1, item2);
+                this.PreviewToolStrip[0].Button.Enabled = false;
+            }
 
             this.InitializeComponent();
             this.inithash = init_hashlink;
@@ -95,6 +108,31 @@ namespace cb0t
             this.SetToList();
 
             Aero.HideIconAndText(this);
+        }
+
+        private delegate void SetProgressLevelHandler(int amount);
+        public void SetProgressLevel(int amount)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new SetProgressLevelHandler(this.SetProgressLevel), amount);
+            else if (this.TaskBarProgress != null)
+            {
+                if (amount == 0)
+                    this.TaskBarProgress.Reset();
+                else
+                {
+                    this.TaskBarProgress.Color = TaskBarProgressColor.Red;
+                    this.TaskBarProgress.SetValue(amount <= 15 ? amount : 15, 15);
+                }
+            }
+        }
+
+        private void PreviewToolStripItemClicked(object sender, PreviewToolStripItemClickedEventArgs e)
+        {
+            if (((int)e.Item.Tag) == 1)
+                this.showAsOnlineToolStripMenuItem_Click(null, EventArgs.Empty);
+            else
+                this.showAsAwayToolStripMenuItem_Click(null, EventArgs.Empty);
         }
 
         public void AddToFavourite(FavouritesListItem f)
@@ -437,28 +475,22 @@ namespace cb0t
                             this.showAsAwayToolStripMenuItem_Click(null, EventArgs.Empty);
                         else
                             this.showAsOnlineToolStripMenuItem_Click(null, EventArgs.Empty);
-
-                        this.BeginInvoke((Action)(() => this.Activate()));
                         break;
 
                     case "next":
                         this.audio_content.NextClicked();
-                        this.BeginInvoke((Action)(() => this.Activate()));
                         break;
 
                     case "playpause":
                         this.audio_content.PlayPauseClicked();
-                        this.BeginInvoke((Action)(() => this.Activate()));
                         break;
 
                     case "previous":
                         this.audio_content.PreviousClicked();
-                        this.BeginInvoke((Action)(() => this.Activate()));
                         break;
 
                     case "stop":
                         this.audio_content.StopClicked();
-                        this.BeginInvoke((Action)(() => this.Activate()));
                         break;
 
                     case "exit":
@@ -500,7 +532,13 @@ namespace cb0t
                 }
 
                 this.audioToolStripMenuItem.Enabled = AudioPanel.Available;
-                this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 2), "cbjl_exit"));
+                this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 2), "cbjl_exit"), 7);
+            }
+
+            if (this.PreviewToolStrip != null)
+            {
+                this.PreviewToolStrip[0].Button.Tooltip = StringTemplate.Get(STType.SystemTray, 0);
+                this.PreviewToolStrip[1].Button.Tooltip = StringTemplate.Get(STType.SystemTray, 1);
             }
 
             this.toolStripDropDownButton1.ToolTipText = StringTemplate.Get(STType.AudioBar, 0);
@@ -875,6 +913,12 @@ namespace cb0t
             if (this.OverlayIcon != null)
                 this.OverlayIcon.Hide();
 
+            if (this.PreviewToolStrip != null)
+            {
+                this.PreviewToolStrip[0].Button.Enabled = false;
+                this.PreviewToolStrip[1].Button.Enabled = true;
+            }
+
             Settings.IsAway = false;
             RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(false));
         }
@@ -892,6 +936,12 @@ namespace cb0t
 
             if (this.OverlayIcon != null)
                 this.OverlayIcon.Show();
+
+            if (this.PreviewToolStrip != null)
+            {
+                this.PreviewToolStrip[0].Button.Enabled = true;
+                this.PreviewToolStrip[1].Button.Enabled = false;
+            }
 
             Settings.IsAway = true;
             RoomPool.Rooms.ForEach(x => x.UpdateAwayStatus(true));

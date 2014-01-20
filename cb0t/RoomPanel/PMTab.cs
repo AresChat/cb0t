@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Net;
 
 namespace cb0t
 {
@@ -19,7 +20,7 @@ namespace cb0t
         public bool AutoReplySent { get; set; }
         public bool First { get; set; }
 
-        public PMTab(String name)
+        public PMTab(String name, IPEndPoint ep)
         {
             this.AutoReplySent = false;
             this.rec = new PMRecPanel();
@@ -30,7 +31,7 @@ namespace cb0t
             this.rec.RecordingTime = 0;
             this.rec.Size = new Size(540, 16);
 
-            this.rtf = new RtfScreen();
+            this.rtf = new RtfScreen(ep);
             this.rtf.BackColor = Color.White;
             this.rtf.BorderStyle = BorderStyle.None;
             this.rtf.Dock = DockStyle.Fill;

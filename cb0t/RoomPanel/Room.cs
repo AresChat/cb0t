@@ -132,6 +132,7 @@ namespace cb0t
                 this.is_recording = true;
                 this.recording_time = 0;
                 this.Panel.UpdateVoiceTime(this.recording_time);
+                this.owner_frm.SetProgressLevel(0);
             }
         }
 
@@ -144,6 +145,7 @@ namespace cb0t
                 byte rec_len = (byte)this.recording_time;
                 this.recording_time = 0;
                 this.Panel.UpdateVoiceTime(-1);
+                this.owner_frm.SetProgressLevel(0);
                 bool should_opus = this.CanOpusVC;
 
                 if (should_opus)
@@ -192,6 +194,7 @@ namespace cb0t
                 this.is_recording = false;
                 this.recording_time = 0;
                 this.Panel.UpdateVoiceTime(-1);
+                this.owner_frm.SetProgressLevel(0);
 
                 if (this.Panel.Mode == ScreenMode.PM)
                     this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 27));
@@ -206,6 +209,7 @@ namespace cb0t
             {
                 this.recording_time++;
                 this.Panel.UpdateVoiceTime(this.recording_time);
+                this.owner_frm.SetProgressLevel(this.recording_time);
 
                 if (this.recording_time == 15)
                     this.StopRecording();
