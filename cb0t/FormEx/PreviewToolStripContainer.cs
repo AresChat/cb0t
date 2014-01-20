@@ -26,28 +26,18 @@ namespace FormEx.PreviewToolStripEx
             this.Owner = f;
         }
 
-        public void CreateItem(Bitmap image)
+        public void CreateItems(params PreviewToolStripItem[] items)
         {
-            this.CreateItem(image, String.Empty, null);
-        }
+            List<Microsoft.WindowsAPICodePack.Taskbar.ThumbnailToolBarButton> list = new List<Microsoft.WindowsAPICodePack.Taskbar.ThumbnailToolBarButton>();
 
-        public void CreateItem(Bitmap image, object tag)
-        {
-            this.CreateItem(image, String.Empty, tag);
-        }
+            foreach (PreviewToolStripItem i in items)
+            {
+                i.ButtonClicked += this.ButtonClicked;
+                this.Items.Add(i);
+                list.Add(i.Button);
+            }
 
-        public void CreateItem(Bitmap image, String tiptext)
-        {
-            this.CreateItem(image, tiptext, null);
-        }
-
-        public void CreateItem(Bitmap image, String tiptext, object tag)
-        {
-            PreviewToolStripItem item = new PreviewToolStripItem(image, tiptext);
-            item.Tag = tag;
-            item.ButtonClicked += this.ButtonClicked;
-            this.Items.Add(item);
-            Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Owner.Handle, item.Button);
+            Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Owner.Handle, list.ToArray());
         }
 
         private void ButtonClicked(object sender, PreviewToolStripItemClickedEventArgs e)

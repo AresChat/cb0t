@@ -191,6 +191,23 @@ namespace cb0t.Scripting.Statics
             return false;
         }
 
+        [JSFunction(Name = "onlinkclicked", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnLinkedClick(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONLINKCLICKED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         [JSFunction(Name = "onload", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
         public static bool EventOnLoad(ScriptEngine eng, object a)
         {

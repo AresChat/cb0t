@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Net;
+using System.Diagnostics;
 
 namespace cb0t.Scripting
 {
@@ -109,6 +110,17 @@ namespace cb0t.Scripting
 
                             if (!String.IsNullOrEmpty(str))
                                 r.SendPM(item.Name, str);
+                        }
+                        else if (item.Type == JSOutboundTextItemType.Link)
+                        {
+                            if (ScriptEvents.OnLinkClicked(r, item.Text))
+                            {
+                                try
+                                {
+                                    Process.Start(item.Text);
+                                }
+                                catch { }
+                            }
                         }
                 }
             }

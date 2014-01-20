@@ -54,6 +54,7 @@ namespace cb0t
             this.PMName = String.Empty;
             this.MyName = String.Empty;
             this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
+            this.rtfScreen1.EndPoint = this.EndPoint;
             this.topic = new Topic();
             this.b1 = (Bitmap)Emoticons.emotic[47].Clone();
             this.toolStripButton5.Image = this.b1;
@@ -245,7 +246,7 @@ namespace cb0t
                             return;
                         }
 
-                PMTab new_tab = new PMTab(target);
+                PMTab new_tab = new PMTab(target, this.EndPoint);
 
                 if (this.IsBlack)
                     new_tab.SetToBlack();
@@ -278,7 +279,7 @@ namespace cb0t
                         return;
                     }
 
-            PMTab new_tab = new PMTab(name);
+            PMTab new_tab = new PMTab(name, this.EndPoint);
 
             if (this.IsBlack)
                 new_tab.SetToBlack();
@@ -313,7 +314,7 @@ namespace cb0t
                             return;
                         }
 
-                PMTab new_tab = new PMTab(name);
+                PMTab new_tab = new PMTab(name, this.EndPoint);
 
                 if (this.IsBlack)
                     new_tab.SetToBlack();
@@ -392,7 +393,7 @@ namespace cb0t
                             return;
                         }
 
-                PMTab new_tab = new PMTab(name);
+                PMTab new_tab = new PMTab(name, this.EndPoint);
 
                 if (this.IsBlack)
                     new_tab.SetToBlack();
@@ -959,11 +960,16 @@ namespace cb0t
                 }
                 else
                 {
-                    try
+                    String check = this.url_tag.ToUpper();
+
+                    if (check.StartsWith("HTTP://") || check.StartsWith("HTTPS://") || check.StartsWith("WWW."))
                     {
-                        System.Diagnostics.Process.Start(this.url_tag);
+                        Scripting.JSOutboundTextItem cb = new Scripting.JSOutboundTextItem();
+                        cb.Type = Scripting.JSOutboundTextItemType.Link;
+                        cb.Text = this.url_tag;
+                        cb.EndPoint = this.EndPoint;
+                        Scripting.ScriptManager.PendingUIText.Enqueue(cb);
                     }
-                    catch { }
                 }
             }
         }

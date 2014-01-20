@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -56,8 +57,16 @@ namespace cb0t
             }
             else
             {
-                try { Process.Start(e.LinkText); }
-                catch { }
+                String check = e.LinkText.ToUpper();
+
+                if (check.StartsWith("HTTP://") || check.StartsWith("HTTPS://") || check.StartsWith("WWW."))
+                {
+                    Scripting.JSOutboundTextItem cb = new Scripting.JSOutboundTextItem();
+                    cb.Type = Scripting.JSOutboundTextItemType.Link;
+                    cb.Text = e.LinkText;
+                    cb.EndPoint = this.EndPoint;
+                    Scripting.ScriptManager.PendingUIText.Enqueue(cb);
+                }
             }
         }
 
@@ -222,6 +231,36 @@ namespace cb0t
 
             while (this.CanUndo)
                 this.ClearUndo();
+        }
+
+        public IPEndPoint EndPoint { get; set; }
+
+        public RtfScreen(IPEndPoint ep)
+        {
+            this.EndPoint = ep;
+            this.BackColor = Color.White;
+            this.HideSelection = false;
+            this.DetectUrls = true;
+            this.ctx = new ContextMenuStrip();
+            this.ctx.ShowImageMargin = false;
+            this.ctx.ShowCheckMargin = false;
+            this.ctx.Items.Add("Save image...");//0
+            this.ctx.Items[0].Visible = false;
+            this.ctx.Items.Add("Edit...");//1
+            this.ctx.Items[1].Visible = false;
+            this.ctx.Items.Add("Save voice clip...");//2
+            this.ctx.Items[2].Visible = false;
+            this.ctx.Items.Add("Clear screen");//3
+            this.ctx.Items.Add("Export text");//4
+            this.ctx.Items.Add("Copy to clipboard");//5
+            this.ctx.Items.Add("Pause/Unpause screen");//6
+            this.ctx.Opening += this.CTXOpening;
+            this.ctx.Closed += this.CTXClosed;
+            this.ctx.ItemClicked += this.CTXItemClicked;
+            this.ContextMenuStrip = this.ctx;
+            this.paused_items.Clear();
+            this.paused_items = new List<PausedItem>();
+            this.UpdateTemplate();
         }
 
         public RtfScreen()

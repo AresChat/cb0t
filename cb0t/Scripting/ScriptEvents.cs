@@ -87,6 +87,30 @@ namespace cb0t
             return true;
         }
 
+        public static bool OnLinkClicked(Room room, String text)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONLINKCLICKED != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                object obj = script.EVENT_ONLINKCLICKED.Call(script.JS.Global, r, text);
+
+                                if (obj != null)
+                                    if (obj is bool)
+                                        if (!((bool)obj))
+                                            return false;
+                            }
+                            catch { }
+
+                            break;
+                        }
+
+            return true;
+        }
+
         public static String OnCommandSending(Room room, String text)
         {
             String str = text;

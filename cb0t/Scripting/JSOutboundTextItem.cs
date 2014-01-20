@@ -19,6 +19,7 @@ namespace cb0t.Scripting
         Command,
         Emote,
         Public,
-        Private
+        Private,
+        Link
     }
 }
