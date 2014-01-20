@@ -185,6 +185,16 @@ namespace cb0t.Scripting
                                 catch { }
                         }
                     }
+                    else if (item is Objects.JSHttpRequestResult)
+                    {
+                        Objects.JSHttpRequestResult cb = (Objects.JSHttpRequestResult)item;
+                        JSScript script = Scripts.Find(x => x.ScriptName == cb.ScriptName);
+
+                        if (script != null)
+                        if (cb.Callback != null)
+                            try { cb.Callback.Call(cb, !String.IsNullOrEmpty(cb.Data)); }
+                            catch { }
+                    }
                 }
             }
         }
