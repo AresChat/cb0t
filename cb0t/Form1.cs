@@ -632,10 +632,10 @@ namespace cb0t
                 if (this.terminate)
                     return;
 
-                Scripting.ScriptManager.EventCycle();
+                ulong time_long = Settings.TimeLong;
+                Scripting.ScriptManager.EventCycle(time_long);
                 Room[] pool = RoomPool.Rooms.ToArray();
                 uint time = Settings.Time;
-                ulong time_long = Settings.TimeLong;
                 bool check_song = time > this.last_song_check;
                 bool do_timer = time > this.last_song_check;
                 bool do_trickle = time_long >= (this.last_trickle + 500);

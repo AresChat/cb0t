@@ -103,6 +103,7 @@ namespace cb0t.Scripting
 
         public void ResetScript()
         {
+            JSTimers.ClearTimers(this.ScriptName);
             this.EVENT_ONANNOUNCERECEIVED = null;
             this.EVENT_ONANNOUNCERECEIVING = null;
             this.EVENT_ONCOMMANDSENDING = null;

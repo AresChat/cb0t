@@ -406,6 +406,62 @@ namespace cb0t
             full = null;
         }
 
+        public void ScriptScribble(byte[] data, String target)
+        {
+            if (target == null)
+                this.Panel.Scribble(Zip.Decompress(data));
+
+            List<byte> full = new List<byte>(data);
+            data = null;
+
+            if (full.Count <= 4000)
+            {
+                if (target == null)
+                    this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst((uint)full.Count, 0, full.ToArray()));
+                else
+                    this.sock.SendTrickle(TCPOutbound.PMScribbleOnce(target, full.ToArray(), this.crypto));
+            }
+            else
+            {
+                List<byte[]> p = new List<byte[]>();
+                uint s_size = (uint)full.Count;
+
+                while (full.Count > 4000)
+                {
+                    p.Add(full.GetRange(0, 4000).ToArray());
+                    full.RemoveRange(0, 4000);
+                }
+
+                if (full.Count > 0)
+                    p.Add(full.ToArray());
+
+                if (target == null)
+                {
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomFirst(s_size, (ushort)(p.Count - 1), p[i]));
+                        else
+                            this.sock.SendTrickle(TCPOutbound.ScribbleRoomChunk(p[i]));
+                }
+                else
+                {
+                    for (int i = 0; i < p.Count; i++)
+                        if (i == 0)
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleFirst(target, p[i], this.crypto));
+                        else if (i == (p.Count - 1))
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleLast(target, p[i], this.crypto));
+                        else
+                            this.sock.SendTrickle(TCPOutbound.PMScribbleChunk(target, p[i], this.crypto));
+                }
+
+                p.Clear();
+                p = null;
+            }
+
+            full.Clear();
+            full = null;
+        }
+
         private void WantScribble(object sender, EventArgs e)
         {
             if (this.state != SessionState.Connected)
