@@ -59,8 +59,10 @@ namespace cb0t.Scripting
                         }
         }
 
-        public static void EventCycle()
+        public static void EventCycle(ulong time)
         {
+            JSTimers.ServiceTimers(time);
+
             if (PendingTerminators.Pending)
             {
                 IPEndPoint ep = null;
@@ -191,9 +193,19 @@ namespace cb0t.Scripting
                         JSScript script = Scripts.Find(x => x.ScriptName == cb.ScriptName);
 
                         if (script != null)
-                        if (cb.Callback != null)
-                            try { cb.Callback.Call(cb, !String.IsNullOrEmpty(cb.Data)); }
-                            catch { }
+                            if (cb.Callback != null)
+                                try { cb.Callback.Call(cb, !String.IsNullOrEmpty(cb.Data)); }
+                                catch { }
+                    }
+                    else if (item is Objects.JSScribbleImage)
+                    {
+                        Objects.JSScribbleImage cb = (Objects.JSScribbleImage)item;
+                        JSScript script = Scripts.Find(x => x.ScriptName == cb.ScriptName);
+
+                        if (script != null)
+                            if (cb.Callback != null)
+                                try { cb.Callback.Call(cb, cb.Data != null); }
+                                catch { }
                     }
                 }
             }

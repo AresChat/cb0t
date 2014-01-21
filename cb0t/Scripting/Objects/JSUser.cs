@@ -243,6 +243,23 @@ namespace cb0t.Scripting.Objects
             set { }
         }
 
+        [JSFunction(Name = "scribble", IsWritable = false, IsEnumerable = true)]
+        public void Scribble(object a)
+        {
+            if (a is Objects.JSScribbleImage)
+            {
+                Objects.JSScribbleImage cb = (Objects.JSScribbleImage)a;
+
+                if (cb.Data != null)
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.ScriptScribble(cb.Data, this.U_Name);
+                }
+            }
+        }
+
         [JSProperty(Name = "textColor")]
         public String F_TextColor
         {

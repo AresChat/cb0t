@@ -130,12 +130,16 @@
     <Compile Include="Scripting\ICustomUI.cs" />
     <Compile Include="Scripting\Instances\JSHttpRequest.cs" />
     <Compile Include="Scripting\Instances\JSHttpRequestInstance.cs" />
+    <Compile Include="Scripting\Instances\JSScribble.cs" />
+    <Compile Include="Scripting\Instances\JSScribbleInstance.cs" />
     <Compile Include="Scripting\Instances\JSXmlParser.cs" />
     <Compile Include="Scripting\Instances\JSXmlParserInstance.cs" />
     <Compile Include="Scripting\IScriptingCallback.cs" />
     <Compile Include="Scripting\JSGlobal.cs" />
     <Compile Include="Scripting\JSOutboundTextItem.cs" />
     <Compile Include="Scripting\JSScript.cs" />
+    <Compile Include="Scripting\JSTimerInstance.cs" />
+    <Compile Include="Scripting\JSTimers.cs" />
     <Compile Include="Scripting\JSUIEventItem.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSChannel.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSChannelCollection.cs" />
@@ -149,6 +153,7 @@
     <Compile Include="Scripting\ObjectPrototypes\JSRedirect.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSRegistryKeyCollection.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSRoom.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSScribbleImage.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUI.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUICheckBox.cs" />
@@ -172,6 +177,7 @@
     <Compile Include="Scripting\Objects\JSRedirect.cs" />
     <Compile Include="Scripting\Objects\JSRegistryKeyCollection.cs" />
     <Compile Include="Scripting\Objects\JSRoom.cs" />
+    <Compile Include="Scripting\Objects\JSScribbleImage.cs" />
     <Compile Include="Scripting\Objects\JSUI.cs" />
     <Compile Include="Scripting\Objects\JSUIButton.cs" />
     <Compile Include="Scripting\Objects\JSUICheckBox.cs" />

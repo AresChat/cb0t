@@ -23,6 +23,34 @@ namespace cb0t.Scripting
             }
         }
 
+        [JSFunction(Name = "clearInterval")]
+        public static bool ClearInterval(object a)
+        {
+            if (!(a is Undefined))
+            {
+                int i;
+
+                if (int.TryParse(a.ToString(), out i))
+                    return JSTimers.Remove(i);
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "clearTimeout")]
+        public static bool ClearTimeout(object a)
+        {
+            if (!(a is Undefined))
+            {
+                int i;
+
+                if (int.TryParse(a.ToString(), out i))
+                    return JSTimers.Remove(i);
+            }
+
+            return false;
+        }
+
         [JSFunction(Name = "clientVersion")]
         public static String DoClientVersion()
         {
@@ -192,6 +220,74 @@ namespace cb0t.Scripting
         public static int DoScriptVersion()
         {
             return ScriptManager.SCRIPT_VERSION;
+        }
+
+        [JSFunction(Name = "setInterval", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static int SetInterval(ScriptEngine eng, object a, object b)
+        {
+            if (!(a is Undefined) && !(b is Undefined))
+            {
+                if (a is UserDefinedFunction)
+                {
+                    UserDefinedFunction cb = (UserDefinedFunction)a;
+                    int i;
+
+                    if (int.TryParse(b.ToString(), out i))
+                    {
+                        if (i >= 250)
+                        {
+                            JSTimerInstance t = new JSTimerInstance
+                            {
+                                Callback = cb,
+                                Ident = JSTimers.NextIdent++,
+                                Interval = i,
+                                Loop = true,
+                                ScriptName = eng.ScriptName,
+                                Time = (Settings.TimeLong + (ulong)i)
+                            };
+
+                            JSTimers.Add(t);
+                            return t.Ident;
+                        }
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        [JSFunction(Name = "setTimeout", Flags = JSFunctionFlags.HasEngineParameter)]
+        public static int SetTimeout(ScriptEngine eng, object a, object b)
+        {
+            if (!(a is Undefined) && !(b is Undefined))
+            {
+                if (a is UserDefinedFunction)
+                {
+                    UserDefinedFunction cb = (UserDefinedFunction)a;
+                    int i;
+
+                    if (int.TryParse(b.ToString(), out i))
+                    {
+                        if (i >= 250)
+                        {
+                            JSTimerInstance t = new JSTimerInstance
+                            {
+                                Callback = cb,
+                                Ident = JSTimers.NextIdent++,
+                                Interval = i,
+                                Loop = false,
+                                ScriptName = eng.ScriptName,
+                                Time = (Settings.TimeLong + (ulong)i)
+                            };
+
+                            JSTimers.Add(t);
+                            return t.Ident;
+                        }
+                    }
+                }
+            }
+
+            return -1;
         }
     }
 }
