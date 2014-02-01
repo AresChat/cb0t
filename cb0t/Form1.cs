@@ -687,13 +687,13 @@ namespace cb0t
 
                         if (do_trickle)
                             pool[i].TrickleTasks();
-
-                        if (check_song)
-                            ScriptEvents.OnSongChanged(pool[i], this.last_song);
-
-                        if (do_timer)
-                            ScriptEvents.OnTimer(pool[i]);
                     }
+
+                if (check_song)
+                    ScriptEvents.OnSongChanged(this.last_song);
+
+                if (do_timer)
+                    ScriptEvents.OnTimer();
 
                 Thread.Sleep(30);
             }

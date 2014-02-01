@@ -10,7 +10,7 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 2001;
+        public const int SCRIPT_VERSION = 2002;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
@@ -20,10 +20,12 @@ namespace cb0t.Scripting
         public static List<CustomJSMenuOption> UserListMenuOptions { get; private set; }
         public static List<CustomJSMenuOption> RoomMenuOptions { get; private set; }
 
-        public static void AddRoom(IPEndPoint ep)
+        public static void AddRoom(IPEndPoint ep, FavouritesListItem creds)
         {
             foreach (JSScript script in Scripts)
-                script.Rooms.Add(new Objects.JSRoom(script.JS.Object.InstancePrototype, ep));
+                script.Rooms.Add(new Objects.JSRoom(script.JS.Object.InstancePrototype, ep, creds));
+
+            ScriptEvents.OnRoomOpened(ep);
         }
 
         public static void AddUser(IPEndPoint ep, User u)
@@ -70,6 +72,7 @@ namespace cb0t.Scripting
                 while (PendingTerminators.TryDequeue(out ep))
                 {
                     ClearUsers(ep);
+                    ScriptEvents.OnRoomClosed(ep);
 
                     foreach (JSScript script in Scripts)
                         script.Rooms.RemoveAll(x => x.EndPoint.Equals(ep));
@@ -145,6 +148,12 @@ namespace cb0t.Scripting
                         item.Element.ItemDoubleClickCallback();
                     else if (item.EventType == JSUIEventType.SelectedItemChanged)
                         item.Element.SelectedItemChangedCallback();
+                    else if (item.EventType == JSUIEventType.UISelected)
+                        ScriptEvents.OnUISelected((String)item.Arg);
+                    else if (item.EventType == JSUIEventType.RoomOpened)
+                        ScriptEvents.OnRoomOpened((IPEndPoint)item.Arg);
+                    else if (item.EventType == JSUIEventType.RoomClosed)
+                        ScriptEvents.OnRoomClosed((IPEndPoint)item.Arg);
                 }
             }
 

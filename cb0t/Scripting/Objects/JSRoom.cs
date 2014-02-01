@@ -16,12 +16,13 @@ namespace cb0t.Scripting.Objects
             this.PopulateFunctions();
         }
 
-        public JSRoom(ObjectInstance prototype, IPEndPoint ep)
+        public JSRoom(ObjectInstance prototype, IPEndPoint ep, FavouritesListItem creds)
             : base(prototype.Engine, ((ClrFunction)prototype.Engine.Global["Room"]).InstancePrototype)
         {
             this.PopulateFunctions();
             this.EndPoint = ep;
             this.UserList = new List<JSUser>();
+            this.Creds = creds.Copy();
         }
 
         protected override string InternalClassName
@@ -31,6 +32,7 @@ namespace cb0t.Scripting.Objects
 
         // begin
 
+        private FavouritesListItem Creds { get; set; }
         public IPEndPoint EndPoint { get; private set; }
         public List<JSUser> UserList { get; private set; }
 
@@ -194,6 +196,8 @@ namespace cb0t.Scripting.Objects
 
                 if (r != null)
                     return Hashlink.EncodeHashlink(r.Credentials);
+                else if (this.Creds != null)
+                    return Hashlink.EncodeHashlink(this.Creds);
                 else
                     return null;
             }
@@ -209,6 +213,8 @@ namespace cb0t.Scripting.Objects
 
                 if (r != null)
                     return r.Credentials.Name;
+                else if (this.Creds != null)
+                    return this.Creds.Name;
                 else
                     return null;
             }
@@ -239,6 +245,8 @@ namespace cb0t.Scripting.Objects
 
                 if (r != null)
                     return r.Credentials.Server;
+                else if (this.Creds != null)
+                    return this.Creds.Server;
                 else
                     return null;
             }
@@ -254,6 +262,8 @@ namespace cb0t.Scripting.Objects
 
                 if (r != null)
                     return r.Credentials.Topic;
+                else if (this.Creds != null)
+                    return this.Creds.Topic;
                 else
                     return null;
             }
@@ -271,6 +281,21 @@ namespace cb0t.Scripting.Objects
                     return r.MyName;
                 else
                     return null;
+            }
+            set { }
+        }
+
+        [JSProperty(Name = "userLevel")]
+        public int R_UserLevel
+        {
+            get
+            {
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    return r.Panel.Userlist.MyLevel;
+
+                return 0;
             }
             set { }
         }

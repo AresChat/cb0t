@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace cb0t
@@ -1062,48 +1063,52 @@ namespace cb0t
                         }
         }
 
-        public static void OnSongChanged(Room room, String song)
+        public static void OnSongChanged(String song)
         {
-            if (Settings.GetReg<bool>("show_song", true))
-            {
-                if (!String.IsNullOrEmpty(song))
-                    room.SendPersonalMessage("\x0007" + song);
-                else
-                    room.SendPersonalMessage();
-            }
+            AudioHelpers.IsUpdatingNP = true;
 
-            if (room.CanNP)
-                if (!String.IsNullOrEmpty(song))
-                    foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
-                        if (script.EVENT_ONSONGCHANGED != null)
-                            foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                                if (r.EndPoint.Equals(room.EndPoint))
-                                {
-                                    try
-                                    {
-                                        script.EVENT_ONSONGCHANGED.Call(script.JS.Global, r, song);
-                                    }
-                                    catch { }
+            Room[] pool = RoomPool.Rooms.ToArray();
+            bool update_userlist = Settings.GetReg<bool>("show_song", true);
+            bool contains_song = !String.IsNullOrEmpty(song);
 
-                                    break;
-                                }
+            foreach (Room room in pool)
+                if (update_userlist)
+                {
+                    if (!String.IsNullOrEmpty(song))
+                        room.SendPersonalMessage("\x0007" + song);
+                    else
+                        room.SendPersonalMessage();
+                }
+
+            if (contains_song)
+                foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                    if (script.EVENT_ONSONGCHANGED != null)
+                    {
+                        try
+                        {
+                            script.EVENT_ONSONGCHANGED.Call(script.JS.Global, song);
+                        }
+                        catch { }
+
+                        break;
+                    }
+
+            AudioHelpers.IsUpdatingNP = false;
         }
 
-        public static void OnTimer(Room room)
+        public static void OnTimer()
         {
             foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
                 if (script.EVENT_ONTIMER != null)
-                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
-                        if (r.EndPoint.Equals(room.EndPoint))
-                        {
-                            try
-                            {
-                                script.EVENT_ONTIMER.Call(script.JS.Global, r);
-                            }
-                            catch { }
+                {
+                    try
+                    {
+                        script.EVENT_ONTIMER.Call(script.JS.Global);
+                    }
+                    catch { }
 
-                            break;
-                        }
+                    break;
+                }
         }
 
         public static bool OnVoiceClipReceiving(Room room, User user)
@@ -1177,6 +1182,57 @@ namespace cb0t
 
                             break;
                         }
+        }
+
+        public static void OnUISelected(String script_name)
+        {
+            Scripting.JSScript script = Scripting.ScriptManager.Scripts.Find(x => x.ScriptName == script_name);
+
+            if (script != null)
+                if (script.EVENT_ONUISELECTED != null)
+                {
+                    try
+                    {
+                        script.EVENT_ONUISELECTED.Call(script.JS.Global);
+                    }
+                    catch { }
+                }
+        }
+
+        public static void OnRoomOpened(IPEndPoint ep)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONROOMOPENED != null)
+                {
+                    Scripting.Objects.JSRoom jsroom = script.Rooms.Find(x => x.EndPoint.Equals(ep));
+
+                    if (jsroom != null)
+                    {
+                        try
+                        {
+                            script.EVENT_ONROOMOPENED.Call(script.JS.Global, jsroom);
+                        }
+                        catch { }
+                    }
+                }
+        }
+
+        public static void OnRoomClosed(IPEndPoint ep)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONROOMCLOSED != null)
+                {
+                    Scripting.Objects.JSRoom jsroom = script.Rooms.Find(x => x.EndPoint.Equals(ep));
+
+                    if (jsroom != null)
+                    {
+                        try
+                        {
+                            script.EVENT_ONROOMCLOSED.Call(script.JS.Global, jsroom);
+                        }
+                        catch { }
+                    }
+                }
         }
     }
 }

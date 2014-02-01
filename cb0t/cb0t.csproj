@@ -69,7 +69,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>bin\Debug\Interop.WMPLib.dll</HintPath>
     </Reference>
-    <Reference Include="Jurassic">
+    <Reference Include="Jurassic, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Jurassic.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack">

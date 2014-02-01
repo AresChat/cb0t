@@ -713,6 +713,9 @@ namespace cb0t
 
         public void SendText(String text)
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -722,6 +725,9 @@ namespace cb0t
 
         public void SendEmote(String text)
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -731,6 +737,9 @@ namespace cb0t
 
         public void SendCommand(String text)
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -740,6 +749,9 @@ namespace cb0t
 
         public void SendPersonalMessage(String text)
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -749,6 +761,9 @@ namespace cb0t
 
         public void SendPersonalMessage()
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -758,6 +773,9 @@ namespace cb0t
 
         public void SendCustomData(String ident, String data)
         {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
             if (this.state != SessionState.Connected)
                 return;
 
@@ -792,7 +810,7 @@ namespace cb0t
                     if (!this.ScriptObjectCreated)
                     {
                         this.ScriptObjectCreated = true;
-                        Scripting.ScriptManager.AddRoom(this.EndPoint);
+                        Scripting.ScriptManager.AddRoom(this.EndPoint, this.Credentials);
                     }
 
                     this.state = SessionState.Connecting;
