@@ -9,6 +9,8 @@ namespace cb0t
 {
     class AudioHelpers
     {
+        public static bool IsUpdatingNP { get; set; }
+
         [DllImport("winmm.dll")]
         private static extern int waveInGetNumDevs();
         [DllImport("winmm.dll")]

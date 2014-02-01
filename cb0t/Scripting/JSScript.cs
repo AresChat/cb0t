@@ -59,6 +59,9 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONVOICECLIPRECEIVED { get; set; }
         public UserDefinedFunction EVENT_ONCUSTOMDATARECEIVED { get; set; }
         public UserDefinedFunction EVENT_ONLINKCLICKED { get; set; }
+        public UserDefinedFunction EVENT_ONUISELECTED { get; set; }
+        public UserDefinedFunction EVENT_ONROOMOPENED { get; set; }
+        public UserDefinedFunction EVENT_ONROOMCLOSED { get; set; }
 
         public JSScript(String name, bool is_subscript)
         {
@@ -165,7 +168,7 @@ namespace cb0t.Scripting
 
             foreach (Room room in RoomPool.Rooms)
             {
-                this.Rooms.Add(new Objects.JSRoom(this.JS.Object.InstancePrototype, room.EndPoint));
+                this.Rooms.Add(new Objects.JSRoom(this.JS.Object.InstancePrototype, room.EndPoint, room.Credentials));
 
                 foreach (User user in room.UserPool)
                     this.Rooms[this.Rooms.Count - 1].UserList.Add(new Objects.JSUser(this.JS.Object.InstancePrototype, user, room.EndPoint));

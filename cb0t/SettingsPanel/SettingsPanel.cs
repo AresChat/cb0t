@@ -152,7 +152,15 @@ namespace cb0t
 
                 if (script != null)
                     if (script.UI.UIPanel != null)
+                    {
                         this.panel1.Controls.Add(script.UI.UIPanel);
+
+                        Scripting.ScriptManager.PendingUIEvents.Enqueue(new Scripting.JSUIEventItem
+                        {
+                            Arg = script.ScriptName,
+                            EventType = Scripting.JSUIEventType.UISelected
+                        });
+                    }
             }
         }
 

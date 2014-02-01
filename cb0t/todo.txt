@@ -1,1 +1,1 @@
-﻿
+﻿expose client external and local ip to scripting

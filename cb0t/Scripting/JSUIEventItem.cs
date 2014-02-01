@@ -19,6 +19,9 @@ namespace cb0t.Scripting
         Click,
         Select,
         SelectedItemChanged,
-        ItemDoubleClick
+        ItemDoubleClick,
+        UISelected,
+        RoomOpened,
+        RoomClosed
     }
 }
