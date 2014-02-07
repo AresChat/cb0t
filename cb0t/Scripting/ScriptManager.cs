@@ -10,7 +10,7 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 2002;
+        public const int SCRIPT_VERSION = 2021;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }

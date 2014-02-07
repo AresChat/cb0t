@@ -36,6 +36,22 @@ namespace cb0t.Scripting.Objects
         public IPEndPoint EndPoint { get; private set; }
         public List<JSUser> UserList { get; private set; }
 
+        [JSFunction(Name = "equals", IsEnumerable = true, IsWritable = false)]
+        public bool R_IsEqual(object a)
+        {
+            if (!(a is Undefined))
+                if (a is JSRoom)
+                {
+                    JSRoom compare = (JSRoom)a;
+
+                    if (compare.EndPoint != null)
+                        if (this.EndPoint != null)
+                            return this.EndPoint.Equals(compare.EndPoint);
+                }
+
+            return false;
+        }
+
         [JSFunction(Name = "popup", IsEnumerable = true, IsWritable = false)]
         public void R_Popup(object a, object b)
         {
