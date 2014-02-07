@@ -86,7 +86,15 @@ namespace cb0t
                 if (this.sock == null)
                     return false;
 
-                return this.sock.Poll(0, SelectMode.SelectWrite);
+                bool result = false;
+                
+                try
+                {
+                    result = this.sock.Poll(0, SelectMode.SelectWrite);
+                }
+                catch { }
+
+                return result;
             }
         }
 

@@ -109,12 +109,17 @@ namespace cb0t.Scripting.Objects
                                     r.ForceUnselect();
                             }
 
-                ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
-                {
-                    Arg = null,
-                    Element = this,
-                    EventType = JSUIEventType.Select
-                });
+                this._checked = true;
+
+                if (!this._manual_select)
+                    ScriptManager.PendingUIEvents.Enqueue(new JSUIEventItem
+                    {
+                        Arg = null,
+                        Element = this,
+                        EventType = JSUIEventType.Select
+                    });
+
+                this._manual_select = false;
             }
         }
 
@@ -130,11 +135,23 @@ namespace cb0t.Scripting.Objects
         }
 
         private bool _checked;
-        [JSProperty(Name = "checked")]
+        private bool _manual_select = false;
+        [JSProperty(Name = "selected")]
         public bool Checked
         {
             get { return this._checked; }
-            set { }
+            set
+            {
+                if (value && !this._checked)
+                {
+                    this._manual_select = true;
+
+                    if (this.UIRadioButton.IsHandleCreated)
+                        this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Checked = true));
+                    else
+                        this.UIRadioButton.Checked = true;
+                }
+            }
         }
 
         private int _x;

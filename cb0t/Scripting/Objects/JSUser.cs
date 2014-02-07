@@ -95,6 +95,25 @@ namespace cb0t.Scripting.Objects
             return false;
         }
 
+        [JSFunction(Name = "equals", IsEnumerable = true, IsWritable = false)]
+        public bool R_IsEqual(object a)
+        {
+            if (!(a is Undefined))
+                if (a is JSUser)
+                {
+                    JSUser compare = (JSUser)a;
+
+                    if (compare.EndPoint != null)
+                        if (this.EndPoint != null)
+                            if (this.EndPoint.Equals(compare.EndPoint))
+                                if (!String.IsNullOrEmpty(compare.U_Name))
+                                    if (!String.IsNullOrEmpty(this.U_Name))
+                                        return this.U_Name == compare.U_Name;
+                }
+
+            return false;
+        }
+
         [JSProperty(Name = "externalIp")]
         public String ExternalIP
         {
@@ -240,6 +259,26 @@ namespace cb0t.Scripting.Objects
         public String Region
         {
             get { return this.parent.Region; }
+            set { }
+        }
+
+        [JSProperty(Name = "room")]
+        public JSRoom GetRoom
+        {
+            get
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == this.Engine.ScriptName);
+
+                if (script != null)
+                {
+                    JSRoom room = script.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (room != null)
+                        return room;
+                }
+
+                return null;
+            }
             set { }
         }
 
