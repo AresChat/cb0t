@@ -15,6 +15,7 @@ namespace cb0t
         public String Password { get; set; }
         public bool AutoJoin { get; set; }
         public String Server { get; set; }
+        public String CountString { get; set; }
 
         public FavouritesListItem()
         {
@@ -31,6 +32,7 @@ namespace cb0t
             c.IP = this.IP;
             c.Password = this.Password;
             c.AutoJoin = this.AutoJoin;
+            c.CountString = this.CountString;
             return c;
         }
     }

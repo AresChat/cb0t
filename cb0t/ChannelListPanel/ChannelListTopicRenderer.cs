@@ -22,7 +22,7 @@ namespace cb0t
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.Clear(Color.White);
-
+                
                 String text = org.Name;
                 char[] letters = text.ToCharArray();
                 int x = 0;
@@ -52,6 +52,50 @@ namespace cb0t
                 item.NameImg = new Bitmap(x + 2, 15);
 
                 using (Graphics g2 = Graphics.FromImage(item.NameImg))
+                {
+                    g2.Clear(Color.Transparent);
+                    g2.DrawImage(bmp, new Point(0, 0));
+                }
+            }
+
+            using (Bitmap bmp = new Bitmap(35, 15))
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+
+                String text = org.CountString;
+
+                if (String.IsNullOrEmpty(text))
+                    text = String.Empty;
+
+                char[] letters = text.ToCharArray();
+                int x = 0;
+
+                for (var i = 0; i < letters.Length; i++)
+                {
+                    switch (letters[i])
+                    {
+                        case ' ':
+                            x += 3;
+                            break;
+
+                        default:
+                            int w = (int)Math.Round((double)g.MeasureString(letters[i].ToString(), this.t_font, 100, StringFormat.GenericTypographic).Width);
+
+                            if ((w + x) < 35)
+                                g.DrawString(letters[i].ToString(), this.t_font, Brushes.Black, new PointF(x, 0));
+
+                            x += w;
+                            break;
+                    }
+
+                    if (x >= 35)
+                        break;
+                }
+
+                item.CountImg = new Bitmap(x + 2, 15);
+
+                using (Graphics g2 = Graphics.FromImage(item.CountImg))
                 {
                     g2.Clear(Color.Transparent);
                     g2.DrawImage(bmp, new Point(0, 0));

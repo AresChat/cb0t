@@ -9,6 +9,7 @@ namespace cb0t
     class ChannelListItem
     {
         public String Name { get; set; }
+        public String StrippedName { get; set; }
         public String Topic { get; set; }
         public String StrippedTopic { get; set; }
         public ushort Port { get; set; }
@@ -25,6 +26,18 @@ namespace cb0t
         public ChannelListItem(String name, String topic, IPAddress ip, ushort port)
         {
             this.Name = name;
+            StringBuilder sb = new StringBuilder();
+            int i;
+
+            foreach (char c in this.Name.ToUpper().ToCharArray())
+            {
+                i = (int)c;
+
+                if ((i >= 65 && i <= 90) || (i >= 48 && i <= 57))
+                    sb.Append(c);
+            }
+
+            this.StrippedName = sb.ToString();
             this.Topic = topic;
             this.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(this.Topic)).ToUpper();
             this.Port = port;
@@ -40,6 +53,18 @@ namespace cb0t
             this.Port = packet.ReadUInt16();
             this.Users = packet.ReadUInt16();
             this.Name = packet.ReadString();
+            StringBuilder sb = new StringBuilder();
+            int i2;
+
+            foreach (char c in this.Name.ToUpper().ToCharArray())
+            {
+                i2 = (int)c;
+
+                if ((i2 >= 65 && i2 <= 90) || (i2 >= 48 && i2 <= 57))
+                    sb.Append(c);
+            }
+
+            this.StrippedName = sb.ToString();
             this.Topic = packet.ReadString();
             this.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(this.Topic)).ToUpper();
             this.Lang = (RoomLanguage)packet.ReadByte();
@@ -69,6 +94,7 @@ namespace cb0t
             f.Name = this.Name;
             f.Port = this.Port;
             f.Topic = this.Topic;
+            f.CountString = this.Users.ToString();
             return f;
         }
     }

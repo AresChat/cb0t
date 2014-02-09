@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChannelListPanel));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.channelListView1 = new cb0t.ChannelListView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportHashlinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToFavouritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -39,22 +43,20 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.exportHashlinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToFavouritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
+            this.channelListView2 = new cb0t.ChannelListView();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportHashlinkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.removeFromFavouritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoJoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
-            this.channelListView1 = new cb0t.ChannelListView();
-            this.channelListView2 = new cb0t.ChannelListView();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,6 +81,47 @@
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
+            // channelListView1
+            // 
+            this.channelListView1.BackColor = System.Drawing.Color.White;
+            this.channelListView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.channelListView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.channelListView1.FullRowSelect = true;
+            this.channelListView1.Location = new System.Drawing.Point(0, 25);
+            this.channelListView1.MultiSelect = false;
+            this.channelListView1.Name = "channelListView1";
+            this.channelListView1.OwnerDraw = true;
+            this.channelListView1.Size = new System.Drawing.Size(586, 197);
+            this.channelListView1.TabIndex = 1;
+            this.channelListView1.UseCompatibleStateImageBehavior = false;
+            this.channelListView1.View = System.Windows.Forms.View.Details;
+            this.channelListView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.channelListView1_ColumnClick);
+            this.channelListView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView1_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportHashlinkToolStripMenuItem,
+            this.addToFavouritesToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(166, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
+            // 
+            // exportHashlinkToolStripMenuItem
+            // 
+            this.exportHashlinkToolStripMenuItem.Name = "exportHashlinkToolStripMenuItem";
+            this.exportHashlinkToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.exportHashlinkToolStripMenuItem.Tag = "1";
+            this.exportHashlinkToolStripMenuItem.Text = "Export hashlink";
+            // 
+            // addToFavouritesToolStripMenuItem
+            // 
+            this.addToFavouritesToolStripMenuItem.Name = "addToFavouritesToolStripMenuItem";
+            this.addToFavouritesToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.addToFavouritesToolStripMenuItem.Tag = "2";
+            this.addToFavouritesToolStripMenuItem.Text = "Add to favourites";
+            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -89,7 +132,9 @@
             this.toolStripTextBox1,
             this.toolStripSeparator2,
             this.toolStripLabel2,
-            this.toolStripComboBox1});
+            this.toolStripComboBox1,
+            this.toolStripLabel3,
+            this.toolStripComboBox2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(586, 25);
@@ -162,29 +207,37 @@
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
             this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
-            // contextMenuStrip1
+            // toolStripLabel3
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportHashlinkToolStripMenuItem,
-            this.addToFavouritesToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(166, 48);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            this.contextMenuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(29, 22);
+            this.toolStripLabel3.Text = " Src:";
             // 
-            // exportHashlinkToolStripMenuItem
+            // toolStripComboBox2
             // 
-            this.exportHashlinkToolStripMenuItem.Name = "exportHashlinkToolStripMenuItem";
-            this.exportHashlinkToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.exportHashlinkToolStripMenuItem.Tag = "1";
-            this.exportHashlinkToolStripMenuItem.Text = "Export hashlink";
+            this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox2.Items.AddRange(new object[] {
+            "Udp",
+            "marsproject"});
+            this.toolStripComboBox2.Name = "toolStripComboBox2";
+            this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
             // 
-            // addToFavouritesToolStripMenuItem
+            // channelListView2
             // 
-            this.addToFavouritesToolStripMenuItem.Name = "addToFavouritesToolStripMenuItem";
-            this.addToFavouritesToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.addToFavouritesToolStripMenuItem.Tag = "2";
-            this.addToFavouritesToolStripMenuItem.Text = "Add to favourites";
+            this.channelListView2.BackColor = System.Drawing.Color.White;
+            this.channelListView2.ContextMenuStrip = this.contextMenuStrip2;
+            this.channelListView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.channelListView2.FullRowSelect = true;
+            this.channelListView2.Location = new System.Drawing.Point(0, 0);
+            this.channelListView2.MultiSelect = false;
+            this.channelListView2.Name = "channelListView2";
+            this.channelListView2.OwnerDraw = true;
+            this.channelListView2.Size = new System.Drawing.Size(586, 135);
+            this.channelListView2.TabIndex = 0;
+            this.channelListView2.UseCompatibleStateImageBehavior = false;
+            this.channelListView2.View = System.Windows.Forms.View.Details;
+            this.channelListView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView2_MouseDoubleClick);
             // 
             // contextMenuStrip2
             // 
@@ -232,38 +285,6 @@
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(100, 23);
             // 
-            // channelListView1
-            // 
-            this.channelListView1.BackColor = System.Drawing.Color.White;
-            this.channelListView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.channelListView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.channelListView1.FullRowSelect = true;
-            this.channelListView1.Location = new System.Drawing.Point(0, 25);
-            this.channelListView1.MultiSelect = false;
-            this.channelListView1.Name = "channelListView1";
-            this.channelListView1.OwnerDraw = true;
-            this.channelListView1.Size = new System.Drawing.Size(586, 197);
-            this.channelListView1.TabIndex = 1;
-            this.channelListView1.UseCompatibleStateImageBehavior = false;
-            this.channelListView1.View = System.Windows.Forms.View.Details;
-            this.channelListView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView1_MouseDoubleClick);
-            // 
-            // channelListView2
-            // 
-            this.channelListView2.BackColor = System.Drawing.Color.White;
-            this.channelListView2.ContextMenuStrip = this.contextMenuStrip2;
-            this.channelListView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.channelListView2.FullRowSelect = true;
-            this.channelListView2.Location = new System.Drawing.Point(0, 0);
-            this.channelListView2.MultiSelect = false;
-            this.channelListView2.Name = "channelListView2";
-            this.channelListView2.OwnerDraw = true;
-            this.channelListView2.Size = new System.Drawing.Size(586, 135);
-            this.channelListView2.TabIndex = 0;
-            this.channelListView2.UseCompatibleStateImageBehavior = false;
-            this.channelListView2.View = System.Windows.Forms.View.Details;
-            this.channelListView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.channelListView2_MouseDoubleClick);
-            // 
             // ChannelListPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -277,9 +298,9 @@
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip2.ResumeLayout(false);
             this.contextMenuStrip2.PerformLayout();
             this.ResumeLayout(false);
@@ -308,6 +329,8 @@
         private System.Windows.Forms.ToolStripMenuItem autoJoinToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
 
     }
 }

@@ -157,6 +157,7 @@ namespace cb0t
 
         private IPEndPoint popup_ep = null;
         private bool can_show_popup = true;
+        private Scripting.JSUIPopupCallback popup_cb = null;
 
         public void ShowPopup(String title, String msg, IPEndPoint room, PopupSound sound)
         {
@@ -166,6 +167,7 @@ namespace cb0t
             if (!this.can_show_popup)
                 return;
 
+            this.popup_cb = null;
             this.can_show_popup = false;
             this.popup_ep = room;
             this.notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
@@ -177,6 +179,24 @@ namespace cb0t
                 InternalSounds.Notify();
             else if (sound == PopupSound.Friend)
                 InternalSounds.Friend();
+        }
+
+        public void ShowPopup(String title, String msg, Scripting.JSUIPopupCallback pcb)
+        {
+            if (Settings.GetReg<bool>("block_popups", false))
+                return;
+
+            if (!this.can_show_popup)
+                return;
+
+            this.popup_cb = pcb;
+            this.can_show_popup = false;
+            this.popup_ep = pcb.Room;
+            this.notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            this.notifyIcon1.BalloonTipTitle = title;
+            this.notifyIcon1.BalloonTipText = msg;
+            this.notifyIcon1.ShowBalloonTip(10000);
+            InternalSounds.Notify();
         }
 
         public byte[] GetScribble()
@@ -218,6 +238,13 @@ namespace cb0t
 
                     this.Activate();
                 }));
+
+                if (this.popup_cb != null)
+                {
+                    Scripting.JSUIPopupCallback pcb = this.popup_cb;
+                    this.popup_cb = null;
+                    Scripting.ScriptManager.PendingPopupCallbacks.Enqueue(pcb);
+                }
             }
         }
 

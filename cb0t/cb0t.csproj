@@ -88,6 +88,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Speech" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -142,6 +144,7 @@
     <Compile Include="Scripting\JSTimerInstance.cs" />
     <Compile Include="Scripting\JSTimers.cs" />
     <Compile Include="Scripting\JSUIEventItem.cs" />
+    <Compile Include="Scripting\JSUIPopupCallback.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSChannel.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSChannelCollection.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSCryptoResult.cs" />
