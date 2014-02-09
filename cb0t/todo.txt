@@ -1,6 +1,2 @@
-﻿expose client external and local ip to scripting
-user count in channel list
-don't zip the msi
-read clist from marsproject
-load scripts on the fly and expose currently loaded scripts
-channel list sorting
+﻿load scripts on the fly and expose currently loaded scripts
+popup callback

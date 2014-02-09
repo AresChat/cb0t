@@ -10,13 +10,14 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 2021;
+        public const int SCRIPT_VERSION = 2022;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
         public static SafeQueue<IPEndPoint> PendingTerminators { get; private set; }
         public static SafeQueue<JSOutboundTextItem> PendingUIText { get; private set; }
         public static SafeQueue<IScriptingCallback> PendingScriptingCallbacks { get; private set; }
+        public static SafeQueue<JSUIPopupCallback> PendingPopupCallbacks { get; private set; }
         public static List<CustomJSMenuOption> UserListMenuOptions { get; private set; }
         public static List<CustomJSMenuOption> RoomMenuOptions { get; private set; }
 
@@ -157,6 +158,27 @@ namespace cb0t.Scripting
                 }
             }
 
+            if (PendingPopupCallbacks.Pending)
+            {
+                JSUIPopupCallback item = null;
+
+                while (PendingPopupCallbacks.TryDequeue(out item))
+                {
+                    JSScript script = Scripts.Find(x => x.ScriptName == item.Callback.Engine.ScriptName);
+
+                    if (script != null)
+                    {
+                        Objects.JSRoom room = script.Rooms.Find(x => x.EndPoint.Equals(item.Room));
+
+                        if (room != null)
+                            try { item.Callback.Call(script.JS.Global, room); }
+                            catch { }
+                    }
+
+                    item.Callback = null;
+                }
+            }
+
             if (PendingScriptingCallbacks.Pending)
             {
                 IScriptingCallback item = null;
@@ -229,6 +251,7 @@ namespace cb0t.Scripting
             UserListMenuOptions = new List<CustomJSMenuOption>();
             RoomMenuOptions = new List<CustomJSMenuOption>();
             PendingScriptingCallbacks = new SafeQueue<IScriptingCallback>();
+            PendingPopupCallbacks = new SafeQueue<JSUIPopupCallback>();
 
             DirectoryInfo dir = new DirectoryInfo(Settings.ScriptPath);
 

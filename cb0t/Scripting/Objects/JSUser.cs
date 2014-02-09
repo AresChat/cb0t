@@ -299,6 +299,24 @@ namespace cb0t.Scripting.Objects
             }
         }
 
+        [JSFunction(Name = "sendCustomData", IsWritable = false, IsEnumerable = true)]
+        public void SendCustomData(object a, object b)
+        {
+            if (!(a is Undefined) && !(b is Undefined))
+            {
+                String ident = a.ToString();
+                String data = b.ToString();
+
+                if (!String.IsNullOrEmpty(ident) && !String.IsNullOrEmpty(data))
+                {
+                    Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                    if (r != null)
+                        r.SendCustomData(this.parent.Name, ident, data);
+                }
+            }
+        }
+
         [JSProperty(Name = "textColor")]
         public String F_TextColor
         {

@@ -9,6 +9,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace cb0t
 {
@@ -27,10 +29,13 @@ namespace cb0t
             this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.ChannelList, 0);
             this.toolStripLabel1.Text = StringTemplate.Get(STType.ChannelList, 1) + ":";
             this.toolStripLabel2.Text = StringTemplate.Get(STType.ChannelList, 2) + ":";
+            this.toolStripLabel3.Text = " " + StringTemplate.Get(STType.AudioSettings, 7) + ":";
             this.channelListView1.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
             this.channelListView2.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
-            this.channelListView1.Columns[1].Text = StringTemplate.Get(STType.ChannelList, 4);
-            this.channelListView2.Columns[1].Text = StringTemplate.Get(STType.ChannelList, 4);
+            this.channelListView1.Columns[1].Text = StringTemplate.Get(STType.UserList, 15);
+            this.channelListView2.Columns[1].Text = StringTemplate.Get(STType.UserList, 15);
+            this.channelListView1.Columns[2].Text = StringTemplate.Get(STType.ChannelList, 4);
+            this.channelListView2.Columns[2].Text = StringTemplate.Get(STType.ChannelList, 4);
             this.exportHashlinkToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 5);
             this.exportHashlinkToolStripMenuItem1.Text = StringTemplate.Get(STType.ChannelList, 5);
             this.addToFavouritesToolStripMenuItem.Text = StringTemplate.Get(STType.ChannelList, 6);
@@ -58,6 +63,7 @@ namespace cb0t
             if (fav_split > 0 && (this.splitContainer1.ClientSize.Height - fav_split) > 0)
                 this.splitContainer1.SplitterDistance = (this.splitContainer1.ClientSize.Height - fav_split);
 
+            this.toolStripComboBox2.SelectedIndex = Settings.GetReg<int>("clist_src", 0);
             this.LoadCache();
             this.LoadFavourites();
             this.setting_up = false;
@@ -103,7 +109,7 @@ namespace cb0t
         private List<ChannelListViewItem> gfx_items = new List<ChannelListViewItem>();
         private ChannelListTopicRenderer gfx = new ChannelListTopicRenderer();
 
-        private void CheckNewItems(ChannelListItem[] rooms)
+        private void CheckNewItems(ChannelListItem[] rooms, bool from_mars)
         {
             try
             {
@@ -115,7 +121,7 @@ namespace cb0t
                         if (rooms[i].Users > 0)
                         {
                             full_channel_list.Add(rooms[i]);
-                            ChannelListViewItem item = new ChannelListViewItem();
+                            ChannelListViewItem item = new ChannelListViewItem(rooms[i].StrippedName, rooms[i].Users);
                             this.gfx.RenderChannelListItem(item, rooms[i]);
                             this.gfx_items.Add(item);
 
@@ -127,19 +133,94 @@ namespace cb0t
                                 }
                         }
 
+                    String pre = from_mars ? "Channels" : "Searching";
+
                     if (full_channel_list.Count == this.part_channel_list.Count)
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + full_channel_list.Count + ")" });
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = pre + " (" + full_channel_list.Count + ")" });
                     else
-                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
+                        this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = pre + " (" + this.part_channel_list.Count + "/" + full_channel_list.Count + ")" });
+
+                    if (from_mars)
+                    {
+                        this.SaveServers();
+                        this.SaveCache();
+                    }
                 }));
             }
             catch { }
+        }
+
+        private void RefreshFromMarsProject()
+        {
+            this.reloading_list = true;
+            this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
+            this.Terminate = false;
+
+            MarsProjectResult result = null;
+
+            try
+            {
+                WebRequest request = WebRequest.Create("http://chatrooms.marsproject.net/list/json.aspx");
+
+                using (WebResponse response = request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                {
+                    DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(MarsProjectResult));
+                    result = (MarsProjectResult)json.ReadObject(stream);
+                }
+            }
+            catch { }
+
+            if (result != null)
+            {
+                List<ChannelListItem> items = new List<ChannelListItem>();
+
+                foreach (MarsProjectItem r in result.Items)
+                {
+                    ChannelListItem i = new ChannelListItem(r.Name,
+                                                            r.Topic,
+                                                            IPAddress.Parse(r.IP),
+                                                            (ushort)r.Port);
+
+                    i.Lang = (RoomLanguage)Enum.Parse(typeof(RoomLanguage), r.Language);
+                    i.Users = (ushort)r.Count;
+                    items.Add(i);
+                }
+
+                if (items.Count > 2)
+                {
+                    int n = items.Count;
+                    Random rnd = new Random((int)Helpers.UnixTime);
+
+                    while (n > 1)
+                    {
+                        n--;
+                        int k = rnd.Next(n + 1);
+                        ChannelListItem value = items[k];
+                        items[k] = items[n];
+                        items[n] = value;
+                    }
+                }
+                
+                this.CheckNewItems(items.ToArray(), true);
+                items.Clear();
+                items = null;
+            }
+
+            this.toolStrip1.BeginInvoke((Action)(() => this.toolStripButton1.Enabled = true));
+            this.reloading_list = false;
         }
 
         private void RefreshList()
         {
             new Thread(new ThreadStart(() =>
             {
+                if (Settings.GetReg<int>("clist_src", 0) == 1)
+                {
+                    this.RefreshFromMarsProject();
+                    return;
+                }
+
                 this.reloading_list = true;
                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
@@ -200,7 +281,7 @@ namespace cb0t
 
                             if (recv_items.Count > 0)
                             {
-                                this.CheckNewItems(recv_items.ToArray());
+                                this.CheckNewItems(recv_items.ToArray(), false);
                                 recv_items.Clear();
                             }
                         }
@@ -415,11 +496,23 @@ namespace cb0t
                     item.Port = buf.ReadUInt16();
                     item.Lang = (RoomLanguage)buf.ReadByte();
                     item.Name = buf.ReadString();
+                    StringBuilder sb = new StringBuilder();
+                    int i;
+
+                    foreach (char c in item.Name.ToUpper().ToCharArray())
+                    {
+                        i = (int)c;
+
+                        if ((i >= 65 && i <= 90) || (i >= 48 && i <= 57))
+                            sb.Append(c);
+                    }
+
+                    item.StrippedName = sb.ToString();
                     item.Topic = buf.ReadString();
                     item.StrippedTopic = Helpers.StripColors(Helpers.FormatAresColorCodes(item.Topic)).ToUpper();
                     item.Users = buf.ReadUInt16();
                     full_channel_list.Add(item);
-                    ChannelListViewItem vitem = new ChannelListViewItem();
+                    ChannelListViewItem vitem = new ChannelListViewItem(item.StrippedName, item.Users);
                     this.gfx.RenderChannelListItem(vitem, item);
                     this.gfx_items.Add(vitem);
                 }
@@ -466,7 +559,7 @@ namespace cb0t
                     item.Topic = buf.ReadString();
                     item.Password = buf.ReadString();
                     this.favs.Add(item);
-                    ChannelListViewItem vitem = new ChannelListViewItem();
+                    ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
                     this.gfx.RenderChannelListItem(vitem, item);
                     this.g_favs.Add(vitem);
                     this.channelListView2.Items.Add(vitem);
@@ -532,21 +625,25 @@ namespace cb0t
                 return;
 
             FavouritesListItem f = room.ToFavouritesItem();
+            f.CountString = null;
             this.favs.Add(f);
-            ChannelListViewItem vitem = new ChannelListViewItem();
+            ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
             this.gfx.RenderChannelListItem(vitem, f);
             this.g_favs.Add(vitem);
             this.channelListView2.Items.Add(vitem);
             this.SaveFavourites();
         }
 
-        public void AddToFavourites(FavouritesListItem room)
+        public void AddToFavourites(FavouritesListItem r)
         {
+            FavouritesListItem room = r.Copy();
+            room.CountString = null;
+
             if (this.favs.Find(x => x.IP.Equals(room.IP) && x.Port == room.Port) != null)
                 return;
 
             this.favs.Add(room);
-            ChannelListViewItem vitem = new ChannelListViewItem();
+            ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
             this.gfx.RenderChannelListItem(vitem, room);
             this.g_favs.Add(vitem);
             this.channelListView2.Items.Add(vitem);
@@ -651,5 +748,82 @@ namespace cb0t
         {
             return this.favs.FindAll(x => x.AutoJoin).ToArray();
         }
+
+        private void toolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!this.setting_up)
+                Settings.SetReg("clist_src", this.toolStripComboBox2.SelectedIndex);
+        }
+
+        private bool sort_up = true;
+
+        private void channelListView1_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (this.reloading_list || e.Column == 2)
+                return;
+
+            if (full_channel_list.Count > 1)
+            {
+                this.sort_up = !this.sort_up;
+
+                if (e.Column == 0)
+                {
+                    if (this.sort_up)
+                    {
+                        full_channel_list.Sort((x, y) => x.StrippedName.CompareTo(y.StrippedName));
+                        this.gfx_items.Sort((x, y) => x.XName.CompareTo(y.XName));
+                    }
+                    else
+                    {
+                        full_channel_list.Sort((x, y) => y.StrippedName.CompareTo(x.StrippedName));
+                        this.gfx_items.Sort((x, y) => y.XName.CompareTo(x.XName));
+                    }
+                }
+                else if (e.Column == 1)
+                {
+                    if (this.sort_up)
+                    {
+                        full_channel_list.Sort((x, y) => x.Users.CompareTo(y.Users));
+                        this.gfx_items.Sort((x, y) => x.XCount.CompareTo(y.XCount));
+                    }
+                    else
+                    {
+                        full_channel_list.Sort((x, y) => y.Users.CompareTo(x.Users));
+                        this.gfx_items.Sort((x, y) => y.XCount.CompareTo(x.XCount));
+                    }
+                }
+
+                this.FilterResults();
+            }
+        }
+    }
+
+    [DataContract]
+    class MarsProjectResult
+    {
+        [DataMember]
+        public List<MarsProjectItem> Items { get; set; }
+    }
+
+    [DataContract]
+    class MarsProjectItem
+    {
+        [DataMember]
+        public String Name { get; set; }
+
+        [DataMember]
+        public String Topic { get; set; }
+
+        [DataMember]
+        public String Language { get; set; }
+
+        [DataMember]
+        public String IP { get; set; }
+
+        [DataMember]
+        public int Port { get; set; }
+
+        [DataMember]
+        public int Count { get; set; }
     }
 }

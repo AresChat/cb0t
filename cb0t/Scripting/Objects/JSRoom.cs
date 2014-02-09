@@ -53,7 +53,7 @@ namespace cb0t.Scripting.Objects
         }
 
         [JSFunction(Name = "popup", IsEnumerable = true, IsWritable = false)]
-        public void R_Popup(object a, object b)
+        public void R_Popup(object a, object b, object c)
         {
             if (!(a is Undefined))
                 if (!(b is Undefined))
@@ -63,7 +63,18 @@ namespace cb0t.Scripting.Objects
                     Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
 
                     if (r != null)
-                        r.ShowPopup(caption, text, PopupSound.Notify);
+                        if (c is Undefined)
+                            r.ShowPopup(caption, text, PopupSound.Notify);
+                        else if (c is UserDefinedFunction)
+                        {
+                            JSUIPopupCallback cb = new JSUIPopupCallback
+                            {
+                                Callback = (UserDefinedFunction)c,
+                                Room = this.EndPoint
+                            };
+
+                            r.ShowPopup(caption, text, cb);
+                        }
                 }
         }
 
@@ -120,7 +131,7 @@ namespace cb0t.Scripting.Objects
             if (!(a is Undefined) && !(b is Undefined))
             {
                 String ident = a.ToString();
-                String data = a.ToString();
+                String data = b.ToString();
 
                 if (!String.IsNullOrEmpty(ident) && !String.IsNullOrEmpty(data))
                 {

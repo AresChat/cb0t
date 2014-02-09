@@ -783,10 +783,28 @@ namespace cb0t
                 this.sock.Send(TCPOutbound.CustomCbotData(ident, Encoding.UTF8.GetBytes(data), this.crypto));
         }
 
+        public void SendCustomData(String target, String ident, String data)
+        {
+            if (AudioHelpers.IsUpdatingNP && !this.CanNP)
+                return;
+
+            if (this.state != SessionState.Connected)
+                return;
+
+            if (this.sock != null)
+                this.sock.Send(TCPOutbound.CustomCbotData(target, ident, Encoding.UTF8.GetBytes(data), this.crypto));
+        }
+
         public void ShowPopup(String title, String msg, PopupSound sound)
         {
             if (Settings.GetReg<bool>("can_popup", true))
                 this.owner_frm.BeginInvoke((Action)(() => this.owner_frm.ShowPopup(title, msg, this.EndPoint, sound)));
+        }
+
+        public void ShowPopup(String title, String msg, Scripting.JSUIPopupCallback cb)
+        {
+            if (Settings.GetReg<bool>("can_popup", true))
+                this.owner_frm.BeginInvoke((Action)(() => this.owner_frm.ShowPopup(title, msg, cb)));
         }
 
         public void TrickleTasks()

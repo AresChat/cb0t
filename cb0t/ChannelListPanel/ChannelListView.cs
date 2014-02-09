@@ -29,9 +29,11 @@ namespace cb0t
             this.OwnerDraw = true;
             this.View = View.Details;
             this.Columns.Add("Name");
+            this.Columns.Add("Users");
             this.Columns.Add("Topic");
             this.Columns[0].Width = 170;
-            this.Columns[1].Width = (this.Width - 170);
+            this.Columns[1].Width = 40;
+            this.Columns[2].Width = (this.Width - 210);
             this.FullRowSelect = true;
             this.MultiSelect = false;
 
@@ -69,7 +71,9 @@ namespace cb0t
         {
             if (e.ColumnIndex == 0)
                 e.Graphics.DrawImage(((ChannelListViewItem)e.Item).NameImg, new Point(e.SubItem.Bounds.X + 10, e.SubItem.Bounds.Y));
-            else
+            else if (e.ColumnIndex == 1)
+                e.Graphics.DrawImage(((ChannelListViewItem)e.Item).CountImg, new Point(e.SubItem.Bounds.X + 6, e.SubItem.Bounds.Y));
+            else if (e.ColumnIndex == 2)
                 e.Graphics.DrawImage(((ChannelListViewItem)e.Item).TopicImg, new Point(e.SubItem.Bounds.X, e.SubItem.Bounds.Y));
         }
 
@@ -84,19 +88,23 @@ namespace cb0t
                     break;
 
                 case 1:
-                    e.NewWidth = (this.Width - 170);
+                    e.NewWidth = 40;
+                    break;
+
+                case 2:
+                    e.NewWidth = (this.Width - 210);
                     break;
             }
         }
 
         protected override void OnResize(EventArgs e)
         {
-            if (this.Columns.Count == 2)
+            if (this.Columns.Count == 3)
             {
                 if (this.CurrentWidth != this.Width)
                 {
                     this.CurrentWidth = this.Width;
-                    this.Columns[1].Width = (this.Width - 170);
+                    this.Columns[2].Width = (this.Width - 210);
                 }
             }
 
@@ -110,7 +118,7 @@ namespace cb0t
             using (LinearGradientBrush lb = new LinearGradientBrush(r, this.column_bg1, this.column_bg2, 90f))
                 e.Graphics.FillRectangle(lb, r);
 
-            if (e.ColumnIndex == 1)
+            if (e.ColumnIndex == 2)
                 r = new Rectangle(r.X, r.Y, r.Width - 5, r.Height);
 
             e.Graphics.DrawRectangle(this.column_outline, r);
