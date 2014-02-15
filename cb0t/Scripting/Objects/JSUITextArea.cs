@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -67,6 +68,7 @@ namespace cb0t.Scripting.Objects
         private bool can_do_change_event = true;
         private void UITextBoxTextChanged(object sender, EventArgs e)
         {
+            this.TrimContent();
             this._value = this.UITextBox.Text;
 
             if (this.can_do_change_event)
@@ -76,6 +78,35 @@ namespace cb0t.Scripting.Objects
                     Element = this,
                     EventType = JSUIEventType.ValueChanged
                 });
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, IntPtr lParam);
+
+        private void TrimContent()
+        {
+            if (this.Trimmed)
+                if (this.UITextBox.Lines.Length > 300)
+                {
+                    SendMessage(this.UITextBox.Handle, 0x000B, 0, IntPtr.Zero);
+                    IntPtr eventMask = SendMessage(this.UITextBox.Handle, (0x400 + 59), 0, IntPtr.Zero);
+
+                    while (this.UITextBox.Lines.Length > 200)
+                    {
+                        int i = this.UITextBox.Text.IndexOf("\n");
+
+                        if (i == -1)
+                            break;
+
+                        String line_text = this.UITextBox.Text.Substring(0, i);
+
+                        this.UITextBox.Select(0, (i + 1));
+                        this.UITextBox.SelectedText = String.Empty;
+                    }
+
+                    SendMessage(this.UITextBox.Handle, (0x400 + 69), 0, eventMask);
+                    SendMessage(this.UITextBox.Handle, 0x000B, 1, IntPtr.Zero);
+                }
         }
 
         [JSProperty(Name = "onchange")]
@@ -138,6 +169,9 @@ namespace cb0t.Scripting.Objects
         [JSProperty(Name = "id")]
         public String ID { get; set; }
 
+        [JSProperty(Name = "trimmed")]
+        public bool Trimmed { get; set; }
+
         private String _value;
         [JSProperty(Name = "value")]
         public String Value
@@ -147,7 +181,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() =>
                     {
                         this.can_do_change_event = false;
@@ -172,7 +206,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._readonly = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.ReadOnly = value));
                 else
                     this.UITextBox.ReadOnly = value;
@@ -191,7 +225,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Location = new Point((value + 32), this.UITextBox.Location.Y)));
                 else
                     this.UITextBox.Location = new Point((value + 32), this.UITextBox.Location.Y);
@@ -210,7 +244,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Location = new Point(this.UITextBox.Location.X, (value + 32))));
                 else
                     this.UITextBox.Location = new Point(this.UITextBox.Location.X, (value + 32));
@@ -229,7 +263,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Width = value));
                 else
                     this.UITextBox.Width = value;
@@ -248,7 +282,7 @@ namespace cb0t.Scripting.Objects
 
                 this._height = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Height = value));
                 else
                     this.UITextBox.Height = value;
@@ -258,45 +292,44 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "focus", IsEnumerable = true, IsWritable = false)]
         public void Focus()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Focus()));
             else
                 this.UITextBox.Focus();
         }
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
+
+        private const int WM_VSCROLL = 0x115;
+        private const int SB_BOTTOM = 7;
+        private const int SB_TOP = 6;
+
         [JSFunction(Name = "scrollToTop", IsEnumerable = true, IsWritable = false)]
         public void ScrollToTop()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() =>
                 {
-                    this.UITextBox.SelectionStart = 0;
-                    this.UITextBox.SelectionLength = 0;
-                    this.UITextBox.ScrollToCaret();
+                    SendMessage(this.UITextBox.Handle, WM_VSCROLL, (IntPtr)SB_TOP, IntPtr.Zero);
                 }));
             else
             {
-                this.UITextBox.SelectionStart = 0;
-                this.UITextBox.SelectionLength = 0;
-                this.UITextBox.ScrollToCaret();
+                SendMessage(this.UITextBox.Handle, WM_VSCROLL, (IntPtr)SB_TOP, IntPtr.Zero);
             }
         }
 
         [JSFunction(Name = "scrollToBottom", IsEnumerable = true, IsWritable = false)]
         public void ScrollToBottom()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() =>
                 {
-                    this.UITextBox.SelectionStart = this.UITextBox.Text.Length;
-                    this.UITextBox.SelectionLength = 0;
-                    this.UITextBox.ScrollToCaret();
+                    SendMessage(this.UITextBox.Handle, WM_VSCROLL, (IntPtr)SB_BOTTOM, IntPtr.Zero);
                 }));
             else
             {
-                this.UITextBox.SelectionStart = this.UITextBox.Text.Length;
-                this.UITextBox.SelectionLength = 0;
-                this.UITextBox.ScrollToCaret();
+                SendMessage(this.UITextBox.Handle, WM_VSCROLL, (IntPtr)SB_BOTTOM, IntPtr.Zero);
             }
         }
 
@@ -305,7 +338,7 @@ namespace cb0t.Scripting.Objects
         {
             if (!(a is Undefined))
             {
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.AppendText(a.ToString())));
                 else
                     this.UITextBox.AppendText(a.ToString());
@@ -317,7 +350,7 @@ namespace cb0t.Scripting.Objects
         {
             if (!(a is Undefined))
             {
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.AppendText(a + "\r\n")));
                 else
                     this.UITextBox.AppendText(a + "\r\n");
@@ -327,7 +360,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "clear", IsEnumerable = true, IsWritable = false)]
         public void Clear()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Clear()));
             else
                 this.UITextBox.Clear();
@@ -342,7 +375,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Visible = value));
                 else
                     this.UITextBox.Visible = value;
@@ -358,7 +391,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._mono = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                 {
                     this.UITextBox.BeginInvoke((Action)(() =>
                     {
@@ -383,7 +416,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Enabled = value));
                 else
                     this.UITextBox.Enabled = value;
@@ -393,7 +426,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.BringToFront()));
             else
                 this.UITextBox.BringToFront();
@@ -402,7 +435,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.SendToBack()));
             else
                 this.UITextBox.SendToBack();

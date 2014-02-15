@@ -19,6 +19,10 @@ namespace cb0t
                             {
                                 script.EVENT_ONDISCONNECTED.Call(script.JS.Global, r);
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -36,6 +40,10 @@ namespace cb0t
                             {
                                 script.EVENT_ONCONNECTING.Call(script.JS.Global, r);
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -52,6 +60,10 @@ namespace cb0t
                             try
                             {
                                 script.EVENT_ONCONNECTED.Call(script.JS.Global, r);
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                             }
                             catch { }
 
@@ -79,6 +91,10 @@ namespace cb0t
                                             if (!((bool)obj))
                                                 return false;
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
 
                                 break;
@@ -103,6 +119,10 @@ namespace cb0t
                                     if (obj is bool)
                                         if (!((bool)obj))
                                             return false;
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                             }
                             catch { }
 
@@ -133,6 +153,10 @@ namespace cb0t
                                         return null;
                                 }
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -162,6 +186,10 @@ namespace cb0t
                                         return null;
                                 }
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -190,6 +218,10 @@ namespace cb0t
                                     if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
                                         return null;
                                 }
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                             }
                             catch { }
 
@@ -223,6 +255,10 @@ namespace cb0t
                                         if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
                                             return null;
                                     }
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -276,6 +312,10 @@ namespace cb0t
                                                 return null;
                                         }
                                     }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                    }
                                     catch { }
                                 }
 
@@ -325,6 +365,10 @@ namespace cb0t
                                     try
                                     {
                                         script.EVENT_ONTEXTRECEIVED.Call(script.JS.Global, r, user, text);
+                                    }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                     }
                                     catch { }
                                 }
@@ -376,6 +420,10 @@ namespace cb0t
                                                 return null;
                                         }
                                     }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                    }
                                     catch { }
                                 }
 
@@ -426,6 +474,10 @@ namespace cb0t
                                     {
                                         script.EVENT_ONEMOTERECEIVED.Call(script.JS.Global, r, user, text);
                                     }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                    }
                                     catch { }
                                 }
 
@@ -454,6 +506,10 @@ namespace cb0t
                                         return null;
                                 }
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -473,6 +529,10 @@ namespace cb0t
                             {
                                 script.EVENT_ONANNOUNCERECEIVED.Call(script.JS.Global, r, text);
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -489,6 +549,10 @@ namespace cb0t
                             try
                             {
                                 script.EVENT_ONUSERLISTRECEIVED.Call(script.JS.Global, r);
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                             }
                             catch { }
 
@@ -515,6 +579,10 @@ namespace cb0t
                                         if (obj is bool)
                                             if (!((bool)obj))
                                                 return false;
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -561,6 +629,10 @@ namespace cb0t
                                 {
                                     script.EVENT_ONUSERJOINED.Call(script.JS.Global, r, userobj);
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -587,6 +659,10 @@ namespace cb0t
                                         if (obj is bool)
                                             if (!((bool)obj))
                                                 return false;
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -633,6 +709,10 @@ namespace cb0t
                                 {
                                     script.EVENT_ONUSERPARTED.Call(script.JS.Global, r, userobj);
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -654,6 +734,10 @@ namespace cb0t
                                 try
                                 {
                                     script.EVENT_ONUSERLEVELCHANGED.Call(script.JS.Global, r, userobj);
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -681,6 +765,10 @@ namespace cb0t
                                         if (obj is bool)
                                             if (!((bool)obj))
                                                 return false;
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -710,6 +798,10 @@ namespace cb0t
                                         if (obj is bool)
                                             if (!((bool)obj))
                                                 return false;
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -741,6 +833,10 @@ namespace cb0t
                                         return null;
                                 }
                             }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
                             catch { }
 
                             break;
@@ -769,6 +865,10 @@ namespace cb0t
                                     if (String.IsNullOrEmpty(str) || obj is Jurassic.Null)
                                         return null;
                                 }
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                             }
                             catch { }
 
@@ -800,6 +900,10 @@ namespace cb0t
                                             if (!((bool)obj))
                                                 return false;
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -824,6 +928,10 @@ namespace cb0t
                                 {
                                     script.EVENT_ONUSERWRITINGSTATUSCHANGED.Call(script.JS.Global, r, userobj);
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -845,6 +953,10 @@ namespace cb0t
                                 try
                                 {
                                     script.EVENT_ONUSERONLINESTATUSCHANGED.Call(script.JS.Global, r, userobj);
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -896,6 +1008,10 @@ namespace cb0t
                                                 return null;
                                         }
                                     }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                    }
                                     catch { }
                                 }
 
@@ -941,6 +1057,10 @@ namespace cb0t
                                     try
                                     {
                                         script.EVENT_ONPMRECEIVED.Call(script.JS.Global, r, userobj, text);
+                                    }
+                                    catch (Jurassic.JavaScriptException je)
+                                    {
+                                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                     }
                                     catch { }
                                 }
@@ -998,6 +1118,10 @@ namespace cb0t
                                             if (!((bool)obj))
                                                 return false;
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -1032,6 +1156,10 @@ namespace cb0t
                                             if (!((bool)obj))
                                                 return false;
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -1055,6 +1183,10 @@ namespace cb0t
                                 try
                                 {
                                     script.EVENT_ONSCRIBBLERECEIVED.Call(script.JS.Global, r, userobj);
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -1088,9 +1220,11 @@ namespace cb0t
                         {
                             script.EVENT_ONSONGCHANGED.Call(script.JS.Global, song);
                         }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                        }
                         catch { }
-
-                        break;
                     }
 
             AudioHelpers.IsUpdatingNP = false;
@@ -1105,9 +1239,11 @@ namespace cb0t
                     {
                         script.EVENT_ONTIMER.Call(script.JS.Global);
                     }
+                    catch (Jurassic.JavaScriptException je)
+                    {
+                        Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                    }
                     catch { }
-
-                    break;
                 }
         }
 
@@ -1130,6 +1266,10 @@ namespace cb0t
                                         if (obj is bool)
                                             if (!((bool)obj))
                                                 return false;
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -1155,6 +1295,10 @@ namespace cb0t
                                 {
                                     script.EVENT_ONVOICECLIPRECEIVED.Call(script.JS.Global, r, userobj);
                                 }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                                }
                                 catch { }
                             }
 
@@ -1176,6 +1320,10 @@ namespace cb0t
                                 try
                                 {
                                     script.EVENT_ONCUSTOMDATARECEIVED.Call(script.JS.Global, r, userobj, ident, data);
+                                }
+                                catch (Jurassic.JavaScriptException je)
+                                {
+                                    Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                                 }
                                 catch { }
                             }
@@ -1212,6 +1360,10 @@ namespace cb0t
                         {
                             script.EVENT_ONROOMOPENED.Call(script.JS.Global, jsroom);
                         }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                        }
                         catch { }
                     }
                 }
@@ -1229,6 +1381,10 @@ namespace cb0t
                         try
                         {
                             script.EVENT_ONROOMCLOSED.Call(script.JS.Global, jsroom);
+                        }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
                         }
                         catch { }
                     }

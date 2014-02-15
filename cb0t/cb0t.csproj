@@ -116,6 +116,7 @@
     <Compile Include="FormEx\PreviewToolStripItemClickedEventArgs.cs" />
     <Compile Include="FormEx\TaskBarProgress.cs" />
     <Compile Include="FormEx\TaskBarProgressColor.cs" />
+    <Compile Include="MediaIPC\iTunes\iTunesListener.cs" />
     <Compile Include="Scripting\CustomJSMenuOption.cs" />
     <Compile Include="Scripting\CustomJSRoomMenuCallback.cs" />
     <Compile Include="Scripting\CustomJSUserListMenuCallback.cs" />
@@ -201,7 +202,9 @@
     <Compile Include="Scripting\Statics\JSEvents.cs" />
     <Compile Include="Scripting\Statics\JSFile.cs" />
     <Compile Include="Scripting\Statics\JSHashlink.cs" />
+    <Compile Include="Scripting\Statics\JSInterop.cs" />
     <Compile Include="Scripting\Statics\JSRegistry.cs" />
+    <Compile Include="Scripting\Statics\JSAutoLoad.cs" />
     <Compile Include="Scripting\Statics\JSZip.cs" />
     <Compile Include="SettingsPanel\ClientSettings.cs">
       <SubType>UserControl</SubType>
@@ -702,7 +705,17 @@
     <None Include="Resources\online.png" />
     <Content Include="todo.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="iTunesLib">
+      <Guid>{9E93C96F-CF0D-43F6-8BA8-B807A3370712}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>13</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -180,6 +180,5 @@ namespace cb0t.Scripting.Objects
 
             return false;
         }
-
     }
 }

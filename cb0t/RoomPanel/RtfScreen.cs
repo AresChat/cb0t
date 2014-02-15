@@ -39,6 +39,13 @@ namespace cb0t
                 if (hashlink != null)
                     this.HashlinkClicked(hashlink, EventArgs.Empty);
             }
+            else if (e.LinkText.StartsWith("\\\\cb0t://script/?file="))
+            {
+                String str = e.LinkText.Substring(22);
+
+                if (!String.IsNullOrEmpty(str))
+                    Scripting.ScriptManager.InstallScript(str);
+            }
             else if (e.LinkText.StartsWith("\\\\voice_clip_#"))
             {
                 String vc_check = e.LinkText.Substring(14);
@@ -442,6 +449,9 @@ namespace cb0t
 
         public void ScrollDown()
         {
+            if (!this.IsHandleCreated)
+                return;
+
             this.BeginInvoke((Action)(() => SendMessage(this.Handle, 277, 7, IntPtr.Zero)));
         }
 
@@ -449,6 +459,9 @@ namespace cb0t
 
         public void Scribble(byte[] data)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<byte[]>(this.Scribble), data);
             else
@@ -479,6 +492,9 @@ namespace cb0t
 
         public void ShowPMText(String name, String text, AresFont font)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPMText), name, text, font);
             else
@@ -508,6 +524,9 @@ namespace cb0t
 
         public void ShowAnnounceText(String text)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String>(this.ShowAnnounceText), text);
             else
@@ -549,6 +568,9 @@ namespace cb0t
 
         public void ShowServerText(String text)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String>(this.ShowServerText), text);
             else
@@ -567,6 +589,9 @@ namespace cb0t
 
         public void ShowPublicText(String name, String text, AresFont font)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPublicText), name, text, font);
             else
@@ -585,6 +610,9 @@ namespace cb0t
 
         public void ShowEmoteText(String name, String text, AresFont font)
         {
+            if (!this.IsHandleCreated)
+                return;
+
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowEmoteText), name, text, font);
             else

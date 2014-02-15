@@ -50,6 +50,7 @@ namespace cb0t
         {
             CustomScriptSettings panel = new CustomScriptSettings(script_name);
             panel.Dock = DockStyle.Fill;
+            panel.CreateControl();
             TreeNode node = new TreeNode();
             node.Text = script_name;
             node.ImageIndex = 1;
@@ -151,6 +152,7 @@ namespace cb0t
                 Scripting.JSScript script = Scripting.ScriptManager.Scripts.Find(x => x.ScriptName == script_name);
 
                 if (script != null)
+                {
                     if (script.UI.UIPanel != null)
                     {
                         this.panel1.Controls.Add(script.UI.UIPanel);
@@ -161,6 +163,7 @@ namespace cb0t
                             EventType = Scripting.JSUIEventType.UISelected
                         });
                     }
+                }
             }
         }
 

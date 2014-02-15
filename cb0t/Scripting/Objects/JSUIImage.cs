@@ -91,6 +91,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.ClickFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.ClickFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -100,7 +104,7 @@ namespace cb0t.Scripting.Objects
             if (a is Undefined || String.IsNullOrEmpty(this.DataPath))
                 return;
 
-            if (this.UIImage.IsHandleCreated)
+            if (this.UIImage.InvokeRequired)
                 this.UIImage.BeginInvoke((Action)(() =>
                 {
                     String path = a.ToString();
@@ -172,7 +176,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Location = new Point((value + 32), this.UIImage.Location.Y)));
                 else
                     this.UIImage.Location = new Point((value + 32), this.UIImage.Location.Y);
@@ -191,7 +195,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Location = new Point(this.UIImage.Location.X, (value + 32))));
                 else
                     this.UIImage.Location = new Point(this.UIImage.Location.X, (value + 32));
@@ -207,7 +211,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Visible = value));
                 else
                     this.UIImage.Visible = value;
@@ -223,7 +227,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._hand = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Cursor = value ? Cursors.Hand : Cursors.Arrow));
                 else
                     this.UIImage.Cursor = value ? Cursors.Hand : Cursors.Arrow;
@@ -239,7 +243,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._resize = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() =>
                     {
                         if (this._resize)
@@ -269,7 +273,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Width = value));
                 else
                     this.UIImage.Width = value;
@@ -288,7 +292,7 @@ namespace cb0t.Scripting.Objects
 
                 this._height = value;
 
-                if (this.UIImage.IsHandleCreated)
+                if (this.UIImage.InvokeRequired)
                     this.UIImage.BeginInvoke((Action)(() => this.UIImage.Height = value));
                 else
                     this.UIImage.Height = value;
@@ -298,7 +302,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UIImage.IsHandleCreated)
+            if (this.UIImage.InvokeRequired)
                 this.UIImage.BeginInvoke((Action)(() => this.UIImage.BringToFront()));
             else
                 this.UIImage.BringToFront();
@@ -307,7 +311,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UIImage.IsHandleCreated)
+            if (this.UIImage.InvokeRequired)
                 this.UIImage.BeginInvoke((Action)(() => this.UIImage.SendToBack()));
             else
                 this.UIImage.SendToBack();

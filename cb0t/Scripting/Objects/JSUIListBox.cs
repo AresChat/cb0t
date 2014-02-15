@@ -61,7 +61,7 @@ namespace cb0t.Scripting.Objects
             get { return this._selectedindex; }
             set
             {
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() =>
                     {
                         int i = value;
@@ -88,6 +88,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OSICFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OSICFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -111,6 +115,10 @@ namespace cb0t.Scripting.Objects
                 try
                 {
                     this.ODCFunction.Call(this);
+                }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.ODCFunction.Engine.ScriptName, je.LineNumber, je.Message);
                 }
                 catch { }
         }
@@ -158,7 +166,7 @@ namespace cb0t.Scripting.Objects
             String str = a.ToString();
             this.Shadow.Add(str);
 
-            if (this.UIListBox.IsHandleCreated)
+            if (this.UIListBox.InvokeRequired)
                 this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Items.Add(str)));
             else
                 this.UIListBox.Items.Add(str);
@@ -179,7 +187,7 @@ namespace cb0t.Scripting.Objects
                     String str = b.ToString();
                     this.Shadow.Insert(i, str);
 
-                    if (this.UIListBox.IsHandleCreated)
+                    if (this.UIListBox.InvokeRequired)
                         this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Items.Insert(i, str)));
                     else
                         this.UIListBox.Items.Insert(i, str);
@@ -200,7 +208,7 @@ namespace cb0t.Scripting.Objects
                 {
                     this.Shadow.RemoveAt(i);
 
-                    if (this.UIListBox.IsHandleCreated)
+                    if (this.UIListBox.InvokeRequired)
                         this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Items.RemoveAt(i)));
                     else
                         this.UIListBox.Items.RemoveAt(i);
@@ -212,7 +220,7 @@ namespace cb0t.Scripting.Objects
         {
             this.Shadow.Clear();
 
-            if (this.UIListBox.IsHandleCreated)
+            if (this.UIListBox.InvokeRequired)
                 this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Items.Clear()));
             else
                 this.UIListBox.Items.Clear();
@@ -243,7 +251,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Location = new Point((value + 32), this.UIListBox.Location.Y)));
                 else
                     this.UIListBox.Location = new Point((value + 32), this.UIListBox.Location.Y);
@@ -262,7 +270,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Location = new Point(this.UIListBox.Location.X, (value + 32))));
                 else
                     this.UIListBox.Location = new Point(this.UIListBox.Location.X, (value + 32));
@@ -278,7 +286,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Visible = value));
                 else
                     this.UIListBox.Visible = value;
@@ -294,7 +302,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Enabled = value));
                 else
                     this.UIListBox.Enabled = value;
@@ -313,7 +321,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Width = value));
                 else
                     this.UIListBox.Width = value;
@@ -332,7 +340,7 @@ namespace cb0t.Scripting.Objects
 
                 this._height = value;
 
-                if (this.UIListBox.IsHandleCreated)
+                if (this.UIListBox.InvokeRequired)
                     this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.Height = value));
                 else
                     this.UIListBox.Height = value;
@@ -342,7 +350,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UIListBox.IsHandleCreated)
+            if (this.UIListBox.InvokeRequired)
                 this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.BringToFront()));
             else
                 this.UIListBox.BringToFront();
@@ -351,7 +359,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UIListBox.IsHandleCreated)
+            if (this.UIListBox.InvokeRequired)
                 this.UIListBox.BeginInvoke((Action)(() => this.UIListBox.SendToBack()));
             else
                 this.UIListBox.SendToBack();

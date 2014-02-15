@@ -209,6 +209,10 @@ namespace cb0t.Scripting.Objects
                 this.UserList.ForEach(x =>
                 {
                     try { f.Call(this.Engine.Global, x); }
+                    catch (Jurassic.JavaScriptException je)
+                    {
+                        ScriptManager.ErrorHandler(f.Engine.ScriptName, je.LineNumber, je.Message);
+                    }
                     catch { }
                 });
             }

@@ -77,6 +77,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnClickFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnClickFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -100,7 +104,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Location = new Point((value + 32), this.UIButton.Location.Y)));
                 else
                     this.UIButton.Location = new Point((value + 32), this.UIButton.Location.Y);
@@ -119,7 +123,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Location = new Point(this.UIButton.Location.X, (value + 32))));
                 else
                     this.UIButton.Location = new Point(this.UIButton.Location.X, (value + 32));
@@ -135,7 +139,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Text = value));
                 else
                     this.UIButton.Text = value;
@@ -151,7 +155,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Visible = value));
                 else
                     this.UIButton.Visible = value;
@@ -167,7 +171,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Enabled = value));
                 else
                     this.UIButton.Enabled = value;
@@ -186,7 +190,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Width = value));
                 else
                     this.UIButton.Width = value;
@@ -205,7 +209,7 @@ namespace cb0t.Scripting.Objects
 
                 this._height = value;
 
-                if (this.UIButton.IsHandleCreated)
+                if (this.UIButton.InvokeRequired)
                     this.UIButton.BeginInvoke((Action)(() => this.UIButton.Height = value));
                 else
                     this.UIButton.Height = value;
@@ -215,7 +219,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UIButton.IsHandleCreated)
+            if (this.UIButton.InvokeRequired)
                 this.UIButton.BeginInvoke((Action)(() => this.UIButton.BringToFront()));
             else
                 this.UIButton.BringToFront();
@@ -224,7 +228,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UIButton.IsHandleCreated)
+            if (this.UIButton.InvokeRequired)
                 this.UIButton.BeginInvoke((Action)(() => this.UIButton.SendToBack()));
             else
                 this.UIButton.SendToBack();
