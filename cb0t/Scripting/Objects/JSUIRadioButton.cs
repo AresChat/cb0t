@@ -79,6 +79,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnSelectFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnSelectFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -86,7 +90,7 @@ namespace cb0t.Scripting.Objects
         {
             this._checked = false;
 
-            if (this.UIRadioButton.IsHandleCreated)
+            if (this.UIRadioButton.InvokeRequired)
                 this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Checked = false));
             else
                 this.UIRadioButton.Checked = false;
@@ -146,7 +150,7 @@ namespace cb0t.Scripting.Objects
                 {
                     this._manual_select = true;
 
-                    if (this.UIRadioButton.IsHandleCreated)
+                    if (this.UIRadioButton.InvokeRequired)
                         this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Checked = true));
                     else
                         this.UIRadioButton.Checked = true;
@@ -166,7 +170,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UIRadioButton.IsHandleCreated)
+                if (this.UIRadioButton.InvokeRequired)
                     this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Location = new Point((value + 32), this.UIRadioButton.Location.Y)));
                 else
                     this.UIRadioButton.Location = new Point((value + 32), this.UIRadioButton.Location.Y);
@@ -185,7 +189,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UIRadioButton.IsHandleCreated)
+                if (this.UIRadioButton.InvokeRequired)
                     this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Location = new Point(this.UIRadioButton.Location.X, (value + 32))));
                 else
                     this.UIRadioButton.Location = new Point(this.UIRadioButton.Location.X, (value + 32));
@@ -201,7 +205,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UIRadioButton.IsHandleCreated)
+                if (this.UIRadioButton.InvokeRequired)
                     this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Text = value));
                 else
                     this.UIRadioButton.Text = value;
@@ -217,7 +221,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UIRadioButton.IsHandleCreated)
+                if (this.UIRadioButton.InvokeRequired)
                     this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Visible = value));
                 else
                     this.UIRadioButton.Visible = value;
@@ -233,7 +237,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UIRadioButton.IsHandleCreated)
+                if (this.UIRadioButton.InvokeRequired)
                     this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.Enabled = value));
                 else
                     this.UIRadioButton.Enabled = value;
@@ -243,7 +247,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UIRadioButton.IsHandleCreated)
+            if (this.UIRadioButton.InvokeRequired)
                 this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.BringToFront()));
             else
                 this.UIRadioButton.BringToFront();
@@ -252,7 +256,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UIRadioButton.IsHandleCreated)
+            if (this.UIRadioButton.InvokeRequired)
                 this.UIRadioButton.BeginInvoke((Action)(() => this.UIRadioButton.SendToBack()));
             else
                 this.UIRadioButton.SendToBack();

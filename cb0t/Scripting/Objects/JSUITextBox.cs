@@ -82,6 +82,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnChangeFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnChangeFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -103,6 +107,10 @@ namespace cb0t.Scripting.Objects
                 try
                 {
                     this.OnKeyPressFunction.Call(this, k);
+                }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnKeyPressFunction.Engine.ScriptName, je.LineNumber, je.Message);
                 }
                 catch { }
         }
@@ -127,6 +135,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnClickFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnClickFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -142,7 +154,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() =>
                     {
                         this.can_do_change_event = false;
@@ -167,7 +179,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._readonly = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.ReadOnly = value));
                 else
                     this.UITextBox.ReadOnly = value;
@@ -186,7 +198,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Location = new Point((value + 32), this.UITextBox.Location.Y)));
                 else
                     this.UITextBox.Location = new Point((value + 32), this.UITextBox.Location.Y);
@@ -205,7 +217,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Location = new Point(this.UITextBox.Location.X, (value + 32))));
                 else
                     this.UITextBox.Location = new Point(this.UITextBox.Location.X, (value + 32));
@@ -224,7 +236,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Width = value));
                 else
                     this.UITextBox.Width = value;
@@ -234,7 +246,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "focus", IsEnumerable = true, IsWritable = false)]
         public void Focus()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Focus()));
             else
                 this.UITextBox.Focus();
@@ -243,7 +255,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "clear", IsEnumerable = true, IsWritable = false)]
         public void Clear()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Clear()));
             else
                 this.UITextBox.Clear();
@@ -254,7 +266,7 @@ namespace cb0t.Scripting.Objects
         {
             if (!(a is Undefined))
             {
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.AppendText(a.ToString())));
                 else
                     this.UITextBox.AppendText(a.ToString());
@@ -270,7 +282,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Visible = value));
                 else
                     this.UITextBox.Visible = value;
@@ -286,7 +298,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UITextBox.IsHandleCreated)
+                if (this.UITextBox.InvokeRequired)
                     this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.Enabled = value));
                 else
                     this.UITextBox.Enabled = value;
@@ -296,7 +308,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.BringToFront()));
             else
                 this.UITextBox.BringToFront();
@@ -305,7 +317,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UITextBox.IsHandleCreated)
+            if (this.UITextBox.InvokeRequired)
                 this.UITextBox.BeginInvoke((Action)(() => this.UITextBox.SendToBack()));
             else
                 this.UITextBox.SendToBack();

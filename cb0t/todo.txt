@@ -1,2 +1,1 @@
-﻿load scripts on the fly and expose currently loaded scripts
-popup callback
+﻿

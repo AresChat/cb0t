@@ -83,6 +83,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OSICFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OSICFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -93,7 +97,7 @@ namespace cb0t.Scripting.Objects
             get { return this._selectedindex; }
             set
             {
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() =>
                     {
                         int i = value;
@@ -136,7 +140,7 @@ namespace cb0t.Scripting.Objects
             String str = a.ToString();
             this.Shadow.Add(str);
 
-            if (this.UIComboBox.IsHandleCreated)
+            if (this.UIComboBox.InvokeRequired)
                 this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Items.Add(str)));
             else
                 this.UIComboBox.Items.Add(str);
@@ -157,7 +161,7 @@ namespace cb0t.Scripting.Objects
                     String str = b.ToString();
                     this.Shadow.Insert(i, str);
 
-                    if (this.UIComboBox.IsHandleCreated)
+                    if (this.UIComboBox.InvokeRequired)
                         this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Items.Insert(i, str)));
                     else
                         this.UIComboBox.Items.Insert(i, str);
@@ -178,7 +182,7 @@ namespace cb0t.Scripting.Objects
                 {
                     this.Shadow.RemoveAt(i);
 
-                    if (this.UIComboBox.IsHandleCreated)
+                    if (this.UIComboBox.InvokeRequired)
                         this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Items.RemoveAt(i)));
                     else
                         this.UIComboBox.Items.RemoveAt(i);
@@ -190,7 +194,7 @@ namespace cb0t.Scripting.Objects
         {
             this.Shadow.Clear();
 
-            if (this.UIComboBox.IsHandleCreated)
+            if (this.UIComboBox.InvokeRequired)
                 this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Items.Clear()));
             else
                 this.UIComboBox.Items.Clear();
@@ -215,7 +219,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Location = new Point((value + 32), this.UIComboBox.Location.Y)));
                 else
                     this.UIComboBox.Location = new Point((value + 32), this.UIComboBox.Location.Y);
@@ -234,7 +238,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Location = new Point(this.UIComboBox.Location.X, (value + 32))));
                 else
                     this.UIComboBox.Location = new Point(this.UIComboBox.Location.X, (value + 32));
@@ -250,7 +254,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Visible = value));
                 else
                     this.UIComboBox.Visible = value;
@@ -266,7 +270,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Enabled = value));
                 else
                     this.UIComboBox.Enabled = value;
@@ -285,7 +289,7 @@ namespace cb0t.Scripting.Objects
 
                 this._width = value;
 
-                if (this.UIComboBox.IsHandleCreated)
+                if (this.UIComboBox.InvokeRequired)
                     this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.Width = value));
                 else
                     this.UIComboBox.Width = value;
@@ -295,7 +299,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UIComboBox.IsHandleCreated)
+            if (this.UIComboBox.InvokeRequired)
                 this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.BringToFront()));
             else
                 this.UIComboBox.BringToFront();
@@ -304,7 +308,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UIComboBox.IsHandleCreated)
+            if (this.UIComboBox.InvokeRequired)
                 this.UIComboBox.BeginInvoke((Action)(() => this.UIComboBox.SendToBack()));
             else
                 this.UIComboBox.SendToBack();

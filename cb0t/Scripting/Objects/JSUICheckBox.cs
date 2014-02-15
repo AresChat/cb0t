@@ -71,6 +71,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnChangeFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnChangeFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -102,7 +106,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.Location = new Point((value + 32), this.UICheckBox.Location.Y)));
                 else
                     this.UICheckBox.Location = new Point((value + 32), this.UICheckBox.Location.Y);
@@ -121,7 +125,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.Location = new Point(this.UICheckBox.Location.X, (value + 32))));
                 else
                     this.UICheckBox.Location = new Point(this.UICheckBox.Location.X, (value + 32));
@@ -137,7 +141,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.Text = value));
                 else
                     this.UICheckBox.Text = value;
@@ -153,7 +157,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.Visible = value));
                 else
                     this.UICheckBox.Visible = value;
@@ -169,7 +173,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.Enabled = value));
                 else
                     this.UICheckBox.Enabled = value;
@@ -185,7 +189,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._checked = value;
 
-                if (this.UICheckBox.IsHandleCreated)
+                if (this.UICheckBox.InvokeRequired)
                     this.UICheckBox.BeginInvoke((Action)(() =>
                     {
                         this.can_do_change_event = false;
@@ -204,7 +208,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UICheckBox.IsHandleCreated)
+            if (this.UICheckBox.InvokeRequired)
                 this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.BringToFront()));
             else
                 this.UICheckBox.BringToFront();
@@ -213,7 +217,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UICheckBox.IsHandleCreated)
+            if (this.UICheckBox.InvokeRequired)
                 this.UICheckBox.BeginInvoke((Action)(() => this.UICheckBox.SendToBack()));
             else
                 this.UICheckBox.SendToBack();

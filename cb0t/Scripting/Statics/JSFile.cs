@@ -110,6 +110,26 @@ namespace cb0t.Scripting.Statics
             return false;
         }
 
+        [JSFunction(Name = "getFiles", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static ArrayInstance JS_GetFiles(ScriptEngine eng)
+        {
+            JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+            if (script != null)
+            {
+                DirectoryInfo dir = new DirectoryInfo(script.DataPath);
+                FileInfo[] org = dir.GetFiles();
+                object[] results = new object[org.Length];
+
+                for (int i = 0; i < results.Length; i++)
+                    results[i] = org[i].Name;
+
+                return eng.Array.New(results);
+            }
+
+            return eng.Array.New();
+        }
+
         [JSFunction(Name = "load", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
         public static String JS_Load(ScriptEngine eng, object a)
         {

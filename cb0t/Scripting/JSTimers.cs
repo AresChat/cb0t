@@ -35,6 +35,10 @@ namespace cb0t.Scripting
                 {
                     if (Items[i].Callback != null)
                         try { Items[i].Callback.Call(Items[i].Callback.Engine.Global); }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            ScriptManager.ErrorHandler(Items[i].Callback.Engine.ScriptName, je.LineNumber, je.Message);
+                        }
                         catch { }
 
                     if (Items[i].Loop)

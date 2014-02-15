@@ -41,16 +41,26 @@ namespace cb0t
                 {
                     str = str.Substring(7);
 
-                    DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
+                    if (str.StartsWith("script/?file="))
+                    {
+                        String filename = str.Substring(13);
 
-                    if (dh == null)
-                        if (str.EndsWith("/"))
-                            str = str.Substring(0, str.Length - 1);
+                        if (!String.IsNullOrEmpty(filename))
+                            Scripting.ScriptManager.InstallScript(filename);
+                    }
+                    else
+                    {
+                        DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
 
-                    dh = Hashlink.DecodeHashlink(str);
+                        if (dh == null)
+                            if (str.EndsWith("/"))
+                                str = str.Substring(0, str.Length - 1);
 
-                    if (dh != null)
-                        this.HashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                        dh = Hashlink.DecodeHashlink(str);
+
+                        if (dh != null)
+                            this.HashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                    }
                 }
                 else if (str.StartsWith("cbjl_"))
                 {

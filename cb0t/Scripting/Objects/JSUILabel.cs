@@ -84,6 +84,10 @@ namespace cb0t.Scripting.Objects
                 {
                     this.OnClickFunction.Call(this);
                 }
+                catch (Jurassic.JavaScriptException je)
+                {
+                    ScriptManager.ErrorHandler(this.OnClickFunction.Engine.ScriptName, je.LineNumber, je.Message);
+                }
                 catch { }
         }
 
@@ -102,7 +106,7 @@ namespace cb0t.Scripting.Objects
 
                 this._x = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                     this.UILabel.BeginInvoke((Action)(() => this.UILabel.Location = new Point((value + 32), this.UILabel.Location.Y)));
                 else
                     this.UILabel.Location = new Point((value + 32), this.UILabel.Location.Y);
@@ -121,7 +125,7 @@ namespace cb0t.Scripting.Objects
 
                 this._y = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                     this.UILabel.BeginInvoke((Action)(() => this.UILabel.Location = new Point(this.UILabel.Location.X, (value + 32))));
                 else
                     this.UILabel.Location = new Point(this.UILabel.Location.X, (value + 32));
@@ -137,7 +141,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._value = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                     this.UILabel.BeginInvoke((Action)(() => this.UILabel.Text = value));
                 else
                     this.UILabel.Text = value;
@@ -153,7 +157,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._visible = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                     this.UILabel.BeginInvoke((Action)(() => this.UILabel.Visible = value));
                 else
                     this.UILabel.Visible = value;
@@ -169,7 +173,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._enabled = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                     this.UILabel.BeginInvoke((Action)(() => this.UILabel.Enabled = value));
                 else
                     this.UILabel.Enabled = value;
@@ -185,7 +189,7 @@ namespace cb0t.Scripting.Objects
             {
                 this._link = value;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                 {
                     this.UILabel.BeginInvoke((Action)(() =>
                     {
@@ -220,7 +224,7 @@ namespace cb0t.Scripting.Objects
                 if (this._size > 24)
                     this._size = 24;
 
-                if (this.UILabel.IsHandleCreated)
+                if (this.UILabel.InvokeRequired)
                 {
                     this.UILabel.BeginInvoke((Action)(() =>
                     {
@@ -239,7 +243,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "promote", IsEnumerable = true, IsWritable = false)]
         public void DoPromote()
         {
-            if (this.UILabel.IsHandleCreated)
+            if (this.UILabel.InvokeRequired)
                 this.UILabel.BeginInvoke((Action)(() => this.UILabel.BringToFront()));
             else
                 this.UILabel.BringToFront();
@@ -248,7 +252,7 @@ namespace cb0t.Scripting.Objects
         [JSFunction(Name = "demote", IsEnumerable = true, IsWritable = false)]
         public void DoDemote()
         {
-            if (this.UILabel.IsHandleCreated)
+            if (this.UILabel.InvokeRequired)
                 this.UILabel.BeginInvoke((Action)(() => this.UILabel.SendToBack()));
             else
                 this.UILabel.SendToBack();

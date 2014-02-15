@@ -117,6 +117,10 @@ namespace cb0t.Scripting
                         {
                             script.JS.ExecuteFile(file);
                         }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                        }
                         catch { }
 
                         return true;
@@ -206,6 +210,10 @@ namespace cb0t.Scripting
                 if (script != null)
                     foreach (Objects.JSRoom r in script.Rooms)
                         try { f.Call(script.JS.Global, r); }
+                        catch (Jurassic.JavaScriptException je)
+                        {
+                            ScriptManager.ErrorHandler(f.Engine.ScriptName, je.LineNumber, je.Message);
+                        }
                         catch { }
             }
         }

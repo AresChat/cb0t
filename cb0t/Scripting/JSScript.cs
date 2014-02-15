@@ -62,6 +62,7 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONUISELECTED { get; set; }
         public UserDefinedFunction EVENT_ONROOMOPENED { get; set; }
         public UserDefinedFunction EVENT_ONROOMCLOSED { get; set; }
+        public UserDefinedFunction EVENT_ONERROR { get; set; }
 
         public JSScript(String name, bool is_subscript)
         {
@@ -100,6 +101,10 @@ namespace cb0t.Scripting
             try
             {
                 this.JS.ExecuteFile(path);
+            }
+            catch (Jurassic.JavaScriptException je)
+            {
+                ScriptManager.ErrorHandler(this.ScriptName, je.LineNumber, je.Message);
             }
             catch { }
         }
@@ -193,6 +198,10 @@ namespace cb0t.Scripting
                     if (result == "undefined")
                         result = null;
                 }
+            }
+            catch (Jurassic.JavaScriptException je)
+            {
+                ScriptManager.ErrorHandler(this.ScriptName, je.LineNumber, je.Message);
             }
             catch { }
 

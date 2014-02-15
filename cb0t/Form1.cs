@@ -34,6 +34,7 @@ namespace cb0t
         private MediaIPC.Winamp.WinampListener winamp { get; set; }
         private MediaIPC.VLC.VLCListener vlc { get; set; }
         private MediaIPC.Foobar2000.FoobarListener foobar { get; set; }
+        private MediaIPC.iTunes.iTunesListener itunes { get; set; }
 
         private ulong last_trickle = 0;
         private String inithash = null;
@@ -418,6 +419,7 @@ namespace cb0t
                 this.winamp = new MediaIPC.Winamp.WinampListener();
                 this.vlc = new MediaIPC.VLC.VLCListener();
                 this.foobar = new MediaIPC.Foobar2000.FoobarListener();
+                this.itunes = new MediaIPC.iTunes.iTunesListener();
 
                 this.volume = new VolumeControl();
                 this.volume.VolumeChanged += this.VolumeChanged;
@@ -438,22 +440,32 @@ namespace cb0t
                 this.ipc = new IPCListener();
                 this.ipc.HashlinkReceived += this.IPCHashlinkReceived;
                 this.ipc.CommandReceived += this.IPCCommandReceived;
+
                 if (!String.IsNullOrEmpty(this.inithash))
                     if (this.inithash.StartsWith("cb0t://"))
                     {
-
                         this.inithash = this.inithash.Substring(7);
 
-                        DecryptedHashlink dh = Hashlink.DecodeHashlink(this.inithash);
+                        if (this.inithash.StartsWith("script/?file="))
+                        {
+                            String filename = this.inithash.Substring(13);
 
-                        if (dh == null)
-                            if (this.inithash.EndsWith("/"))
-                                this.inithash = this.inithash.Substring(0, this.inithash.Length - 1);
+                            if (!String.IsNullOrEmpty(filename))
+                                Scripting.ScriptManager.InstallScript(filename);
+                        }
+                        else
+                        {
+                            DecryptedHashlink dh = Hashlink.DecodeHashlink(this.inithash);
 
-                        dh = Hashlink.DecodeHashlink(this.inithash);
+                            if (dh == null)
+                                if (this.inithash.EndsWith("/"))
+                                    this.inithash = this.inithash.Substring(0, this.inithash.Length - 1);
 
-                        if (dh != null)
-                            this.IPCHashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                            dh = Hashlink.DecodeHashlink(this.inithash);
+
+                            if (dh != null)
+                                this.IPCHashlinkReceived(null, new IPCListenerEventArgs { Hashlink = dh });
+                        }
                     }
 
                 this.ipc.Start();
@@ -696,6 +708,10 @@ namespace cb0t
 
                         case 5:
                             c_song = this.foobar.Song;
+                            break;
+
+                        case 6:
+                            c_song = this.itunes.Song;
                             break;
                     }
 
