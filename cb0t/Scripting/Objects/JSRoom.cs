@@ -177,6 +177,22 @@ namespace cb0t.Scripting.Objects
             }
         }
 
+        [JSFunction(Name = "sendPersonalMessage", IsEnumerable = true, IsWritable = false)]
+        public void R_SendPersonalMessage(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    if (!String.IsNullOrEmpty(str))
+                        r.SendPersonalMessage(str);
+                    else
+                        r.SendPersonalMessage();
+            }
+        }
+
         [JSFunction(Name = "user", IsEnumerable = true, IsWritable = false)]
         public Objects.JSUser R_GetUser(object a)
         {

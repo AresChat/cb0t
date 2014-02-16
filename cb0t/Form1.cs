@@ -682,10 +682,13 @@ namespace cb0t
                 if (do_trickle)
                     this.last_trickle = time_long;
 
+                int player_type = -1;
+
                 if (check_song)
                 {
                     this.last_song_check = time;
                     int src = Settings.GetReg<int>("m_listener_index", 0);
+                    player_type = src;
                     String c_song = String.Empty;
 
                     switch (src)
@@ -733,7 +736,7 @@ namespace cb0t
                     }
 
                 if (check_song)
-                    ScriptEvents.OnSongChanged(this.last_song);
+                    ScriptEvents.OnSongChanged(this.last_song, player_type);
 
                 if (do_timer)
                     ScriptEvents.OnTimer();

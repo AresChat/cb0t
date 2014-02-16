@@ -19,7 +19,7 @@ namespace cb0t.Scripting.Statics
 
         protected override string InternalClassName
         {
-            get { return "AutoLoad"; }
+            get { return "Interop"; }
         }
 
         [DllImport("user32.dll", SetLastError = true)]

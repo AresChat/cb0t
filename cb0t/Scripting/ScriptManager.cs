@@ -11,7 +11,7 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 2023;
+        public const int SCRIPT_VERSION = 2024;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
@@ -27,8 +27,14 @@ namespace cb0t.Scripting
         public static void InstallScript(String filename)
         {
             IntPtr ptr = Process.GetCurrentProcess().MainWindowHandle;
-            DwmForm control = (DwmForm)DwmForm.FromHandle(ptr);
-            InstallScript(control, filename);
+
+            if (!ptr.Equals(IntPtr.Zero))
+            {
+                DwmForm control = (DwmForm)DwmForm.FromHandle(ptr);
+
+                if (control != null)
+                    InstallScript(control, filename);
+            }
         }
 
         private delegate void InstallScriptHandler(DwmForm form, String filename);
