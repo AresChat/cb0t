@@ -1195,7 +1195,7 @@ namespace cb0t
                         }
         }
 
-        public static void OnSongChanged(String song)
+        public static void OnSongChanged(String song, int type)
         {
             AudioHelpers.IsUpdatingNP = true;
 
