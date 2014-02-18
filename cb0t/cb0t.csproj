@@ -163,6 +163,7 @@
     <Compile Include="Scripting\ObjectPrototypes\JSUIButton.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUICheckBox.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIComboBox.cs" />
+    <Compile Include="Scripting\ObjectPrototypes\JSUIGroupBox.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIImage.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUILabel.cs" />
     <Compile Include="Scripting\ObjectPrototypes\JSUIListBox.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Scripting\Objects\JSUIButton.cs" />
     <Compile Include="Scripting\Objects\JSUICheckBox.cs" />
     <Compile Include="Scripting\Objects\JSUIComboBox.cs" />
+    <Compile Include="Scripting\Objects\JSUIGroupBox.cs" />
     <Compile Include="Scripting\Objects\JSUIImage.cs" />
     <Compile Include="Scripting\Objects\JSUILabel.cs" />
     <Compile Include="Scripting\Objects\JSUIListBox.cs" />
