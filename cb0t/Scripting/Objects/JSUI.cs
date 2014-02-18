@@ -125,6 +125,15 @@ namespace cb0t.Scripting.Objects
                 return null;
         }
 
+        [JSFunction(Name = "createGroupBox", IsWritable = false, IsEnumerable = true)]
+        public JSUIGroupBox CreateGroupBox()
+        {
+            if (this.CanAddControls)
+                return new JSUIGroupBox(this.Engine.Object.InstancePrototype, this);
+            else
+                return null;
+        }
+
         [JSFunction(Name = "createRadioButton", IsWritable = false, IsEnumerable = true)]
         public JSUIRadioButton CreateRadioButton(object a)
         {

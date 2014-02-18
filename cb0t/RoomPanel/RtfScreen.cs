@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -459,9 +458,6 @@ namespace cb0t
 
         public void Scribble(byte[] data)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<byte[]>(this.Scribble), data);
             else
@@ -492,9 +488,6 @@ namespace cb0t
 
         public void ShowPMText(String name, String text, AresFont font)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPMText), name, text, font);
             else
@@ -524,9 +517,6 @@ namespace cb0t
 
         public void ShowAnnounceText(String text)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String>(this.ShowAnnounceText), text);
             else
@@ -568,9 +558,6 @@ namespace cb0t
 
         public void ShowServerText(String text)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String>(this.ShowServerText), text);
             else
@@ -589,9 +576,6 @@ namespace cb0t
 
         public void ShowPublicText(String name, String text, AresFont font)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPublicText), name, text, font);
             else
@@ -610,9 +594,6 @@ namespace cb0t
 
         public void ShowEmoteText(String name, String text, AresFont font)
         {
-            if (!this.IsHandleCreated)
-                return;
-
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowEmoteText), name, text, font);
             else

@@ -34,22 +34,26 @@ namespace MediaIPC.iTunes
                 }
                 else
                 {
-                    IITTrack track = this.itunes.CurrentTrack;
-
-                    if (track != null)
+                    try
                     {
-                        StringBuilder sb = new StringBuilder();
+                        IITTrack track = this.itunes.CurrentTrack;
 
-                        if (!String.IsNullOrEmpty(track.Artist))
-                            sb.Append(track.Artist);
-                        else if (!String.IsNullOrEmpty(track.Composer))
-                            sb.Append(track.Composer);
-                        else
-                            sb.Append("Unknown Artist");
+                        if (track != null)
+                        {
+                            StringBuilder sb = new StringBuilder();
 
-                        sb.Append(" - " + track.Name);
-                        return sb.ToString();
+                            if (!String.IsNullOrEmpty(track.Artist))
+                                sb.Append(track.Artist);
+                            else if (!String.IsNullOrEmpty(track.Composer))
+                                sb.Append(track.Composer);
+                            else
+                                sb.Append("Unknown Artist");
+
+                            sb.Append(" - " + track.Name);
+                            return sb.ToString();
+                        }
                     }
+                    catch { }
                 }
 
                 return String.Empty;
