@@ -849,7 +849,14 @@ namespace cb0t
                 if (!this.toolStripDropDownButton1.DropDownItems[5].Visible)
                     this.toolStripDropDownButton1.DropDownItems[5].Visible = true;
 
-                Scripting.ScriptManager.RoomMenuOptions.ForEach(x => this.toolStripDropDownButton1.DropDownItems.Add(x.Text));
+                Scripting.ScriptManager.RoomMenuOptions.ForEach(x =>
+                {
+                    this.toolStripDropDownButton1.DropDownItems.Add(x.Text);
+
+                    if (x.CanCheck)
+                        ((ToolStripMenuItem)this.toolStripDropDownButton1.DropDownItems[this.toolStripDropDownButton1.DropDownItems.Count - 1]).Checked = x.IsChecked;
+                });
+
                 custom_options = true;
             }
 
@@ -891,8 +898,19 @@ namespace cb0t
 
                             if (index >= 0 && index < Scripting.ScriptManager.RoomMenuOptions.Count)
                             {
-                                UserDefinedFunction cback = Scripting.ScriptManager.RoomMenuOptions[index].Callback;
+                                Scripting.CustomJSMenuOption option = Scripting.ScriptManager.RoomMenuOptions[index];
+
+                                if (option.CanCheck)
+                                    option.IsChecked = !option.IsChecked;
+
+                                UserDefinedFunction cback = option.Callback;
                                 Scripting.CustomJSRoomMenuCallback js = new Scripting.CustomJSRoomMenuCallback { Callback = cback };
+
+                                if (option.CanCheck)
+                                    js.IsChecked = option.IsChecked ? Scripting.JSCheckState.Checked : Scripting.JSCheckState.Unchecked;
+                                else
+                                    js.IsChecked = Scripting.JSCheckState.Unused;
+
                                 this.RoomMenuJSItemClicked(null, new RoomMenuJSItemClickedEventArgs { Item = js });
                             }
                         }

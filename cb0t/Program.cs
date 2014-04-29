@@ -21,7 +21,7 @@ namespace cb0t
         static void Main(String[] args)
         {
             String hashlink = null;
-
+            
             if (args != null)
                 if (args.Length > 0)
                     hashlink = String.Join(String.Empty, args);
