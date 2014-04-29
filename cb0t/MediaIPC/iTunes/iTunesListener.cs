@@ -9,7 +9,7 @@ namespace MediaIPC.iTunes
 {
     class iTunesListener
     {
-        private iTunesAppClass itunes { get; set; }
+        private iTunesApp itunes { get; set; }
         private int reconnect_ticks = 0;
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -28,7 +28,7 @@ namespace MediaIPC.iTunes
 
                     if (!ptr.Equals(IntPtr.Zero))
                     {
-                        this.itunes = new iTunesAppClass();
+                        this.itunes = new iTunesApp();
                         this.itunes.OnAboutToPromptUserToQuitEvent += this.DestroyCOMLink;
                     }
                 }
