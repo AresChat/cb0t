@@ -10,5 +10,7 @@ namespace cb0t.Scripting
     {
         public UserDefinedFunction Callback { get; set; }
         public String Text { get; set; }
+        public bool IsChecked { get; set; }
+        public bool CanCheck { get; set; }
     }
 }

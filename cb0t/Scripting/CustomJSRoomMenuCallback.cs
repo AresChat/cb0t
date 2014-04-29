@@ -11,5 +11,13 @@ namespace cb0t.Scripting
     {
         public UserDefinedFunction Callback { get; set; }
         public IPEndPoint Room { get; set; }
+        public JSCheckState IsChecked { get; set; }
+    }
+
+    enum JSCheckState : int
+    {
+        Unused = -1,
+        Unchecked = 0,
+        Checked = 1
     }
 }

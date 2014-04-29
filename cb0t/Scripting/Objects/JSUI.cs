@@ -57,7 +57,7 @@ namespace cb0t.Scripting.Objects
         }
 
         [JSFunction(Name = "createRoomMenuOption", IsWritable = false, IsEnumerable = true)]
-        public bool CreateRoomMenuOption(object a, object b)
+        public bool CreateRoomMenuOption(object a, object b, object c)
         {
             if (this.CanAddControls || this.CanCreate)
                 if (!(a is Undefined) && b is UserDefinedFunction)
@@ -67,10 +67,17 @@ namespace cb0t.Scripting.Objects
 
                     if (ScriptManager.RoomMenuOptions.Find(x => x.Text == text) == null)
                     {
+                        JSCheckState cstate = JSCheckState.Unused;
+
+                        if (c is bool)
+                            cstate = ((bool)c) ? JSCheckState.Checked : JSCheckState.Unchecked;
+
                         ScriptManager.RoomMenuOptions.Add(new CustomJSMenuOption
                         {
                             Callback = callback,
-                            Text = text
+                            Text = text,
+                            CanCheck = cstate != JSCheckState.Unused,
+                            IsChecked = cstate == JSCheckState.Checked
                         });
 
                         return true;

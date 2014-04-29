@@ -402,7 +402,11 @@ namespace cb0t.Scripting
                             Objects.JSRoom room = script.Rooms.Find(x => x.EndPoint.Equals(cb.Room));
 
                             if (room != null)
-                                try { cb.Callback.Call(script.JS.Global, room); }
+                                try
+                                {
+                                    int i = (int)cb.IsChecked;
+                                    cb.Callback.Call(script.JS.Global, room, i);
+                                }
                                 catch (Jurassic.JavaScriptException je)
                                 {
                                     ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
