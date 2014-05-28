@@ -20,7 +20,7 @@ namespace cb0t
             this.MinimumSize = this.Size;
             this.emRegMenu1.EmoticonClicked += this.RegEmoticonClicked;
 
-            for (int i = 0; i < Emoticons.ex_emotic.Length; i++)
+          /*  for (int i = 0; i < Emoticons.ex_emotic.Length; i++)
             {
                 ExtEm ee = new ExtEm(Emoticons.ex_emotic[i]);
                 ee.BackColor = Color.White;
@@ -28,6 +28,23 @@ namespace cb0t
                 ee.Location = new Point(1 + ((i % 4) * 50) + (i % 4), 1 + ((i / 4) * 50) + (i / 4));
                 ee.Click += this.EmoticonClicked;
                 this.emExtMenu1.Controls.Add(ee);
+            } */
+
+            String path = Path.Combine(Settings.AniEmoticPath, "ext");
+            FileInfo[] files = new DirectoryInfo(path).GetFiles();
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                PictureBox pb = new PictureBox();
+                pb.BackColor = Color.White;
+                pb.Size = new Size(50, 50);
+                pb.Location = new Point(1 + ((i % 4) * 50) + (i % 4), 1 + ((i / 4) * 50) + (i / 4));
+                pb.ImageLocation = files[i].FullName;
+                pb.SizeMode = PictureBoxSizeMode.CenterImage | PictureBoxSizeMode.StretchImage;
+                pb.Tag = Path.GetFileNameWithoutExtension(files[i].FullName);
+                pb.Click += this.EmoticonClicked;
+                pb.Cursor = Cursors.Hand;
+                this.emExtMenu1.Controls.Add(pb);
             }
         }
 
@@ -57,7 +74,7 @@ namespace cb0t
 
         private void EmoticonClicked(object sender, EventArgs e)
         {
-            String shortcut = ((ExtEm)sender).ShortcutText;
+            String shortcut = (String)((PictureBox)sender).Tag;
 
             if (this.callback != null)
             {

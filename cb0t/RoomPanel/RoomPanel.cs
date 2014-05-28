@@ -45,6 +45,32 @@ namespace cb0t
             this.accuTextBox1.Font = new Font(Settings.GetReg<String>("global_font", "Tahoma"), 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
         }
 
+        public void SetScreenWidth(bool wide)
+        {
+            this.webControl1.IsWideText = wide;
+        }
+
+        public int ViewID
+        {
+            get
+            {
+                if (this.webControl1 != null)
+                    return this.webControl1.ViewIdent;
+
+                return -1;
+            }
+        }
+
+        public void ProcessLinkClicked(String url)
+        {
+            this.webControl1.OnLinkClicked(new LinkClickedEventArgs(url));
+        }
+
+        public void ShowCustomHTML(String html)
+        {
+            this.webControl1.ShowCustomHTML(html);
+        }
+
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
@@ -54,7 +80,7 @@ namespace cb0t
             this.PMName = String.Empty;
             this.MyName = String.Empty;
             this.EndPoint = new IPEndPoint(creds.IP, creds.Port);
-            this.rtfScreen1.EndPoint = this.EndPoint;
+            this.webControl1.EndPoint = this.EndPoint;
             this.topic = new Topic();
             this.b1 = (Bitmap)Emoticons.emotic[47].Clone();
             this.toolStripButton5.Image = this.b1;
@@ -85,15 +111,20 @@ namespace cb0t
             this.tab_imgs.Images.Add((Bitmap)Properties.Resources.folder2.Clone());
             this.tabControl1.ImageList = this.tab_imgs;
             this.tabPage1.ImageIndex = 0;
-            this.rtfScreen1.HashlinkClicked += this.LinkHashlinkClicked;
-            this.rtfScreen1.EditScribbleClicked += this.DoEditScribbleClicked;
-            this.rtfScreen1.NameClicked += this.ScreenNameClicked;
-            this.rtfScreen1.IsMainScreen = true;
+            this.webControl1.HashlinkClicked += this.LinkHashlinkClicked;
+            this.webControl1.EditScribbleClicked += this.DoEditScribbleClicked;
+            this.webControl1.NameClicked += this.ScreenNameClicked;
+            this.webControl1.IsMainScreen = true;
             this.rc_ctx = new ContextMenuStrip();
             this.rc_ctx.Items.Add("Close");
             this.rc_ctx.ItemClicked += this.CTXItemClicked;
             this.splitContainer1.SplitterMoved += this.SplitterMoved;
             this.SetUserlistWidth();
+        }
+
+        public void CreateScreen()
+        {
+            this.webControl1.CreateScreen();
         }
 
         private void DoEditScribbleClicked(object sender, EventArgs e)
@@ -142,7 +173,7 @@ namespace cb0t
         public void UpdateTemplate()
         {
             this.accuTextBox1.UpdateTemplate();
-            this.rtfScreen1.UpdateTemplate();
+            this.webControl1.UpdateTemplate();
             this.toolStripButton2.ToolTipText = StringTemplate.Get(STType.ButtonBar, 0);
             this.toolStripButton3.ToolTipText = StringTemplate.Get(STType.ButtonBar, 1);
             this.toolStripButton4.ToolTipText = StringTemplate.Get(STType.ButtonBar, 2);
@@ -173,8 +204,8 @@ namespace cb0t
         {
             this.writingPanel1.IsBlack = true;
             this.writingPanel1.Invalidate();
-            this.rtfScreen1.IsBlack = true;
-            this.rtfScreen1.BackColor = Color.Black;
+            this.webControl1.IsBlack = true;
+            this.webControl1.BackColor = Color.Black;
         }
 
         public void UpdateVoiceTime(int seconds)
@@ -529,16 +560,16 @@ namespace cb0t
                 }
         }
 
-        public void ServerText(String text) { this.rtfScreen1.ShowServerText(text); }
-        public void AnnounceText(String text) { this.rtfScreen1.ShowAnnounceText(text); }
-        public void PublicText(String name, String text, AresFont font) { this.rtfScreen1.ShowPublicText(name, text, font); }
-        public void EmoteText(String name, String text, AresFont font) { this.rtfScreen1.ShowEmoteText(name, text, font); }
+        public void ServerText(String text) { this.webControl1.ShowServerText(text); }
+        public void AnnounceText(String text) { this.webControl1.ShowAnnounceText(text); }
+        public void PublicText(String name, String text, AresFont font) { this.webControl1.ShowPublicText(name, text, font); }
+        public void EmoteText(String name, String text, AresFont font) { this.webControl1.ShowEmoteText(name, text, font); }
         public void CheckUnreadStatus() { this.CheckUnread(this.EndPoint, EventArgs.Empty); }
-        public void Scribble(byte[] data) { this.rtfScreen1.Scribble(data); }
+        public void Scribble(byte[] data) { this.webControl1.Scribble(data); }
 
         public void ScrollDown()
         {
-            this.rtfScreen1.ScrollDown();
+            this.webControl1.ScrollDown();
         }
 
         public UserListContainer Userlist { get { return this.userListContainer1; } }
@@ -728,11 +759,11 @@ namespace cb0t
 
             this.panel2.Dispose();
             this.panel2 = null;
-            this.rtfScreen1.HashlinkClicked -= this.LinkHashlinkClicked;
-            this.rtfScreen1.EditScribbleClicked -= this.DoEditScribbleClicked;
-            this.rtfScreen1.Free();
-            this.rtfScreen1.Dispose();
-            this.rtfScreen1 = null;
+            this.webControl1.HashlinkClicked -= this.LinkHashlinkClicked;
+            this.webControl1.EditScribbleClicked -= this.DoEditScribbleClicked;
+            this.webControl1.Free();
+            this.webControl1.Dispose();
+            this.webControl1 = null;
             this.writingPanel1.Free();
             this.writingPanel1.Dispose();
             this.writingPanel1 = null;

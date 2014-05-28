@@ -42,6 +42,7 @@ namespace cb0t
         public Form1(String init_hashlink)
         {
             Settings.Create();
+            Helpers.LoadScreenHTML();
             Friends.Load();
             Emoticons.Load();
             Avatar.Load();
@@ -776,6 +777,7 @@ namespace cb0t
                 this.channel_bar.Mode = ChannelBar.ModeOption.Channel;
                 this.channel_bar.SelectedButton = room.EndPoint;
                 this.toolStrip1.Invalidate();
+                room.Panel.CreateScreen();
             }
         }
 

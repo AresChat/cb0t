@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO.Pipes;
 using System.Text;
+using Awesomium.Core;
 
 namespace cb0t
 {
@@ -48,8 +49,21 @@ namespace cb0t
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
+            WebCore.Initialize(new WebConfig
+            {
+                ChildProcessPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cb3_proc.exe"),
+                HomeURL = new Uri("about:blank"),
+                LogLevel = LogLevel.None
+            });
+
+            WebCore.Initialized += WebCore_Initialized;
 
             Application.Run(new Form1(hashlink));
+        }
+
+        static void WebCore_Initialized(object sender, CoreStartEventArgs e)
+        {
+            WebCore.ResourceInterceptor = new MainScreenResourceManager();
         }
 
         static void SendIPC(String str)
@@ -71,7 +85,7 @@ namespace cb0t
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             String path = Path.Combine(Settings.DataPath, "log1.txt");
-
+            
             try
             {
                 String str = e.Exception.Message + "\r\n\r\n" + e.Exception.StackTrace;
@@ -84,7 +98,7 @@ namespace cb0t
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             String path = Path.Combine(Settings.DataPath, "log2.txt");
-
+            
             try
             {
                 if (e.ExceptionObject != null)

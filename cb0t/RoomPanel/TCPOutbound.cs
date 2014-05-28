@@ -49,6 +49,7 @@ namespace cb0t
                 features |= ClientFeatures.CLIENT_SUPPORTS_PM_VC;
             }
 
+            features |= ClientFeatures.CLIENT_SUPPORTS_HTML;
             packet.WriteByte((byte)features);
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_LOGIN);
         }
