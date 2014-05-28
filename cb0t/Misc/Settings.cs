@@ -13,7 +13,7 @@ namespace cb0t
     class Settings
     {
         public const String APP_NAME = "cb0t";
-        public const String APP_VERSION = "3.20";
+        public const String APP_VERSION = "3.21";
 
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }
@@ -24,6 +24,7 @@ namespace cb0t
         public static String VoicePath { get; set; }
         public static String ArtPath { get; set; }
         public static String ScriptPath { get; set; }
+        public static String AniEmoticPath { get; set; }
 
         private static Stopwatch sw { get; set; }
 
@@ -34,6 +35,7 @@ namespace cb0t
             ArtPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\art\\";
             ScriptPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\scripts\\";
             AppPath = AppDomain.CurrentDomain.BaseDirectory;
+            AniEmoticPath = (AppPath + "aniemotic\\").Replace("\\", "/");
             
             sw = new Stopwatch();
             sw.Start();

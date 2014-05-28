@@ -1,1 +1,6 @@
-﻿
+﻿expose html screen to scripting + onHTMLreceived events
+right click menu
+click name -> to textbox
+voice clips to new screen
+old scribbles to new screen
+queue messages before the screen is built

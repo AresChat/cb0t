@@ -62,6 +62,17 @@ namespace cb0t.Scripting.Statics
                     catch { }
         }
 
+        [JSFunction(Name = "dataPath", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static String JS_DataPath(ScriptEngine eng)
+        {
+            JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+            if (script != null)
+                return script.DataPath;
+
+            return String.Empty;
+        }
+
         [JSFunction(Name = "delete", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
         public static bool JS_Delete(ScriptEngine eng, object a)
         {

@@ -10,5 +10,6 @@ namespace cb0t
     {
         public Bitmap Img { get; set; }
         public String ShortcutText { get; set; }
+        public int Height { get; set; }
     }
 }

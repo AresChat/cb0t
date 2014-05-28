@@ -114,6 +114,77 @@ namespace cb0t
                 case TCPMsg.MSG_CHAT_SERVER_ENDOFBROWSE:
                     this.Eval_EndBrowse(e.Packet);
                     break;
+
+                case TCPMsg.MSG_CHAT_SERVER_HTML:
+                    this.Eval_HTML(e.Packet);
+                    break;
+            }
+        }
+
+        private bool IsMOTDReceiving { get; set; }
+
+        private void Eval_HTML(TCPPacketReader packet)
+        {
+            String html = packet.ReadString();
+
+            if (html == "<!--MOTDSTART-->")
+            {
+                this.Panel.SetScreenWidth(true);
+                this.IsMOTDReceiving = true;
+            }
+            else if (html == "<!--MOTDEND-->")
+            {
+                this.Panel.SetScreenWidth(false);
+                this.IsMOTDReceiving = false;
+            }
+            else
+            {
+                /* SANDBOXED CUSTOM HTML CONTENT */
+
+                // images
+                if (html.StartsWith("<img"))
+                {
+                    if (html.StartsWith("<img ") && !html.Contains("onload="))
+                        html = "<img onload=\"imagedLoaded(this)\" " + html.Substring(5);
+
+                    if (html.LastIndexOf("<") == 0)
+                        this.Panel.ShowCustomHTML(html);
+                }
+
+                // audio
+                else if (html.StartsWith("<audio") && this.IsMOTDReceiving)
+                {
+                    if (html.LastIndexOf("<") == 0)
+                        this.Panel.ShowCustomHTML(html);
+                }
+
+                // video
+                else if (html.StartsWith("<video") && this.IsMOTDReceiving)
+                {
+                    if (html.LastIndexOf("<") == 0)
+                        this.Panel.ShowCustomHTML(html);
+                }
+
+                // youtube
+                else if (html.StartsWith("<!--YOUTUBE:") && this.IsMOTDReceiving)
+                {
+                    html = html.Substring(12);
+
+                    if (html.EndsWith("-->"))
+                    {
+                        html = html.Substring(0, html.Length - 3);
+
+                        if (html.Length > 0)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/");
+                            sb.Append(html);
+                            sb.Append("\" frameborder=\"0\" allowfullscreen></iframe>");
+                            this.Panel.ShowCustomHTML(sb.ToString());
+                            sb.Clear();
+                        }
+                    }
+                }
             }
         }
 

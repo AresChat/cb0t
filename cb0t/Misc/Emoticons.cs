@@ -134,6 +134,11 @@ namespace cb0t
             return result.ToString();
         }
 
+        public static int GetExEmoticonHeight(int image_index)
+        {
+            return ex_emotic[image_index].Height;
+        }
+
         public static String GetRTFExEmoticon(int image_index, Color back_color, Graphics richtextbox)
         {
             StringBuilder result = new StringBuilder();
@@ -214,6 +219,7 @@ namespace cb0t
                         g.DrawImage(raw, new Point(0, 0));
 
                     ex.ShortcutText = Path.GetFileNameWithoutExtension(files[i].Name).ToUpper();
+                    ex.Height = ex.Img.Height;
                     ex_emotic[i] = ex;
                 }
             }

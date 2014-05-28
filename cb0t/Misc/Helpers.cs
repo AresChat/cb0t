@@ -18,9 +18,20 @@ namespace cb0t
         public static String[] cmds = new String[] { "/reconnect", "/np", "/client", "/time", "/uptime", "/gfx", "/hdd", "/os", "/cpu", "/ram", "/lag", "/all <text>", "/find <name>", "/pretext", "/pretext <text>" };
         public static String NP = String.Empty;
 
+        public static String ScreenHTML { get; set; }
+
         static Helpers()
         {
             UserIdent = 0;
+        }
+
+        public static void LoadScreenHTML()
+        {
+            try
+            {
+                ScreenHTML = File.ReadAllText(Path.Combine(Settings.AppPath, "screen.html"));
+            }
+            catch { }
         }
 
         public static String EndPointToHexString(IPEndPoint ep)
