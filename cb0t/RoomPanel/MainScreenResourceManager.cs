@@ -1,4 +1,5 @@
 ﻿using Awesomium.Core;
+using cb0t.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,8 +13,6 @@ namespace cb0t
     {
         public ResourceResponse OnRequest(ResourceRequest request)
         {
-            String path = Path.Combine(Settings.DataPath, "log2.txt");
-
             if (!String.IsNullOrEmpty(request.Url.Host))
             {
                 switch (request.Url.Host)
@@ -26,6 +25,24 @@ namespace cb0t
 
                     case "emotic.ui":
                         return ResourceResponse.Create(Path.Combine(Settings.AniEmoticPath, "ui", request.Url.LocalPath.Substring(1)));
+
+                    case "scribble.image":
+                        return ResourceResponse.Create(Path.Combine(Settings.ScribblePath, request.Url.LocalPath.Substring(1)));
+
+                    default:
+                        String[] parts = request.Url.Host.Split(new String[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (parts.Length == 2)
+                            if (parts[1] == "script")
+                            {
+                                String script_name = parts[1] + ".js";
+                                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == script_name);
+
+                                if (script != null)
+                                    return ResourceResponse.Create(Path.Combine(script.DataPath, request.Url.LocalPath.Substring(1)));
+                            }
+
+                        break;
                 }
             }
 

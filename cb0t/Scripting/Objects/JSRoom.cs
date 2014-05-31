@@ -52,6 +52,32 @@ namespace cb0t.Scripting.Objects
             return false;
         }
 
+        [JSFunction(Name = "injectHTML", IsEnumerable = true, IsWritable = false)]
+        public void R_InjectHTML(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    r.Panel.InjectHTMLFromScript(str);
+            }
+        }
+
+        [JSFunction(Name = "injectJS", IsEnumerable = true, IsWritable = false)]
+        public void R_InjectJS(object a)
+        {
+            if (!(a is Undefined))
+            {
+                String str = a.ToString();
+                Room r = RoomPool.Rooms.Find(x => x.EndPoint.Equals(this.EndPoint));
+
+                if (r != null)
+                    r.Panel.InjectJSFromScript(str);
+            }
+        }
+
         [JSFunction(Name = "popup", IsEnumerable = true, IsWritable = false)]
         public void R_Popup(object a, object b, object c)
         {

@@ -144,11 +144,14 @@ namespace cb0t
                 // images
                 if (html.StartsWith("<img"))
                 {
-                    if (html.StartsWith("<img ") && !html.Contains("onload="))
-                        html = "<img onload=\"imagedLoaded(this)\" " + html.Substring(5);
+                    if (Settings.GetReg<bool>("receive_scribbles", true))
+                    {
+                        if (html.StartsWith("<img ") && !html.Contains("onload="))
+                            html = "<img onload=\"imageLoaded(this)\" " + html.Substring(5);
 
-                    if (html.LastIndexOf("<") == 0)
-                        this.Panel.ShowCustomHTML(html);
+                        if (html.LastIndexOf("<") == 0)
+                            this.Panel.ShowCustomHTML(html);
+                    }
                 }
 
                 // audio
@@ -184,6 +187,12 @@ namespace cb0t
                             sb.Clear();
                         }
                     }
+                }
+
+                // let the script engine decide...
+                else if (!html.ToUpper().Contains("<object"))
+                {
+                    ScriptEvents.OnHTMLReceived(this, html);
                 }
             }
         }
@@ -812,7 +821,7 @@ namespace cb0t
                                     vc.Auto = true;
                                     VoicePlayer.QueueItem(vc);
                                 }
-                                else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender));
+                                else this.Panel.ShowVoice(vc.Sender, vc.ShortCut);
 
                                 ScriptEvents.OnVoiceClipReceived(this, u);
                             }
@@ -853,7 +862,7 @@ namespace cb0t
                                         vc.Auto = true;
                                         VoicePlayer.QueueItem(vc);
                                     }
-                                    else this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender));
+                                    else this.Panel.ShowVoice(vc.Sender, vc.ShortCut);
 
                                     ScriptEvents.OnVoiceClipReceived(this, u);
                                 }

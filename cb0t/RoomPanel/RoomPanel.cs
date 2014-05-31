@@ -39,6 +39,11 @@ namespace cb0t
 
         private ContextMenuStrip rc_ctx { get; set; }
 
+        public void ShowVoice(String sender, uint sc)
+        {
+            this.webControl1.ShowVoice(sender, sc);
+        }
+
         public void UpdateFont()
         {
             this.accuTextBox1.Font.Dispose();
@@ -48,6 +53,16 @@ namespace cb0t
         public void SetScreenWidth(bool wide)
         {
             this.webControl1.IsWideText = wide;
+        }
+
+        public void InjectHTMLFromScript(String str)
+        {
+            this.webControl1.ShowCustomHTML(str);
+        }
+
+        public void InjectJSFromScript(String str)
+        {
+            this.webControl1.ShowCustomScript(str);
         }
 
         public int ViewID

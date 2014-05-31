@@ -22,16 +22,21 @@ namespace cb0t
         public static String DataPath { get; set; }
         public static String AppPath { get; set; }
         public static String VoicePath { get; set; }
+        public static String ScribblePath { get; set; }
         public static String ArtPath { get; set; }
         public static String ScriptPath { get; set; }
         public static String AniEmoticPath { get; set; }
+
+        public static ulong ScribbleIdent { get; set; }
 
         private static Stopwatch sw { get; set; }
 
         public static void Create()
         {
+            ScribbleIdent = 0;
             DataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\";
             VoicePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\voice\\";
+            ScribblePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\scribble\\";
             ArtPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\art\\";
             ScriptPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\scripts\\";
             AppPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -71,6 +76,17 @@ namespace cb0t
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+
+            path = Path.Combine(DataPath, "temp\\scribble");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            files = new DirectoryInfo(path).GetFiles();
+
+            foreach (FileInfo f in files)
+                try { File.Delete(f.FullName); }
+                catch { }
         }
 
         public static IPAddress LocalIP

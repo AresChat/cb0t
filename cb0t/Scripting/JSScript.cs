@@ -63,6 +63,7 @@ namespace cb0t.Scripting
         public UserDefinedFunction EVENT_ONROOMOPENED { get; set; }
         public UserDefinedFunction EVENT_ONROOMCLOSED { get; set; }
         public UserDefinedFunction EVENT_ONERROR { get; set; }
+        public UserDefinedFunction EVENT_ONHTMLRECEIVED { get; set; }
 
         public JSScript(String name, bool is_subscript)
         {
