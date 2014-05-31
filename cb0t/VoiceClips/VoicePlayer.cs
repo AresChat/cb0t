@@ -67,7 +67,7 @@ namespace cb0t
                             Room room = RoomPool.Rooms.Find(x => x.EndPoint.Equals(item.EndPoint));
 
                             if (room != null)
-                                room.ShowAnnounceText((item.IsBlack ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + item.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", item.Sender));
+                                room.Panel.ShowVoice(item.Sender, item.ShortCut);
                         }
                     }
                 }

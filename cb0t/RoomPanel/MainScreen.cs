@@ -1,10 +1,16 @@
-﻿using Awesomium.Windows.Forms;
+﻿using Awesomium.Core;
+using Awesomium.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Collections.Concurrent;
+using System.Windows.Forms;
 
 namespace cb0t
 {
@@ -12,8 +18,33 @@ namespace cb0t
     {
         public MainScreen(IContainer c) : base(c) { }
 
+        private ConcurrentQueue<String> PendingQueue { get; set; }
+        private ConcurrentQueue<String> PausedQueue { get; set; }
+        private ContextMenuStrip ctx { get; set; }
+
         public void CreateScreen()
         {
+            this.ctx = new ContextMenuStrip();
+            this.ctx.ShowImageMargin = false;
+            this.ctx.ShowCheckMargin = false;
+            this.ctx.Items.Add("Save image...");//0
+            this.ctx.Items[0].Visible = false;
+            this.ctx.Items.Add("Edit...");//1
+            this.ctx.Items[1].Visible = false;
+            this.ctx.Items.Add("Save voice clip...");//2
+            this.ctx.Items[2].Visible = false;
+            this.ctx.Items.Add("Export hashlink...");//3
+            this.ctx.Items[3].Visible = false;
+            this.ctx.Items.Add("Clear screen");//4
+            this.ctx.Items.Add("Export text");//5
+            this.ctx.Items.Add("Copy to clipboard");//6
+            this.ctx.Items.Add("Pause/Unpause screen");//7
+            this.ctx.Opening += this.CTXOpening;
+            this.ctx.Closed += this.CTXClosed;
+            this.ctx.ItemClicked += this.CTXItemClicked;
+
+            this.PendingQueue = new ConcurrentQueue<String>();
+            this.PausedQueue = new ConcurrentQueue<String>();
             this.ViewIdent = -1;
             this.LoadingFrameComplete += this.ScreenIsReady;
             this.ShowContextMenu += this.DefaultContextMenu;
@@ -25,12 +56,31 @@ namespace cb0t
                 template = template.Replace("FFFFFF", "000000");
 
             base.LoadHTML(template);
-            
+        }
+
+        private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void CTXOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+
         }
 
         private void DefaultContextMenu(object sender, Awesomium.Core.ContextMenuEventArgs e)
         {
             e.Handled = true;
+        }
+
+        protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e)
+        {
+            e.SuppressKeyPress = e.KeyData != (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C);
         }
 
         public void OnLinkClicked(System.Windows.Forms.LinkClickedEventArgs e)
@@ -52,6 +102,22 @@ namespace cb0t
 
                     if (hashlink != null)
                         this.HashlinkClicked(hashlink, EventArgs.Empty);
+                }
+                else if (e.LinkText.StartsWith("http://voice.clip/?i="))
+                {
+                    String str = e.LinkText.Substring(21);
+                    uint vc_finder = 0;
+
+                    if (uint.TryParse(str, out vc_finder))
+                    {
+                        VoicePlayerItem vc = VoicePlayer.Records.Find(x => x.ShortCut == vc_finder);
+
+                        if (vc != null)
+                        {
+                            vc.Auto = false;
+                            VoicePlayer.QueueItem(vc);
+                        }
+                    }
                 }
                 else
                 {
@@ -77,6 +143,55 @@ namespace cb0t
             this.LoadingFrameComplete -= this.ScreenIsReady;
             this.IsScreenReady = true;
             this.ViewIdent = this.Identifier;
+            
+            JSObject jsobject = base.CreateGlobalJavascriptObject("cb0t");
+            jsobject.Bind("callbackMouseClick", false, this.JSMouseClicked);
+
+            String[] pending = this.PendingQueue.ToArray();
+
+            foreach (String str in pending)
+                base.ExecuteJavascript(str);
+        }
+
+        private void JSMouseClicked(object sender, JavascriptMethodEventArgs args)
+        {
+            MainScreenButton button = (MainScreenButton)int.Parse(args.Arguments[0].ToString());
+
+            switch (button)
+            {
+                case MainScreenButton.Middle:
+                    this.GetUserNameFromMousePos();
+                    break;
+
+                case MainScreenButton.Right:
+                    break;
+            }
+        }
+
+        private void GetUserNameFromMousePos()
+        {
+            if (!this.IsScreenReady)
+                return;
+
+            JSValue val = base.ExecuteJavascriptWithResult("getUserNameFromMousePos()");
+
+            if (val.IsString)
+            {
+                String str = val.ToString();
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    if (Settings.GetReg<bool>("can_timestamp", false))
+                    {
+                        String[] parts = str.Split(new String[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (parts.Length == 2)
+                            this.NameClicked(parts[1], EventArgs.Empty);
+                    }
+
+                    this.NameClicked(str, EventArgs.Empty);
+                }
+            }
         }
 
         public event EventHandler HashlinkClicked;
@@ -91,17 +206,97 @@ namespace cb0t
 
         public void UpdateTemplate()
         {
-
+            this.ctx.Items[0].Text = StringTemplate.Get(STType.OutBox, 0) + "...";
+            this.ctx.Items[1].Text = StringTemplate.Get(STType.FilterSettings, 1) + "...";
+            this.ctx.Items[2].Text = StringTemplate.Get(STType.OutBox, 1) + "...";
+            this.ctx.Items[3].Text = StringTemplate.Get(STType.RoomMenu, 2) + "...";
+            this.ctx.Items[4].Text = StringTemplate.Get(STType.OutBox, 2);
+            this.ctx.Items[5].Text = StringTemplate.Get(STType.OutBox, 3);
+            this.ctx.Items[6].Text = StringTemplate.Get(STType.OutBox, 4);
+            this.ctx.Items[7].Text = StringTemplate.Get(STType.OutBox, 5);
         }
 
         public void ScrollDown()
         {
-
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action(this.ScrollDown));
+            else
+            {
+                if (!this.IsScreenReady)
+                    this.PendingQueue.Enqueue("scrollDown()");
+                else
+                    base.ExecuteJavascript("scrollDown()");
+            }
         }
 
-        public void Scribble(byte[] data)
+        public void Scribble(object data)
         {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<object>(this.Scribble), data);
+            else
+            {
+                int height = 0, width = 0;
+                Guid type = Guid.Empty;
+                byte[] b = (byte[])data;
 
+                using (MemoryStream stream = new MemoryStream(b))
+                using (Bitmap bmp = new Bitmap(stream))
+                {
+                    height = bmp.Height;
+                    width = bmp.Width;
+                    type = bmp.RawFormat.Guid;
+                }
+
+                if (height > 0 && width > 0)
+                {
+                    String filename = (Settings.ScribbleIdent++) + this.BitmapToFileExtension(type);
+                    File.WriteAllBytes(Path.Combine(Settings.ScribblePath, filename), b);
+                    String html = "<img src=\"http://scribble.image/" + filename + "\" style=\"width: " + width + "px; height: " + height + "px; max-width: 420px; max-height: 420px;\" alt=\"\" />";
+
+                    if (!this.IsScreenReady)
+                        this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                    else
+                        base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                }
+            }
+        }
+
+        public void ShowVoice(String sender, uint sc)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<String, uint>(this.ShowVoice), sender, sc);
+            else
+            {
+                this.ShowAnnounceText("\x000314--- " + sender + ":");
+
+                StringBuilder html = new StringBuilder();
+                html.Append("<div class=\"vc\">");
+                html.Append("<a title=\"\" href=\"http://voice.clip/?i=" + sc + "\" style=\"cursor: pointer;\">");
+                html.Append("<img class=\"vc\" alt=\"\" src=\"http://emotic.ui/voice.png\" />");
+                html.Append("</a>");
+                html.Append("</div>");
+
+                if (!this.IsScreenReady)
+                    this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
+                else
+                    base.ExecuteJavascript("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
+
+                html.Clear();
+            }
+        }
+
+        private String BitmapToFileExtension(Guid guid)
+        {
+            if (guid.Equals(ImageFormat.Gif.Guid))
+                return ".gif";
+            if (guid.Equals(ImageFormat.Icon.Guid))
+                return ".ico";
+            if (guid.Equals(ImageFormat.Jpeg.Guid))
+                return ".jpg";
+            if (guid.Equals(ImageFormat.Png.Guid))
+                return ".png";
+
+            return ".bmp";
         }
 
         public void ShowAnnounceText(String text)
@@ -110,12 +305,6 @@ namespace cb0t
                 this.BeginInvoke(new Action<String>(this.ShowAnnounceText), text);
             else
             {
-                /*if (this.IsPaused)
-                {
-                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Announce, Text = text });
-                    return;
-                }*/
-
                 if (text.Replace("\n", "").Replace("\r", "").Length == 0)
                 {
                     if (this.cls_count++ > 6)
@@ -151,12 +340,6 @@ namespace cb0t
                 this.BeginInvoke(new Action<String>(this.ShowServerText), text);
             else
             {
-             /*   if (this.IsPaused)
-                {
-                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Server, Text = text });
-                    return;
-                } */
-
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, this.IsBlack ? 15 : 2, null);
@@ -169,12 +352,6 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowPublicText), name, text, font);
             else
             {
-                /*if (this.IsPaused)
-                {
-                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Public, Name = name, Text = text });
-                    return;
-                }*/
-
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, this.IsBlack ? 0 : 12, font);
@@ -187,12 +364,6 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, String, AresFont>(this.ShowEmoteText), name, text, font);
             else
             {
-                /*if (this.IsPaused)
-                {
-                    this.paused_items.Add(new PausedItem { Type = PausedItemType.Emote, Name = name, Text = text });
-                    return;
-                }*/
-
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
                 this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, this.IsBlack ? 13 : 6, font);
@@ -206,14 +377,29 @@ namespace cb0t
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action<String>(this.ShowCustomHTML), html);
             else
-                base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+            {
+                if (!this.IsScreenReady)
+                    this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                else
+                    base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+            }
+        }
+
+        public void ShowCustomScript(String src)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<String>(this.ShowCustomScript), src);
+            else
+            {
+                if (!this.IsScreenReady)
+                    this.PendingQueue.Enqueue("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
+                else
+                    base.ExecuteJavascript("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
+            }
         }
 
         private void Render(String txt, String name, bool can_col, int first_col, AresFont _ff)
         {
-            if (!this.IsScreenReady)
-                return;
-
             String text = txt.Replace("\r\n", "\r").Replace("\n",
                 "\r").Replace("", "").Replace("]̽", "").Replace(" ̽",
                 "").Replace("͊", "").Replace("]͊", "").Replace("͠",
@@ -479,7 +665,7 @@ namespace cb0t
                                         hash_inner += ("&#" + ((int)tmp[a]) + ";");
 
                                     String hash_img = "<img style=\"margin-bottom: -4px; border-style: none; height: 24px;\" src=\"http://emotic.ui/hashlink.png\" alt=\"\" />";
-                                    html.Append("<a href=\"" + hash_href + "\" title=\"" + hash_title + "\" style=\"text-decoration: underline; cursor: pointer;\">" + hash_img + " " + hash_inner + "</a>");
+                                    html.Append("<a href=\"" + hash_href + "\" title=\"" + hash_title + "\" style=\"text-decoration: underline; cursor: pointer;\">" + hash_img + hash_inner + "</a>");
                                     break;
                                 }
                                 else
@@ -579,7 +765,11 @@ namespace cb0t
                 font_style.Clear();
             }
 
-            base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+            if (!this.IsScreenReady)
+                this.PendingQueue.Enqueue("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+            else
+                base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+
             html.Clear();
         }
 
@@ -640,6 +830,24 @@ namespace cb0t
         {
             this.IsScreenReady = false;
             this.ShowContextMenu -= this.DefaultContextMenu;
+            this.PausedQueue = new ConcurrentQueue<String>();
+            this.PendingQueue = new ConcurrentQueue<String>();
+            this.ctx.Opening -= this.CTXOpening;
+            this.ctx.Closed -= this.CTXClosed;
+            this.ctx.ItemClicked -= this.CTXItemClicked;
+
+            while (this.ctx.Items.Count > 0)
+                this.ctx.Items[0].Dispose();
+
+            this.ctx.Dispose();
+            this.ctx = null;
         }
+    }
+
+    enum MainScreenButton
+    {
+        Left = 0,
+        Middle = 1,
+        Right = 2
     }
 }
