@@ -51,6 +51,7 @@
             this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.checkBox14 = new System.Windows.Forms.CheckBox();
             this.checkBox15 = new System.Windows.Forms.CheckBox();
+            this.checkBox16 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -69,7 +70,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(32, 32);
+            this.checkBox1.Location = new System.Drawing.Point(230, 32);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(114, 17);
             this.checkBox1.TabIndex = 1;
@@ -80,7 +81,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(32, 68);
+            this.checkBox2.Location = new System.Drawing.Point(230, 68);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(110, 17);
             this.checkBox2.TabIndex = 2;
@@ -91,7 +92,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(32, 86);
+            this.checkBox3.Location = new System.Drawing.Point(230, 86);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(176, 17);
             this.checkBox3.TabIndex = 3;
@@ -102,7 +103,7 @@
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(32, 104);
+            this.checkBox4.Location = new System.Drawing.Point(230, 122);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(113, 17);
             this.checkBox4.TabIndex = 4;
@@ -113,7 +114,7 @@
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(32, 122);
+            this.checkBox5.Location = new System.Drawing.Point(230, 140);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(151, 17);
             this.checkBox5.TabIndex = 5;
@@ -124,7 +125,7 @@
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(32, 140);
+            this.checkBox6.Location = new System.Drawing.Point(230, 158);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(104, 17);
             this.checkBox6.TabIndex = 6;
@@ -135,7 +136,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(32, 158);
+            this.checkBox7.Location = new System.Drawing.Point(230, 176);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(110, 17);
             this.checkBox7.TabIndex = 7;
@@ -146,7 +147,7 @@
             // checkBox8
             // 
             this.checkBox8.AutoSize = true;
-            this.checkBox8.Location = new System.Drawing.Point(32, 176);
+            this.checkBox8.Location = new System.Drawing.Point(230, 194);
             this.checkBox8.Name = "checkBox8";
             this.checkBox8.Size = new System.Drawing.Size(135, 17);
             this.checkBox8.TabIndex = 8;
@@ -157,7 +158,7 @@
             // checkBox9
             // 
             this.checkBox9.AutoSize = true;
-            this.checkBox9.Location = new System.Drawing.Point(32, 212);
+            this.checkBox9.Location = new System.Drawing.Point(230, 230);
             this.checkBox9.Name = "checkBox9";
             this.checkBox9.Size = new System.Drawing.Size(134, 17);
             this.checkBox9.TabIndex = 9;
@@ -168,7 +169,7 @@
             // checkBox10
             // 
             this.checkBox10.AutoSize = true;
-            this.checkBox10.Location = new System.Drawing.Point(32, 230);
+            this.checkBox10.Location = new System.Drawing.Point(230, 248);
             this.checkBox10.Name = "checkBox10";
             this.checkBox10.Size = new System.Drawing.Size(157, 17);
             this.checkBox10.TabIndex = 10;
@@ -179,7 +180,7 @@
             // checkBox11
             // 
             this.checkBox11.AutoSize = true;
-            this.checkBox11.Location = new System.Drawing.Point(32, 248);
+            this.checkBox11.Location = new System.Drawing.Point(230, 266);
             this.checkBox11.Name = "checkBox11";
             this.checkBox11.Size = new System.Drawing.Size(104, 17);
             this.checkBox11.TabIndex = 11;
@@ -193,16 +194,16 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(32, 357);
+            this.groupBox1.Location = new System.Drawing.Point(19, 80);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(256, 134);
+            this.groupBox1.Size = new System.Drawing.Size(197, 134);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Global font";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(166, 91);
+            this.numericUpDown1.Location = new System.Drawing.Point(98, 91);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             18,
             0,
@@ -215,7 +216,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.ReadOnly = true;
-            this.numericUpDown1.Size = new System.Drawing.Size(48, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(74, 20);
             this.numericUpDown1.TabIndex = 6;
             this.numericUpDown1.Value = new decimal(new int[] {
             10,
@@ -227,7 +228,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(163, 75);
+            this.label2.Location = new System.Drawing.Point(95, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(33, 13);
             this.label2.TabIndex = 7;
@@ -237,16 +238,16 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(42, 44);
+            this.comboBox1.Location = new System.Drawing.Point(22, 44);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(172, 21);
+            this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 5;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(40, 28);
+            this.label3.Location = new System.Drawing.Point(20, 28);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 4;
@@ -255,7 +256,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(29, 309);
+            this.label4.Location = new System.Drawing.Point(16, 32);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 13);
             this.label4.TabIndex = 13;
@@ -274,7 +275,7 @@
             "Spanish",
             "Spanish (Mexico)",
             "Spanish (Catalan)"});
-            this.comboBox2.Location = new System.Drawing.Point(32, 325);
+            this.comboBox2.Location = new System.Drawing.Point(19, 48);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(145, 21);
             this.comboBox2.TabIndex = 14;
@@ -283,7 +284,7 @@
             // checkBox12
             // 
             this.checkBox12.AutoSize = true;
-            this.checkBox12.Location = new System.Drawing.Point(32, 50);
+            this.checkBox12.Location = new System.Drawing.Point(230, 50);
             this.checkBox12.Name = "checkBox12";
             this.checkBox12.Size = new System.Drawing.Size(148, 17);
             this.checkBox12.TabIndex = 15;
@@ -294,7 +295,7 @@
             // checkBox13
             // 
             this.checkBox13.AutoSize = true;
-            this.checkBox13.Location = new System.Drawing.Point(32, 266);
+            this.checkBox13.Location = new System.Drawing.Point(230, 284);
             this.checkBox13.Name = "checkBox13";
             this.checkBox13.Size = new System.Drawing.Size(120, 17);
             this.checkBox13.TabIndex = 16;
@@ -305,7 +306,7 @@
             // checkBox14
             // 
             this.checkBox14.AutoSize = true;
-            this.checkBox14.Location = new System.Drawing.Point(32, 194);
+            this.checkBox14.Location = new System.Drawing.Point(230, 212);
             this.checkBox14.Name = "checkBox14";
             this.checkBox14.Size = new System.Drawing.Size(115, 17);
             this.checkBox14.TabIndex = 17;
@@ -316,7 +317,7 @@
             // checkBox15
             // 
             this.checkBox15.AutoSize = true;
-            this.checkBox15.Location = new System.Drawing.Point(32, 284);
+            this.checkBox15.Location = new System.Drawing.Point(230, 302);
             this.checkBox15.Name = "checkBox15";
             this.checkBox15.Size = new System.Drawing.Size(124, 17);
             this.checkBox15.TabIndex = 18;
@@ -324,11 +325,23 @@
             this.checkBox15.UseVisualStyleBackColor = true;
             this.checkBox15.CheckedChanged += new System.EventHandler(this.checkBox15_CheckedChanged);
             // 
+            // checkBox16
+            // 
+            this.checkBox16.AutoSize = true;
+            this.checkBox16.Location = new System.Drawing.Point(230, 104);
+            this.checkBox16.Name = "checkBox16";
+            this.checkBox16.Size = new System.Drawing.Size(92, 17);
+            this.checkBox16.TabIndex = 19;
+            this.checkBox16.Text = "Enable HTML";
+            this.checkBox16.UseVisualStyleBackColor = true;
+            this.checkBox16.CheckedChanged += new System.EventHandler(this.checkBox16_CheckedChanged);
+            // 
             // GlobalSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.checkBox16);
             this.Controls.Add(this.checkBox15);
             this.Controls.Add(this.checkBox14);
             this.Controls.Add(this.checkBox13);
@@ -349,7 +362,7 @@
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label1);
             this.Name = "GlobalSettings";
-            this.Size = new System.Drawing.Size(603, 512);
+            this.Size = new System.Drawing.Size(535, 365);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -383,5 +396,6 @@
         private System.Windows.Forms.CheckBox checkBox13;
         private System.Windows.Forms.CheckBox checkBox14;
         private System.Windows.Forms.CheckBox checkBox15;
+        private System.Windows.Forms.CheckBox checkBox16;
     }
 }
