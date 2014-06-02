@@ -17,6 +17,7 @@ namespace cb0t
 
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }
+        public static bool CanHTML { get; set; }
 
         public static AresFont MyFont { get; set; }
         public static String DataPath { get; set; }

@@ -16,13 +16,8 @@ namespace cb0t
 {
     class MainScreen : WebControl
     {
-        public MainScreen(IContainer c) : base(c) { }
-
-        private ConcurrentQueue<String> PendingQueue { get; set; }
-        private ConcurrentQueue<String> PausedQueue { get; set; }
-        private ContextMenuStrip ctx { get; set; }
-
-        public void CreateScreen()
+        public MainScreen(IContainer c)
+            : base(c)
         {
             this.ctx = new ContextMenuStrip();
             this.ctx.ShowImageMargin = false;
@@ -45,6 +40,14 @@ namespace cb0t
 
             this.PendingQueue = new ConcurrentQueue<String>();
             this.PausedQueue = new ConcurrentQueue<String>();
+        }
+
+        private ConcurrentQueue<String> PendingQueue { get; set; }
+        private ConcurrentQueue<String> PausedQueue { get; set; }
+        private ContextMenuStrip ctx { get; set; }
+
+        public void CreateScreen()
+        {
             this.ViewIdent = -1;
             this.LoadingFrameComplete += this.ScreenIsReady;
             this.ShowContextMenu += this.DefaultContextMenu;
@@ -151,6 +154,8 @@ namespace cb0t
 
             foreach (String str in pending)
                 base.ExecuteJavascript(str);
+
+            this.ShowVoice("tester", 123);
         }
 
         private void JSMouseClicked(object sender, JavascriptMethodEventArgs args)
@@ -164,8 +169,15 @@ namespace cb0t
                     break;
 
                 case MainScreenButton.Right:
+                    this.OpenRightClickMenu();
                     break;
             }
+        }
+
+        private void OpenRightClickMenu()
+        {
+            JSValue val = base.ExecuteJavascriptWithResult("openRightClickMenu()");
+            this.ShowAnnounceText(val.ToString());
         }
 
         private void GetUserNameFromMousePos()

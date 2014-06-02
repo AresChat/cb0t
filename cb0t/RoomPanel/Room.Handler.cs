@@ -125,6 +125,9 @@ namespace cb0t
 
         private void Eval_HTML(TCPPacketReader packet)
         {
+            if (!Settings.CanHTML)
+                return;
+
             String html = packet.ReadString();
 
             if (html == "<!--MOTDSTART-->")

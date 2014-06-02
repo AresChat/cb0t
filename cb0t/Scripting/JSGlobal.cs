@@ -23,6 +23,12 @@ namespace cb0t.Scripting
             }
         }
 
+        [JSFunction(Name = "canHTML")]
+        public static bool CanHTML()
+        {
+            return Settings.CanHTML;
+        }
+
         [JSFunction(Name = "clearInterval")]
         public static bool ClearInterval(object a)
         {
