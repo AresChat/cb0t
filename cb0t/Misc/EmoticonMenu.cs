@@ -19,6 +19,7 @@ namespace cb0t
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
             this.emRegMenu1.EmoticonClicked += this.RegEmoticonClicked;
+            this.VisibleChanged += this.EmoticonMenu_VisibleChanged;
 
           /*  for (int i = 0; i < Emoticons.ex_emotic.Length; i++)
             {
@@ -46,6 +47,12 @@ namespace cb0t
                 pb.Cursor = Cursors.Hand;
                 this.emExtMenu1.Controls.Add(pb);
             }
+        }
+
+        private void EmoticonMenu_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+                this.emExtMenu1.BeginInvoke((Action)(() => this.emExtMenu1.Focus()));
         }
 
         private RoomPanel callback = null;

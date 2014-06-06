@@ -55,7 +55,7 @@ namespace cb0t
                 HomeURL = new Uri("about:blank"),
                 LogLevel = LogLevel.None
             });
-
+            
             WebCore.Initialized += WebCore_Initialized;
 
             Application.Run(new Form1(hashlink));
