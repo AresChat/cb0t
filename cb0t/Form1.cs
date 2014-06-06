@@ -882,6 +882,11 @@ namespace cb0t
             {
                 this.terminate = true;
                 this.clist_content.Terminate = true;
+
+             //   if (Awesomium.Core.WebCore.IsInitialized)
+               //     Awesomium.Core.WebCore.Shutdown();
+
+                Thread.Sleep(500);
             }
             else
             {

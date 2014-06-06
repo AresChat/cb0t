@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Collections.Concurrent;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace cb0t
 {
@@ -34,7 +35,6 @@ namespace cb0t
             this.ctx.Items.Add("Export text");//5
             this.ctx.Items.Add("Copy to clipboard");//6
             this.ctx.Items.Add("Pause/Unpause screen");//7
-            this.ctx.Opening += this.CTXOpening;
             this.ctx.Closed += this.CTXClosed;
             this.ctx.ItemClicked += this.CTXItemClicked;
 
@@ -61,19 +61,132 @@ namespace cb0t
             base.LoadHTML(template);
         }
 
+        private bool IsPaused { get; set; }
+
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            if (e.ClickedItem.Equals(this.ctx.Items[0])) // save image
+            {
+                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
 
-        }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[1])) // edit image
+            {
+                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+                
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[2])) // save voice clip
+            {
+                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
 
-        private void CTXOpening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
+                if (str.StartsWith("http://voice.clip/?i="))
+                {
+                    str = str.Substring(21);
+                    uint vc_finder;
 
+                    if (uint.TryParse(str, out vc_finder))
+                    {
+                        VoicePlayerItem vc_item = VoicePlayer.Records.Find(x => x.ShortCut == vc_finder);
+
+                        if (vc_item != null)
+                        {
+                            this.ctx.Hide();
+                            SharedUI.SaveFile.Filter = "Wav|*.wav";
+                            SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+                            SharedUI.SaveFile.FileName = String.Empty;
+
+                            if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                try
+                                {
+                                    String org_path = Path.Combine(Settings.VoicePath, vc_item.FileName + ".wav");
+                                    File.Copy(org_path, SharedUI.SaveFile.FileName);
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[3])) // export hashlink
+            {
+                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+
+                if (str.StartsWith("http://hashlink.link/?h="))
+                {
+                    str = str.Substring(24);
+                    StringBuilder sb = new StringBuilder();
+                    DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
+
+
+                    if (dh != null)
+                    {
+                        sb.AppendLine(dh.Name);
+                        sb.Append("arlnk://");
+                        
+                        sb.AppendLine(Hashlink.EncodeHashlink(new Redirect
+                        {
+                            Hashlink = str,
+                            IP = dh.IP,
+                            Name = dh.Name,
+                            Port = dh.Port
+                        }));
+
+                        try
+                        {
+                            File.WriteAllText(Settings.DataPath + "hashlink.txt", sb.ToString());
+                            Process.Start("notepad.exe", Settings.DataPath + "hashlink.txt");
+                        }
+                        catch { }
+                    }
+                }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[4])) // clear screen
+            {
+                base.ExecuteJavascript("clearScreen()");
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[5])) // export text
+            {
+                String str = base.ExecuteJavascriptWithResult("getExportText()").ToString();
+
+                try
+                {
+                    File.WriteAllText(Settings.DataPath + "export.txt", str);
+                    Process.Start("notepad.exe", Settings.DataPath + "export.txt");
+                }
+                catch { }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[6])) // copy to clipboard
+            {
+                String str = base.ExecuteJavascriptWithResult("getClipboardText()").ToString();
+
+                try { Clipboard.SetText(str); }
+                catch { }
+            }
+            else if (e.ClickedItem.Equals(this.ctx.Items[7])) // pause/unpause
+            {
+                if (this.IsPaused)
+                {
+                    this.IsPaused = false;
+                    String[] paused_items = this.PausedQueue.ToArray();
+
+                    foreach (String str in paused_items)
+                        base.ExecuteJavascript(str);
+
+                    this.PausedQueue = new ConcurrentQueue<String>();
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 6));
+                }
+                else
+                {
+                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 7));
+                    this.IsPaused = true;
+                }
+            }
         }
 
         private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-
+            base.ExecuteJavascript("closeRightClickMenu()");
         }
 
         private void DefaultContextMenu(object sender, Awesomium.Core.ContextMenuEventArgs e)
@@ -126,7 +239,7 @@ namespace cb0t
                 {
                     String check = e.LinkText.ToUpper();
 
-                    if (check.StartsWith("HTTP://") || check.StartsWith("HTTPS://") || check.StartsWith("WWW."))
+                    if (check.StartsWith("HTTP://") || check.StartsWith("HTTPS://"))
                     {
                         Scripting.JSOutboundTextItem cb = new Scripting.JSOutboundTextItem();
                         cb.Type = Scripting.JSOutboundTextItemType.Link;
@@ -155,7 +268,7 @@ namespace cb0t
             foreach (String str in pending)
                 base.ExecuteJavascript(str);
 
-            this.ShowVoice("tester", 123);
+            this.PendingQueue = new ConcurrentQueue<String>();
         }
 
         private void JSMouseClicked(object sender, JavascriptMethodEventArgs args)
@@ -177,7 +290,12 @@ namespace cb0t
         private void OpenRightClickMenu()
         {
             JSValue val = base.ExecuteJavascriptWithResult("openRightClickMenu()");
-            this.ShowAnnounceText(val.ToString());
+            String options = val.ToString();
+            this.ctx.Items[3].Visible = options[0] == '1';
+            this.ctx.Items[0].Visible = options[1] == '1';
+            this.ctx.Items[1].Visible = options[1] == '1';
+            this.ctx.Items[2].Visible = options[2] == '1';
+            this.ctx.Show(MousePosition);
         }
 
         private void GetUserNameFromMousePos()
@@ -236,6 +354,8 @@ namespace cb0t
             {
                 if (!this.IsScreenReady)
                     this.PendingQueue.Enqueue("scrollDown()");
+                else if (this.IsPaused)
+                    this.PausedQueue.Enqueue("scrollDown()");
                 else
                     base.ExecuteJavascript("scrollDown()");
             }
@@ -267,6 +387,8 @@ namespace cb0t
 
                     if (!this.IsScreenReady)
                         this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                    else if (this.IsPaused)
+                        this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
                     else
                         base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
                 }
@@ -290,6 +412,8 @@ namespace cb0t
 
                 if (!this.IsScreenReady)
                     this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
+                else if (this.IsPaused)
+                    this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
                 else
                     base.ExecuteJavascript("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
 
@@ -392,6 +516,8 @@ namespace cb0t
             {
                 if (!this.IsScreenReady)
                     this.PendingQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                else if (this.IsPaused)
+                    this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
                 else
                     base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
             }
@@ -405,6 +531,8 @@ namespace cb0t
             {
                 if (!this.IsScreenReady)
                     this.PendingQueue.Enqueue("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
+                else if (this.IsPaused)
+                    this.PausedQueue.Enqueue("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
                 else
                     base.ExecuteJavascript("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
             }
@@ -570,7 +698,7 @@ namespace cb0t
                             {
                                 if (emote_count++ < 8)
                                 {
-                                    html.Append("<img style=\"height: 19px; margin-bottom: -4px;\" alt=\"\" src=\"http://emotic.org/" + em.Index + ".gif\" />");
+                                    html.Append("<img style=\"height: 19px; margin-bottom: -1px;\" alt=\"\" src=\"http://emotic.org/" + em.Index + ".gif\" />");
                                     i += (em.Shortcut.Length - 1);
                                     break;
                                 }
@@ -585,7 +713,7 @@ namespace cb0t
                                 {
                                     itmp = Emoticons.GetExEmoticonHeight(em.Index);
                                     tmp = em.Shortcut.Substring(1, em.Shortcut.Length - 2).ToLower();
-                                    html.Append("<img style=\"height: " + itmp + "px; margin-bottom: -4px;\" alt=\"\" src=\"http://emotic.ext/" + tmp + ".gif\" />");
+                                    html.Append("<img style=\"height: " + itmp + "px; margin-bottom: -1px;\" alt=\"\" src=\"http://emotic.ext/" + tmp + ".gif\" />");
                                     i += (em.Shortcut.Length - 1);
                                     break;
                                 }
@@ -670,33 +798,36 @@ namespace cb0t
                                     for (int a = 0; a < tmp.Length; a++)
                                         hash_href += ("&#" + ((int)tmp[a]) + ";");
 
-                                    tmp = StringTemplate.Get(STType.HashlinkSettings, 0) + ": " + dec_hash.Name;
+                                    tmp = dec_hash.Name;
                                     String hash_inner = String.Empty;
 
                                     for (int a = 0; a < tmp.Length; a++)
                                         hash_inner += ("&#" + ((int)tmp[a]) + ";");
 
-                                    String hash_img = "<img style=\"margin-bottom: -4px; border-style: none; height: 24px;\" src=\"http://emotic.ui/hashlink.png\" alt=\"\" />";
+                                    String hash_img = "<img style=\"margin-bottom: -1px; border-style: none; height: 24px;\" src=\"http://emotic.ui/hashlink.png\" alt=\"\" />";
                                     html.Append("<a href=\"" + hash_href + "\" title=\"" + hash_title + "\" style=\"text-decoration: underline; cursor: pointer;\">" + hash_img + hash_inner + "</a>");
                                     break;
                                 }
                                 else
                                 {
-                                    if (tmp.IndexOf("www.") == 0)
-                                    {
-                                        pre_link = "http://";
+                                    String enclink = tmp;
 
-                                        for (int a = 0; a < pre_link.Length; a++)
-                                            link += ("&#" + ((int)pre_link[a]) + ";");
+                                    if (enclink.IndexOf("www.") == 0)
+                                        enclink = "http://" + enclink;
 
-                                        pre_link = link;
-                                        link = "";
-                                    }
+                                    StringBuilder elink = new StringBuilder();
+                                    byte[] elbytes = Encoding.UTF8.GetBytes(enclink);
+
+                                    foreach (byte c in enclink)
+                                        elink.AppendFormat("{0:X2}", c);
+
+                                    elink.Insert(0, "http://external.link/");
 
                                     for (int a = 0; a < tmp.Length; a++)
                                         link += ("&#" + ((int)tmp[a]) + ";");
 
-                                    html.Append("<a href=\"" + pre_link + link + "\" title=\"" + link + "\" style=\"text-decoration: underline; cursor: pointer;\">" + link + "</a>");
+                                    html.Append("<a href=\"" + elink.ToString() + "\" title=\"" + link + "\" style=\"text-decoration: underline; cursor: pointer;\">" + link + "</a>");
+                                    elink.Clear();
                                     break;
                                 }
                             }
@@ -779,6 +910,8 @@ namespace cb0t
 
             if (!this.IsScreenReady)
                 this.PendingQueue.Enqueue("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+            else if (this.IsPaused)
+                this.PausedQueue.Enqueue("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
             else
                 base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
 
@@ -844,7 +977,6 @@ namespace cb0t
             this.ShowContextMenu -= this.DefaultContextMenu;
             this.PausedQueue = new ConcurrentQueue<String>();
             this.PendingQueue = new ConcurrentQueue<String>();
-            this.ctx.Opening -= this.CTXOpening;
             this.ctx.Closed -= this.CTXClosed;
             this.ctx.ItemClicked -= this.CTXItemClicked;
 

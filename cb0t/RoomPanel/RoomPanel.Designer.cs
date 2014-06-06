@@ -298,9 +298,11 @@
             this.webControl1.EndPoint = null;
             this.webControl1.IsBlack = false;
             this.webControl1.IsMainScreen = false;
+            this.webControl1.IsWideText = false;
             this.webControl1.Location = new System.Drawing.Point(0, 0);
             this.webControl1.Size = new System.Drawing.Size(312, 233);
             this.webControl1.TabIndex = 2;
+            this.webControl1.ViewIdent = 0;
             // 
             // writingPanel1
             // 

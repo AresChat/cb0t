@@ -172,7 +172,7 @@ namespace cb0t
                 }
 
                 // youtube
-                else if (html.StartsWith("<!--YOUTUBE:") && this.IsMOTDReceiving)
+                else if (html.StartsWith("<!--EMBEDYOUTUBE:") && this.IsMOTDReceiving)
                 {
                     html = html.Substring(12);
 

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 
 namespace cb0t
 {
@@ -58,10 +59,28 @@ namespace cb0t
                     Room r = RoomPool.Rooms.Find(x => x.Panel.ViewID == id);
 
                     if (r != null)
-                    {
-                        r.Panel.ProcessLinkClicked(request.Url.ToString());
-                        return true;
-                    }
+                        if (!String.IsNullOrEmpty(request.Url.Host))
+                        {
+                            switch (request.Url.Host)
+                            {
+                                case "hashlink.script":
+                                case "hashlink.link":
+                                case "voice.clip":
+                                    r.Panel.ProcessLinkClicked(request.Url.ToString());
+                                    return true;
+
+                                case "external.link":
+                                    String str = request.Url.LocalPath.Substring(1);
+                                    byte[] buf = new byte[str.Length / 2];
+
+                                    for (var i = 0; i < buf.Length; i++)
+                                        buf[i] = byte.Parse(str.Substring((i * 2), 2), NumberStyles.HexNumber);
+
+                                    str = Encoding.UTF8.GetString(buf);
+                                    r.Panel.ProcessLinkClicked(str);
+                                    return true;
+                            }
+                        }
                 }
 
             return false;
