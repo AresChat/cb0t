@@ -63,17 +63,56 @@ namespace cb0t
 
         private bool IsPaused { get; set; }
 
+        private void DownloadedImageReceived(DownloadedImagedReceivedEventArgs e)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new Action<DownloadedImagedReceivedEventArgs>(this.DownloadedImageReceived), e);
+            else
+            {
+                if (e.ImageBytes == null)
+                    return;
+
+                if (!e.Save)
+                    this.EditScribbleClicked(e.ImageBytes, EventArgs.Empty);
+                else
+                {
+                    SharedUI.SaveFile.Filter = "Image|*.png";
+                    SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    SharedUI.SaveFile.FileName = String.Empty;
+
+                    if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            File.WriteAllBytes(SharedUI.SaveFile.FileName, e.ImageBytes);
+                        }
+                        catch { }
+                    }
+                }
+            }
+        }
+
         private void CTXItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Equals(this.ctx.Items[0])) // save image
             {
                 String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
 
+                if (!String.IsNullOrEmpty(str))
+                {
+                    this.ctx.Close();
+                    SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, true);
+                }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[1])) // edit image
             {
                 String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
-                
+
+                if (!String.IsNullOrEmpty(str))
+                {
+                    this.ctx.Close();
+                    SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, false);
+                }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[2])) // save voice clip
             {

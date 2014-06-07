@@ -15,6 +15,7 @@ namespace cb0t
         public static ColorMenu CMenu { get; set; }
         public static OpenFileDialog OpenFile { get; set; }
         public static FolderBrowserDialog OpenFolder { get; set; }
+        public static ScribbleDownloader ScribbleDownloader { get; set; }
 
         public static void Init()
         {
@@ -25,6 +26,8 @@ namespace cb0t
             CMenu = new ColorMenu();
             OpenFile = new OpenFileDialog();
             OpenFolder = new FolderBrowserDialog();
+            ScribbleDownloader = new ScribbleDownloader();
+            ScribbleDownloader.PrepareAnimation();
         }
 
         public static void UpdateTemplate()
