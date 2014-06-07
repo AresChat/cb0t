@@ -127,6 +127,12 @@
     <Compile Include="RoomPanel\MainScreenResourceManager.cs" />
     <Compile Include="MediaIPC\iTunes\iTunesListener.cs" />
     <Compile Include="RoomPanel\MainScreen.cs" />
+    <Compile Include="ScribbleDownloader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScribbleDownloader.Designer.cs">
+      <DependentUpon>ScribbleDownloader.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scripting\CustomJSMenuOption.cs" />
     <Compile Include="Scripting\CustomJSRoomMenuCallback.cs" />
     <Compile Include="Scripting\CustomJSUserListMenuCallback.cs" />
@@ -535,6 +541,9 @@
     <EmbeddedResource Include="AudioPanel\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ScribbleDownloader.resx">
+      <DependentUpon>ScribbleDownloader.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scripting\CustomScriptSettings.resx">
       <DependentUpon>CustomScriptSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -639,6 +648,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dav.dat" />
+    <None Include="Resources\loader.dat" />
     <None Include="Resources\read.png" />
   </ItemGroup>
   <ItemGroup>

@@ -629,8 +629,8 @@ namespace cb0t
         private delegate void InitScribbleDelegate();
         public void InitScribbleButton()
         {
-            if (!this.toolStrip2.IsHandleCreated)
-                return;
+         //   if (!this.toolStrip2.IsHandleCreated)
+           //     return;
 
             if (this.toolStrip2.InvokeRequired)
                 this.toolStrip2.BeginInvoke(new InitScribbleDelegate(this.InitScribbleButton));
