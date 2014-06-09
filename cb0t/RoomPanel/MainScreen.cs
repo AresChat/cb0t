@@ -301,6 +301,7 @@ namespace cb0t
             
             JSObject jsobject = base.CreateGlobalJavascriptObject("cb0t");
             jsobject.Bind("callbackMouseClick", false, this.JSMouseClicked);
+            jsobject.Bind("callbackCopyRequested", false, this.JSCopyRequested);
 
             String[] pending = this.PendingQueue.ToArray();
 
@@ -308,6 +309,15 @@ namespace cb0t
                 base.ExecuteJavascript(str);
 
             this.PendingQueue = new ConcurrentQueue<String>();
+        }
+
+        private void JSCopyRequested(object sender, JavascriptMethodEventArgs args)
+        {
+            String str = args.Arguments[0].ToString();
+
+            if (!String.IsNullOrEmpty(str))
+                try { Clipboard.SetText(str); }
+                catch { }
         }
 
         private void JSMouseClicked(object sender, JavascriptMethodEventArgs args)
@@ -621,6 +631,7 @@ namespace cb0t
             html.Append(this.BuildFontStyle(fore, back, bold, italic, underline));
 
             char[] letters = text.ToCharArray();
+            bool special_space = false;
 
             for (int i = 0; i < letters.Length; i++)
             {
@@ -877,11 +888,22 @@ namespace cb0t
 
                     case ' ':
                         can_link = true;
-                        html.Append("&#" + ((int)letters[i]) + ";");
+
+                        if (special_space)
+                        {
+                            html.Append("&nbsp;");
+                            special_space = false;
+                        }
+                        else
+                        {
+                            html.Append("&#" + ((int)letters[i]) + ";");
+                            special_space = true;
+                        }
                         break;
 
                     default:
                         can_link = false;
+                        special_space = false;
                         html.Append("&#" + ((int)letters[i]) + ";");
                         break;
                 }
@@ -914,7 +936,10 @@ namespace cb0t
                 char[] name_chrs = (name + "> ").ToCharArray();
 
                 for (int i = 0; i < name_chrs.Length; i++)
-                    name_builder.Append("&#" + ((int)name_chrs[i]) + ";");
+                    if (name_chrs[i] == ' ' && i < (name_chrs.Length - 1))
+                        name_builder.Append("&nbsp;");
+                    else
+                        name_builder.Append("&#" + ((int)name_chrs[i]) + ";");
 
                 name_builder.Append("</span>");
                 html.Insert(0, name_builder.ToString());
