@@ -416,17 +416,27 @@ namespace cb0t
                 this.BeginInvoke(new Action<object>(this.Scribble), data);
             else
             {
+                if (data == null)
+                    return;
+
+                if (!(data is byte[]))
+                    return;
+
                 int height = 0, width = 0;
                 Guid type = Guid.Empty;
                 byte[] b = (byte[])data;
 
-                using (MemoryStream stream = new MemoryStream(b))
-                using (Bitmap bmp = new Bitmap(stream))
+                try
                 {
-                    height = bmp.Height;
-                    width = bmp.Width;
-                    type = bmp.RawFormat.Guid;
+                    using (MemoryStream stream = new MemoryStream(b))
+                    using (Bitmap bmp = new Bitmap(stream))
+                    {
+                        height = bmp.Height;
+                        width = bmp.Width;
+                        type = bmp.RawFormat.Guid;
+                    }
                 }
+                catch { }
 
                 if (height > 0 && width > 0)
                 {

@@ -311,13 +311,23 @@ namespace cb0t
 
         private void Eval_Announce(TCPPacketReader packet)
         {
-            String text = packet.ReadString(this.crypto);
-            text = ScriptEvents.OnAnnounceReceiving(this, text);
+            String str = packet.ReadString(this.crypto);
+            str = str.Replace("\r\n", "\0");
+            str = str.Replace("\r", "\0");
+            str = str.Replace("\n", "\0");
+            String[] lines = str.Split(new String[] { "\0" }, StringSplitOptions.None);
+            String text;
 
-            if (!String.IsNullOrEmpty(text))
+            foreach (String l in lines)
             {
-                this.Panel.AnnounceText(text);
-                ScriptEvents.OnAnnounceReceived(this, text);
+                text = l;
+                text = ScriptEvents.OnAnnounceReceiving(this, text);
+
+                if (text != null)
+                {
+                    this.Panel.AnnounceText(text);
+                    ScriptEvents.OnAnnounceReceived(this, text);
+                }
             }
         }
 
