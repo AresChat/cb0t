@@ -56,13 +56,13 @@
     <ApplicationIcon>ni.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.4.2, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
+    <Reference Include="Awesomium.Core, Version=1.7.3.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.4.2\wrappers\Awesomium.NET\Assemblies\Awesomium.Core.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.3.0\wrappers\Awesomium.NET\Assemblies\Awesomium.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Awesomium.Windows.Forms, Version=1.7.4.2, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86">
+    <Reference Include="Awesomium.Windows.Forms, Version=1.7.3.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.4.2\wrappers\Awesomium.NET\Assemblies\Awesomium.Windows.Forms.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.3.0\wrappers\Awesomium.NET\Assemblies\Awesomium.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -126,7 +126,9 @@
     <Compile Include="FormEx\TaskBarProgressColor.cs" />
     <Compile Include="RoomPanel\MainScreenResourceManager.cs" />
     <Compile Include="MediaIPC\iTunes\iTunesListener.cs" />
-    <Compile Include="RoomPanel\MainScreen.cs" />
+    <Compile Include="RoomPanel\MainScreen.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ScribbleDownloader.cs">
       <SubType>Form</SubType>
     </Compile>

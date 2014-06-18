@@ -13,7 +13,7 @@ namespace cb0t
     class Settings
     {
         public const String APP_NAME = "cb0t";
-        public const String APP_VERSION = "3.21";
+        public const String APP_VERSION = "3.22";
 
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }
@@ -27,6 +27,7 @@ namespace cb0t
         public static String ArtPath { get; set; }
         public static String ScriptPath { get; set; }
         public static String AniEmoticPath { get; set; }
+        public static String CachePath { get; set; }
 
         public static ulong ScribbleIdent { get; set; }
 
@@ -39,6 +40,7 @@ namespace cb0t
             VoicePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\voice\\";
             ScribblePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\scribble\\";
             ArtPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\art\\";
+            CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\temp\\cache\\";
             ScriptPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\cb0tv3\\data\\scripts\\";
             AppPath = AppDomain.CurrentDomain.BaseDirectory;
             AniEmoticPath = (AppPath + "aniemotic\\").Replace("\\", "/");
@@ -60,12 +62,14 @@ namespace cb0t
             String path = Path.Combine(DataPath, "temp");
 
             if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+                try { Directory.CreateDirectory(path); }
+                catch { }
 
             path = Path.Combine(DataPath, "temp\\voice");
 
             if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+                try { Directory.CreateDirectory(path); }
+                catch { }
 
             FileInfo[] files = new DirectoryInfo(path).GetFiles();
 
@@ -76,17 +80,29 @@ namespace cb0t
             path = Path.Combine(DataPath, "temp\\art");
 
             if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+                try { Directory.CreateDirectory(path); }
+                catch { }
 
             path = Path.Combine(DataPath, "temp\\scribble");
 
             if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+                try { Directory.CreateDirectory(path); }
+                catch { }
 
             files = new DirectoryInfo(path).GetFiles();
 
             foreach (FileInfo f in files)
                 try { File.Delete(f.FullName); }
+                catch { }
+
+            path = Path.Combine(DataPath, "temp\\cache");
+
+            if (Directory.Exists(path))
+                try { Directory.Delete(path, true); }
+                catch { }
+
+            if (!Directory.Exists(path))
+                try { Directory.CreateDirectory(path); }
                 catch { }
         }
 

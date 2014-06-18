@@ -811,6 +811,9 @@ namespace cb0t
                 this.toolStrip1.Invalidate();
                 this.content1.Controls.Add(this.clist_content);
                 this.BeginInvoke((Action)(() => this.Activate()));
+
+                try { Awesomium.Core.WebCore.Update(); }
+                catch { }
             }
         }
 
