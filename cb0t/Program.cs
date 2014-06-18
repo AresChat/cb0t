@@ -51,6 +51,7 @@ namespace cb0t
 
             WebCore.Initialize(new WebConfig
             {
+                
                 HomeURL = new Uri("about:blank"),
                 LogLevel = LogLevel.None,
                 ReduceMemoryUsageOnNavigation = true
