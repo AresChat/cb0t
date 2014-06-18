@@ -51,12 +51,12 @@ namespace cb0t
 
             WebCore.Initialize(new WebConfig
             {
-                ChildProcessPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cb3_proc.exe"),
                 HomeURL = new Uri("about:blank"),
-                LogLevel = LogLevel.None
+                LogLevel = LogLevel.None,
+                ReduceMemoryUsageOnNavigation = true
             });
-            
-            WebCore.Initialized += WebCore_Initialized;
+
+            WebCore.Started += WebCore_Initialized;
 
             Application.Run(new Form1(hashlink));
         }

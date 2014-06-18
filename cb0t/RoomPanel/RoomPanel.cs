@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Drawing.Drawing2D;
 using Jurassic.Library;
+using Awesomium.Core;
 
 namespace cb0t
 {
@@ -38,6 +39,7 @@ namespace cb0t
         public event EventHandler EditScribbleClicked;
 
         private ContextMenuStrip rc_ctx { get; set; }
+        private WebSession cache_session { get; set; }
 
         public void ShowVoice(String sender, uint sc)
         {
@@ -89,6 +91,17 @@ namespace cb0t
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
+
+            byte[] c_bytes = creds.IP.GetAddressBytes().Concat(BitConverter.GetBytes(creds.Port)).ToArray();
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte b in c_bytes)
+                sb.AppendFormat("{0:X2}", b);
+
+            this.cache_session = WebCore.CreateWebSession(System.IO.Path.Combine(Settings.CachePath, sb.ToString()), new WebPreferences());
+            this.webControl1.WebSession = this.cache_session;
+            sb.Clear();
+
             this.toolStripDropDownButton1.DropDownDirection = ToolStripDropDownDirection.BelowLeft;
             this.Mode = ScreenMode.Main;
             this.accuTextBox1.Font = new Font(Settings.GetReg<String>("global_font", "Tahoma"), 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
@@ -779,6 +792,10 @@ namespace cb0t
             this.webControl1.Free();
             this.webControl1.Dispose();
             this.webControl1 = null;
+            this.cache_session.ClearCache();
+            this.cache_session.ClearCookies();
+            this.cache_session.Dispose();
+            this.cache_session = null;
             this.writingPanel1.Free();
             this.writingPanel1.Dispose();
             this.writingPanel1 = null;

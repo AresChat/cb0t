@@ -50,6 +50,7 @@ namespace cb0t
         {
             this.ViewIdent = -1;
             this.LoadingFrameComplete += this.ScreenIsReady;
+            this.DocumentReady += this.ReadyEvent;
             this.ShowContextMenu += this.DefaultContextMenu;
             String template = Helpers.ScreenHTML;
             template = template.Replace("[font]", Settings.GetReg<String>("global_font", "Tahoma"));
@@ -292,16 +293,35 @@ namespace cb0t
 
         private bool IsScreenReady { get; set; }
         public int ViewIdent { get; set; }
+        private int ready_state = 0;
 
         private void ScreenIsReady(object sender, Awesomium.Core.FrameEventArgs e)
         {
             this.LoadingFrameComplete -= this.ScreenIsReady;
-            this.IsScreenReady = true;
+            this.ready_state++;
+
+            if (this.ready_state == 2)
+                this.GoScreen();
+        }
+
+        private void ReadyEvent(object sender, UrlEventArgs e)
+        {
+            this.DocumentReady -= this.ReadyEvent;
+            this.ready_state++;
+
+            if (this.ready_state == 2)
+                this.GoScreen();
+        }
+
+        private void GoScreen()
+        {
             this.ViewIdent = this.Identifier;
-            
+
             JSObject jsobject = base.CreateGlobalJavascriptObject("cb0t");
             jsobject.Bind("callbackMouseClick", false, this.JSMouseClicked);
             jsobject.Bind("callbackCopyRequested", false, this.JSCopyRequested);
+            
+            this.IsScreenReady = true;
 
             String[] pending = this.PendingQueue.ToArray();
 
