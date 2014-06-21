@@ -36,7 +36,7 @@ namespace cb0t
                         if (parts.Length == 2)
                             if (parts[1] == "script")
                             {
-                                String script_name = parts[1] + ".js";
+                                String script_name = parts[0] + ".js";
                                 JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == script_name);
 
                                 if (script != null)
