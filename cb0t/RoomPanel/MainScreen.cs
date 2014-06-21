@@ -419,15 +419,8 @@ namespace cb0t
         {
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action(this.ScrollDown));
-            else
-            {
-                if (!this.IsScreenReady)
-                    this.PendingQueue.Enqueue("scrollDown()");
-                else if (this.IsPaused)
-                    this.PausedQueue.Enqueue("scrollDown()");
-                else
-                    base.ExecuteJavascript("scrollDown()");
-            }
+            else if (this.IsScreenReady)
+                base.ExecuteJavascript("scrollDown()");
         }
 
         public void Scribble(object data)
