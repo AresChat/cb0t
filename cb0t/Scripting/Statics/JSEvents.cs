@@ -344,6 +344,57 @@ namespace cb0t.Scripting.Statics
             return false;
         }
 
+        [JSFunction(Name = "onroomclosed", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnRoomClosed(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONROOMCLOSED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onroomopened", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnRoomOpened(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONROOMOPENED = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [JSFunction(Name = "onscreencallback", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
+        public static bool EventOnScreenCallback(ScriptEngine eng, object a)
+        {
+            if (a is UserDefinedFunction)
+            {
+                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
+
+                if (script != null)
+                {
+                    script.EVENT_ONSCREENCALLBACK = (UserDefinedFunction)a;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         [JSFunction(Name = "onscribblereceived", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
         public static bool EventOnScribbleReceived(ScriptEngine eng, object a)
         {
@@ -728,40 +779,6 @@ namespace cb0t.Scripting.Statics
                 if (script != null)
                 {
                     script.EVENT_ONUISELECTED = (UserDefinedFunction)a;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        [JSFunction(Name = "onroomopened", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
-        public static bool EventOnRoomOpened(ScriptEngine eng, object a)
-        {
-            if (a is UserDefinedFunction)
-            {
-                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
-
-                if (script != null)
-                {
-                    script.EVENT_ONROOMOPENED = (UserDefinedFunction)a;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        [JSFunction(Name = "onroomclosed", Flags = JSFunctionFlags.HasEngineParameter, IsWritable = false, IsEnumerable = true)]
-        public static bool EventOnRoomClosed(ScriptEngine eng, object a)
-        {
-            if (a is UserDefinedFunction)
-            {
-                JSScript script = ScriptManager.Scripts.Find(x => x.ScriptName == eng.ScriptName);
-
-                if (script != null)
-                {
-                    script.EVENT_ONROOMCLOSED = (UserDefinedFunction)a;
                     return true;
                 }
             }

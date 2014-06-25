@@ -8,6 +8,27 @@ namespace cb0t
 {
     class ScriptEvents
     {
+        public static void OnScreenCallback(Room room, String ident, String text)
+        {
+            foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
+                if (script.EVENT_ONSCREENCALLBACK != null)
+                    foreach (Scripting.Objects.JSRoom r in script.Rooms)
+                        if (r.EndPoint.Equals(room.EndPoint))
+                        {
+                            try
+                            {
+                                script.EVENT_ONSCREENCALLBACK.Call(script.JS.Global, r, ident, text);
+                            }
+                            catch (Jurassic.JavaScriptException je)
+                            {
+                                Scripting.ScriptManager.ErrorHandler(script.ScriptName, je.LineNumber, je.Message);
+                            }
+                            catch { }
+
+                            break;
+                        }
+        }
+
         public static void OnHTMLReceived(Room room, String html)
         {
             foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)

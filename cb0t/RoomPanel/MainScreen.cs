@@ -97,52 +97,76 @@ namespace cb0t
         {
             if (e.ClickedItem.Equals(this.ctx.Items[0])) // save image
             {
-                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                if (!String.IsNullOrEmpty(str))
+                try { val = base.ExecuteJavascriptWithResult("getRightClickMenuData()"); }
+                catch { }
+
+                if (!val.IsUndefined)
                 {
-                    this.ctx.Close();
-                    SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, true);
+                    String str = val.ToString();
+
+                    if (!String.IsNullOrEmpty(str))
+                    {
+                        this.ctx.Close();
+                        SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, true);
+                    }
                 }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[1])) // edit image
             {
-                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                if (!String.IsNullOrEmpty(str))
+                try { val = base.ExecuteJavascriptWithResult("getRightClickMenuData()"); }
+                catch { }
+
+                if (!val.IsUndefined)
                 {
-                    this.ctx.Close();
-                    SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, false);
+                    String str = val.ToString();
+
+                    if (!String.IsNullOrEmpty(str))
+                    {
+                        this.ctx.Close();
+                        SharedUI.ScribbleDownloader.DownloadImage(this, str, this.DownloadedImageReceived, false);
+                    }
                 }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[2])) // save voice clip
             {
-                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                if (str.StartsWith("http://voice.clip/?i="))
+                try { val = base.ExecuteJavascriptWithResult("getRightClickMenuData()"); }
+                catch { }
+
+                if (!val.IsUndefined)
                 {
-                    str = str.Substring(21);
-                    uint vc_finder;
+                    String str = val.ToString();
 
-                    if (uint.TryParse(str, out vc_finder))
+                    if (str.StartsWith("http://voice.clip/?i="))
                     {
-                        VoicePlayerItem vc_item = VoicePlayer.Records.Find(x => x.ShortCut == vc_finder);
+                        str = str.Substring(21);
+                        uint vc_finder;
 
-                        if (vc_item != null)
+                        if (uint.TryParse(str, out vc_finder))
                         {
-                            this.ctx.Hide();
-                            SharedUI.SaveFile.Filter = "Wav|*.wav";
-                            SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-                            SharedUI.SaveFile.FileName = String.Empty;
+                            VoicePlayerItem vc_item = VoicePlayer.Records.Find(x => x.ShortCut == vc_finder);
 
-                            if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
+                            if (vc_item != null)
                             {
-                                try
+                                this.ctx.Hide();
+                                SharedUI.SaveFile.Filter = "Wav|*.wav";
+                                SharedUI.SaveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+                                SharedUI.SaveFile.FileName = String.Empty;
+
+                                if (SharedUI.SaveFile.ShowDialog() == DialogResult.OK)
                                 {
-                                    String org_path = Path.Combine(Settings.VoicePath, vc_item.FileName + ".wav");
-                                    File.Copy(org_path, SharedUI.SaveFile.FileName);
+                                    try
+                                    {
+                                        String org_path = Path.Combine(Settings.VoicePath, vc_item.FileName + ".wav");
+                                        File.Copy(org_path, SharedUI.SaveFile.FileName);
+                                    }
+                                    catch { }
                                 }
-                                catch { }
                             }
                         }
                     }
@@ -150,58 +174,83 @@ namespace cb0t
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[3])) // export hashlink
             {
-                String str = base.ExecuteJavascriptWithResult("getRightClickMenuData()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                if (str.StartsWith("http://hashlink.link/?h="))
+                try { val = base.ExecuteJavascriptWithResult("getRightClickMenuData()"); }
+                catch { }
+
+                if (!val.IsUndefined)
                 {
-                    str = str.Substring(24);
-                    StringBuilder sb = new StringBuilder();
-                    DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
+                    String str = val.ToString();
 
-
-                    if (dh != null)
+                    if (str.StartsWith("http://hashlink.link/?h="))
                     {
-                        sb.AppendLine(dh.Name);
-                        sb.Append("arlnk://");
-                        
-                        sb.AppendLine(Hashlink.EncodeHashlink(new Redirect
-                        {
-                            Hashlink = str,
-                            IP = dh.IP,
-                            Name = dh.Name,
-                            Port = dh.Port
-                        }));
+                        str = str.Substring(24);
+                        StringBuilder sb = new StringBuilder();
+                        DecryptedHashlink dh = Hashlink.DecodeHashlink(str);
 
-                        try
+
+                        if (dh != null)
                         {
-                            File.WriteAllText(Settings.DataPath + "hashlink.txt", sb.ToString());
-                            Process.Start("notepad.exe", Settings.DataPath + "hashlink.txt");
+                            sb.AppendLine(dh.Name);
+                            sb.Append("arlnk://");
+
+                            sb.AppendLine(Hashlink.EncodeHashlink(new Redirect
+                            {
+                                Hashlink = str,
+                                IP = dh.IP,
+                                Name = dh.Name,
+                                Port = dh.Port
+                            }));
+
+                            try
+                            {
+                                File.WriteAllText(Settings.DataPath + "hashlink.txt", sb.ToString());
+                                Process.Start("notepad.exe", Settings.DataPath + "hashlink.txt");
+                            }
+                            catch { }
                         }
-                        catch { }
                     }
                 }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[4])) // clear screen
             {
-                base.ExecuteJavascript("clearScreen()");
+                try { base.ExecuteJavascript("clearScreen()"); }
+                catch { }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[5])) // export text
             {
-                String str = base.ExecuteJavascriptWithResult("getExportText()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                try
-                {
-                    File.WriteAllText(Settings.DataPath + "export.txt", str);
-                    Process.Start("notepad.exe", Settings.DataPath + "export.txt");
-                }
+                try { val = base.ExecuteJavascriptWithResult("getExportText()"); }
                 catch { }
+
+                if (!val.IsUndefined)
+                {
+                    String str = val.ToString();
+
+                    try
+                    {
+                        File.WriteAllText(Settings.DataPath + "export.txt", str);
+                        Process.Start("notepad.exe", Settings.DataPath + "export.txt");
+                    }
+                    catch { }
+                }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[6])) // copy to clipboard
             {
-                String str = base.ExecuteJavascriptWithResult("getClipboardText()").ToString();
+                JSValue val = JSValue.Undefined;
 
-                try { Clipboard.SetText(str); }
+                try { val = base.ExecuteJavascriptWithResult("getClipboardText()"); }
                 catch { }
+
+                if (!val.IsUndefined)
+                {
+                    String str = val.ToString();
+
+                    try { Clipboard.SetText(str); }
+                    catch { }
+                }
             }
             else if (e.ClickedItem.Equals(this.ctx.Items[7])) // pause/unpause
             {
@@ -211,7 +260,8 @@ namespace cb0t
                     String[] paused_items = this.PausedQueue.ToArray();
 
                     foreach (String str in paused_items)
-                        base.ExecuteJavascript(str);
+                        try { base.ExecuteJavascript(str); }
+                        catch { }
 
                     this.PausedQueue = new ConcurrentQueue<String>();
                     this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 6));
@@ -226,7 +276,8 @@ namespace cb0t
 
         private void CTXClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            base.ExecuteJavascript("closeRightClickMenu()");
+            try { base.ExecuteJavascript("closeRightClickMenu()"); }
+            catch { }
         }
 
         private void DefaultContextMenu(object sender, Awesomium.Core.ContextMenuEventArgs e)
@@ -320,15 +371,34 @@ namespace cb0t
             JSObject jsobject = base.CreateGlobalJavascriptObject("cb0t");
             jsobject.Bind("callbackMouseClick", false, this.JSMouseClicked);
             jsobject.Bind("callbackCopyRequested", false, this.JSCopyRequested);
+            jsobject.Bind("callback", false, this.JSCallback);
             
             this.IsScreenReady = true;
 
             String[] pending = this.PendingQueue.ToArray();
 
             foreach (String str in pending)
-                base.ExecuteJavascript(str);
+                try { base.ExecuteJavascript(str); }
+                catch { }
 
             this.PendingQueue = new ConcurrentQueue<String>();
+        }
+
+        private void JSCallback(object sender, JavascriptMethodEventArgs args)
+        {
+            if (args.Arguments.Length >= 2)
+            {
+                String arg1 = args.Arguments[0].ToString();
+                String arg2 = args.Arguments[1].ToString();
+
+                Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem
+                {
+                    EndPoint = this.EndPoint,
+                    Name = arg1,
+                    Text = arg2,
+                    Type = Scripting.JSOutboundTextItemType.ChatScreenCallback
+                });
+            }
         }
 
         private void JSCopyRequested(object sender, JavascriptMethodEventArgs args)
@@ -358,7 +428,11 @@ namespace cb0t
 
         private void OpenRightClickMenu()
         {
-            JSValue val = base.ExecuteJavascriptWithResult("openRightClickMenu()");
+            JSValue val = JSValue.Undefined;
+
+            try { val = base.ExecuteJavascriptWithResult("openRightClickMenu()"); }
+            catch { }
+
             String options = val.ToString();
             this.ctx.Items[3].Visible = options[0] == '1';
             this.ctx.Items[0].Visible = options[1] == '1';
@@ -372,7 +446,10 @@ namespace cb0t
             if (!this.IsScreenReady)
                 return;
 
-            JSValue val = base.ExecuteJavascriptWithResult("getUserNameFromMousePos()");
+            JSValue val = JSValue.Undefined;
+
+            try { val = base.ExecuteJavascriptWithResult("getUserNameFromMousePos()"); }
+            catch { }
 
             if (val.IsString)
             {
@@ -420,7 +497,8 @@ namespace cb0t
             if (this.InvokeRequired)
                 this.BeginInvoke(new Action(this.ScrollDown));
             else if (this.IsScreenReady)
-                base.ExecuteJavascript("scrollDown()");
+                try { base.ExecuteJavascript("scrollDown()"); }
+                catch { }
         }
 
         public void Scribble(object data)
@@ -462,7 +540,8 @@ namespace cb0t
                     else if (this.IsPaused)
                         this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
                     else
-                        base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                        try { base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")"); }
+                        catch { }
                 }
             }
         }
@@ -487,7 +566,8 @@ namespace cb0t
                 else if (this.IsPaused)
                     this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
                 else
-                    base.ExecuteJavascript("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")");
+                    try { base.ExecuteJavascript("injectCustomHTML(\"" + html.ToString().Replace("\"", "\\\"") + "\")"); }
+                    catch { }
 
                 html.Clear();
             }
@@ -591,7 +671,8 @@ namespace cb0t
                 else if (this.IsPaused)
                     this.PausedQueue.Enqueue("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
                 else
-                    base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")");
+                    try { base.ExecuteJavascript("injectCustomHTML(\"" + html.Replace("\"", "\\\"") + "\")"); }
+                    catch { }
             }
         }
 
@@ -606,7 +687,8 @@ namespace cb0t
                 else if (this.IsPaused)
                     this.PausedQueue.Enqueue("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
                 else
-                    base.ExecuteJavascript("injectScript(\"" + src.Replace("\"", "\\\"") + "\")");
+                    try { base.ExecuteJavascript("injectScript(\"" + src.Replace("\"", "\\\"") + "\")"); }
+                    catch { }
             }
         }
 
@@ -1000,7 +1082,8 @@ namespace cb0t
             else if (this.IsPaused)
                 this.PausedQueue.Enqueue("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
             else
-                base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+                try { base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")"); }
+                catch { }
 
             html.Clear();
         }
