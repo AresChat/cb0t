@@ -1088,6 +1088,16 @@ namespace cb0t
                                 Settings.SetReg("pretext", arg);
                                 this.Panel.AnnounceText(StringTemplate.Get(STType.Messages, 19));
                             }
+                            else if (text.StartsWith("/login "))
+                            {
+                                if (text.Length > 7)
+                                    this.sock.Send(TCPOutbound.LoginCommand(text.Substring(7), this.crypto));
+                            }
+                            else if (text.StartsWith("/register "))
+                            {
+                                if (text.Length > 10)
+                                    this.sock.Send(TCPOutbound.RegisterCommand(text.Substring(10), this.crypto));
+                            }
                             else if (text.Length > 1)
                             {
                                 Scripting.ScriptManager.PendingUIText.Enqueue(new Scripting.JSOutboundTextItem

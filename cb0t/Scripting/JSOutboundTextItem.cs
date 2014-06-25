@@ -20,6 +20,7 @@ namespace cb0t.Scripting
         Emote,
         Public,
         Private,
-        Link
+        Link,
+        ChatScreenCallback
     }
 }

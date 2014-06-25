@@ -127,6 +127,20 @@ namespace cb0t
             return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_COMMAND);
         }
 
+        public static byte[] LoginCommand(String text, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString(text, c, false);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_AUTHLOGIN);
+        }
+
+        public static byte[] RegisterCommand(String text, CryptoService c)
+        {
+            TCPPacketWriter packet = new TCPPacketWriter();
+            packet.WriteString(text, c, false);
+            return packet.ToAresPacket(TCPMsg.MSG_CHAT_CLIENT_AUTHREGISTER);
+        }
+
         public static byte[] Lag(String name, ulong time, CryptoService c)
         {
             TCPPacketWriter packet = new TCPPacketWriter();

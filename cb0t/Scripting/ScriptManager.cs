@@ -11,7 +11,7 @@ namespace cb0t.Scripting
 {
     class ScriptManager
     {
-        public const int SCRIPT_VERSION = 2032;
+        public const int SCRIPT_VERSION = 2033;
 
         public static List<JSScript> Scripts { get; private set; }
         public static SafeQueue<JSUIEventItem> PendingUIEvents { get; private set; }
@@ -308,6 +308,8 @@ namespace cb0t.Scripting
                                 catch { }
                             }
                         }
+                        else if (item.Type == JSOutboundTextItemType.ChatScreenCallback)
+                            ScriptEvents.OnScreenCallback(r, item.Name, item.Text);
                 }
             }
 
