@@ -618,7 +618,12 @@ namespace cb0t
                 else this.cls_count = 0;
 
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, 4, null);
+                String str = Settings.GetReg<bool>("can_timestamp", false) ? (Helpers.Timestamp + text) : text;
+
+                while (str.Length < 2)
+                    str += " ";
+
+                this.Render(str, null, true, 4, null);
             }
         }
 
