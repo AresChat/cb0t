@@ -147,6 +147,12 @@ namespace cb0t
 
                 Version v = Environment.OSVersion.Version;
                 sb.Append(" (" + v.Major + "." + v.Minor + "." + v.Build + ")");
+
+                if (Environment.Is64BitOperatingSystem)
+                    sb.Append(" [64 bit]");
+                else
+                    sb.Append(" [32 bit]");
+
                 return StringTemplate.Get(STType.Commands, 5).Replace("+x", sb.ToString());
             }
         }
