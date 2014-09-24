@@ -80,12 +80,55 @@ namespace cb0t
                 img_x += 15;
             }
 
+         /*   try
+            {
+                using (Font name_font = new Font(e.Font, FontStyle.Bold))
+                using (SolidBrush brush = new SolidBrush(name_color))
+                    e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + img_x, e.Bounds.Y + 7));
+            }
+            catch { }*/
+
             using (Font name_font = new Font(e.Font, FontStyle.Bold))
             using (SolidBrush brush = new SolidBrush(name_color))
-                e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + img_x, e.Bounds.Y + 7));
+            {
+                char[] n_letters = this.Owner.Name.ToCharArray();
+                int n_x_pos = e.Bounds.X + img_x;
+                int n_y_pos = e.Bounds.Y + 7;
+                int n_max_width = (e.Bounds.X + e.Bounds.Width) - img_x;
 
-            using (SolidBrush brush = new SolidBrush(is_black ? Color.WhiteSmoke : Color.Gray))
-                e.Graphics.DrawString(this.Owner.ToASLString(), e.Font, brush, new PointF(e.Bounds.X + 58, e.Bounds.Y + 24));
+                for (int i = 0; i < n_letters.Length; i++)
+                {
+                    switch (n_letters[i])
+                    {
+                        case ' ':
+                            n_x_pos += 4;
+                            break;
+
+                        default:
+                            try
+                            {
+                                int w = (int)Math.Round((double)e.Graphics.MeasureString(n_letters[i].ToString(), name_font, 100, StringFormat.GenericTypographic).Width);
+
+                                if ((n_x_pos + w) < n_max_width)
+                                    e.Graphics.DrawString(n_letters[i].ToString(), name_font, brush, new PointF(n_x_pos, n_y_pos));
+
+                                n_x_pos += w;
+                            }
+                            catch { }
+                            break;
+                    }
+
+                    if (n_x_pos >= n_max_width)
+                        break;
+                }
+            }
+
+            try
+            {
+                using (SolidBrush brush = new SolidBrush(is_black ? Color.WhiteSmoke : Color.Gray))
+                    e.Graphics.DrawString(this.Owner.ToASLString(), e.Font, brush, new PointF(e.Bounds.X + 58, e.Bounds.Y + 24));
+            }
+            catch { }
 
             String text = this.Owner.PersonalMessage;
             bool is_song = false;
@@ -179,12 +222,16 @@ namespace cb0t
                             using (Font f = new Font(e.Font, this.CreateFont(bold, italic, underline)))
                             using (SolidBrush brush = new SolidBrush(fore_color))
                             {
-                                int w = (int)Math.Round((double)e.Graphics.MeasureString(letters[i].ToString(), f, 100, StringFormat.GenericTypographic).Width);
+                                try
+                                {
+                                    int w = (int)Math.Round((double)e.Graphics.MeasureString(letters[i].ToString(), f, 100, StringFormat.GenericTypographic).Width);
 
-                                if ((x + w) < max_width)
-                                    e.Graphics.DrawString(letters[i].ToString(), f, brush, new PointF(x, y));
+                                    if ((x + w) < max_width)
+                                        e.Graphics.DrawString(letters[i].ToString(), f, brush, new PointF(x, y));
 
-                                x += w;
+                                    x += w;
+                                }
+                                catch { }
                             }
                             break;
                     }

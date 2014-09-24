@@ -235,7 +235,9 @@ namespace cb0t
 
             if (version.StartsWith("sb0t 5."))
             {
+                version = version.Substring(version.IndexOf(" ") + 1).Split(' ')[0];
                 String vnum_str = new String(version.Where(x => Char.IsNumber(x)).ToArray());
+
                 uint vnum;
 
                 if (!uint.TryParse(vnum_str, out vnum))
