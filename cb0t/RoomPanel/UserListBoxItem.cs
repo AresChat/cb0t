@@ -80,21 +80,13 @@ namespace cb0t
                 img_x += 15;
             }
 
-         /*   try
-            {
-                using (Font name_font = new Font(e.Font, FontStyle.Bold))
-                using (SolidBrush brush = new SolidBrush(name_color))
-                    e.Graphics.DrawString(this.Owner.Name, name_font, brush, new PointF(e.Bounds.X + img_x, e.Bounds.Y + 7));
-            }
-            catch { }*/
-
             using (Font name_font = new Font(e.Font, FontStyle.Bold))
             using (SolidBrush brush = new SolidBrush(name_color))
             {
                 char[] n_letters = this.Owner.Name.ToCharArray();
                 int n_x_pos = e.Bounds.X + img_x;
                 int n_y_pos = e.Bounds.Y + 7;
-                int n_max_width = (e.Bounds.X + e.Bounds.Width) - img_x;
+                int n_max_width = (n_x_pos + e.Bounds.Width);
 
                 for (int i = 0; i < n_letters.Length; i++)
                 {
@@ -114,7 +106,7 @@ namespace cb0t
 
                                 n_x_pos += w;
                             }
-                            catch { }
+                            catch { break; }
                             break;
                     }
 
@@ -231,7 +223,7 @@ namespace cb0t
 
                                     x += w;
                                 }
-                                catch { }
+                                catch { break; }
                             }
                             break;
                     }

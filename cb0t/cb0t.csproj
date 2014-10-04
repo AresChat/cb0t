@@ -124,6 +124,7 @@
     <Compile Include="FormEx\PreviewToolStripItemClickedEventArgs.cs" />
     <Compile Include="FormEx\TaskBarProgress.cs" />
     <Compile Include="FormEx\TaskBarProgressColor.cs" />
+    <Compile Include="Misc\Emoji.cs" />
     <Compile Include="RoomPanel\MainScreenResourceManager.cs" />
     <Compile Include="MediaIPC\iTunes\iTunesListener.cs" />
     <Compile Include="RoomPanel\MainScreen.cs">
