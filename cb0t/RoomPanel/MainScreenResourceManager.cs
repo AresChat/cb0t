@@ -27,6 +27,9 @@ namespace cb0t
                     case "emotic.ui":
                         return ResourceResponse.Create(Path.Combine(Settings.AniEmoticPath, "ui", request.Url.LocalPath.Substring(1)));
 
+                    case "emotic.emoji":
+                        return ResourceResponse.Create(Path.Combine(Settings.AppPath, "emoji", "at24", request.Url.LocalPath.Substring(1)));
+
                     case "scribble.image":
                         return ResourceResponse.Create(Path.Combine(Settings.ScribblePath, request.Url.LocalPath.Substring(1)));
 

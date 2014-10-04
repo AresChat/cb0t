@@ -247,6 +247,8 @@ namespace cb0t
                     }
                 }
             }
+
+            Emoji.Load();
         }
 
         public static void Load()

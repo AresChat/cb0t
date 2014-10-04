@@ -115,6 +115,7 @@ namespace cb0t
                 bool bold = false, italic = false, underline = false;
                 Color fore_color = Color.Black;
                 int color_finder;
+                EmojiItem emoji_item;
 
                 for (var i = 0; i < letters.Length; i++)
                 {
@@ -181,6 +182,147 @@ namespace cb0t
                                 g.DrawImage(Emoticons.emotic[em.Index], new RectangleF(x + 2, 0, 15, 15));
                                 x += 15;
                                 i += (em.Shortcut.Length - 1);
+                                break;
+                            }
+                            else goto default;
+
+                        case (char)35:
+                        case (char)48:
+                        case (char)49:
+                        case (char)50:
+                        case (char)51:
+                        case (char)52:
+                        case (char)53:
+                        case (char)54:
+                        case (char)55:
+                        case (char)56:
+                        case (char)57:
+                        case (char)169:
+                        case (char)174:
+                        case (char)55356:
+                        case (char)55357:
+                        case (char)8252:
+                        case (char)8265:
+                        case (char)8482:
+                        case (char)8505:
+                        case (char)8596:
+                        case (char)8597:
+                        case (char)8598:
+                        case (char)8599:
+                        case (char)8600:
+                        case (char)8601:
+                        case (char)8617:
+                        case (char)8618:
+                        case (char)8986:
+                        case (char)8987:
+                        case (char)9193:
+                        case (char)9194:
+                        case (char)9195:
+                        case (char)9196:
+                        case (char)9200:
+                        case (char)9203:
+                        case (char)9410:
+                        case (char)9642:
+                        case (char)9643:
+                        case (char)9654:
+                        case (char)9664:
+                        case (char)9723:
+                        case (char)9724:
+                        case (char)9725:
+                        case (char)9726:
+                        case (char)9728:
+                        case (char)9729:
+                        case (char)9742:
+                        case (char)9745:
+                        case (char)9748:
+                        case (char)9749:
+                        case (char)9757:
+                        case (char)9786:
+                        case (char)9800:
+                        case (char)9801:
+                        case (char)9802:
+                        case (char)9803:
+                        case (char)9804:
+                        case (char)9805:
+                        case (char)9806:
+                        case (char)9807:
+                        case (char)9808:
+                        case (char)9809:
+                        case (char)9810:
+                        case (char)9811:
+                        case (char)9824:
+                        case (char)9827:
+                        case (char)9829:
+                        case (char)9830:
+                        case (char)9832:
+                        case (char)9851:
+                        case (char)9855:
+                        case (char)9875:
+                        case (char)9888:
+                        case (char)9889:
+                        case (char)9898:
+                        case (char)9899:
+                        case (char)9917:
+                        case (char)9918:
+                        case (char)9924:
+                        case (char)9925:
+                        case (char)9934:
+                        case (char)9940:
+                        case (char)9962:
+                        case (char)9970:
+                        case (char)9971:
+                        case (char)9973:
+                        case (char)9978:
+                        case (char)9981:
+                        case (char)9986:
+                        case (char)9989:
+                        case (char)9992:
+                        case (char)9993:
+                        case (char)9994:
+                        case (char)9995:
+                        case (char)9996:
+                        case (char)9999:
+                        case (char)10002:
+                        case (char)10004:
+                        case (char)10006:
+                        case (char)10024:
+                        case (char)10035:
+                        case (char)10036:
+                        case (char)10052:
+                        case (char)10055:
+                        case (char)10060:
+                        case (char)10062:
+                        case (char)10067:
+                        case (char)10068:
+                        case (char)10069:
+                        case (char)10071:
+                        case (char)10084:
+                        case (char)10133:
+                        case (char)10134:
+                        case (char)10135:
+                        case (char)10145:
+                        case (char)10160:
+                        case (char)10175:
+                        case (char)10548:
+                        case (char)10549:
+                        case (char)11013:
+                        case (char)11014:
+                        case (char)11015:
+                        case (char)11035:
+                        case (char)11036:
+                        case (char)11088:
+                        case (char)11093:
+                        case (char)12336:
+                        case (char)12349:
+                        case (char)12951:
+                        case (char)12953:
+                            emoji_item = Emoji.GetEmoji24(letters, i);
+
+                            if (emoji_item != null)
+                            {
+                                g.DrawImage(emoji_item.Image, new RectangleF(x + 2, 0, 15, 15));
+                                x += 15;
+                                i += (emoji_item.Length - 1);
                                 break;
                             }
                             else goto default;
