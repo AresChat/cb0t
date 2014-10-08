@@ -83,6 +83,57 @@ namespace cb0t
             return result.ToString();
         }
 
+        public static String GetRTFEmoji(Bitmap emoji, Color back_color, Graphics richtextbox)
+        {
+            StringBuilder result = new StringBuilder();
+
+            using (Bitmap bmp = new Bitmap(16, 16))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.Clear(back_color);
+                    g.DrawImage(emoji, new Point(0, 0));
+
+                    result.Append(@"{\pict\wmetafile8\picw");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiX) * 2540));
+                    result.Append(@"\pich");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiY) * 2540));
+                    result.Append(@"\picwgoal");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiX) * 1440));
+                    result.Append(@"\pichgoal");
+                    result.Append((int)Math.Round((16 / richtextbox.DpiY) * 1440));
+                    result.Append(" ");
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        IntPtr ptr = g.GetHdc();
+
+                        using (Metafile meta = new Metafile(ms, ptr))
+                        {
+                            g.ReleaseHdc(ptr);
+
+                            using (Graphics gfx = Graphics.FromImage(meta))
+                                gfx.DrawImage(bmp, new Rectangle(0, 0, 16, 16));
+
+                            ptr = meta.GetHenhmetafile();
+                            uint size = GdipEmfToWmfBits(ptr, 0, null, 8, 0);
+                            byte[] buffer = new byte[size];
+                            GdipEmfToWmfBits(ptr, (uint)buffer.Length, buffer, 8, 0);
+                            DeleteEnhMetaFile(ptr);
+
+                            foreach (byte b in buffer)
+                                result.Append(String.Format("{0:x2}", b));
+
+                            result.Append("}");
+                            buffer = null;
+                        }
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
+
         public static String GetRTFEmoticon(int image_index, Color back_color, Graphics richtextbox)
         {
             StringBuilder result = new StringBuilder();
@@ -271,6 +322,8 @@ namespace cb0t
             shortcuts.Add(new Emotic { Index = 4, Shortcut = ":P" });
             shortcuts.Add(new Emotic { Index = 4, Shortcut = ":-P" });
             shortcuts.Add(new Emotic { Index = 5, Shortcut = "(H)" });
+            shortcuts.Add(new Emotic { Index = 5, Shortcut = "8)" });
+            shortcuts.Add(new Emotic { Index = 5, Shortcut = "8-)" });
             shortcuts.Add(new Emotic { Index = 6, Shortcut = ":@" });
             shortcuts.Add(new Emotic { Index = 7, Shortcut = ":$" });
             shortcuts.Add(new Emotic { Index = 7, Shortcut = ":-$" });

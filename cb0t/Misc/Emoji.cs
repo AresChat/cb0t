@@ -67,6 +67,16 @@ namespace cb0t
             return sb.ToString();
         }
 
+        public static EmojiItem EmojiFromFileName(String name)
+        {
+            return Items.FirstOrDefault(x => x.FileName == name);
+        }
+
+        public static EmojiItem EmojiFromSurrogate(String seq)
+        {
+            return Items.FirstOrDefault(x => x.SurrogateSequence == seq);
+        }
+
         public static EmojiItem GetEmoji24(char[] letters, int start_pos)
         {
             StringBuilder sb = new StringBuilder();

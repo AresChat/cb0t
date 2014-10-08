@@ -125,6 +125,22 @@
     <Compile Include="FormEx\TaskBarProgress.cs" />
     <Compile Include="FormEx\TaskBarProgressColor.cs" />
     <Compile Include="Misc\Emoji.cs" />
+    <Compile Include="Misc\EmojiMenuBar.cs" />
+    <Compile Include="Misc\Emoji_Nature.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Misc\Emoji_Objects.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Misc\Emoji_People.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Misc\Emoji_Places.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Misc\Emoji_Symbols.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="RoomPanel\MainScreenResourceManager.cs" />
     <Compile Include="MediaIPC\iTunes\iTunesListener.cs" />
     <Compile Include="RoomPanel\MainScreen.cs">
