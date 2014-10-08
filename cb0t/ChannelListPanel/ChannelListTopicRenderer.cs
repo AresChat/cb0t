@@ -171,7 +171,6 @@ namespace cb0t
                                     g.DrawString(" ", font, brush, new PointF(x, 0));
                             break;
 
-                        case '+':
                         case '(':
                         case ':':
                         case ';':

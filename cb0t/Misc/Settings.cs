@@ -13,7 +13,7 @@ namespace cb0t
     class Settings
     {
         public const String APP_NAME = "cb0t";
-        public const String APP_VERSION = "3.28";
+        public const String APP_VERSION = "3.29";
 
         public static bool CAN_WRITE_REG { get; set; }
         public static bool IsAway { get; set; }

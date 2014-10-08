@@ -1017,7 +1017,7 @@ namespace cb0t
             else if (e.ClickedItem.Equals(this.toolStripButton7))
             {
                 SharedUI.EMenu.StartPosition = FormStartPosition.Manual;
-                SharedUI.EMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 276);
+                SharedUI.EMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 300);
                 SharedUI.EMenu.SetCallback(this);
                 SharedUI.EMenu.Show();
             }

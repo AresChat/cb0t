@@ -34,6 +34,7 @@ namespace cb0t
         {
             ScribbleEditor.UpdateTemplate();
             ColorPicker.UpdateTemplate();
+            EMenu.UpdateTemplate();
         }
     }
 }
