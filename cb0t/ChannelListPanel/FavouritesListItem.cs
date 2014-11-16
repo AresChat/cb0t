@@ -35,5 +35,10 @@ namespace cb0t
             c.CountString = this.CountString;
             return c;
         }
+
+        public EndPoint ToEndPoint()
+        {
+            return new IPEndPoint(this.IP, this.Port);
+        }
     }
 }

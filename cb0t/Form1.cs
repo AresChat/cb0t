@@ -109,7 +109,7 @@ namespace cb0t
             this.clist_content.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.SetToList();
 
-            Aero.HideIconAndText(this);
+            Aero.HideIconAndText(this, true, true);
         }
 
         private delegate void SetProgressLevelHandler(int amount);
@@ -374,6 +374,9 @@ namespace cb0t
         {
             if (!this.do_once)
             {
+                if (this.SystemMenu != null)
+                    this.SystemMenu.ItemClicked += this.SystemMenuItemClicked;
+
                 int frm_size_x = Settings.GetReg<int>("form_x", -1);
                 int frm_size_y = Settings.GetReg<int>("form_y", -1);
 
@@ -547,9 +550,44 @@ namespace cb0t
             this.UpdateTemplate();
         }
 
+        private IntPtr[] sysmenubmps = null;
+
         private void UpdateTemplate()
         {
             SettingsContent.UpdateTemplate();
+
+            if (this.SystemMenu != null)
+            {
+                if (this.sysmenubmps == null)
+                {
+                    this.sysmenubmps = new IntPtr[4];
+                    this.sysmenubmps[0] = FormEx.SystemMenuEx.SystemMenuContainer.ImageToHandle((Bitmap)Properties.Resources.away.Clone());
+                    this.sysmenubmps[1] = FormEx.SystemMenuEx.SystemMenuContainer.ImageToHandle((Bitmap)Properties.Resources.online.Clone());
+                    this.sysmenubmps[2] = FormEx.SystemMenuEx.SystemMenuContainer.ImageToHandle((Bitmap)Properties.Resources.audio.Clone());
+                    this.sysmenubmps[3] = FormEx.SystemMenuEx.SystemMenuContainer.ImageToHandle((Bitmap)Properties.Resources.close.Clone());
+                }
+
+                this.SystemMenu.Clear();
+
+                if (Settings.IsAway)
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.SystemTray, 0), this.sysmenubmps[1])); //0
+                else
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.SystemTray, 1), this.sysmenubmps[0])); //0
+
+                this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuSeperator()); //1
+
+                if (AudioPanel.Available)
+                {
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.AudioBar, 10), this.sysmenubmps[2])); //2
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.AudioBar, 9), this.sysmenubmps[2])); //3
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.AudioBar, 8), this.sysmenubmps[2])); //4
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.AudioBar, 7), this.sysmenubmps[2])); //5
+                    this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuSeperator()); //6
+                }
+
+                this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.SystemTray, 2), this.sysmenubmps[3])); //2 or 7
+                this.SystemMenu.Add(new FormEx.SystemMenuEx.SystemMenuSeperator()); //8
+            }
 
             if (this.JumpList != null)
             {
@@ -571,9 +609,10 @@ namespace cb0t
                     this.JumpList.Add(new JumpListSeparator());
                 }
 
-                this.audioToolStripMenuItem.Enabled = AudioPanel.Available;
                 this.JumpList.Add(new JumpListItem(StringTemplate.Get(STType.SystemTray, 2), "cbjl_exit"), 7);
             }
+
+            this.audioToolStripMenuItem.Enabled = AudioPanel.Available;
 
             if (this.PreviewToolStrip != null)
             {
@@ -770,6 +809,8 @@ namespace cb0t
                 room.Panel.Dock = DockStyle.Fill;
                 room.Panel.CloseClicked += this.CloseChannel;
                 room.Panel.CheckUnread += this.CheckUnread;
+                room.RoomNameChanged += this.RoomNameChanged;
+                room.TopicChanged += this.RoomTopicChanged;
                 room.ConnectEvents();
                 RoomPool.Rooms.Add(room);
                 this.toolStrip1.Items.Add(room.Button);
@@ -781,6 +822,29 @@ namespace cb0t
             }
         }
 
+        private void RoomTopicChanged(object sender, EventArgs e)
+        {
+            FavouritesListItem creds = (FavouritesListItem)sender;
+            this.clist_content.UpdateFavouriteTopic(creds);
+        }
+
+        private void RoomNameChanged(object sender, EventArgs e)
+        {
+            FavouritesListItem creds = (FavouritesListItem)sender;
+            Room room = RoomPool.Rooms.Find(x => x.Credentials.ToEndPoint().Equals(creds.ToEndPoint()));
+
+            if (room != null)
+            {
+                this.toolStrip1.BeginInvoke((Action)(() =>
+                {
+                    room.Button.UpdateRoomName(creds.Name);
+                    this.toolStrip1.Invalidate();
+                }));
+            }
+
+            this.clist_content.UpdateFavouriteName(creds);
+        }
+
         private void CloseChannel(object sender, EventArgs e)
         {
             IPEndPoint ep = (IPEndPoint)sender;
@@ -790,6 +854,8 @@ namespace cb0t
             {
                 RoomPool.Rooms[index].Panel.CloseClicked -= this.CloseChannel;
                 RoomPool.Rooms[index].Panel.CheckUnread -= this.CheckUnread;
+                RoomPool.Rooms[index].RoomNameChanged -= this.RoomNameChanged;
+                RoomPool.Rooms[index].TopicChanged -= this.RoomTopicChanged;
 
                 for (int i = 0; i < this.toolStrip1.Items.Count; i++)
                     if (this.toolStrip1.Items[i] is ChannelButton)
@@ -955,6 +1021,42 @@ namespace cb0t
             this.toolStrip1.Refresh();
         }
 
+        private void SystemMenuItemClicked(object sender, FormEx.SystemMenuEx.SystemMenuItem e)
+        {
+            int button = e.Index;
+
+            if (this.SystemMenu.Count == 4)
+                if (button == 2)
+                    button = 7;
+
+            switch (button)
+            {
+                case 0: // away|online
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "online" });
+                    break;
+
+                case 2: // next
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "next" });
+                    break;
+
+                case 3: // play|pause
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "playpause" });
+                    break;
+
+                case 4: // previous
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "previous" });
+                    break;
+
+                case 5: // stop
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "stop" });
+                    break;
+
+                case 7: // exit
+                    this.IPCCommandReceived(null, new IPCListenerEventArgs { Command = "exit" });
+                    break;
+            }
+        }
+
         private void showAsOnlineToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.showAsAwayToolStripMenuItem.Enabled = true;
@@ -964,6 +1066,12 @@ namespace cb0t
             {
                 this.JumpList.RemoveAt(0);
                 this.JumpList.Insert(0, new JumpListItem(StringTemplate.Get(STType.SystemTray, 1), "cbjl_online"), 6);
+            }
+
+            if (this.SystemMenu != null)
+            {
+                this.SystemMenu.RemoveAt(0);
+                this.SystemMenu.Insert(0, new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.SystemTray, 1), this.sysmenubmps[0]));
             }
 
             if (this.OverlayIcon != null)
@@ -988,6 +1096,12 @@ namespace cb0t
             {
                 this.JumpList.RemoveAt(0);
                 this.JumpList.Insert(0, new JumpListItem(StringTemplate.Get(STType.SystemTray, 0), "cbjl_online"), 5);
+            }
+
+            if (this.SystemMenu != null)
+            {
+                this.SystemMenu.RemoveAt(0);
+                this.SystemMenu.Insert(0, new FormEx.SystemMenuEx.SystemMenuItem(StringTemplate.Get(STType.SystemTray, 0), this.sysmenubmps[1]));
             }
 
             if (this.OverlayIcon != null)

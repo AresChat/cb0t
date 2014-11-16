@@ -59,13 +59,25 @@ namespace cb0t
             }
         }
 
-        public static void HideIconAndText(Form form)
+        public static void HideIconAndText(Form form, bool hide_icon, bool hide_text)
         {
             if (!CanAero)
                 return;
 
+            if (!hide_icon && !hide_text)
+                return;
+
             WTA_OPTIONS options = new WTA_OPTIONS();
-            options.dwFlags = WTNCA.NODRAWICON | WTNCA.NODRAWCAPTION;
+
+            if (hide_icon)
+            {
+                options.dwFlags = WTNCA.NODRAWICON;
+
+                if (hide_text)
+                    options.dwFlags |= WTNCA.NODRAWCAPTION;
+            }
+            else options.dwFlags = WTNCA.NODRAWCAPTION;
+
             options.dwMask = WTNCA.VALIDBITS;
 
             SetWindowThemeAttribute(form.Handle,

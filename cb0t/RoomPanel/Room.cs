@@ -22,6 +22,9 @@ namespace cb0t
         public bool RoomIsVisible { get; set; }
         public bool CanNP { get; set; }
 
+        public event EventHandler RoomNameChanged;
+        public event EventHandler TopicChanged;
+
         private CryptoService crypto = new CryptoService();
         private SessionState state = SessionState.Sleeping;
         private int reconnect_count = 0;

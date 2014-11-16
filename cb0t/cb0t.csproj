@@ -113,6 +113,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormEx\IJumpListItem.cs" />
+    <Compile Include="FormEx\ISystemMenuItem.cs" />
     <Compile Include="FormEx\JumpListContainer.cs" />
     <Compile Include="FormEx\JumpListHelpers.cs" />
     <Compile Include="FormEx\JumpListItem.cs" />
@@ -122,6 +123,9 @@
     <Compile Include="FormEx\PreviewToolStripContainer.cs" />
     <Compile Include="FormEx\PreviewToolStripItem.cs" />
     <Compile Include="FormEx\PreviewToolStripItemClickedEventArgs.cs" />
+    <Compile Include="FormEx\SystemMenuContainer.cs" />
+    <Compile Include="FormEx\SystemMenuItem.cs" />
+    <Compile Include="FormEx\SystemMenuSeperator.cs" />
     <Compile Include="FormEx\TaskBarProgress.cs" />
     <Compile Include="FormEx\TaskBarProgressColor.cs" />
     <Compile Include="Misc\Emoji.cs" />

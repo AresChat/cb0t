@@ -219,12 +219,27 @@ namespace cb0t
             this.Panel.MyName = this.MyName;
 
             if (packet.Remaining > 0)
-                this.Credentials.Name = packet.ReadString(this.crypto);
+            {
+                String room_name = packet.ReadString(this.crypto);
+                bool update_name = false;
+
+                if (!String.IsNullOrEmpty(this.Credentials.Name))
+                    if (this.Credentials.Name != room_name)
+                        if (this.EndPoint.Equals(this.Credentials.ToEndPoint()))
+                            update_name = true;
+
+                this.Credentials.Name = room_name;
+
+                if (update_name)
+                    this.RoomNameChanged(this.Credentials, EventArgs.Empty);
+            }
 
             this.Panel.Userlist.MyLevel = 0;
             this.is_writing = false;
             this.Panel.ClearWriters();
         }
+
+        private bool should_check_for_current_topic_update = false;
 
         private void Eval_Features(TCPPacketReader packet)
         {
@@ -232,6 +247,7 @@ namespace cb0t
             this.Credentials.Server = version;
             this.Panel.ServerText(StringTemplate.Get(STType.Messages, 17) + ": " + version);
             this.Panel.Userlist.UpdateServerVersion(version);
+            this.should_check_for_current_topic_update = true;
 
             if (version.StartsWith("sb0t 5."))
             {
@@ -588,15 +604,24 @@ namespace cb0t
 
         private void Eval_Topic(String text, bool updated)
         {
-            if (updated)
-                this.Panel.ServerText(StringTemplate.Get(STType.Messages, 11) + ": " + text);
-
             String str = ScriptEvents.OnTopicReceiving(this, text);
 
-            if (!String.IsNullOrEmpty(str))
+            if (updated)
+            {
+                this.Panel.ServerText(StringTemplate.Get(STType.Messages, 11) + ": " + text);
+                this.Credentials.Topic = text;
+                this.Panel.SetTopic(text);
+            }
+            else if (!String.IsNullOrEmpty(str))
             {
                 this.Credentials.Topic = str;
                 this.Panel.SetTopic(text);
+            }
+
+            if (this.should_check_for_current_topic_update)
+            {
+                this.should_check_for_current_topic_update = false;
+                this.TopicChanged(this.Credentials, EventArgs.Empty);
             }
         }
 
@@ -767,10 +792,10 @@ namespace cb0t
 
                     if (u != null)
                         if (!u.Ignored)
-                            if (ScriptEvents.OnVoiceClipReceiving(this, u))
+                            if (ScriptEvents.OnVoiceClipReceiving(this, u, true))
                             {
                                 this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
-                                ScriptEvents.OnVoiceClipReceived(this, u);
+                                ScriptEvents.OnVoiceClipReceived(this, u, true);
                             }
                 }
             }
@@ -802,10 +827,10 @@ namespace cb0t
 
                         if (u != null)
                             if (!u.Ignored)
-                                if (ScriptEvents.OnVoiceClipReceiving(this, u))
+                                if (ScriptEvents.OnVoiceClipReceiving(this, u, true))
                                 {
                                     this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
-                                    ScriptEvents.OnVoiceClipReceived(this, u);
+                                    ScriptEvents.OnVoiceClipReceived(this, u, true);
                                 }
                     }
                 }
@@ -829,7 +854,7 @@ namespace cb0t
 
                     if (u != null)
                         if (!u.Ignored)
-                            if (ScriptEvents.OnVoiceClipReceiving(this, u))
+                            if (ScriptEvents.OnVoiceClipReceiving(this, u, false))
                             {
                                 if (this.CanAutoPlayVC)
                                 {
@@ -838,7 +863,7 @@ namespace cb0t
                                 }
                                 else this.Panel.ShowVoice(vc.Sender, vc.ShortCut);
 
-                                ScriptEvents.OnVoiceClipReceived(this, u);
+                                ScriptEvents.OnVoiceClipReceived(this, u, false);
                             }
                 }
             }
@@ -870,7 +895,7 @@ namespace cb0t
 
                         if (u != null)
                             if (!u.Ignored)
-                                if (ScriptEvents.OnVoiceClipReceiving(this, u))
+                                if (ScriptEvents.OnVoiceClipReceiving(this, u, false))
                                 {
                                     if (this.CanAutoPlayVC)
                                     {
@@ -879,7 +904,7 @@ namespace cb0t
                                     }
                                     else this.Panel.ShowVoice(vc.Sender, vc.ShortCut);
 
-                                    ScriptEvents.OnVoiceClipReceived(this, u);
+                                    ScriptEvents.OnVoiceClipReceived(this, u, false);
                                 }
                     }
                 }
