@@ -12,6 +12,7 @@ namespace FormEx
         public PreviewToolStripEx.PreviewToolStripContainer PreviewToolStrip { get; private set; }
         public TaskBarProgressBarEx.TaskBarProgress TaskBarProgress { get; private set; }
         public OverlayIconEx.OverlayIcon OverlayIcon { get; private set; }
+        public SystemMenuEx.SystemMenuContainer SystemMenu { get; private set; }
 
         public DwmForm()
         {
@@ -30,6 +31,7 @@ namespace FormEx
                 this.PreviewToolStrip = null;
                 this.TaskBarProgress = null;
                 this.OverlayIcon = null;
+                this.SystemMenu = null;
             }
             else
             {
@@ -37,7 +39,19 @@ namespace FormEx
                 this.PreviewToolStrip = new PreviewToolStripEx.PreviewToolStripContainer(this);
                 this.TaskBarProgress = new TaskBarProgressBarEx.TaskBarProgress(this);
                 this.OverlayIcon = new OverlayIconEx.OverlayIcon(this);
+                this.SystemMenu = new SystemMenuEx.SystemMenuContainer(this);
             }
+        }
+
+        private const int WM_SYSCOMMAND = 0x112;
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_SYSCOMMAND)
+                if (this.SystemMenu.ProcMsg(m.WParam))
+                    return;
+
+            base.WndProc(ref m);
         }
     }
 }

@@ -593,6 +593,61 @@ namespace cb0t
             list = null;
         }
 
+        public void UpdateFavouriteName(FavouritesListItem creds)
+        {
+            if (this.channelListView2.InvokeRequired)
+                this.channelListView2.BeginInvoke((Action)(() => this.UpdateFavouriteName(creds)));
+            else
+            {
+                int index = this.favs.FindIndex(x => x.IP.Equals(creds.IP) && x.Port == creds.Port);
+
+                if (index > -1)
+                    if (creds.Name != this.favs[index].Name)
+                    {
+                        FavouritesListItem current = this.favs[index];
+                        this.channelListView2.Items.RemoveAt(index);
+                        this.g_favs[index].Dispose();
+                        this.g_favs.RemoveAt(index);
+                        this.favs.RemoveAt(index);
+                        current.Name = creds.Name;
+                        this.favs.Insert(index, current);
+                        ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
+                        this.gfx.RenderChannelListItem(vitem, current);
+                        this.g_favs.Insert(index, vitem);
+                        this.channelListView2.Items.Insert(index, vitem);
+                        this.SaveFavourites();
+                    }
+            }
+        }
+
+        public void UpdateFavouriteTopic(FavouritesListItem creds)
+        {
+            if (this.channelListView2.InvokeRequired)
+                this.channelListView2.BeginInvoke((Action)(() => this.UpdateFavouriteTopic(creds)));
+            else
+            {
+                String topic = creds.Topic;
+                int index = this.favs.FindIndex(x => x.IP.Equals(creds.IP) && x.Port == creds.Port);
+
+                if (index > -1)
+                    if (topic != this.favs[index].Topic)
+                    {
+                        FavouritesListItem current = this.favs[index];
+                        this.channelListView2.Items.RemoveAt(index);
+                        this.g_favs[index].Dispose();
+                        this.g_favs.RemoveAt(index);
+                        this.favs.RemoveAt(index);
+                        current.Topic = topic;
+                        this.favs.Insert(index, current);
+                        ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
+                        this.gfx.RenderChannelListItem(vitem, current);
+                        this.g_favs.Insert(index, vitem);
+                        this.channelListView2.Items.Insert(index, vitem);
+                        this.SaveFavourites();
+                    }
+            }
+        }
+
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (this.channelListView1.SelectedItems.Count < 1)

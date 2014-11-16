@@ -34,6 +34,12 @@ namespace cb0t
             this.TextAlign = ContentAlignment.MiddleLeft;
         }
 
+        public void UpdateRoomName(String name)
+        {
+            this.RoomName = name;
+            this.ToolTipText = name;
+        }
+
         public void MakeRead()
         {
             if (!this.is_read)

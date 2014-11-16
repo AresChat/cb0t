@@ -1289,7 +1289,7 @@ namespace cb0t
                 }
         }
 
-        public static bool OnVoiceClipReceiving(Room room, User user)
+        public static bool OnVoiceClipReceiving(Room room, User user, bool pm)
         {
             foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
                 if (script.EVENT_ONVOICECLIPRECEIVING != null)
@@ -1302,7 +1302,7 @@ namespace cb0t
                             {
                                 try
                                 {
-                                    object obj = script.EVENT_ONVOICECLIPRECEIVING.Call(script.JS.Global, r, userobj);
+                                    object obj = script.EVENT_ONVOICECLIPRECEIVING.Call(script.JS.Global, r, userobj, pm);
 
                                     if (obj != null)
                                         if (obj is bool)
@@ -1322,7 +1322,7 @@ namespace cb0t
             return true;
         }
 
-        public static void OnVoiceClipReceived(Room room, User user)
+        public static void OnVoiceClipReceived(Room room, User user, bool pm)
         {
             foreach (Scripting.JSScript script in Scripting.ScriptManager.Scripts)
                 if (script.EVENT_ONVOICECLIPRECEIVED != null)
@@ -1335,7 +1335,7 @@ namespace cb0t
                             {
                                 try
                                 {
-                                    script.EVENT_ONVOICECLIPRECEIVED.Call(script.JS.Global, r, userobj);
+                                    script.EVENT_ONVOICECLIPRECEIVED.Call(script.JS.Global, r, userobj, pm);
                                 }
                                 catch (Jurassic.JavaScriptException je)
                                 {
