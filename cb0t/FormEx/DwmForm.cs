@@ -39,19 +39,21 @@ namespace FormEx
                 this.PreviewToolStrip = new PreviewToolStripEx.PreviewToolStripContainer(this);
                 this.TaskBarProgress = new TaskBarProgressBarEx.TaskBarProgress(this);
                 this.OverlayIcon = new OverlayIconEx.OverlayIcon(this);
-                this.SystemMenu = new SystemMenuEx.SystemMenuContainer(this);
+             //   this.SystemMenu = new SystemMenuEx.SystemMenuContainer(this);
+                this.SystemMenu = null;
             }
         }
 
         private const int WM_SYSCOMMAND = 0x112;
 
-        protected override void WndProc(ref Message m)
+   /*     protected override void WndProc(ref Message m)
         {
             if (m.Msg == WM_SYSCOMMAND)
-                if (this.SystemMenu.ProcMsg(m.WParam))
-                    return;
+                if (this.SystemMenu != null)
+                    if (this.SystemMenu.ProcMsg(m.WParam))
+                        return;
 
             base.WndProc(ref m);
-        }
+        }*/
     }
 }
