@@ -41,6 +41,8 @@ namespace cb0t
 
             this.PendingQueue = new ConcurrentQueue<String>();
             this.PausedQueue = new ConcurrentQueue<String>();
+
+            
         }
 
         private ConcurrentQueue<String> PendingQueue { get; set; }
