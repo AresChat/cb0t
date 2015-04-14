@@ -496,7 +496,7 @@ namespace cb0t
                 this.Panel.Userlist.RemoveUserItem(ghost);
 
                 if (ScriptEvents.OnUserParting(this, ghost))
-                    this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", ghost.Name));
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Part, this.BlackBG) + StringTemplate.Get(STType.Messages, 12).Replace("+x", ghost.Name));
 
                 ScriptEvents.OnUserParted(this, ghost);
                 Scripting.ScriptManager.RemoveUser(this.EndPoint, u);
@@ -509,7 +509,7 @@ namespace cb0t
             Scripting.ScriptManager.AddUser(this.EndPoint, u);
 
             if (ScriptEvents.OnUserJoining(this, u))
-                this.Panel.AnnounceText((this.BlackBG ? "\x000309" : "\x000303") + StringTemplate.Get(STType.Messages, 13).Replace("+x", u.Name));
+                this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Join, this.BlackBG) + StringTemplate.Get(STType.Messages, 13).Replace("+x", u.Name));
 
             if (u.Name == this.MyName)
             {
@@ -541,7 +541,7 @@ namespace cb0t
                 this.Panel.Userlist.RemoveUserItem(u);
 
                 if (ScriptEvents.OnUserParting(this, u))
-                    this.Panel.AnnounceText("\x000307" + StringTemplate.Get(STType.Messages, 12).Replace("+x", u.Name));
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Part, this.BlackBG) + StringTemplate.Get(STType.Messages, 12).Replace("+x", u.Name));
 
                 ScriptEvents.OnUserParted(this, u);
                 Scripting.ScriptManager.RemoveUser(this.EndPoint, u);
@@ -794,7 +794,7 @@ namespace cb0t
                         if (!u.Ignored)
                             if (ScriptEvents.OnVoiceClipReceiving(this, u, true))
                             {
-                                this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
+                                this.Panel.PMTextReceived(this, u, vc.Sender, GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
                                 ScriptEvents.OnVoiceClipReceived(this, u, true);
                             }
                 }
@@ -829,7 +829,7 @@ namespace cb0t
                             if (!u.Ignored)
                                 if (ScriptEvents.OnVoiceClipReceiving(this, u, true))
                                 {
-                                    this.Panel.PMTextReceived(this, u, vc.Sender, (this.BlackBG ? "\x000315" : "\x000314") + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
+                                    this.Panel.PMTextReceived(this, u, vc.Sender, GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- \\\\voice_clip_#" + vc.ShortCut + " " + StringTemplate.Get(STType.Messages, 8).Replace("+x", vc.Sender), null, PMTextReceivedType.Announce);
                                     ScriptEvents.OnVoiceClipReceived(this, u, true);
                                 }
                     }
@@ -1187,7 +1187,7 @@ namespace cb0t
             if (data.Length == 4)
                 if (data.SequenceEqual(new byte[] { 78, 65, 61, 61 }))
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 6).Replace("+x", user.Name));
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 6).Replace("+x", user.Name));
                     return;
                 }
 
@@ -1199,7 +1199,7 @@ namespace cb0t
 
                 if (ScriptEvents.OnNudgeReceiving(this, user))
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 5).Replace("+x", user.Name));
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 5).Replace("+x", user.Name));
                     this.owner_frm.Nudge();
                     this.ShowPopup("cb0t :: " + StringTemplate.Get(STType.Messages, 3), StringTemplate.Get(STType.Messages, 5).Replace("+x", user.Name), PopupSound.None);
                 }

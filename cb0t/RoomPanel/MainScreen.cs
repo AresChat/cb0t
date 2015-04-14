@@ -298,11 +298,11 @@ namespace cb0t
                         catch { }
 
                     this.PausedQueue = new ConcurrentQueue<String>();
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 6));
+                    this.ShowAnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.IsBlack) + "--- " + StringTemplate.Get(STType.OutBox, 6));
                 }
                 else
                 {
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 7));
+                    this.ShowAnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.IsBlack) + "--- " + StringTemplate.Get(STType.OutBox, 7));
                     this.IsPaused = true;
                 }
             }
@@ -586,7 +586,7 @@ namespace cb0t
                 this.BeginInvoke(new Action<String, uint>(this.ShowVoice), sender, sc);
             else
             {
-                this.ShowAnnounceText("\x000314--- " + sender + ":");
+                this.ShowAnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.IsBlack) + sender + ":");
 
                 StringBuilder html = new StringBuilder();
                 html.Append("<div class=\"vc\">");
@@ -657,7 +657,7 @@ namespace cb0t
                 while (str.Length < 2)
                     str += " ";
 
-                this.Render(str, null, true, 4, null);
+                this.Render(str, null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Announce, this.IsBlack), null);
             }
         }
 
@@ -669,7 +669,7 @@ namespace cb0t
             {
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, this.IsBlack ? 15 : 2, null);
+                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Server, this.IsBlack), null);
             }
         }
 
@@ -681,7 +681,7 @@ namespace cb0t
             {
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, this.IsBlack ? 0 : 12, font);
+                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Text, this.IsBlack), font);
             }
         }
 
@@ -693,7 +693,7 @@ namespace cb0t
             {
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, this.IsBlack ? 13 : 6, font);
+                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Emote, this.IsBlack), font);
             }
         }
 
@@ -1220,7 +1220,7 @@ namespace cb0t
                 }
 
                 if (ff == null)
-                    fore = this.IsBlack ? "#FFFF00" : "#000000";
+                    fore = this.AresColorToHTMLColor(GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Name, this.IsBlack));
                 else
                     fore = ff.NameColor;
 

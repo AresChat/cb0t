@@ -422,11 +422,11 @@ namespace cb0t
                     }
 
                     this.paused_items = new List<PausedItem>();
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 6));
+                    this.ShowAnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.IsBlack) + "--- " + StringTemplate.Get(STType.OutBox, 6));
                 }
                 else
                 {
-                    this.ShowAnnounceText((this.IsBlack ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.OutBox, 7));
+                    this.ShowAnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.IsBlack) + "--- " + StringTemplate.Get(STType.OutBox, 7));
                     this.IsPaused = true;
                 }
             }
@@ -510,8 +510,8 @@ namespace cb0t
                     name_font.Size = font.Size;
                 }
 
-                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, this.IsBlack ? 0 : 1, name_font);
-                this.Render("    " + text, null, true, this.IsBlack ? 0 : 1, font);
+                this.Render((ts ? (Helpers.Timestamp + name) : name) + ":", null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Name, this.IsBlack), name_font);
+                this.Render("    " + text, null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.PM, this.IsBlack), font);
             }
         }
 
@@ -552,7 +552,7 @@ namespace cb0t
                 else this.cls_count = 0;
 
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, 4, null);
+                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Announce, this.IsBlack), null);
             }
         }
 
@@ -570,7 +570,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, this.IsBlack ? 15 : 2, null);
+                this.Render(ts ? (Helpers.Timestamp + text) : text, null, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Server, this.IsBlack), null);
             }
         }
 
@@ -588,7 +588,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, this.IsBlack ? 0 : 12, font);
+                this.Render(text, ts ? (Helpers.Timestamp + name) : name, true, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Text, this.IsBlack), font);
             }
         }
 
@@ -606,7 +606,7 @@ namespace cb0t
 
                 this.cls_count = 0;
                 bool ts = Settings.GetReg<bool>("can_timestamp", false);
-                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, this.IsBlack ? 13 : 6, font);
+                this.Render((ts ? Helpers.Timestamp : "") + "* " + name + " " + text, null, false, GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Emote, this.IsBlack), font);
             }
         }
 
@@ -1058,7 +1058,8 @@ namespace cb0t
 
                 if (ff == null)
                 {
-                    col_index = this.GetColorIndex(ref cols, this.IsBlack ? Color.Yellow : Color.Black);
+                    Color colfromcode = this.GetColorFromCode(GlobalSettings.GetDefaultColorInt(GlobalSettings.DefaultColorType.Name, this.IsBlack));
+                    col_index = this.GetColorIndex(ref cols, colfromcode);
 
                     if (col_index > -1)
                         name_builder.Append("\\cf" + (col_index + 1) + " ");
