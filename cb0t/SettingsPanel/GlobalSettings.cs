@@ -40,6 +40,9 @@ namespace cb0t
             this.checkBox14.Text = StringTemplate.Get(STType.ChatSettings, 17);
             this.checkBox15.Text = StringTemplate.Get(STType.ChatSettings, 18);
             this.checkBox16.Text = StringTemplate.Get(STType.ChatSettings, 19);
+            this.label9.Text = StringTemplate.Get(STType.PersonalSettings, 0) + ":";
+            this.label7.Text = StringTemplate.Get(STType.PersonalSettings, 13) + ":";
+            this.label10.Text = StringTemplate.Get(STType.Messages, 17) + ":";
         }
 
         public event EventHandler SpellCheckUpdate;
@@ -84,6 +87,189 @@ namespace cb0t
 
             this.setting_up_font = false;
             this.numericUpDown1.Value = Settings.GetReg<int>("global_font_size", 10);
+
+            this.panel2.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_name", 1));
+            this.panel1.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_pm", 1));
+            this.panel4.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_text", 12));
+            this.panel3.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_emote", 6));
+            this.panel8.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_join", 3));
+            this.panel7.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_part", 7));
+            this.panel6.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_server", 2));
+            this.panel5.BackColor = this.AresColorCodeToColorObject(Settings.GetReg<int>("defc_announce", 4));
+        }
+
+        public static String GetDefaultColorString(DefaultColorType type, bool black)
+        {
+            int i = 0;
+
+            if (type == DefaultColorType.Server)
+            {
+                i = Settings.GetReg<int>("defc_server", 2);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 2;
+            }
+            else if (type == DefaultColorType.Join)
+            {
+                i = Settings.GetReg<int>("defc_join", 3);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 3;
+            }
+            else if (type == DefaultColorType.Part)
+            {
+                i = Settings.GetReg<int>("defc_part", 7);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 7;
+            }
+
+            return i < 10 ? ("\x00030" + i) : ("\x0003" + i);
+        }
+
+        public static int GetDefaultColorInt(DefaultColorType type, bool black)
+        {
+            int i = 0;
+
+            if (type == DefaultColorType.Announce)
+            {
+                i = Settings.GetReg<int>("defc_announce", 4);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 4;
+            }
+            else if (type == DefaultColorType.Server)
+            {
+                i = Settings.GetReg<int>("defc_server", 2);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 2;
+            }
+            else if (type == DefaultColorType.Emote)
+            {
+                i = Settings.GetReg<int>("defc_emote", 6);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 6;
+            }
+            else if (type == DefaultColorType.Text)
+            {
+                i = Settings.GetReg<int>("defc_text", 12);
+
+                if ((black && i == 1) || (!black && i == 0))
+                    i = 12;
+            }
+            else if (type == DefaultColorType.Name)
+            {
+                i = Settings.GetReg<int>("defc_name", 1);
+
+                if (black && i == 1)
+                    i = 0;
+                else if (!black && i == 0)
+                    i = 1;
+            }
+            else if (type == DefaultColorType.PM)
+            {
+                i = Settings.GetReg<int>("defc_pm", 1);
+
+                if (black && i == 1)
+                    i = 0;
+                else if (!black && i == 0)
+                    i = 1;
+            }
+
+            return i;
+        }
+
+        public enum DefaultColorType
+        {
+            Announce,
+            Server,
+            Emote,
+            Text,
+            Name,
+            PM,
+            Join,
+            Part
+        }
+
+        public void ColorChangeCallback(String panel, int color)
+        {
+            switch (panel)
+            {
+                case "panel2":
+                    Settings.SetReg("defc_name", color);
+                    this.panel2.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel1":
+                    Settings.SetReg("defc_pm", color);
+                    this.panel1.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel4":
+                    Settings.SetReg("defc_text", color);
+                    this.panel4.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel3":
+                    Settings.SetReg("defc_emote", color);
+                    this.panel3.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel8":
+                    Settings.SetReg("defc_join", color);
+                    this.panel8.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel7":
+                    Settings.SetReg("defc_part", color);
+                    this.panel7.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel6":
+                    Settings.SetReg("defc_server", color);
+                    this.panel6.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+
+                case "panel5":
+                    Settings.SetReg("defc_announce", color);
+                    this.panel5.BackColor = this.AresColorCodeToColorObject(color);
+                    break;
+            }
+        }
+
+        private void panel2_Click(object sender, EventArgs e)
+        {
+            String panel = ((Panel)sender).Name;
+
+            SharedUI.CMenu.StartPosition = FormStartPosition.Manual;
+            SharedUI.CMenu.Location = new Point(MousePosition.X - 40, MousePosition.Y - 150);
+            SharedUI.CMenu.SetCallback(this, panel);
+            SharedUI.CMenu.Show();
+        }
+
+        private Color AresColorCodeToColorObject(int code)
+        {
+            switch (code)
+            {
+                case 1: return Color.Black;
+                case 2: return Color.Navy;
+                case 3: return Color.Green;
+                case 4: return Color.Red;
+                case 5: return Color.Maroon;
+                case 6: return Color.Purple;
+                case 7: return Color.Orange;
+                case 8: return Color.Yellow;
+                case 9: return Color.Lime;
+                case 10: return Color.Teal;
+                case 11: return Color.Aqua;
+                case 12: return Color.Blue;
+                case 13: return Color.Fuchsia;
+                case 14: return Color.Gray;
+                case 15: return Color.Silver;
+                default: return Color.White;
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -199,5 +385,7 @@ namespace cb0t
             Settings.SetReg("can_html", this.checkBox16.Checked);
             Settings.CanHTML = this.checkBox16.Checked;
         }
+
+        
     }
 }

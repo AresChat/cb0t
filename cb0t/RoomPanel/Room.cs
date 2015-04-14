@@ -174,7 +174,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
+                            this.Panel.MyPMAnnounce(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
                         }
                         else
                         {
@@ -183,7 +183,7 @@ namespace cb0t
                             foreach (byte[] p in packets)
                                 this.sock.SendTrickle(p);
 
-                            this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
+                            this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 28) + "...");
                         }
                     }
             }
@@ -200,9 +200,9 @@ namespace cb0t
                 this.owner_frm.SetProgressLevel(0);
 
                 if (this.Panel.Mode == ScreenMode.PM)
-                    this.Panel.MyPMAnnounce((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 27));
+                    this.Panel.MyPMAnnounce(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 27));
                 else
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 27));
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 27));
             }
         }
 
@@ -347,12 +347,12 @@ namespace cb0t
 
             if (this.Panel.Mode == ScreenMode.Main)
             {
-                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
+                this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
                 this.Panel.Scribble(data);
             }
             else if (this.Panel.Mode == ScreenMode.PM)
             {
-                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
+                this.Panel.PMTextReceived(null, null, this.Panel.PMName, GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
                 this.Panel.PMScribbleReceived(null, null, this.Panel.PMName, data);
             }
 
@@ -478,12 +478,12 @@ namespace cb0t
 
             if (this.Panel.Mode == ScreenMode.Main)
             {
-                this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
+                this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 26) + "...");
                 this.Panel.Scribble(data);
             }
             else if (this.Panel.Mode == ScreenMode.PM)
             {
-                this.Panel.PMTextReceived(null, null, this.Panel.PMName, (this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
+                this.Panel.PMTextReceived(null, null, this.Panel.PMName, GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.Messages, 26) + "...", null, PMTextReceivedType.Announce);
                 this.Panel.PMScribbleReceived(null, null, this.Panel.PMName, data);
             }
 
@@ -596,7 +596,7 @@ namespace cb0t
 
                 if (u != null)
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- " + StringTemplate.Get(STType.UserList, 1) + " " + u.Name);
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- " + StringTemplate.Get(STType.UserList, 1) + " " + u.Name);
                     this.sock.Send(TCPOutbound.Nudge(this.MyName, name, this.crypto));
                 }
             }
@@ -606,9 +606,9 @@ namespace cb0t
 
                 if (u != null)
                 {
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Whois: " + u.Name);
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- ASL: " + u.ToASLString());
-                    this.Panel.AnnounceText((this.BlackBG ? "\x000315" : "\x000314") + "--- Personal Message: " + u.PersonalMessage);
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- Whois: " + u.Name);
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- ASL: " + u.ToASLString());
+                    this.Panel.AnnounceText(GlobalSettings.GetDefaultColorString(GlobalSettings.DefaultColorType.Server, this.BlackBG) + "--- Personal Message: " + u.PersonalMessage);
                 }
             }
         }

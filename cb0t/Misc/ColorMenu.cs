@@ -26,13 +26,20 @@ namespace cb0t
             this.Hide();
         }
 
-        private RoomPanel callback = null;
+        private object callback = null;
         private bool bg = false;
+        private String pname = null;
 
         public void SetCallback(RoomPanel cb, bool bg)
         {
             this.callback = cb;
             this.bg = bg;
+        }
+
+        public void SetCallback(GlobalSettings cb, String pn)
+        {
+            this.callback = cb;
+            this.pname = pn;
         }
 
         private void ColorClicked(object sender, EventArgs e)
@@ -41,10 +48,16 @@ namespace cb0t
 
             if (this.callback != null)
             {
-                if (this.bg)
-                    this.callback.ColorCallback("\x00025" + text);
-                else
-                    this.callback.ColorCallback("\x00023" + text);
+                if (this.callback is RoomPanel)
+                {
+                    RoomPanel rp = (RoomPanel)this.callback;
+                    if (this.bg)
+                        rp.ColorCallback("\x00025" + text);
+                    else
+                        rp.ColorCallback("\x00023" + text);
+                }
+                else if (this.callback is GlobalSettings)
+                    ((GlobalSettings)this.callback).ColorChangeCallback(this.pname, int.Parse(text));
 
                 this.callback = null;
             }
