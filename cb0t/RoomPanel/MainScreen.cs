@@ -1271,7 +1271,11 @@ namespace cb0t
             else if (this.IsPaused)
                 this.PausedQueue.Enqueue("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
             else
-                try { base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")"); }
+                try
+                {
+                    // save to test file
+                    base.ExecuteJavascript("injectText(\"" + html.ToString().Replace("\"", "\\\"") + "\", " + (this.IsWideText ? "true" : "false") + ")");
+                }
                 catch { }
 
             html.Clear();
