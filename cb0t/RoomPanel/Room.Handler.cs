@@ -1132,8 +1132,9 @@ namespace cb0t
 
                     if (user.Name == this.users[0].Name)
                         this.Panel.Scribble(data);
-                    else
+                    else if (!user.Ignored)
                         this.Panel.PMScribbleReceived(this, user, user.Name, data);
+                    else return;
 
                     this.Panel.CheckUnreadStatus();
                     ScriptEvents.OnScribbleReceived(this, user);

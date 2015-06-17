@@ -211,6 +211,8 @@ namespace cb0t
             this.reloading_list = false;
         }
 
+        private const String default_remote_cache_server = "http://chatrooms.marsproject.net/list/cache.aspx";
+
         private void RefreshList()
         {
             new Thread(new ThreadStart(() =>
@@ -229,7 +231,40 @@ namespace cb0t
                 if (File.Exists(Settings.DataPath + "servers.dat"))
                     raw = File.ReadAllBytes(Settings.DataPath + "servers.dat");
                 else
-                    raw = File.ReadAllBytes(Settings.AppPath + "servers.dat");
+                {
+                    String cserv_location = default_remote_cache_server;
+
+                    try
+                    {
+                        if (File.Exists(Settings.DataPath + "remotecserv.dat")) // alternative user defined server?
+                            cserv_location = File.ReadAllText(Settings.DataPath + "remotecserv.dat");
+                        else // create the default
+                            File.WriteAllText(Settings.DataPath + "remotecserv.dat", default_remote_cache_server);
+                    }
+                    catch { }
+
+                    try
+                    {
+                        WebRequest request = WebRequest.Create(cserv_location);
+
+                        using (WebResponse response = request.GetResponse())
+                        using (Stream stream = response.GetResponseStream())
+                        {
+                            List<byte> tmp = new List<byte>();
+                            int s = 0;
+                            byte[] btmp = new byte[1024];
+
+                            while ((s = stream.Read(btmp, 0, 1024)) > 0)
+                                tmp.AddRange(btmp.Take(s));
+
+                            raw = tmp.ToArray();
+                        }
+                    }
+                    catch { }
+
+                    if (raw == null) // unable to retrieve remote cache server so use the one in the installer
+                        raw = File.ReadAllBytes(Settings.AppPath + "servers.dat");
+                }
 
                 if (raw != null)
                 {
