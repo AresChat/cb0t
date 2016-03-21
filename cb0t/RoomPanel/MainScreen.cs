@@ -403,9 +403,9 @@ namespace cb0t
             this.ViewIdent = this.Identifier;
 
             JSObject jsobject = base.CreateGlobalJavascriptObject("cb0t");
-            jsobject.Bind("callbackMouseClick", false, this.JSMouseClicked);
-            jsobject.Bind("callbackCopyRequested", false, this.JSCopyRequested);
-            jsobject.Bind("callback", false, this.JSCallback);
+            jsobject.Bind("callbackMouseClick", this.JSMouseClicked);
+            jsobject.Bind("callbackCopyRequested", this.JSCopyRequested);
+            jsobject.Bind("callback", this.JSCallback);
             
             this.IsScreenReady = true;
 
@@ -418,7 +418,7 @@ namespace cb0t
             this.PendingQueue = new ConcurrentQueue<String>();
         }
 
-        private void JSCallback(object sender, JavascriptMethodEventArgs args)
+        private JSValue JSCallback(object sender, JavascriptMethodEventArgs args)
         {
             if (args.Arguments.Length >= 2)
             {
@@ -433,18 +433,21 @@ namespace cb0t
                     Type = Scripting.JSOutboundTextItemType.ChatScreenCallback
                 });
             }
+            return null;
         }
 
-        private void JSCopyRequested(object sender, JavascriptMethodEventArgs args)
+        private JSValue JSCopyRequested(object sender, JavascriptMethodEventArgs args)
         {
             String str = args.Arguments[0].ToString();
 
             if (!String.IsNullOrEmpty(str))
                 try { Clipboard.SetText(str); }
                 catch { }
+
+            return null;
         }
 
-        private void JSMouseClicked(object sender, JavascriptMethodEventArgs args)
+        private JSValue JSMouseClicked(object sender, JavascriptMethodEventArgs args)
         {
             MainScreenButton button = (MainScreenButton)int.Parse(args.Arguments[0].ToString());
 
@@ -458,6 +461,8 @@ namespace cb0t
                     this.OpenRightClickMenu();
                     break;
             }
+
+            return null;
         }
 
         private void OpenRightClickMenu()
