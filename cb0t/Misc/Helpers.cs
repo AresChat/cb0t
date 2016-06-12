@@ -607,7 +607,7 @@ namespace cb0t
                 case 163:
                     return "Peru";
                 case 164:
-                    return "Phillippines";
+                    return "Philippines";
                 case 165:
                     return "Pitcairn Island";
                 case 166:
