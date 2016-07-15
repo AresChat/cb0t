@@ -659,6 +659,8 @@
       <DependentUpon>VolumeControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Libraries\awesomium.lib" />
+    <None Include="Libraries\awesomium_process" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -734,6 +736,27 @@
   <ItemGroup>
     <None Include="Resources\mrec.png" />
     <None Include="Resources\writingpen.png" />
+    <Content Include="Libraries\avcodec-53.dll" />
+    <Content Include="Libraries\avformat-53.dll" />
+    <Content Include="Libraries\avutil-51.dll" />
+    <Content Include="Libraries\Awesomium.Core.dll" />
+    <Content Include="Libraries\awesomium.dll" />
+    <Content Include="Libraries\Awesomium.Windows.Forms.dll" />
+    <Content Include="Libraries\AxInterop.WMPLib.dll" />
+    <Content Include="Libraries\Hunspellx86.dll" />
+    <Content Include="Libraries\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="Libraries\icudt.dll" />
+    <Content Include="Libraries\Interop.iTunesLib.dll" />
+    <Content Include="Libraries\Interop.WMPLib.dll" />
+    <Content Include="Libraries\Jurassic.dll" />
+    <Content Include="Libraries\libEGL.dll" />
+    <Content Include="Libraries\libGLESv2.dll" />
+    <Content Include="Libraries\listres.dll" />
+    <Content Include="Libraries\Microsoft.WindowsAPICodePack.dll" />
+    <Content Include="Libraries\Microsoft.WindowsAPICodePack.Shell.dll" />
+    <Content Include="Libraries\NHunspell.dll" />
+    <Content Include="Libraries\opus.dll" />
+    <Content Include="Libraries\xinput9_1_0.dll" />
     <Content Include="ni.ico" />
     <None Include="Resources\scribble.png" />
     <None Include="Resources\folder2.png" />
@@ -762,6 +785,9 @@
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(SolutionDir)cb0t\Libraries\*.*" "$(TargetDir)"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
