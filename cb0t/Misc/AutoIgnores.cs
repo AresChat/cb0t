@@ -131,7 +131,8 @@ namespace cb0t
         Text = 0,
         PM = 1,
         All = 2,
-        None = 3
+        Scribble = 3,
+        None = 4,
     }
 
     public enum AutoIgnoreCondition : int

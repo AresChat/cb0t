@@ -1125,6 +1125,11 @@ namespace cb0t
             byte[] data = user.ScribbleBuffer.ToArray();
             user.ScribbleBuffer = new List<byte>();
 
+            AutoIgnoreType ai = AutoIgnores.IgnoreType(user.Name);
+
+            if (ai == AutoIgnoreType.All || ai == AutoIgnoreType.Scribble)
+                return;
+
             if (Settings.GetReg<bool>("receive_scribbles", true) && !user.Ignored)
                 if (ScriptEvents.OnScribbleReceiving(this, user))
                 {
