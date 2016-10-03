@@ -1,0 +1,314 @@
+﻿## About ##
+
+00|00|Spanish (euro) template
+00|01|by Di3go
+
+## Audio Bar ##
+
+01|00|opciones lista de reproducción
+01|01|Borrar lista de reproducción
+01|02|Aleatorio
+01|03|Repetir
+01|04|Importar archivos
+01|05|Importar carpeta
+01|06|volumen
+01|07|detener
+01|08|previo
+01|09|reproducir/pausar
+01|10|siguiente
+
+## Top Bar ##
+
+02|00|Configuración
+02|01|Audio
+02|02|Salas
+02|03|Búsqueda
+
+## Settings ##
+
+03|00|Cliente
+03|01|Configuración del Cliente
+03|02|Chat
+03|03|Configuración del Chat
+03|04|Hashlink
+03|05|Configuración del Hashlink
+03|06|Personal
+03|07|Configuración Personal
+03|08|Audio
+03|09|Configuración del Audio
+03|10|Filtros
+03|11|Configuración del Filtro
+03|12|Menú
+03|13|Configuración del Menú
+03|14|Privacidad
+03|15|Configuración de la Privacidad
+
+## Client Settings ##
+
+04|00|abrir carpeta de datos
+04|01|Template
+04|02|Para ver los comandos en la sala, digite /cmds
+
+## Chat Settings ##
+
+05|00|Habilitar las marcas de tiempo
+05|01|Habilitar fondo negro
+05|02|Habilitar emoticones
+05|03|Habilitar el protocolo de encriptación del cb0t
+05|04|Mostrar estatus de escritura cuando se escribe
+05|05|Recibir mensajes privados
+05|06|Recibir zumbidos
+05|07|Recibir fotos
+05|08|Recibir el tiempo de latencia del servidor
+05|09|Bloquear peticiones de redirección
+05|10|Bloquear peticiones para borrar la pantalla
+05|11|Bloquear todas las ventanas emergentes
+05|12|Bloquear ventanas emergentes de amigos
+05|13|Corrector ortográfico
+05|14|Fuente global
+05|15|Fuente
+05|16|Tamaño
+05|17|Recibir fuentes de usuario
+05|18|Bloquear custom names
+05|19|Habilitar el protocolo HTML
+
+## Hashlink Settings ##
+
+06|00|conectando
+
+## Personal Settings ##
+
+07|00|Nombre
+07|01|País
+07|02|Región
+07|03|Edad
+07|04|Género
+07|05|Secreto
+07|06|Mensaje personal
+07|07|Actualizar
+07|08|Auto mensaje privado
+07|09|Habilitar auto mensaje privado
+07|10|Avatar
+07|11|Borrar
+07|12|Fuente del usuario
+07|13|Texto
+07|14|Fuente
+07|15|Tamaño
+07|16|Habilitar la fuente del usuario
+
+## Audio Settings ##
+
+08|00|Mensajes de voz
+08|01|Dispositivo de grabación
+08|02|Dispositivo de reproducción
+08|03|Recibir mensajes de voz públicos
+08|04|Recibir mensajes de voz privados
+08|05|Grabar usando Opus codec
+08|06|Escuchando
+08|07|Fuente
+08|08|Mostrar las canciones en la lista de usuarios
+08|09|Reproducir notificaciones con sonido
+08|10|Habilitar la opción de chat narrado
+
+## Filter Settings ##
+
+09|00|Añadir
+09|01|Editar
+09|02|Eliminar
+09|03|Habilitar filtros
+09|04|ok
+09|05|falta texto en la sección 7
+
+## Menu Settings ##
+
+10|00|Menú de opciones del usuario
+10|01|Menú de opciones de la sala
+10|02|Nombre
+10|03|Acción
+10|04|Eliminar
+10|05|Agregar una nueva opción de menú
+10|06|Nombre de la opción
+10|07|Texto de la opción
+10|08|agregar
+
+## Privacy Settings ##
+
+11|00|Auto ignorar usuarios
+11|01|Condición
+11|02|Nombre
+11|03|Bloquear
+11|04|agregar
+11|05|Removee
+
+## Scribble Editor ##
+
+12|00|pincel delgado
+12|01|pincel mediano
+12|02|pincel grueso
+12|03|pegar
+12|04|color
+12|05|deshacer
+12|06|rehacer
+12|07|borrar
+12|08|cancelar
+12|09|Enviar
+
+## Color Picker ##
+
+13|00|Color elegido
+13|01|Escoger un color de la web
+13|02|Escoger un color de ares
+
+## Audio Player ##
+
+14|00|Está seguro que desea borrar la lista de reproducción?
+14|01|Escuchando
+14|02|Título
+14|03|Artista
+14|04|Álbum
+14|05|Duración
+14|06|Eliminar de la lista de reproducción
+
+## Channel List ##
+
+15|00|Actualizar
+15|01|Encontrar
+15|02|Lenguaje
+15|03|Nombre
+15|04|Topic
+15|05|Exportar hashlink
+15|06|Agregar a favoritos
+15|07|Eliminar de favoritos
+15|08|Auto conectar
+15|09|Contraseña de admin
+
+## Commands ##
+
+16|00|Tiempo: +x
+16|01|Cliente: +x - en línea +d días, +h horas, +m minutos
+16|02|Tiempo en línea: +d días, +h horas, +m minutos
+16|03|Gráficos: +x
+16|04|Disk Space: +xGB de +yGB disponible (+z% en uso)
+16|05|Sistema operativo: +x
+16|06|Procesador: +x
+16|07|Memoria: +xMB de +yMB disponible (+z% en uso)
+
+## User List ##
+
+17|00|Opciones para
+17|01|Zumbido
+17|02|Quién es
+17|03|Ignorar/Designorar
+17|04|Copiar nombre al portapapeles
+17|05|Agregar/Eliminar amigo
+17|06|Explorar
+17|07|Matar
+17|08|Rechazar
+17|09|Amordazar
+17|10|Desamordazar
+17|11|Matar con host
+17|12|Rechazar con host
+17|13|Amordazar con host
+17|14|Desamordazar con host
+17|15|Usuarios
+17|16|Servidor
+17|17|Lag
+17|18|Amigos
+17|19|Admins
+
+## In Box ##
+
+18|00|Cortar
+18|01|Copiar
+18|02|Pegar
+18|03|Agregar al diccionario
+
+## Out Box ##
+
+19|00|Guardar imagen
+19|01|Guardar mensaje de voz
+19|02|Borrar pantalla
+19|03|Exportar texto
+19|04|Copiar al portapapeles
+19|05|Pausar/Despausar pantalla
+19|06|Pantalla despausada
+19|07|Pantalla pausada
+
+## Button Bar ##
+
+20|00|negrita
+20|01|italica
+20|02|subrayado
+20|03|primer plano
+20|04|fondo
+20|05|emoticones
+20|06|Para grabar un mensaje de voz, mantenga pulsado éste botón o pulse F2.
+20|07|Suelte el botón para enviar el mensaje.
+20|08|fotos
+
+## Room Menu ##
+
+21|00|Opciones
+21|01|Cerrar
+21|02|Exportar hashlink
+21|03|Agregar a favoritos
+21|04|Copiar el nombre de la sala en el portapapeles
+21|05|Auto reproducir mensajes de voz
+21|06|Cerrar sub pestañas
+
+## Browse Tab ##
+
+22|00|Cargando
+22|01|Todo
+22|02|Audios
+22|03|Imágenes
+22|04|Videos
+22|05|Documentos
+22|06|Programas
+22|07|Otro
+22|08|Título
+22|09|Artista
+22|10|Media
+22|11|Categoría
+22|12|Tamaño
+22|13|Nombre del archivo
+22|14|Archivos
+22|15|Exploración fallida
+
+## Messages ##
+
+23|00|Escribiendo: +x
+23|01|GRABACIÓN [+ x segundos restantes]
+23|02|Notificación
+23|03|Zumbido
+23|04|Amigo
+23|05|+x te ha zumbado!
+23|06|+x no está recibiendo zumbidos
+23|07|Test de lag
+23|08|recibido de +x
+23|09|Usuario desconectado
+23|10|El usuario está ignorándolo
+23|11|Topic actualizado
+23|12|+x ha salido
+23|13|+x ha entrado
+23|14|+x ha entrado +y
+23|15|Redirecionando a +x...
+23|16|Lenguaje
+23|17|Servidor
+23|18|Iniciando, recuperando lista de usuarios
+23|19|pre texto actualizado
+23|20|pre texto deshabilitado
+23|21|Reconectando
+23|22|Desconectado
+23|23|No se puede conectar
+23|24|Conectado, handshaking
+23|25|Conectando con el host, por favor espere
+23|26|Enviando
+23|27|su mensaje de voz fue cancelado
+23|28|su mensaje de voz ha sido grabado y ahora está siendo enviado
+
+## System Tray ##
+
+24|00|Mostrarse como Online
+24|01|Mostrarse como Ausente
+24|02|Salir

@@ -1,0 +1,314 @@
+﻿## About ##
+
+00|00|Polish template
+00|01|by нιтмαη™
+
+## Audio Bar ##
+
+01|00|playlist opcje
+01|01|Czyść liste
+01|02|Przypadkowy
+01|03|Powtórz
+01|04|Importuj pliki
+01|05|Importuj folder
+01|06|głośność
+01|07|stop
+01|08|poprzedni
+01|09|play/pause
+01|10|następny
+
+## Top Bar ##
+
+02|00|Ustawienia
+02|01|Audio
+02|02|Kanały
+02|03|Szukanie
+
+## Ustawienia ##
+
+03|00|Klient
+03|01|Klient Ustawienia
+03|02|Czat
+03|03|Czat ustawienia
+03|04|Hashlink
+03|05|Hashlink Ustawienia
+03|06|Osobisty
+03|07|Osobiste ustawienia
+03|08|Audio
+03|09|Audio Ustawienia
+03|10|Filtr
+03|11|Filtr Ustawienia
+03|12|Główne
+03|13|Główne Ustawienia
+03|14|Prywatne
+03|15|Prywatne ustawienia
+
+## Klient Ustawienia ##
+
+04|00|Folder z plikami
+04|01|Szablon
+04|02|Komendy wpisujemy przy uzyciu /
+
+## Czat Ustawienia ##
+
+05|00|Włącz znaczniki czasu
+05|01|Włącz czarne tło
+05|02|Włącz emoty
+05|03|Włącz protokół szyfrowania cb0t
+05|04|Wyslij status
+05|05|Otrzymywanie wiadomości
+05|06|Receive nudges
+05|07|Otrzymuj bazgroły
+05|08|Otrzymuj opóznienia serwera
+05|09|Zablokuj żądania
+05|10|zablokuj ekran/jasne wnioski
+05|11|Blokuj wyskakujące okna
+05|12|Blokowania pop-upów przyjaciela
+05|13|Sprawdzanie pisowni
+05|14|Globalne czcionki
+05|15|czcionka
+05|16|Rozmiar
+05|17|Otrzymuj czcionki od uzytk.
+05|18|Blokuj kolorowanie
+05|19|Włącz HTML
+
+## Hashlink Ustawienia ##
+
+06|00|Połączony
+
+## Personal Settings ##
+
+07|00|Nazwa
+07|01|Kraj
+07|02|Region
+07|03|Wiek
+07|04|Płeć
+07|05|Secret
+07|06|Prywatna wiadomość
+07|07|Aktualizuj
+07|08|PM auto odp
+07|09|Włącz auto ODP
+07|10|Zdjęcie
+07|11|Czyść
+07|12|Czcionka użytk.
+07|13|Text
+07|14|Czcionka
+07|15|Rozmiar
+07|16|Włącz czcionki uzytk.
+
+## Audio Ustawienia ##
+
+08|00|Klipy głosowe
+08|01|Urządzenie nagryw.
+08|02|Urządzenie do odtw.
+08|03|Otrzymuj publiczne klipy głos.
+08|04|Odbieraj prywatne nagrania głos.
+08|05|Zapis za pomocą kodeka Opus
+08|06|Teraz gra
+08|07|Źródło
+08|08|Pokaż piosenki w liście użytk.
+08|09|Odtwarzaj dzwięki
+08|10|Włącz czat narrację
+
+## Filter Settings ##
+
+09|00|Dodaj
+09|01|Edytuj
+09|02|Usuń
+09|03|Włącz filtry
+09|04|ok
+09|05|brakuje tekstu w sekcji 7
+
+## Menu Ustawienia ##
+
+10|00|Lista uzytkowników menu opcje
+10|01|Pokój menu opcje
+10|02|Nazwa
+10|03|Akcja
+10|04|Usuń
+10|05|Dodaj nowe opcje menu
+10|06|Nazwa Opcji
+10|07|Akcja textu
+10|08|Dodaj
+
+## Privacy Ustawienia ##
+
+11|00|Auto ignorowanie uzytkowników
+11|01|Stan
+11|02|Nazwa
+11|03|Blok
+11|04|Dodaj
+11|05|Usuń
+
+## Scribble Editor ##
+
+12|00|cienki pędzel
+12|01|średni pędzel
+12|02|Gruby pędzel
+12|03|pasta
+12|04|Kolor
+12|05|anuluj
+12|06|przerób
+12|07|Czyść
+12|08|anuluj
+12|09|wyślij
+
+## Kolor Picker ##
+
+13|00|Wybrany kolor
+13|01|Wybierz kolor web
+13|02|Wybierz ares kolor
+
+## Audio Player ##
+
+14|00|Czy na pewno chcesz wyczyścić listę odtwarzania?
+14|01|teraz gra
+14|02|Tytuł
+14|03|Artysta
+14|04|Album
+14|05|Czas trwania
+14|06|Usun z listy odtwarzania
+
+## Lista kanałów ##
+
+15|00|Odswież
+15|01|Szukaj
+15|02|Język
+15|03|Nazwa
+15|04|Temat
+15|05|Exportuj hashlink
+15|06|Dodaj do ulubionych
+15|07|Usuń z ulubionych
+15|08|Auto wejście
+15|09|Hasło admina
+
+## Komendy ##
+
+16|00|Czas: +x
+16|01|Klienci: +x - działa +d dni, +h godziny, +m minut
+16|02|Uptime: +d days, +h hours, +m minutes
+16|03|Grafika: +x
+16|04|Miejsce na dysku: + xGB z + YGB dostępny (+z% usage)
+16|05|System operacyjny: +x
+16|06|Procesor: +x
+16|07|Pamięć: + XMB z + yMB dostępnych (+z% usage)
+
+## Lista użytkowników ##
+
+17|00|Opcje
+17|01|Nudge
+17|02|Whois
+17|03|Ignoruj/Unignor
+17|04|Kopjuj nazwe do schowka
+17|05|Dodaj / Usuń znajomego
+17|06|Przeglądaj
+17|07|Kill
+17|08|Ban
+17|09|Muzzle
+17|10|Unmuzzle
+17|11|Host kill
+17|12|Host ban
+17|13|Host muzzle
+17|14|Host unmuzzle
+17|15|Uzytkownicy
+17|16|Serwer
+17|17|Opóźnienie
+17|18|Przyjaciele
+17|19|Admini
+
+## In Box ##
+
+18|00|Wytnij
+18|01|Kopjuj
+18|02|Wklej
+18|03|Dodaj do słownika
+
+## Out Box ##
+
+19|00|Zapisz zdjęcie
+19|01|Zapisz plik głosowy
+19|02|Czyść obraz
+19|03|Exportuj text
+19|04|Kopjuj do schowka
+19|05|Pausa/Unpausa obraz
+19|06|Obraz wznow
+19|07|Obraz pauza
+
+## Pasek przycisków ##
+
+20|00|śmiały
+20|01|kursywa
+20|02|podkreślenie
+20|03|pierwszy plan
+20|04|tło
+20|05|emotki
+20|06|Aby nagrać plik dźwiękowy, przytrzymaj ten przycisk lub naciśnij klawisz F2.
+20|07|Zwolnij przycisk, aby wysłać wiadomość.
+20|08|scribble
+
+## Menu pokoju ##
+
+21|00|Opcje
+21|01|Zamknij
+21|02|Export hashlink
+21|03|Dodaj do ulubionych
+21|04|Kopjuj do schowka
+21|05|Auto odtwarzanie głosu
+21|06|Zamknij karty
+
+## Browse Tab ##
+
+22|00|Ładowanie
+22|01|Wszystko
+22|02|Audio
+22|03|Zdjęcie
+22|04|Video
+22|05|Dokumenty
+22|06|Oprogramowanie
+22|07|Inne
+22|08|Tytuł
+22|09|Artysta
+22|10|Media
+22|11|Kategoria
+22|12|Rozmiar
+22|13|Nazwa pliku
+22|14|Pliki
+22|15|Przeglądaj błędy
+
+## Wiadomości ##
+
+23|00|Typ: +x
+23|01|Rejestracja [+x seconds remaining]
+23|02|Zgłoszenie
+23|03|Nudge
+23|04|Znajomi
+23|05|+x has nudged you!
+23|06|+x is not receiving nudges
+23|07|test opóznienie
+23|08|otrzymał od +x
+23|09|Klient nie jest zalogowany
+23|10|Uzytk. ignoruje Cię
+23|11|Temat aktualizowany
+23|12|+x wyszedł
+23|13|+x dołączył/a do nas
+23|14|+x wstąpił/a +y
+23|15|Przekierowanie do +x...
+23|16|Język
+23|17|Serwer
+23|18|Zalogowany/ lista uzytkowników
+23|19|Zaaktualizowano text
+23|20|usunięto text
+23|21|RE-połączenie
+23|22|Rozłączony
+23|23|Nie można się połączyć
+23|24|Połączony
+23|25|Łączenie z hostem, proszę czekać
+23|26|Wysyłanie
+23|27|Twój głos został odwołany 
+23|28|Twój głos został nagrany i jest właśnie wysyłany
+
+## Zasobnik systemowy ##
+
+24|00|Pokaż jako Online
+24|01|Pokaż wychodzących
+24|02|Wyjście

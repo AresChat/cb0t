@@ -1,0 +1,313 @@
+﻿## About ##
+
+00|00|French template
+00|01|by Saul Hudson (Simon Meski)
+
+## Audio Bar ##
+
+01|00|Options de liste de le lecture
+01|01|Effacer la liste
+01|02|Aléatoire
+01|03|Répétition
+01|04|Importer des fichiers
+01|05|Importer des dossiers
+01|06|volume
+01|07|arrêter
+01|08|précédent
+01|09|lecture / pause
+01|10|suivant
+
+## Top Bar ##
+
+02|00|configuration
+02|01|Audio
+02|02|Salons
+02|03|Recherche
+## Settings ##
+
+03|00|Client
+03|01|Configurations - Client
+03|02|Discussion
+03|03|Configurations - Discussion
+03|04|Hashlink
+03|05|Configurations - Hashlink
+03|06|Personnel
+03|07|Configurations Personnelles
+03|08|Audio
+03|09|Configurations - Audio
+03|10|Filtre
+03|11|Configurations - Filtre
+03|12|Menu
+03|13|Configurations - Menu
+03|14|Intimité
+03|15|Configurations - Intimité
+
+## Client Settings ##
+
+04|00|Ouvrir le  dossier de données
+04|01|Template
+04|02|Pour les commandes dans le salon, taper " / " avant la commande ex : /help
+
+## Chat Settings ##
+
+05|00|Activer l'horodatage
+05|01|Activer le fond noir
+05|02|Activer les émoticônes
+05|03|Activer le protocole de cryptage de cb0t
+05|04|Envoyer le statut d'écriture
+05|05|Recevoir les messages privés
+05|06|Recevoir les Wizz
+05|07|Recevoir les photos
+05|08|Recevoir la latence du serveur
+05|09|Bloquer les demandes de redirection
+05|10|Bloquer les demandes pour effacer l'écran
+05|11|Bloquer toutes les pop-ups
+05|12|Bloquer les pop-ups ami
+05|13|Vérification orthographique
+05|14|Police global
+05|15|Police
+05|16|Taille
+05|17|Recevoir les polices d'utilisateur
+05|18|Bloquer les custom names
+05|19|Activer le protocole de HTML
+
+## Hashlink Settings ##
+
+06|00|Se Connecter
+
+## Personal Settings ##
+
+07|00|Nom
+07|01|Pays
+07|02|Région
+07|03|Age
+07|04|Sexe
+07|05|Secret
+07|06|Message personnel
+07|07|mettre à jour
+07|08|PM auto-message
+07|09|Activer le Auto-message pour le PM
+07|10|Avatar
+07|11|Effacer
+07|12|Police d'utilisateur
+07|13|Texte
+07|14|Police
+07|15|Taille
+07|16|Activer la police d'utilisateur
+
+## Audio Settings ##
+
+08|00|Messages vocaux
+08|01|Dispositif d'enregistrement
+08|02|Dispositif de lecture
+08|03|Recevoir les messages vocaux publics
+08|04|Recevoir les messages vocaux privés
+08|05|Enregistrement à l'aide d'Opus codec
+08|06|Écouter maintenant
+08|07|Source
+08|08|Afficher les chansons dans la liste des utilisateurs
+08|09|Jouer les sons de notification
+08|10|Activer le chat narration
+
+## Filter Settings ##
+
+09|00|Ajouter
+09|01|Modifier
+09|02|Enlever
+09|03|Activer le filtre
+09|04|ok
+09|05|Texte manquant dans la section 7
+
+## Menu Settings ##
+
+10|00|Menu d'options d'utilisateur
+10|01|Menu d'options du salon
+10|02|Nom
+10|03|Action
+10|04|Enlever
+10|05|Ajouter une nouvelle option menu
+10|06|Nom d'option
+10|07|Texte de l'option
+10|08|Ajouter
+
+## Privacy Settings ##
+
+11|00|Auto-ignorer les utilisateurs
+11|01|Condition
+11|02|Nom
+11|03|Bloquer
+11|04|Ajouter
+11|05|Enlever
+
+## Scribble Editor ##
+
+12|00|mince brosse
+12|01|médium brosse 
+12|02|grosse brosse
+12|03|pâte
+12|04|couleur
+12|05|annuler
+12|06|refaire
+12|07|effacer
+12|08|annuler
+12|09|envoyer
+
+## Color Picker ##
+
+13|00|couleur choisie
+13|01|Choisir une couleur web
+13|02|choisir une couleur d'Ares
+
+## Audio Player ##
+
+14|00|T'es sûr de vouloir effacer ton liste de lecture?
+14|01|joue maintenant
+14|02|Titre
+14|03|Artiste
+14|04|Album
+14|05|Durée
+14|06|Enlever de la liste de lecture
+
+## Channel List ##
+
+15|00|Actualiser
+15|01|chercher
+15|02|Langage
+15|03|Nom
+15|04|Topic
+15|05|Exporter le hashlink
+15|06|Ajouter aux favoris
+15|07|Enlever de favoris
+15|08|Auto joindre
+15|09|Mot de passe d'admin
+
+## Commands ##
+
+16|00|Temps: +x
+16|01|Client: +x - en ligne pour +d jours, +h heures, +m minutes
+16|02|Temps passé en ligne: +d jours, +h heures, +m minutes
+16|03|Graphiques: +x
+16|04|Espace disque: +xGB de +yGB disponible (+z% usage)
+16|05|Système d'exploitation: +x
+16|06|Processeur: +x
+16|07|Mémoire: +xMB de +yMB disponible (+z% usage)
+
+## User List ##
+
+17|00|Options pour
+17|01|Wizz
+17|02|Qui est
+17|03|Ignorer/Unignorer
+17|04|Copier le nom dans le presse-papiers
+17|05|Ajouter/Supprimer ami
+17|06|explorer
+17|07|Tuer
+17|08|Bannir
+17|09|Muzzler
+17|10|Démuzzler
+17|11|Tuer host
+17|12|bannir host
+17|13|Muzzler host
+17|14|Démuzzler host
+17|15|Utilisateurs
+17|16|Serveur
+17|17|Lag
+17|18|Amis
+17|19|Admins
+
+## In Box ##
+
+18|00|Couper
+18|01|Copier
+18|02|Coller
+18|03|Ajouter au dictionnaire
+
+## Out Box ##
+
+19|00|Sauvegarder l'image
+19|01|Sauvegarder le message vocal
+19|02|Effacer écran
+19|03|Exporter le texte
+19|04|Copier dans le presse-papiers
+19|05|Pause/Réactiver écran
+19|06|Écran Réactivée
+19|07|Écran en pause
+
+## Button Bar ##
+
+20|00|gras
+20|01|italique
+20|02|Souligné
+20|03|premier plan
+20|04|fond
+20|05|émoticônes
+20|06|Pour enregistrer un message vocal, appuyez sur ce bouton ou appuyez sur F2.
+20|07|Relâchez le bouton pour envoyer votre message.
+20|08|photo
+
+## Room Menu ##
+
+21|00|Options
+21|01|Fermer
+21|02|Exporter le hashlink
+21|03|Ajouter aux favoris
+21|04|Copier le nom du salon dans le presse-papiers
+21|05|Auto-jouer les messages vocaux
+21|06|Fermer les sous-onglets
+
+## Browse Tab ##
+
+22|00|Chargement
+22|01|Tout
+22|02|Audio
+22|03|Image
+22|04|Video
+22|05|Document
+22|06|Logiciel
+22|07|Autre
+22|08|Titre
+22|09|Artiste
+22|10|Média
+22|11|Catégorie
+22|12|Taille
+22|13|Nom du fichier
+22|14|Fichiers
+22|15|Parcourir échoué
+
+## Messages ##
+
+23|00|Entrain d'ecrire: +x
+23|01|ENREGISTREMENT [+x secondes restantes]
+23|02|Notification
+23|03|Wizz
+23|04|Ami
+23|05|+x T'envoie un Wizz!
+23|06|+x ne reçois pas les Wizz
+23|07|Test de lag
+23|08|Reçues de +x
+23|09|L'utilisateur est Hors-ligne
+23|10|Utilisateur t'ignore
+23|11|Mise à jour du topic
+23|12|+x a quitté le salon
+23|13|+x a rejoint le salon
+23|14|+x a rejoint +y
+23|15|Redirection vers +x...
+23|16|Langage
+23|17|Serveur
+23|18|Connecté, récupération de liste des utilisateurs
+23|19|pre texte mis à jour
+23|20|pre text Désavtivé
+23|21|Reconnexion
+23|22|Déconnecté
+23|23|Impossible de se connecter
+23|24|Connecté, handshaking
+23|25|Connexion à l'hôte, attend s'il te plaît
+23|26|envoi
+23|27|votre message vocal a été annulé
+23|28|votre message vocal a enregistré et est maintenant envoyé
+
+## System Tray ##
+
+24|00|apparaître en-ligne
+24|01|apparaître absent
+24|02|Quitter cb0t
