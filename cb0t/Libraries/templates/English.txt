@@ -1,0 +1,314 @@
+﻿## About ##
+
+00|00|English template
+00|01|by oobe
+
+## Audio Bar ##
+
+01|00|playlist options
+01|01|Clear list
+01|02|Random
+01|03|Repeat
+01|04|Import files
+01|05|Import folder
+01|06|volume
+01|07|stop
+01|08|previous
+01|09|play/pause
+01|10|next
+
+## Top Bar ##
+
+02|00|Settings
+02|01|Audio
+02|02|Channels
+02|03|Searching
+
+## Settings ##
+
+03|00|Client
+03|01|Client Settings
+03|02|Chat
+03|03|Chat Settings
+03|04|Hashlink
+03|05|Hashlink Settings
+03|06|Personal
+03|07|Personal Settings
+03|08|Audio
+03|09|Audio Settings
+03|10|Filter
+03|11|Filter Settings
+03|12|Menu
+03|13|Menu Settings
+03|14|Privacy
+03|15|Privacy Settings
+
+## Client Settings ##
+
+04|00|open data folder
+04|01|Template
+04|02|For in-room commands, type /cmds
+
+## Chat Settings ##
+
+05|00|Enable timestamps
+05|01|Enable black background
+05|02|Enable emoticons
+05|03|Enable cb0t encryption protocol
+05|04|Send typing status
+05|05|Receive private messages
+05|06|Receive nudges
+05|07|Receive scribbles
+05|08|Receive server latency
+05|09|Block redirect requests
+05|10|Block clear screen requests
+05|11|Block all popups
+05|12|Block friend popups
+05|13|Spell checking
+05|14|Global font
+05|15|Font
+05|16|Size
+05|17|Receive user fonts
+05|18|Block custom names
+05|19|Enable HTML protocol
+
+## Hashlink Settings ##
+
+06|00|connect
+
+## Personal Settings ##
+
+07|00|Name
+07|01|Country
+07|02|Region
+07|03|Age
+07|04|Gender
+07|05|Secret
+07|06|Personal message
+07|07|update
+07|08|PM auto reply
+07|09|Enable PM auto reply
+07|10|Avatar
+07|11|clear
+07|12|User Font
+07|13|Text
+07|14|Font
+07|15|Size
+07|16|Enable user font
+
+## Audio Settings ##
+
+08|00|Voice clips
+08|01|Record device
+08|02|Playback device
+08|03|Receive public voice clips
+08|04|Receive private voice clips
+08|05|Record using Opus codec
+08|06|Now playing
+08|07|Source
+08|08|Show songs in user list
+08|09|Play notification sounds
+08|10|Enable chat narration
+
+## Filter Settings ##
+
+09|00|Add
+09|01|Edit
+09|02|Remove
+09|03|Enable filter
+09|04|ok
+09|05|missing text in section 7
+
+## Menu Settings ##
+
+10|00|User list menu options
+10|01|Room menu options
+10|02|Name
+10|03|Action
+10|04|Remove
+10|05|Add new menu option
+10|06|Option name
+10|07|Action text
+10|08|add
+
+## Privacy Settings ##
+
+11|00|Auto ignored users
+11|01|Condition
+11|02|Name
+11|03|Block
+11|04|add
+11|05|Remove
+
+## Scribble Editor ##
+
+12|00|thin brush
+12|01|medium brush
+12|02|thick brush
+12|03|paste
+12|04|color
+12|05|undo
+12|06|redo
+12|07|clear
+12|08|cancel
+12|09|send
+
+## Color Picker ##
+
+13|00|Chosen color
+13|01|Pick a web color
+13|02|Pick an ares color
+
+## Audio Player ##
+
+14|00|Are you sure you want to clear your play list?
+14|01|Now playing
+14|02|Title
+14|03|Artist
+14|04|Album
+14|05|Duration
+14|06|remove from playlist
+
+## Channel List ##
+
+15|00|Refresh
+15|01|Find
+15|02|Language
+15|03|Name
+15|04|Topic
+15|05|Export hashlink
+15|06|Add to favourites
+15|07|Remove from favourites
+15|08|Auto join
+15|09|Admin password
+
+## Commands ##
+
+16|00|Time: +x
+16|01|Client: +x - running for +d days, +h hours, +m minutes
+16|02|Uptime: +d days, +h hours, +m minutes
+16|03|Graphics: +x
+16|04|Disk Space: +xGB out of +yGB available (+z% usage)
+16|05|Operating System: +x
+16|06|Processor: +x
+16|07|Memory: +xMB out of +yMB available (+z% usage)
+
+## User List ##
+
+17|00|Options for
+17|01|Nudge
+17|02|Whois
+17|03|Ignore/Unignore
+17|04|Copy name to clipboard
+17|05|Add/Remove friend
+17|06|Browse
+17|07|Kill
+17|08|Ban
+17|09|Muzzle
+17|10|Unmuzzle
+17|11|Host kill
+17|12|Host ban
+17|13|Host muzzle
+17|14|Host unmuzzle
+17|15|Users
+17|16|Server
+17|17|Lag
+17|18|Friends
+17|19|Admins
+
+## In Box ##
+
+18|00|Cut
+18|01|Copy
+18|02|Paste
+18|03|Add to dictionary
+
+## Out Box ##
+
+19|00|Save image
+19|01|Save voice clip
+19|02|Clear screen
+19|03|Export text
+19|04|Copy to clipboard
+19|05|Pause/Unpause screen
+19|06|Screen unpaused
+19|07|Screen paused
+
+## Button Bar ##
+
+20|00|bold
+20|01|italic
+20|02|underline
+20|03|foreground
+20|04|background
+20|05|emoticons
+20|06|To record a Voice Clip, hold down this button or press F2.
+20|07|Release the button to send your message.
+20|08|scribble
+
+## Room Menu ##
+
+21|00|Options
+21|01|Close
+21|02|Export hashlink
+21|03|Add to favourites
+21|04|Copy room name to clipboard
+21|05|Auto play voice clips
+21|06|Close sub tabs
+
+## Browse Tab ##
+
+22|00|Loading
+22|01|All
+22|02|Audio
+22|03|Image
+22|04|Video
+22|05|Document
+22|06|Software
+22|07|Other
+22|08|Title
+22|09|Artist
+22|10|Media
+22|11|Category
+22|12|Size
+22|13|Filename
+22|14|Files
+22|15|Browse failed
+
+## Messages ##
+
+23|00|Typing: +x
+23|01|RECORDING [+x seconds remaining]
+23|02|Notification
+23|03|Nudge
+23|04|Friend
+23|05|+x has nudged you!
+23|06|+x is not receiving nudges
+23|07|Lag test
+23|08|received from +x
+23|09|User is offline
+23|10|User is ignoring you
+23|11|Topic update
+23|12|+x has parted
+23|13|+x has joined
+23|14|+x has joined +y
+23|15|Redirecting to +x...
+23|16|Language
+23|17|Server
+23|18|Logged in, retrieving user's list
+23|19|pre text updated
+23|20|pre text disabled
+23|21|Reconnecting
+23|22|Disconnected
+23|23|Unable to connect
+23|24|Connected, handshaking
+23|25|Connecting to host, please wait
+23|26|Sending
+23|27|your voice clip was cancelled
+23|28|your voice clip has recorded and is now being sent
+
+## System Tray ##
+
+24|00|Show as Online
+24|01|Show as Away
+24|02|Exit

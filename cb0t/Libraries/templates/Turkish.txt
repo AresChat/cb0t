@@ -1,0 +1,314 @@
+﻿## Bilgi ##
+
+00|00| Türkçe Çeviren
+00|01| √bLaCk_DeViL_61√
+
+## Ses Bar ##
+
+01|00|Play Listesi Seçenekleri
+01|01|Listeyi Temizle
+01|02|Rastgele Dinle
+01|03|Tekrar Dinle
+01|04|Müzik Seçeceği Dosya
+01|05|Müzik Seçeceği Klasör
+01|06|Ses
+01|07|Dur
+01|08|Geri
+01|09|Başlat/Duraklat
+01|10|İleri
+
+## Genel Bar ##
+
+02|00|Ayarlar
+02|01|Ses
+02|02|Kanallar
+02|03|Arama
+
+## Ayarlar ##
+
+03|00|Giris
+03|01|Giris Ayarlari
+03|02|Sohbet
+03|03|Sohbet Ayarlari
+03|04|Hashlink
+03|05|Hashlink Ayarlari
+03|06|Kullanıcı Ayarlari
+03|07|Personal Ayarlari
+03|08|Ses
+03|09|Ses Ayarlari
+03|10|Filitre
+03|11|Filitre Ayarlari
+03|12|Menu
+03|13|Menu Ayarlari
+03|14|Gizlilik
+03|15|Gizlilik Ayarlari
+
+## Giris Ayarlari ##
+
+04|00|Data Klasörünü Aç
+04|01|Şablon
+04|02|Komutlar İçin /cmds Yazınız
+
+## Sohbet Ayarlari ##
+
+05|00|Aktif Sohbet Ekranında Saat Görülsün
+05|01|Aktif Siyah Arka Plan
+05|02|Aktif İfadeler
+05|03|Aktif cb0t Şifreleme Protokolü
+05|04|Yazarak durumunu Gönder
+05|05|Özel mesaj almak
+05|06|Özel Dürt
+05|07|Karamaları Alma
+05|08|Sunucu gecikme Alma
+05|09|Blok isteklerini yönlendirmek
+05|10|Net ekran isteklerini engellemek
+05|11|Tüm pop-up engelle
+05|12|Arkadaşım açılanları engellemek
+05|13|Yazım Denetimi
+05|14|Gelişmiş Yazı Tipi
+05|15|Yazı Tipi
+05|16|Boyut
+05|17|Kullanıcı Fontları Tipi Alma
+05|18|Blok custom names
+05|19|Aktif HTML Protokolü
+
+## Hashlink Ayarlari ##
+
+06|00|Bağlan
+
+## Kullanıcı Ayarlari ##
+
+07|00|İsim 
+07|01|Ülke
+07|02|Region
+07|03|Yaş
+07|04|Gender
+07|05|Cinsiniz
+07|06|Kullanıcı Mesajınız
+07|07|Güncelle
+07|08|PM Otomatik Tekrarlayıcı
+07|09|Aktif PM Otomatik Tekrarlıyıcı Aç
+07|10|Resim
+07|11|Temizle
+07|12|Kullancı Yazı Tipi
+07|13|Yaz
+07|14|Yazi Tipi
+07|15|Boyut
+07|16|Aktif Kullanıcı Yazı Tipi
+
+## Ses Ayarlari ##
+
+08|00|Ses Klipleri
+08|01|Kayıt Cihazı
+08|02|Oynatma Cihazı
+08|03|Genel Ses Kliplerini Almak
+08|04|Özel Ses Kliplerini Almak
+08|05|Opus Codec Kullanarak Kayıt
+08|06|Şimdi Çalıyor
+08|07|Kaynak
+08|08|Kullanıcı Listesinde Göster Şarkılar
+08|09|Bildirim Seslerini Aç
+08|10|Sohbet rivayeti etkinleştirin
+
+## Filter Ayarlari ##
+
+09|00|Ekle
+09|01|Düzenle
+09|02|Sil
+09|03|Aktif Filitre
+09|04|Tamam
+09|05|bölüm 7 eksik metin
+
+## Menu Ayarlari ##
+
+10|00|Kullanıcı Listesi Menu Seçenekleri
+10|01|Oda Seçenekleri
+10|02|İsim 
+10|03|Eylem
+10|04|Sil
+10|05|Yeni Menü Ekle
+10|06|Menü Adı
+10|07|Gönderilecek Yazı
+10|08|Ekle
+
+## Özel Ayarlari ##
+
+11|00|Otomatik kullanıcıları göz ardı
+11|01|Durum
+11|02|İsim
+11|03|Blog
+11|04|Ekle
+11|05|Sil
+
+## Karalama Editor ##
+
+12|00|İnce Fırça
+12|01|Normal Fırça
+12|02|Kalın Fırça
+12|03|Yapıştır
+12|04|Renk
+12|05|Geri
+12|06|İleri
+12|07|Temizle
+12|08|İptal
+12|09|Gönder
+
+## Renk Seçici ##
+
+13|00|Seçilen Renk
+13|01|Bir Web Rengi Seçin
+13|02|Bir Ares Rengi Seçin
+
+## Audio Player ##
+
+14|00|Şarkı Çalma Listesini Silmek İstediğinizden Emin Misiniz?
+14|01|Now playing
+14|02|Title
+14|03|Artist
+14|04|Album
+14|05|Duration
+14|06|remove from playlist
+
+## Kanal Listesi ##
+
+15|00|Yenile
+15|01|Bul
+15|02|Dil
+15|03|İsim
+15|04|Başlık
+15|05|Link hashlink
+15|06|Favorilerime Ekle
+15|07|Favorilerden Sil
+15|08|Otomatik Giriş
+15|09|Admin Şifresi
+
+## Komutlar ##
+
+16|00|Time: +x
+16|01|Client: +x - running for +d days, +h hours, +m minutes
+16|02|Uptime: +d days, +h hours, +m minutes
+16|03|Graphics: +x
+16|04|Disk Space: +xGB out of +yGB available (+z% usage)
+16|05|Operating System: +x
+16|06|Processor: +x
+16|07|Memory: +xMB out of +yMB available (+z% usage)
+
+## Kullanıcı Listesi ##
+
+17|00|Options for
+17|01|Dürt
+17|02|Whois Kişi Bilgisi
+17|03|Gör/Görme
+17|04|Kopayala İsmi Panoya
+17|05|Ekle/Sil Arkadaş
+17|06|Dosyarına Bak
+17|07|At
+17|08|Yasakla
+17|09|Sustur
+17|10|Sus Engelini Kaldır.
+17|11|Host At
+17|12|Host Yasakla
+17|13|Host Sustur
+17|14|Host Sus Engelini Kaldır.
+17|15|Kullanıcılar
+17|16|Server
+17|17|Lag
+17|18|Arkadaşlarım
+17|19|Adminler
+
+## In Box ##
+
+18|00|Kes
+18|01|Kopyala
+18|02|Yapıştır
+18|03|Belgelerime Ekle
+
+## Out Box ##
+
+19|00|Resmi Kaydet
+19|01|Kaydet Sesli Kilp
+19|02|Ekranı Temizle
+19|03|Yazıyı Çıkar
+19|04|Kopyala Klip
+19|05|Durdur/Durdurma Ekranı
+19|06|Ekran Aktif
+19|07|Ekran Durmuştur
+
+## Button Bar ##
+
+20|00|Kalın
+20|01|Eğik
+20|02|Altını Çiz
+20|03|Ön Plan
+20|04|Arka Plan
+20|05|İfadeler
+20|06|Ses Kayıtı İçin F2 Tuşuna Basılı Tutunuz.
+20|07|Mesajınızı Göndermek İçin F2 Tuşunu Bırakın.
+20|08|Karalamak
+
+## Oda Seçenekleri ##
+
+21|00|Seçenekler
+21|01|Kapat
+21|02|Çıkar hashlink
+21|03|Favorilere Ekle
+21|04|Panoya Oda Adını Kopyala
+21|05|Otomatik Ses Kliplerini Oynatma
+21|06|Kapat Alt Sekmeleri
+
+## Dosya Kontrol ##
+
+22|00|Yükleniyor
+22|01|Tüm
+22|02|Ses
+22|03|Resim
+22|04|Video
+22|05|Belge
+22|06|Yazılım
+22|07|Diğer
+22|08|Başlık
+22|09|Artist
+22|10|Medya
+22|11|Katagori
+22|12|Boyut
+22|13|Dosya Adı
+22|14|Dosyalar
+22|15|Gözlem Başarısız
+
+## Mesajlar ##
+
+23|00|Yazma: +x
+23|01|RECORDING [+x seconds remaining]
+23|02|Teblig
+23|03|Dürt
+23|04|Arkadaş
+23|05|+x Seni Dürttü
+23|06|+x Tepki Almıyor
+23|07|Lag test
+23|08|received from +x
+23|09|User is offline
+23|10|User is ignoring you
+23|11|Topic update
+23|12|+x Kanaldan Ayrıldı
+23|13|+x Kanala Bağlandı
+23|14|+x Kanala Bağlandı +y
+23|15|Yeniden Yönlendiriliyor +x...
+23|16|Dil
+23|17|Server
+23|18|Kullanıcı Girdi Listesi
+23|19|pre text updated
+23|20|pre text disabled
+23|21|Tekrar Bağlan
+23|22|Bağlantıyı Kes
+23|23|Bağlantı Başarısız
+23|24|Bağlantı Kuruldu., handshaking
+23|25|Sunucuya Bağlanıyor , Lütfen Bekleyiniz.
+23|26|Gönderiliyor
+23|27|Sesli Klip İptal Edildi.
+23|28|Sesli klibi kaydetti ve şimdi gönderiliyor
+
+## System Tray ##
+
+24|00|Çevrim İçi Göster
+24|01|Meşgul Olarak Göster
+24|02|Çıkış

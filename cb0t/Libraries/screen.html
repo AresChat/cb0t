@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    
+    <style type="text/css">
+        <!--
+        body
+        {
+            font-family: [font];
+            font-size: [size];
+        }
+
+        div.page_container
+        {
+            background-color: #FFFFFF;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            overflow-y: hidden;
+        }
+
+        div.screen_container
+        {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            z-index: 10;
+        }
+
+        div.text
+        {
+            white-space: pre-line;
+            word-wrap: break-word;
+            margin-left: 2px;
+            cursor: text;
+        }
+
+        div.customHTML
+        {
+            margin-left: 2px;
+        }
+
+        div.vc
+        {
+            height: 80px;
+            position: relative;
+            margin-left: 50px;
+        }
+
+        img.vc
+        {
+            position: absolute;
+            top: 8px;
+            left: 0px;
+        }
+        -->
+    </style>
+
+    <script type="text/javascript">
+        var screen_container = null;
+        var page_container = null;
+
+        var mouse_x = 0;
+        var mouse_y = 0;
+        var mouse_username = "";
+
+        var is_hashlink = false;
+        var is_voice_clip = false;
+        var is_image = false;
+        var is_url = false;
+        var right_click_data = null;
+
+        function clipboardHandler(e)
+        {
+            var str = getClipboardText();
+
+            if (str.length > 0)
+                cb0t.callbackCopyRequested(str);
+
+            return false;
+        }
+
+        function init()
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            screen_container.oncopy = clipboardHandler;
+
+            document.body.onkeydown = function (e) { return e.keyCode != 8; }
+
+            if (page_container == null)
+                page_container = document.getElementById("page_container");
+
+            page_container.onmousedown = function (e)
+            {
+                mouse_username = "";
+
+                if (e.button == 1)
+                {
+                    var el = document.elementFromPoint(mouse_x, mouse_y);
+
+                    if (el != null)
+                        if (el.nodeName == "SPAN")
+                        {
+                            var p_el = el.parentNode;
+
+                            if (p_el != null)
+                                if (p_el.childNodes[0] == el)
+                                {
+                                    var html = el.innerText.toString().replace(/\u00a0/g, " ");
+
+                                    if (html.substr(html.length - 2, 2) == "> ")
+                                    {
+                                        mouse_username = html.substr(0, html.length - 2);
+                                        cb0t.callbackMouseClick(e.button);
+                                        return false;
+                                    }
+                                }
+                        }
+                }
+                else if (e.button == 2)
+                {
+                    is_hashlink = false;
+                    is_image = false;
+                    is_voice_clip = false;
+                    is_url = false;
+
+                    var el = document.elementFromPoint(mouse_x, mouse_y);
+
+                    if (el != null)
+                    {
+                        if (el.nodeName == "A")
+                        {
+                            if (el.href.toString().indexOf("http://hashlink.link/?h=") == 0)
+                            {
+                                right_click_data = el.href.toString();
+                                is_hashlink = true;
+                                cb0t.callbackMouseClick(e.button);
+                                return false;
+                            }
+                            else if (el.href.toString().indexOf("http://external.link/") == 0)
+                            {
+                                right_click_data = el.href.toString();
+                                is_url = true;
+                                cb0t.callbackMouseClick(e.button);
+                                return false;
+                            }
+                        }
+                        else if (el.nodeName == "IMG")
+                        {
+                            var p_el = el.parentNode;
+
+                            if (p_el != null)
+                            {
+                                if (p_el.nodeName == "A")
+                                {
+                                    if (p_el.href.toString().indexOf("http://voice.clip/?i=") == 0)
+                                    {
+                                        right_click_data = p_el.href.toString();
+                                        is_voice_clip = true;
+                                        cb0t.callbackMouseClick(e.button);
+                                        return false;
+                                    }
+                                }
+                                else if (p_el.nodeName == "DIV")
+                                    if (p_el.className == "customHTML")
+                                        if (p_el.childNodes.length == 1)
+                                        {
+                                            right_click_data = el.src.toString();
+                                            is_image = true;
+                                            cb0t.callbackMouseClick(e.button);
+                                            return false;
+                                        }
+                            }
+                        }
+                    }
+
+                    cb0t.callbackMouseClick(e.button);
+                    return false;
+                }
+
+                return true;
+            }
+
+            page_container.onmousemove = function (e)
+            {
+                mouse_x = e.clientX;
+                mouse_y = e.clientY;
+                return true;
+            }
+        }
+
+        function getUserNameFromMousePos()
+        {
+            var str = mouse_username;
+            mouse_username = "";
+            return str;
+        }
+
+        function injectText(str, wide)
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            var div = document.createElement("div");
+            div.className = "text";
+
+            if (wide)
+                div.style.width = "3000px";
+
+            div.innerHTML = str;
+            screen_container.appendChild(div);
+            
+            if (screen_container.childNodes.length > 500)
+                while (screen_container.childNodes.length > 300)
+                    screen_container.removeChild(screen_container.childNodes[0]);
+
+            screen_container.scrollTop = screen_container.scrollHeight;
+            screen_container.scrollLeft = 0;
+        }
+
+        function injectCustomHTML(str)
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            var div = document.createElement("div");
+            div.className = "customHTML";
+            div.innerHTML = str;
+            screen_container.appendChild(div);
+
+            if (screen_container.childNodes.length > 500)
+                while (screen_container.childNodes.length > 300)
+                    screen_container.removeChild(screen_container.childNodes[0]);
+
+            screen_container.scrollTop = screen_container.scrollHeight;
+            screen_container.scrollLeft = 0;
+        }
+
+        function injectScript(str)
+        {
+            if (page_container == null)
+                page_container = document.getElementById("page_container");
+
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            eval(str);
+        }
+
+        function imageLoaded(e)
+        {
+            e.style.height = e.clientHeight;
+
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            screen_container.scrollTop = screen_container.scrollHeight;
+            screen_container.scrollLeft = 0;
+        }
+
+        function scrollDown()
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            screen_container.scrollTop = screen_container.scrollHeight;
+            screen_container.scrollLeft = 0;
+        }
+
+        function openRightClickMenu()
+        {
+            return (is_hashlink ? "1" : "0") + (is_image ? "1" : "0") + (is_voice_clip ? "1" : "0");
+        }
+
+        function closeRightClickMenu()
+        {
+            is_hashlink = false;
+            is_image = false;
+            is_voice_clip = false;
+            is_url = false;
+            right_click_data = null;
+        }
+
+        function getRightClickMenuData()
+        {
+            return right_click_data;
+        }
+
+        function getClipboardText()
+        {
+            var text = window.getSelection().toString().replace(/\n/g, "\r\n");
+            
+            if (text.length == 0)
+            {
+                if (is_hashlink || is_url)
+                    return right_click_data;
+
+                if (screen_container == null)
+                    screen_container = document.getElementById("screen_container");
+
+                text = screen_container.innerText.toString().replace(/\n/g, "\r\n").replace(/\u00a0/g, " ");
+            }
+
+            return text;
+        }
+
+        function getExportText()
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            return screen_container.innerText.toString().replace(/\n/g, "\r\n").replace(/\u00a0/g, " ");
+        }
+
+        function clearScreen()
+        {
+            if (screen_container == null)
+                screen_container = document.getElementById("screen_container");
+
+            screen_container.innerHTML = "";
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div class="page_container" id="page_container">
+        <div class="screen_container" id="screen_container">
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,318 @@
+﻿## About ##
+
+00|00|Deutsches template
+00|01|by st3ph
+
+## Audio Bar ##
+
+01|00|Wiedergabeliste Optionen
+01|01|Liste löschen
+01|02|Zufällig
+01|03|Wiederholen
+01|04|Dateien importieren
+01|05|Ordner importieren
+01|06|Lautstärke
+01|07|Stop
+01|08|Vorherig
+01|09|Abspielen/Pause
+01|10|Nächstes
+
+## Top Bar ##
+
+02|00|Einstellungen
+02|01|Ton
+02|02|Kanäle
+02|03|Suchen
+
+## Settings ##
+
+03|00|Klient
+03|01|Klient Einstellungen
+03|02|Chat
+03|03|Chat Einstellungen
+03|04|Hashlink
+03|05|Hashlink Einstellungen
+03|06|Persönlich
+03|07|Persönliche Einstellungen
+03|08|Ton
+03|09|Ton Einstellungen
+03|10|Filter
+03|11|Filter Einstellungen
+03|12|Menü
+03|13|Menü Einstellungen
+03|14|Privatsphäre
+03|15|Privatsphäre Einstellungen
+
+## Client Settings ##
+
+04|00|Öffne Dateiordner
+04|01|Template
+04|02|Für 'im Raum' Komandos, schreibe /cmds
+
+## Chat Settings ##
+
+05|00|Aktiviere Zeitstempel
+05|01|Aktiviere Schwarzer Hintergrund
+05|02|Aktiviere Smileys
+05|03|Aktiviere cb0t Verschlüsselungsprotokoll
+05|04|Sende Benachrichtigungs Status
+05|05|Empfange Private Nachrichten
+05|06|Empfange "anstupsen"
+05|07|Empfange "scribbles"
+05|08|Empfange Server Latenzzeit
+05|09|Blockiere Umleitungs Anfragen
+05|10|Blockiere Anfragen zum Bildschirm löschen
+05|11|Blockiere alle pop-ups
+05|12|Blockiere pop-ups von Freunden
+05|13|Rechtschreibprüfung
+05|14|Allgemeine Schriftart
+05|15|Schriftart
+05|16|Größe
+05|17|Empfange Benutzer Schriftarten
+05|18|Blockiere angepasste Namen
+05|19|aktiviere HTML Protokoll
+
+## Hashlink Settings ##
+
+06|00|verbinden
+
+## Personal Settings ##
+
+07|00|Name
+07|01|Land
+07|02|Region
+07|03|Alter
+07|04|Geschlecht
+07|05|Geheimnis
+07|06|Persönliche Nachricht
+07|07|aktualisieren
+07|08|PN Auto Nachricht
+07|09|Aktiviere PN Auto Nachricht
+07|10|Anzeigebild
+07|11|Löschen
+07|12|Benutzer Schriftart
+07|13|Text
+07|14|Schriftart
+07|15|Größe
+07|16|Aktiviere Benutzer Schriftart
+
+## Audio Settings ##
+
+08|00|Sprachaufnahme
+08|01|Aufnahmegerät
+08|02|Wiedergabegerät
+08|03|Empfange öffentliche Sprachnachrichten
+08|04|Empfange Private Sprachnachrichten
+08|05|Aufnehmen mit Opus codec
+08|06|Spielt gerade
+08|07|Quelle
+08|08|Zeige Lieder in Benutzerliste
+08|09|Spiele Benachrichtigungstöne ab
+
+08|10|Aktiviere Chat Schilderung
+
+## Filter Settings ##
+
+09|00|hinzufügen
+09|01|bearbeiten
+09|02|entfernen
+09|03|Aktiviere Filter
+09|04|ok
+09|05|Fehlender Text im Bereich 7
+
+## Menu Settings ##
+
+10|00|Benutzerlisten Menü Optionen
+10|01|Raum Menü Optionen
+10|02|Name
+10|03|Aktion
+10|04|Entfernen
+10|05|Hinzufügen neuer Menü Funktion
+10|06|Option Name
+10|07|Aktion text
+10|08|hinzufügen
+
+## Privacy Settings ##
+
+11|00|Auto Ignorierte Benutzer
+11|01|Zustand
+11|02|Name
+11|03|Blockiere
+11|04|hinzufügen
+11|05|entfernen
+
+## Scribble Editor ##
+
+12|00|Schmaler Pinsel
+12|01|Mittlerer Pinsel
+12|02|Dicker Pinsel
+12|03|einfügen
+12|04|Farbe
+12|05|rückgängig
+12|06|wiederherstellen
+12|07|löschen
+12|08|abbrechen
+12|09|senden
+
+## Color Picker ##
+
+13|00|ausgewählte Farbe
+13|01|Wähle eine "Web" Farbe
+13|02|Wähle eine "Ares" Farbe
+
+## Audio Player ##
+
+14|00|Bist Du Sicher, die Wiedergabeliste zu löschen?
+14|01|Spielt jetzt
+14|02|Titel
+14|03|Artist
+14|04|Album
+14|05|Dauer
+14|06|Entferne von der Wiedergabeliste
+
+## Channel List ##
+
+15|00|Aktualisieren
+15|01|Finde
+15|02|Sprache
+15|03|Name
+15|04|Thema
+15|05|Exportiere hashlink
+15|06|zu Favoriten hinzufügen
+15|07|Entferne von Favoriten
+15|08|Automatisch Verbinden
+15|09|Administrator Passwort
+
+## Commands ##
+
+16|00|Zeit: +x
+16|01|Klient: +x - in Betrieb seit +d days, +h hours, +m minutes
+16|02|Betriebszeit: +d days, +h hours, +m minutes
+16|03|Graphics: +x
+16|04|Speicherplatz: +xGB von +yGB verfügbar (+z% usage)
+16|05|Betriebssystem: +x
+16|06|Prozessor: +x
+16|07|Arbeitsspeicher: +xMB von +yMB verfügbar (+z% usage)
+
+## User List ##
+
+17|00|Optionen für
+17|01|Anstupsen
+17|02|Whois
+17|03|Ignorieren/Nicht Ignorieren
+17|04|Name in Ablage kopieren
+17|05|Freund hinzufügen/entfernen
+17|06|durchsuchen
+17|07|Killen
+17|08|Verbannen
+17|09|Maulkorb anziehen
+17|10|Maulkorb ausziehen
+17|11|Host Killen
+17|12|Host Verbannen
+17|13|Host Maulkorb anziehen
+17|14|Host Maulkorb ausziehen
+17|15|Benutzer
+17|16|Server
+17|17|Verzögerung
+17|18|Freunde
+17|19|Administratoren
+
+## In Box ##
+
+18|00|Ausschneiden
+18|01|Kopieren
+18|02|Einfügen
+18|03|Zum Wörterbuch hinzufügen
+
+## Out Box ##
+
+19|00|Bild speichern
+19|01|Sprachnachricht speichern
+19|02|Lösche Bildschirm
+19|03|Exportiere Text
+19|04|In Ablage kopieren
+19|05|Bildschirm anhalten/fortlaufen
+19|06|Bildschirm fortlaufend
+19|07|Bildschirm angehalten
+
+## Button Bar ##
+
+20|00|Fett
+20|01|Kursiv
+20|02|Unterstrich
+20|03|Fordergrund
+20|04|Hintergrund
+20|05|Smileys
+20|06|Um eine Sprachnachricht aufzunehmen, drücke diese Taste oder F2.
+20|07|Lass die Taste los um Deine Nachricht zu senden.
+20|08|scribble
+
+## Room Menu ##
+
+21|00|Optionen
+21|01|Schließen
+21|02|Exportiere hashlink
+21|03|Zu Favoriten hinzufügen
+21|04|Kopiere Raumname in Ablage
+21|05|Automatische Wiedergabe von Sprachnachrichten
+21|06|Schließe Unter Tabs
+
+## Browse Tab ##
+
+22|00|Läd
+22|01|Alle
+22|02|Ton
+22|03|Bild
+22|04|Video
+22|05|Dokument
+22|06|Software
+22|07|Sonstige
+22|08|Titel
+22|09|Artist
+22|10|Media
+22|11|Kategorie
+22|12|Größe
+22|13|Dateiname
+22|14|Dateien
+22|15|Durchsuchen fehlgeschlagen
+
+## Messages ##
+
+23|00|Schreiben: +x
+23|01|Aufnahme [+x sekunden verbleibend]
+23|02|Benachrichtigung
+23|03|Anstupsen
+23|04|Freund
+23|05|+x hat Dich angestupst!
+23|06|+x empfängt keine Anstupser!
+23|07|Lag test
+23|08|empfangen von +x
+23|09|Benutzer ist offline
+23|10|Benutzer ignoriert Dich
+23|11|Thema Aktualisierung
+23|12|+x verlässt den Raum
+23|13|+x betritt den Raum
+23|14|+x betritt +y
+23|15|Umleitung zu +x...
+23|16|Sprache
+23|17|Server
+23|18|Eingeloggt, Herstellung der Benutzerliste
+23|19|vorheriger Text aktualisiert
+23|20|vorheriger Text deaktiviert
+23|21|Erneut verbinden
+23|22|Verbindung unterbrochen
+23|23|Verbindung kann nicht hergestellt werden
+23|24|Verbunden, Händeschütteln
+23|25|Verbinden zum Gastgeber, bitte warten
+23|26|Senden
+23|27|Ihre Sprachnachricht wurde abgebrochen
+23|28|Ihre Sprachnachricht wurde aufgenommen und wird nun gesendet
+
+## System Tray ##
+
+24|00|Als Online anzeigen
+24|01|Als Abwesend anzeigen
+24|02|Exit
+
+
+
