@@ -29,7 +29,7 @@ namespace cb0t
             this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.ChannelList, 0);
             this.toolStripLabel1.Text = StringTemplate.Get(STType.ChannelList, 1) + ":";
             this.toolStripLabel2.Text = StringTemplate.Get(STType.ChannelList, 2) + ":";
-            this.toolStripLabel3.Text = " " + StringTemplate.Get(STType.AudioSettings, 7) + ":";
+           // this.toolStripLabel3.Text = " " + StringTemplate.Get(STType.AudioSettings, 7) + ":";
             this.channelListView1.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
             this.channelListView2.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
             this.channelListView1.Columns[1].Text = StringTemplate.Get(STType.UserList, 15);
@@ -63,7 +63,7 @@ namespace cb0t
             if (fav_split > 0 && (this.splitContainer1.ClientSize.Height - fav_split) > 0)
                 this.splitContainer1.SplitterDistance = (this.splitContainer1.ClientSize.Height - fav_split);
 
-            this.toolStripComboBox2.SelectedIndex = Settings.GetReg<int>("clist_src", 0);
+            //this.toolStripComboBox2.SelectedIndex = Settings.GetReg<int>("clist_src", 0);
             this.LoadCache();
             this.LoadFavourites();
             this.setting_up = false;
@@ -217,7 +217,8 @@ namespace cb0t
         {
             new Thread(new ThreadStart(() =>
             {
-                if (Settings.GetReg<int>("clist_src", 0) == 1)
+               // if (Settings.GetReg<int>("clist_src", 0) == 1)
+                if(true)
                 {
                     this.RefreshFromMarsProject();
                     return;
@@ -841,8 +842,8 @@ namespace cb0t
 
         private void toolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!this.setting_up)
-                Settings.SetReg("clist_src", this.toolStripComboBox2.SelectedIndex);
+            //if (!this.setting_up)
+                //Settings.SetReg("clist_src", this.toolStripComboBox2.SelectedIndex);
         }
 
         private bool sort_up = true;
