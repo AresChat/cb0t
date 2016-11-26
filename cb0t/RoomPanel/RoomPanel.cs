@@ -39,7 +39,10 @@ namespace cb0t
         public event EventHandler EditScribbleClicked;
 
         private ContextMenuStrip rc_ctx { get; set; }
+
         private WebSession cache_session { get; set; }
+
+        private static WebPreferences cache_prefs;
 
         public void ShowVoice(String sender, uint sc)
         {
@@ -88,6 +91,14 @@ namespace cb0t
             this.webControl1.ShowCustomHTML(html);
         }
 
+        static RoomPanel() {
+            cache_prefs = new WebPreferences() {
+                 SmoothScrolling = true,
+                 AllowInsecureContent = false,
+                 EnableGPUAcceleration = true,
+            };
+        }
+
         public RoomPanel(FavouritesListItem creds)
         {
             this.InitializeComponent();
@@ -98,8 +109,10 @@ namespace cb0t
             foreach (byte b in c_bytes)
                 sb.AppendFormat("{0:X2}", b);
 
-            this.cache_session = WebCore.CreateWebSession(System.IO.Path.Combine(Settings.CachePath, sb.ToString()), new WebPreferences());
+            this.cache_session = WebCore.CreateWebSession(System.IO.Path.Combine(Settings.CachePath, sb.ToString()), cache_prefs);
+            this.webControl1.ViewType = WebViewType.Window;
             this.webControl1.WebSession = this.cache_session;
+
             sb.Clear();
 
             this.toolStripDropDownButton1.DropDownDirection = ToolStripDropDownDirection.BelowLeft;
