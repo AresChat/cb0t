@@ -217,13 +217,13 @@ namespace cb0t
         {
             new Thread(new ThreadStart(() =>
             {
-               // if (Settings.GetReg<int>("clist_src", 0) == 1)
+                // if (Settings.GetReg<int>("clist_src", 0) == 1)
                 if(true)
                 {
                     this.RefreshFromMarsProject();
                     return;
                 }
-
+                /*
                 this.reloading_list = true;
                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
@@ -388,6 +388,7 @@ namespace cb0t
                         Thread.Sleep(50);
                     }
                 }
+                */
             })).Start();
         }
 
