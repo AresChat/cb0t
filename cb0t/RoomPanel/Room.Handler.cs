@@ -157,22 +157,25 @@ namespace cb0t
                 if (match.Success) {
 
                     string tag = match.Groups[1].Value.ToLower();
-                    string extra = Regex.Replace(match.Groups[2].Value, "onload.*?=[^\\\\]*?\"[^\\\\]*?\"", "", opts);
+                    string extra = Regex.Replace(match.Groups[2].Value, "on[a-z0-9_$]+?.*?=[^\\\\]*?\"[^\\\\]*?\"", "", opts);
 
                     switch (tag) {
                         case "img":
                             this.Panel.ShowCustomHTML("<img onload=\"imageLoaded(this)\" " + extra + ">");
                             break;
                         case "audio":
-                            this.Panel.ShowCustomHTML("<audio " + extra + ">");
+                            if (this.IsMOTDReceiving)
+                                this.Panel.ShowCustomHTML("<audio " + extra + ">");
                             break;
                         case "video":
-                            this.Panel.ShowCustomHTML("<video " + extra + ">");
+                            if (this.IsMOTDReceiving)
+                                this.Panel.ShowCustomHTML("<video " + extra + ">");
                             break;
-                        case "embedyoutube": {
+                        case "embedyoutube": 
+                            if (this.IsMOTDReceiving) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.Append("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/");
-                                sb.Append(Uri.EscapeUriString(extra));
+                                sb.Append(Uri.EscapeUriString(extra));//more injection protection
                                 sb.Append("\" frameborder=\"0\" allowfullscreen></iframe>");
                                 this.Panel.ShowCustomHTML(sb.ToString());
                                 sb.Clear();
