@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace cb0t
 {
@@ -144,58 +146,45 @@ namespace cb0t
             {
                 /* SANDBOXED CUSTOM HTML CONTENT */
 
-                // images
-                if (html.StartsWith("<img"))
-                {
-                    if (Settings.GetReg<bool>("receive_scribbles", true))
-                    {
-                        if (html.StartsWith("<img ") && !html.Contains("onload="))
-                            html = "<img onload=\"imageLoaded(this)\" " + html.Substring(5);
+                //prevent character reference injection
+                html = WebUtility.HtmlDecode(html);
 
-                        if (html.LastIndexOf("<") == 0)
-                            this.Panel.ShowCustomHTML(html);
+                //find 1 tag, and 1 tag only
+                var opts = RegexOptions.Singleline | RegexOptions.IgnoreCase;
+                var regex = new Regex("<!--(?<tag>EMBEDYOUTUBE):(?<ex>.*?)-->|<(?<tag>.*?) (?<ex>.*?)>", opts);
+
+                var match = regex.Match(html);
+                if (match.Success) {
+
+                    string tag = match.Groups[1].Value.ToLower();
+                    string extra = Regex.Replace(match.Groups[2].Value, "onload.*?=[^\\\\]*?\"[^\\\\]*?\"", "", opts);
+
+                    switch (tag) {
+                        case "img":
+                            this.Panel.ShowCustomHTML("<img onload=\"imageLoaded(this)\" " + extra + ">");
+                            break;
+                        case "audio":
+                            this.Panel.ShowCustomHTML("<audio " + extra + ">");
+                            break;
+                        case "video":
+                            this.Panel.ShowCustomHTML("<video " + extra + ">");
+                            break;
+                        case "embedyoutube": {
+                                StringBuilder sb = new StringBuilder();
+                                sb.Append("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/");
+                                sb.Append(Uri.EscapeUriString(extra));
+                                sb.Append("\" frameborder=\"0\" allowfullscreen></iframe>");
+                                this.Panel.ShowCustomHTML(sb.ToString());
+                                sb.Clear();
+                            }
+                            break;
+                        case "object"://do nothing with object tags
+                            break;
+                        default:
+                            // let the script engine decide...
+                            ScriptEvents.OnHTMLReceived(this, html);
+                            break;
                     }
-                }
-
-                // audio
-                else if (html.StartsWith("<audio") && this.IsMOTDReceiving)
-                {
-                    if (html.LastIndexOf("<") == 0)
-                        this.Panel.ShowCustomHTML(html);
-                }
-
-                // video
-                else if (html.StartsWith("<video") && this.IsMOTDReceiving)
-                {
-                    if (html.LastIndexOf("<") == 0)
-                        this.Panel.ShowCustomHTML(html);
-                }
-
-                // youtube
-                else if (html.StartsWith("<!--EMBEDYOUTUBE:") && this.IsMOTDReceiving)
-                {
-                    html = html.Substring(17);
-
-                    if (html.EndsWith("-->"))
-                    {
-                        html = html.Substring(0, html.Length - 3);
-
-                        if (html.Length > 0)
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            sb.Append("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/");
-                            sb.Append(html);
-                            sb.Append("\" frameborder=\"0\" allowfullscreen></iframe>");
-                            this.Panel.ShowCustomHTML(sb.ToString());
-                            sb.Clear();
-                        }
-                    }
-                }
-
-                // let the script engine decide...
-                else if (!html.ToUpper().Contains("<object"))
-                {
-                    ScriptEvents.OnHTMLReceived(this, html);
                 }
             }
         }
