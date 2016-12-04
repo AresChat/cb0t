@@ -77,7 +77,6 @@ namespace cb0t
             items.Add(new STItem { Type = STType.ChatSettings, Index = 16, Text = "Size" });
             items.Add(new STItem { Type = STType.ChatSettings, Index = 17, Text = "Receive user fonts" });
             items.Add(new STItem { Type = STType.ChatSettings, Index = 18, Text = "Block custom names" });
-            items.Add(new STItem { Type = STType.ChatSettings, Index = 19, Text = "Enable HTML protocol" });
 
             items.Add(new STItem { Type = STType.HashlinkSettings, Index = 0, Text = "connect" });
 
