@@ -116,81 +116,10 @@ namespace cb0t
                 case TCPMsg.MSG_CHAT_SERVER_ENDOFBROWSE:
                     this.Eval_EndBrowse(e.Packet);
                     break;
-
-                case TCPMsg.MSG_CHAT_SERVER_HTML:
-                    this.Eval_HTML(e.Packet);
-                    break;
             }
         }
 
         private bool IsMOTDReceiving { get; set; }
-
-        private void Eval_HTML(TCPPacketReader packet)
-        {
-            if (!Settings.CanHTML)
-                return;
-
-            String html = packet.ReadString();
-
-            if (html == "<!--MOTDSTART-->")
-            {
-                this.Panel.SetScreenWidth(true);
-                this.IsMOTDReceiving = true;
-            }
-            else if (html == "<!--MOTDEND-->")
-            {
-                this.Panel.SetScreenWidth(false);
-                this.IsMOTDReceiving = false;
-            }
-            else
-            {
-                /* SANDBOXED CUSTOM HTML CONTENT */
-
-                //prevent character reference injection
-                html = WebUtility.HtmlDecode(html);
-
-                //find 1 tag, and 1 tag only
-                var opts = RegexOptions.Singleline | RegexOptions.IgnoreCase;
-                var regex = new Regex("<!--(?<tag>EMBEDYOUTUBE):(?<ex>.*?)-->|<(?<tag>.*?) (?<ex>.*?)>", opts);
-
-                var match = regex.Match(html);
-                if (match.Success) {
-
-                    string tag = match.Groups[1].Value.ToLower();
-                    string extra = Regex.Replace(match.Groups[2].Value, "on[a-z0-9_$]+?.*?=[^\\\\]*?\"[^\\\\]*?\"", "", opts);
-
-                    switch (tag) {
-                        case "img":
-                            this.Panel.ShowCustomHTML("<img onload=\"imageLoaded(this)\" " + extra + ">");
-                            break;
-                        case "audio":
-                            if (this.IsMOTDReceiving)
-                                this.Panel.ShowCustomHTML("<audio " + extra + ">");
-                            break;
-                        case "video":
-                            if (this.IsMOTDReceiving)
-                                this.Panel.ShowCustomHTML("<video " + extra + ">");
-                            break;
-                        case "embedyoutube": 
-                            if (this.IsMOTDReceiving) {
-                                StringBuilder sb = new StringBuilder();
-                                sb.Append("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/");
-                                sb.Append(Uri.EscapeUriString(extra));//more injection protection
-                                sb.Append("\" frameborder=\"0\" allowfullscreen></iframe>");
-                                this.Panel.ShowCustomHTML(sb.ToString());
-                                sb.Clear();
-                            }
-                            break;
-                        case "object"://do nothing with object tags
-                            break;
-                        default:
-                            // let the script engine decide...
-                            ScriptEvents.OnHTMLReceived(this, html);
-                            break;
-                    }
-                }
-            }
-        }
 
         private void Eval_Ack(TCPPacketReader packet, uint time)
         {

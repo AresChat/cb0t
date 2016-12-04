@@ -70,7 +70,6 @@
 05|16|Boyut
 05|17|Kullanıcı Fontları Tipi Alma
 05|18|Blok custom names
-05|19|Aktif HTML Protokolü
 
 ## Hashlink Ayarlari ##
 

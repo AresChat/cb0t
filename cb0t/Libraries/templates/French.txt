@@ -69,7 +69,6 @@
 05|16|Taille
 05|17|Recevoir les polices d'utilisateur
 05|18|Bloquer les custom names
-05|19|Activer le protocole de HTML
 
 ## Hashlink Settings ##
 

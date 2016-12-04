@@ -70,7 +70,6 @@
 05|16|Rozmiar
 05|17|Otrzymuj czcionki od uzytk.
 05|18|Blokuj kolorowanie
-05|19|Włącz HTML
 
 ## Hashlink Ustawienia ##
 

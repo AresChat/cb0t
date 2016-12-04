@@ -70,7 +70,6 @@
 05|16|Size
 05|17|Receive user fonts
 05|18|Block custom names
-05|19|Enable HTML protocol
 
 ## Hashlink Settings ##
 
