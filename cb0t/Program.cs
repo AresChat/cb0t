@@ -37,9 +37,10 @@ namespace cb0t
             {
                 if (!String.IsNullOrEmpty(hashlink))
                     SendIPC(hashlink);
-
+#if !DEBUG
                 Environment.Exit(-1);
                 return;
+#endif
             }
 
             Application.EnableVisualStyles();
