@@ -14,10 +14,14 @@ namespace MediaIPC.Spotify
                 if (ps.Length > 0)
                 {
                     String str = ps[0].MainWindowTitle;
+                    
+                    if (str.ToUpper().Contains("SPOTIFY")) //Adverts ....
+                        return String.Empty;
+                    
                     return str;
                 }
 
-                return null;
+                return String.Empty;
             }
         }
     }
