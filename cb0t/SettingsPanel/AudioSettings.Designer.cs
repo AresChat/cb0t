@@ -180,7 +180,7 @@
             "Winamp",
             "Foobar2000",
             "iTunes",
-            "Spotify"});
+            /*"Spotify"*/});
             this.comboBox2.Location = new System.Drawing.Point(53, 47);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(171, 21);
