@@ -218,16 +218,18 @@ namespace cb0t
             new Thread(new ThreadStart(() =>
             {
                 // if (Settings.GetReg<int>("clist_src", 0) == 1)
-                if(true)
+                /*if(true)
                 {
                     this.RefreshFromMarsProject();
                     return;
-                }
-                /*
+                }*/
+                
                 this.reloading_list = true;
                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
-                byte[] raw = null;
+                
+
+                /*byte[] raw = null;
 
                 if (File.Exists(Settings.DataPath + "servers.dat"))
                     raw = File.ReadAllBytes(Settings.DataPath + "servers.dat");
@@ -265,21 +267,28 @@ namespace cb0t
 
                     if (raw == null) // unable to retrieve remote cache server so use the one in the installer
                         raw = File.ReadAllBytes(Settings.AppPath + "servers.dat");
-                }
+                }*/
 
-                if (raw != null)
-                {
-                    List<byte> list = new List<byte>(raw);
+               // if (raw != null)
+               // {
+                    //List<byte> list = new List<byte>(raw);
                     List<IPEndPoint> to_send = new List<IPEndPoint>();
 
-                    while (list.Count >= 6)
+                to_send.Add(new IPEndPoint(IPAddress.Parse("3.9.177.74"), 54321)); // AresChat
+                to_send.Add(new IPEndPoint(IPAddress.Parse("72.88.244.38"), 50000)); // Vicky's Hangout
+                to_send.Add(new IPEndPoint(IPAddress.Parse("81.103.82.252"), 37579)); // BATTS STEAKHOUSE
+                to_send.Add(new IPEndPoint(IPAddress.Parse("87.211.177.199"), 5287)); // MIXI - ROOM
+                to_send.Add(new IPEndPoint(IPAddress.Parse("176.27.99.220"), 46500)); // Ross / Milli's Bar and Cafe
+
+
+                /*while (list.Count >= 6)
                     {
                         IPAddress ip = new IPAddress(list.GetRange(0, 4).ToArray());
                         list.RemoveRange(0, 4);
                         ushort port = BitConverter.ToUInt16(list.ToArray(), 0);
                         list.RemoveRange(0, 2);
                         to_send.Add(new IPEndPoint(ip, port));
-                    }
+                    }*/
 
                     Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                     sock.Blocking = false;
@@ -387,8 +396,7 @@ namespace cb0t
 
                         Thread.Sleep(50);
                     }
-                }
-                */
+                //}
             })).Start();
         }
 
