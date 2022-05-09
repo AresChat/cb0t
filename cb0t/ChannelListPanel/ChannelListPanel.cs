@@ -591,26 +591,25 @@ namespace cb0t
             if (list.Count > 0)
             {
                 UdpPacketReader buf = new UdpPacketReader(list.ToArray());
-                list.Clear();
-                list = null;
-
                 while (buf.Remaining() > 0)
                 {
-                    FavouritesListItem item = new FavouritesListItem();
-                    item.AutoJoin = buf.ReadByte() == 1;
-                    item.IP = buf.ReadIP();
-                    item.Port = buf.ReadUInt16();
-                    item.Name = buf.ReadString();
-                    item.Topic = buf.ReadString();
-                    item.Password = buf.ReadString();
-                    this.favs.Add(item);
-                    ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
-                    this.gfx.RenderChannelListItem(vitem, item);
-                    this.g_favs.Add(vitem);
-                    this.channelListView2.Items.Add(vitem);
+                    try
+                    {
+                        FavouritesListItem item = new FavouritesListItem();
+                        item.AutoJoin = buf.ReadByte() == 1;
+                        item.IP = buf.ReadIP();
+                        item.Port = buf.ReadUInt16();
+                        item.Name = buf.ReadString();
+                        item.Topic = buf.ReadString();
+                        item.Password = buf.ReadString();
+                        this.favs.Add(item);
+                        ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
+                        this.gfx.RenderChannelListItem(vitem, item);
+                        this.g_favs.Add(vitem);
+                        this.channelListView2.Items.Add(vitem);
+                    }
+                    catch { break; }
                 }
-
-                buf = null;
             }
         }
 
@@ -631,6 +630,7 @@ namespace cb0t
                 list.AddRange(Encoding.UTF8.GetBytes(i.Password));
             }
 
+            // todo(stuart) this really needs to use atomic writes to stop any corruption of the list
             try { File.WriteAllBytes(Settings.DataPath + "favourites.dat", list.ToArray()); }
             catch { }
 
