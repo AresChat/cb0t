@@ -43,6 +43,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.channelListView2 = new cb0t.ChannelListView();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportHashlinkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +73,23 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.channelListView1);
             this.splitContainer1.Panel1.Controls.Add(this.toolStrip1);
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(29, 22);
+            this.toolStripLabel3.Text = " Src:";
+            // 
+            // toolStripComboBox2
+            // 
+            this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox2.Items.AddRange(new object[] {
+            "Udp",
+            "AresChat"});
+            this.toolStripComboBox2.Name = "toolStripComboBox2";
+            this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
+            // 
             // 
             // splitContainer1.Panel2
             // 
@@ -131,7 +150,9 @@
             this.toolStripTextBox1,
             this.toolStripSeparator2,
             this.toolStripLabel2,
-            this.toolStripComboBox1});
+            this.toolStripComboBox1,
+            this.toolStripLabel3,
+            this.toolStripComboBox2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(586, 25);
@@ -311,6 +332,8 @@
         private System.Windows.Forms.ToolStripMenuItem autoJoinToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
 
     }
 }

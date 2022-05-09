@@ -29,7 +29,7 @@ namespace cb0t
             this.toolStripButton1.ToolTipText = StringTemplate.Get(STType.ChannelList, 0);
             this.toolStripLabel1.Text = StringTemplate.Get(STType.ChannelList, 1) + ":";
             this.toolStripLabel2.Text = StringTemplate.Get(STType.ChannelList, 2) + ":";
-           // this.toolStripLabel3.Text = " " + StringTemplate.Get(STType.AudioSettings, 7) + ":";
+            this.toolStripLabel3.Text = " " + StringTemplate.Get(STType.AudioSettings, 7) + ":";
             this.channelListView1.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
             this.channelListView2.Columns[0].Text = StringTemplate.Get(STType.ChannelList, 3);
             this.channelListView1.Columns[1].Text = StringTemplate.Get(STType.UserList, 15);
@@ -63,7 +63,7 @@ namespace cb0t
             if (fav_split > 0 && (this.splitContainer1.ClientSize.Height - fav_split) > 0)
                 this.splitContainer1.SplitterDistance = (this.splitContainer1.ClientSize.Height - fav_split);
 
-            //this.toolStripComboBox2.SelectedIndex = Settings.GetReg<int>("clist_src", 0);
+            this.toolStripComboBox2.SelectedIndex = Settings.GetReg<int>("clist_src", 0);
             this.LoadCache();
             this.LoadFavourites();
             this.setting_up = false;
@@ -150,23 +150,23 @@ namespace cb0t
             catch { }
         }
 
-        private void RefreshFromMarsProject()
+        private void RefreshAresChatList()
         {
             this.reloading_list = true;
             this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
             this.Terminate = false;
 
-            MarsProjectResult result = null;
+            AresChatResult result = null;
 
             try
             {
-                WebRequest request = WebRequest.Create("http://chatrooms.marsproject.net/list/json.aspx");
+                WebRequest request = WebRequest.Create("https://ares.chat/channels.json");
 
                 using (WebResponse response = request.GetResponse())
                 using (Stream stream = response.GetResponseStream())
                 {
-                    DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(MarsProjectResult));
-                    result = (MarsProjectResult)json.ReadObject(stream);
+                    DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(AresChatResult));
+                    result = (AresChatResult)json.ReadObject(stream);
                 }
             }
             catch { }
@@ -175,7 +175,7 @@ namespace cb0t
             {
                 List<ChannelListItem> items = new List<ChannelListItem>();
 
-                foreach (MarsProjectItem r in result.Items)
+                foreach (AresChatItem r in result.Items)
                 {
                     ChannelListItem i = new ChannelListItem(r.Name,
                                                             r.Topic,
@@ -211,25 +211,23 @@ namespace cb0t
             this.reloading_list = false;
         }
 
-        private const String default_remote_cache_server = "http://chatrooms.marsproject.net/list/cache.aspx";
+        private const String default_remote_cache_server = "https://areschat/servers.dat";
 
         private void RefreshList()
         {
             new Thread(new ThreadStart(() =>
             {
-                // if (Settings.GetReg<int>("clist_src", 0) == 1)
-                /*if(true)
-                {
-                    this.RefreshFromMarsProject();
+                 if (Settings.GetReg<int>("clist_src", 0) == 1) {
+                    this.RefreshAresChatList();
                     return;
-                }*/
+                }
                 
                 this.reloading_list = true;
                 this.LabelChanged(null, new ChannelListLabelChangedEventArgs { Text = "Searching..." });
                 this.Terminate = false;
                 
 
-                /*byte[] raw = null;
+                byte[] raw = null;
 
                 if (File.Exists(Settings.DataPath + "servers.dat"))
                     raw = File.ReadAllBytes(Settings.DataPath + "servers.dat");
@@ -267,28 +265,22 @@ namespace cb0t
 
                     if (raw == null) // unable to retrieve remote cache server so use the one in the installer
                         raw = File.ReadAllBytes(Settings.AppPath + "servers.dat");
-                }*/
+                }
 
-               // if (raw != null)
-               // {
-                    //List<byte> list = new List<byte>(raw);
+                if (raw != null)
+                {
+                    List<byte> list = new List<byte>(raw);
                     List<IPEndPoint> to_send = new List<IPEndPoint>();
 
-                to_send.Add(new IPEndPoint(IPAddress.Parse("3.9.177.74"), 54321)); // AresChat
-                to_send.Add(new IPEndPoint(IPAddress.Parse("72.88.244.38"), 50000)); // Vicky's Hangout
-                to_send.Add(new IPEndPoint(IPAddress.Parse("81.103.82.252"), 37579)); // BATTS STEAKHOUSE
-                to_send.Add(new IPEndPoint(IPAddress.Parse("87.211.177.199"), 5287)); // MIXI - ROOM
-                to_send.Add(new IPEndPoint(IPAddress.Parse("176.27.99.220"), 46500)); // Ross / Milli's Bar and Cafe
 
-
-                /*while (list.Count >= 6)
+                    while (list.Count >= 6)
                     {
                         IPAddress ip = new IPAddress(list.GetRange(0, 4).ToArray());
                         list.RemoveRange(0, 4);
                         ushort port = BitConverter.ToUInt16(list.ToArray(), 0);
                         list.RemoveRange(0, 2);
                         to_send.Add(new IPEndPoint(ip, port));
-                    }*/
+                    }
 
                     Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                     sock.Blocking = false;
@@ -396,7 +388,7 @@ namespace cb0t
 
                         Thread.Sleep(50);
                     }
-                //}
+                }
             })).Start();
         }
 
@@ -591,26 +583,25 @@ namespace cb0t
             if (list.Count > 0)
             {
                 UdpPacketReader buf = new UdpPacketReader(list.ToArray());
-                list.Clear();
-                list = null;
-
                 while (buf.Remaining() > 0)
                 {
-                    FavouritesListItem item = new FavouritesListItem();
-                    item.AutoJoin = buf.ReadByte() == 1;
-                    item.IP = buf.ReadIP();
-                    item.Port = buf.ReadUInt16();
-                    item.Name = buf.ReadString();
-                    item.Topic = buf.ReadString();
-                    item.Password = buf.ReadString();
-                    this.favs.Add(item);
-                    ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
-                    this.gfx.RenderChannelListItem(vitem, item);
-                    this.g_favs.Add(vitem);
-                    this.channelListView2.Items.Add(vitem);
+                    try
+                    {
+                        FavouritesListItem item = new FavouritesListItem();
+                        item.AutoJoin = buf.ReadByte() == 1;
+                        item.IP = buf.ReadIP();
+                        item.Port = buf.ReadUInt16();
+                        item.Name = buf.ReadString();
+                        item.Topic = buf.ReadString();
+                        item.Password = buf.ReadString();
+                        this.favs.Add(item);
+                        ChannelListViewItem vitem = new ChannelListViewItem(null, 0);
+                        this.gfx.RenderChannelListItem(vitem, item);
+                        this.g_favs.Add(vitem);
+                        this.channelListView2.Items.Add(vitem);
+                    }
+                    catch { break; }
                 }
-
-                buf = null;
             }
         }
 
@@ -631,6 +622,7 @@ namespace cb0t
                 list.AddRange(Encoding.UTF8.GetBytes(i.Password));
             }
 
+            // todo(stuart) this really needs to use atomic writes to stop any corruption of the list
             try { File.WriteAllBytes(Settings.DataPath + "favourites.dat", list.ToArray()); }
             catch { }
 
@@ -851,8 +843,8 @@ namespace cb0t
 
         private void toolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (!this.setting_up)
-                //Settings.SetReg("clist_src", this.toolStripComboBox2.SelectedIndex);
+            if (!this.setting_up)
+                Settings.SetReg("clist_src", this.toolStripComboBox2.SelectedIndex);
         }
 
         private bool sort_up = true;
@@ -899,14 +891,14 @@ namespace cb0t
     }
 
     [DataContract]
-    class MarsProjectResult
+    class AresChatResult
     {
         [DataMember]
-        public List<MarsProjectItem> Items { get; set; }
+        public List<AresChatItem> Items { get; set; }
     }
 
     [DataContract]
-    class MarsProjectItem
+    class AresChatItem
     {
         [DataMember]
         public String Name { get; set; }
