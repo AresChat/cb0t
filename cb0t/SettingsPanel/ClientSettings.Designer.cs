@@ -70,7 +70,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(135, 44);
             this.label2.TabIndex = 4;
-            this.label2.Text = "cb0t chat client\r\nby oobe";
+            this.label2.Text = "cb0t chat client\r\nby AresChat";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label3
@@ -127,7 +127,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(45, 13);
             this.label6.TabIndex = 10;
-            this.label6.Text = "by oobe";
+            this.label6.Text = "by AresChat";
             // 
             // linkLabel1
             // 
@@ -137,7 +137,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(133, 13);
             this.linkLabel1.TabIndex = 11;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://cb0t.codeplex.com/";
+            this.linkLabel1.Text = "https://github.com/AresChat/cb0t";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label7

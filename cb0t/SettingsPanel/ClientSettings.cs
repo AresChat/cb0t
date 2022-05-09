@@ -69,7 +69,7 @@ namespace cb0t
         {
             try
             {
-                Process.Start("http://cb0t.codeplex.com/");
+                Process.Start("https://github.com/AresChat/cb0t");
             }
             catch { }
         }
