@@ -179,7 +179,7 @@
             "VLC",
             "Winamp",
             "Foobar2000",
-            "iTunes"
+            "iTunes",
             "Spotify"});
             this.comboBox2.Location = new System.Drawing.Point(53, 47);
             this.comboBox2.Name = "comboBox2";
