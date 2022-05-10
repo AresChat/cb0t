@@ -4,10 +4,10 @@ A chat client written in C# which connects to the Ares Network
 
 ## Authors
 
-oobe - Creator
-hollow87
-silverx69
-stuart2
+- oobe - Creator
+- hollow87
+- silverx69
+- stuart2
 
 ## License
 
