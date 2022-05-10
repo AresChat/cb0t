@@ -211,7 +211,7 @@ namespace cb0t
             this.reloading_list = false;
         }
 
-        private const String default_remote_cache_server = "https://areschat/servers.dat";
+        private const String default_remote_cache_server = "https://ares.chat/servers.dat";
 
         private void RefreshList()
         {
